@@ -36,7 +36,7 @@ jobs:
     uses: ./.github/workflows/slack-notification.yml
     with:
       title: 백엔드 개발용 CI
-      status: 'CI: ${{needs.CI.outputs.status}}'
+      status: '${{ needs.CI.outputs.status }}'
       commit_url: ${{ github.event.pull_request.html_url || github.event.head_commit.url }}
     secrets:
       webhook_url: ${{ secrets.SLACK_NOTIFICATION_WEBHOOK_URL }}
