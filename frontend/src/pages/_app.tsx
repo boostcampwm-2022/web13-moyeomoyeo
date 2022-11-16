@@ -1,6 +1,8 @@
+import { MantineProvider } from '@mantine/core';
 import Head from 'next/head';
 import { AppProps } from 'next/app';
-import { MantineProvider } from '@mantine/core';
+
+import RouterTransition from '@components/RouterTransition';
 import theme from '@styles/theme';
 import CustomFonts from '@styles/CustomFont';
 
@@ -13,6 +15,7 @@ export default function App({ Component, pageProps }: AppProps) {
       </Head>
       <MantineProvider withGlobalStyles withNormalizeCSS theme={theme}>
         <CustomFonts />
+        <RouterTransition />
         <Component {...pageProps} />
       </MantineProvider>
     </>

@@ -22,6 +22,7 @@
     "@mantine/core": "^5.7.2",
     "@mantine/hooks": "^5.7.2",
     "@mantine/next": "^5.7.2",
+    "@mantine/nprogress": "^5.7.2",
     "@tabler/icons": "^1.111.0",
     "next": "^12.3.3",
     "react": "^17.0.2",

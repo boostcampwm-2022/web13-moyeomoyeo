@@ -2,6 +2,7 @@ import Head from 'next/head';
 import { Button, Slider, createPolymorphicComponent, ButtonProps } from '@mantine/core';
 import { IconDatabase } from '@tabler/icons';
 import styled from '@emotion/styled';
+import { useRouter } from 'next/router';
 
 const _StyledButton = styled(Button)`
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
@@ -25,6 +26,12 @@ const StyledSlider = styled(Slider)`
 `;
 
 export default function Home() {
+  const router = useRouter();
+
+  const handleClick = () => {
+    router.push('/hello');
+  };
+
   return (
     <div>
       <Head>
@@ -33,7 +40,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <StyledButton>Connect to database</StyledButton>
+        <StyledButton onClick={handleClick}>Connect to database</StyledButton>
         <div style={{ marginBottom: '10px' }}></div>
         <StyledSlider defaultValue={40} />
         <div style={{ marginBottom: '10px' }}></div>
