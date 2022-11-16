@@ -1,5 +1,5 @@
-import React, { ReactNode } from 'react';
-import { MantineProvider, MantineThemeOverride } from '@mantine/core';
+import { ReactNode } from 'react';
+import { MantineProvider } from '@mantine/core';
 import theme from '../src/styles/theme';
 
 const ThemeWrapper = (props: { children: ReactNode }) => {
