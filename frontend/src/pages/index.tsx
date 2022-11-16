@@ -29,7 +29,7 @@ export default function Home() {
   const router = useRouter();
 
   const handleClick = () => {
-    router.push('/hello');
+    void router.push('/hello');
   };
 
   return (
