@@ -19,6 +19,7 @@
     "quotes": ["error", "single"], // 문자열 들을 쌍따옴표로 감싸도록 강제,
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/semi": "off",
-    "@typescript-eslint/space-before-function-paren": "off"
+    "@typescript-eslint/space-before-function-paren": "off",
+    "no-console": "warn"
   }
 }
