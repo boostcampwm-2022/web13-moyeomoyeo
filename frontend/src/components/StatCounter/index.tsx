@@ -4,7 +4,14 @@ import { IconHeart, IconBookmark, IconMessageCircle2 } from '@tabler/icons';
 import { Text } from '@mantine/core';
 
 export interface Props {
+  /**
+   * Stat의 종류를 입력합니다.
+   * 각각 좋아요, 댓글, 스크랩을 의미합니다.
+   */
   variant: 'like' | 'comment' | 'scrap';
+  /**
+   * Stat의 수를 입력합니다.
+   */
   count: number;
 }
 
