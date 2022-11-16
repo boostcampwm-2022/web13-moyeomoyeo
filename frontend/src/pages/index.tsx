@@ -1,5 +1,28 @@
 import Head from 'next/head';
-import { Button, Title, Text } from '@mantine/core';
+import { Button, Slider, createPolymorphicComponent, ButtonProps } from '@mantine/core';
+import { IconDatabase } from '@tabler/icons';
+import styled from '@emotion/styled';
+
+const _StyledButton = styled(Button)`
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  font-weight: ${({ theme }) => theme.headings.fontWeight};
+  color: ${({ theme }) => theme.colors.indigo[8]};
+`;
+
+const StyledButton = createPolymorphicComponent<'button', ButtonProps>(_StyledButton);
+
+const StyledSlider = styled(Slider)`
+  & .mantine-Slider-bar {
+    background-color: pink;
+  }
+
+  & .mantine-Slider-thumb {
+    border-color: pink;
+    background-color: white;
+    width: 24px;
+    height: 24px;
+  }
+`;
 
 export default function Home() {
   return (
@@ -10,25 +33,11 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <Title order={1}>Title1 입니다.</Title>
-        <Text fz="xds" fw={100}>
-          Text
-        </Text>
-        <Text fz="xl" fw={300}>
-          Text
-        </Text>
-        <Text fz="xl" fw={500}>
-          Text
-        </Text>
-        <Text fz="xl" fw={700}>
-          Text
-        </Text>
-        <Text fz="lg" fw={900}>
-          Text
-        </Text>
-        <Button size="md" variant="gradient">
-          클릭
-        </Button>
+        <StyledButton>Connect to database</StyledButton>
+        <div style={{ marginBottom: '10px' }}></div>
+        <StyledSlider defaultValue={40} />
+        <div style={{ marginBottom: '10px' }}></div>
+        <Button leftIcon={<IconDatabase size={14} />}>Connect to database</Button>
       </main>
     </div>
   );
