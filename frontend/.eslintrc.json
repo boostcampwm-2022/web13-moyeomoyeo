@@ -36,10 +36,10 @@
         "allowTemplateLiterals": true
       }
     ], // 문자열 들을 쌍따옴표로 감싸도록 강제,
-    "no-console": "warn",
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/semi": "off",
     "@typescript-eslint/space-before-function-paren": "off",
+    "no-console": "warn",
     "@typescript-eslint/strict-boolean-expressions": "off",
     "@typescript-eslint/no-floating-promises": "warn"
   }

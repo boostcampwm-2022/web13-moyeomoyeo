@@ -18,6 +18,8 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
+    "@tanstack/react-query": "^4.16.1",
+    "@tanstack/react-query-devtools": "^4.16.1",
     "@emotion/react": "^11.10.5",
     "@emotion/server": "^11.10.0",
     "@emotion/styled": "^11.10.5",
@@ -43,6 +45,7 @@
     "@types/node": "^18.11.9",
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.9",
+    "@types/react-query": "^1.2.9",
     "@typescript-eslint/eslint-plugin": "^5.43.0",
     "babel-loader": "^8.3.0",
     "eslint": "8.22.0",
