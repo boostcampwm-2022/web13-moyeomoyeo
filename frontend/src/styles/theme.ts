@@ -1,6 +1,7 @@
-import { MantineThemeOverride } from '@mantine/core';
+import { MantineThemeOverride, DEFAULT_THEME } from '@mantine/core';
 
 const theme: MantineThemeOverride = {
+  ...DEFAULT_THEME,
   colorScheme: 'light',
   focusRing: 'auto',
   defaultRadius: 'sm',
@@ -15,10 +16,8 @@ const theme: MantineThemeOverride = {
   },
   loader: 'oval',
   cursorType: 'pointer',
-
   fontFamily: 'NanumSquareNeo, sans-serif',
   lineHeight: 1.2,
-
   fontSizes: {
     xs: 10,
     sm: 12,

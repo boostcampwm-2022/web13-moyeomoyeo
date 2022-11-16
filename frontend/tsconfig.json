@@ -19,6 +19,7 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
+    "strictNullChecks": false,
     "target": "es2018",
     "incremental": true,
     "baseUrl": "src",
