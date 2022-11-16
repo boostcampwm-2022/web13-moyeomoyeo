@@ -21,7 +21,14 @@
   },
   "plugins": ["react", "@typescript-eslint", "prettier"],
   "rules": {
-    "quotes": ["error", "single"], // 문자열 들을 쌍따옴표로 감싸도록 강제,
+    "quotes": [
+      "error",
+      "single",
+      {
+        "avoidEscape": true,
+        "allowTemplateLiterals": true
+      }
+    ], // 문자열 들을 쌍따옴표로 감싸도록 강제,
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/semi": "off",
     "@typescript-eslint/space-before-function-paren": "off",

@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { Button } from '@mantine/core';
+import { Button, Title, Text } from '@mantine/core';
 
 export default function Home() {
   return (
@@ -10,6 +10,22 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
+        <Title order={1}>Title1 입니다.</Title>
+        <Text fz="xds" fw={100}>
+          Text
+        </Text>
+        <Text fz="xl" fw={300}>
+          Text
+        </Text>
+        <Text fz="xl" fw={500}>
+          Text
+        </Text>
+        <Text fz="xl" fw={700}>
+          Text
+        </Text>
+        <Text fz="lg" fw={900}>
+          Text
+        </Text>
         <Button size="md" variant="gradient">
           클릭
         </Button>

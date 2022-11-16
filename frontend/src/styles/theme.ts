@@ -16,7 +16,7 @@ const theme: MantineThemeOverride = {
   loader: 'oval',
   cursorType: 'pointer',
 
-  fontFamily: 'sans, sans-serif',
+  fontFamily: 'NanumSquareNeo, sans-serif',
   lineHeight: 1.2,
 
   fontSizes: {
@@ -35,7 +35,7 @@ const theme: MantineThemeOverride = {
   },
 
   headings: {
-    fontFamily: 'sans, sans-serif',
+    fontFamily: 'NanumSquareNeo, sans-serif',
     fontWeight: 900,
     sizes: {
       h1: { fontSize: 32 },
