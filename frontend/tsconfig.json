@@ -19,6 +19,7 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
+    "strictNullChecks": false,
     "target": "es2018",
     "incremental": true,
     "baseUrl": "src",
@@ -26,6 +27,6 @@
       "@*": ["*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".storybook/**/*.tsx"],
   "exclude": ["node_modules"]
 }
