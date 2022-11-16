@@ -1,7 +1,6 @@
-import { MantineThemeOverride, DEFAULT_THEME } from '@mantine/core';
+import { MantineThemeOverride } from '@mantine/core';
 
 const theme: MantineThemeOverride = {
-  ...DEFAULT_THEME,
   colorScheme: 'light',
   focusRing: 'auto',
   defaultRadius: 'sm',
