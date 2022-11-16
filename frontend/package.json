@@ -16,6 +16,8 @@
     "test-all": "npm run check-format && npm run check-lint && npm run check-types && npm run build"
   },
   "dependencies": {
+    "@tanstack/react-query": "^4.16.1",
+    "@tanstack/react-query-devtools": "^4.16.1",
     "next": "^12.3.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
@@ -24,6 +26,7 @@
     "@types/node": "^18.11.9",
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.9",
+    "@types/react-query": "^1.2.9",
     "@typescript-eslint/eslint-plugin": "^5.43.0",
     "eslint": "8.22.0",
     "eslint-config-next": "^13.0.3",
