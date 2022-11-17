@@ -1,9 +1,9 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-GIT_DIFFS=$(git diff --cached --name-only | grep "frontend")
+FRONTEND_GIT_DIFFS=$(git diff --cached --name-only | grep "frontend")
 
-if [ -z GIT_DIFFS ]; then
+if [ -z FRONTEND_GIT_DIFFS ]; then
   exit 0
 fi
 
