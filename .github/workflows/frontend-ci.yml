@@ -25,7 +25,7 @@ jobs:
         run: npm install
 
       - name: test
-        run: npm run test-all
+        run: npm run build
   
   docker:
     needs: [CI]
@@ -36,6 +36,9 @@ jobs:
     outputs:
       status: ${{ job.status }}
     steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
 
@@ -67,7 +70,7 @@ jobs:
     uses: ./.github/workflows/slack-notification.yml
     with:
       title: 프론트엔드 개발용 CI
-      status: '${{ needs.CI.outputs.status }}'
+      status: '${{ needs.CI.outputs.status }} && ${{ needs.docker.outputs.status }}'
       commit_url: ${{ github.event.pull_request.html_url || github.event.head_commit.url }}
     secrets:
       webhook_url: ${{ secrets.SLACK_NOTIFICATION_WEBHOOK_URL }}
