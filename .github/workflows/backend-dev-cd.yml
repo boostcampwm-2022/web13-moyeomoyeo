@@ -68,11 +68,13 @@ jobs:
           script: |
             rm -rf web13-moyeomoyeo
 
-            git clone https://github.com/boostcampwm-2022/web13-moyeomoyeo.git
-
-            cd web13-moyeomoyeo/backend
+            git clone git@github.com:boostcampwm-2022/web13-moyeomoyeo.git
+          
+            cd web13-moyeomoyeo
             
-            ./scripts/dev-deploy.sh ${{ secrets.NCP_ACCESS_KEY }} ${{ secrets.NCP_SECRET_KEY }} ${{ secrets.NCP_DOCKER_REGISTRY }}
+            git checkout origin/develop
+            
+            ./backend/scripts/dev-deploy.sh ${{ secrets.NCP_ACCESS_KEY }} ${{ secrets.NCP_SECRET_KEY }} ${{ secrets.NCP_DOCKER_REGISTRY }}
 
   slack-notifications:
     needs: [Register-Docker-Image,CD]
