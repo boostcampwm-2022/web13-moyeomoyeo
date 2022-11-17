@@ -45,26 +45,27 @@ jobs:
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
-#  CD:
-#    needs: [Register-Docker-Image]
-#    runs-on: ubuntu-latest
-#    defaults:
-#      run:
-#        working-directory: './backend'
-#    outputs:
-#      status: ${{ job.status }}
-#    steps:
-#      - name: deploy
-#        uses: appleboy/ssh-action@master
-#        env:
-#          DOCKER_SERVER_IMAGE: ${{ secrets.NCP_DOCKER_REGISTRY }}/moyeo-server:${{ github.SHA }}
-#        with:
-#          host: ${{secrets.BACKEND_DEV_REMOTE_IP}}
-#          username: ${{secrets.BACKEND_DEV_REMOTE_SSH_ID}}
-#          password: ${{secrets.BACKEND_DEV_REMOTE_ADMIN_KEY}}
-#          port: ${{secrets.BACKEND_DEV_REMOTE_SSH_PORT}}
-#          envs: DOCKER_SERVER_IMAGE
-#          script: ${{secrets.BACKEND_DEV_SSH_SCRIPT}}
+
+  CD:
+    needs: [Register-Docker-Image]
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: './backend'
+    outputs:
+      status: ${{ job.status }}
+    steps:
+      - name: deploy
+        uses: appleboy/ssh-action@master
+        env:
+          DOCKER_SERVER_IMAGE: ${{ secrets.NCP_DOCKER_REGISTRY }}/moyeo-server:${{ github.SHA }}
+        with:
+          host: ${{secrets.BACKEND_DEV_REMOTE_IP}}
+          username: ${{secrets.BACKEND_DEV_REMOTE_SSH_ID}}
+          password: ${{secrets.BACKEND_DEV_REMOTE_ADMIN_KEY}}
+          port: ${{secrets.BACKEND_DEV_REMOTE_SSH_PORT}}
+          envs: DOCKER_SERVER_IMAGE
+          script: ${{secrets.BACKEND_DEV_SSH_SCRIPT}}
 
   slack-notifications:
     needs: [Register-Docker-Image]
