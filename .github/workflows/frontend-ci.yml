@@ -83,8 +83,7 @@ jobs:
                 `⚡️ Lighthouse report!`,
                 `| Category | Score |`,
                 `| --- | --- |`,
-                `| ${score(summary.performance)} Performance | ${summary.performance} |`,
-                { ... }
+                `| ${score(summary.performance)} Performance | ${summary.performance} |`
               ].join("\n");
 
               const detail = [
@@ -94,8 +93,7 @@ jobs:
                   audits["first-contentful-paint"].score * 100
                 )} First Contentful Paint | ${
                   audits["first-contentful-paint"].displayValue
-                } |`,
-                { ... }
+                } |`
               ].join("\n");
               comments += comment + "\n" + detail + "\n";
             });
@@ -106,7 +104,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          msg: ${{ steps.format_lighthouse_score.outputs.comments}}
+          msg: ${{ steps.format_lighthouse_score.outputs.comments }}
   docker:
     needs: [CI]
     runs-on: ubuntu-latest
