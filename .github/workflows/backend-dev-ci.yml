@@ -49,13 +49,18 @@ jobs:
           password: ${{ secrets.NCP_SECRET_KEY }}
 
       - name: build and push
+        id: docker_build
         uses: docker/build-push-action@v3
         with:
           context: backend
-          push: true
+          file: backend/Dockerfile
           build-args: |
             GIT_COMMIT=$(git log -1 --format=%h)
           tags: user/app:latest
+          push: true
+
+      - name: Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}
 
   slack-notifications:
     needs: [CI]
