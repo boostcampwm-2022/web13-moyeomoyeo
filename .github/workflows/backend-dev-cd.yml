@@ -40,7 +40,7 @@ jobs:
         with:
           context: backend
           file: backend/Dockerfile
-          tags: ${{ secrets.NCP_DOCKER_REGISTRY }}/moyeo-server:${{ github.sha }}
+          tags: ${{ secrets.NCP_DOCKER_REGISTRY }}/moyeo-server:${{ github.sha }}, ${{ secrets.NCP_DOCKER_REGISTRY }}/moyeo-server:latest
           push: true
 
       - name: Image digest
@@ -69,15 +69,17 @@ jobs:
             rm -rf web13-moyeomoyeo
 
             git clone git@github.com:boostcampwm-2022/web13-moyeomoyeo.git
-          
+
             cd web13-moyeomoyeo
-            
-            git checkout -t origin/feature/9-backend-dev-cd 
-            
+
+            git checkout -t origin/feature/9-backend-dev-cd
+
+            sudo chmod +x ./backend/scripts/dev-deploy.sh
+
             ./backend/scripts/dev-deploy.sh ${{ secrets.NCP_ACCESS_KEY }} ${{ secrets.NCP_SECRET_KEY }} ${{ secrets.NCP_DOCKER_REGISTRY }}
 
   slack-notifications:
-    needs: [Register-Docker-Image,CD]
+    needs: [Register-Docker-Image, CD]
     if: ${{ always() }}
     uses: ./.github/workflows/slack-notification.yml
     with:
