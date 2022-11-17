@@ -40,7 +40,9 @@ jobs:
         with:
           context: backend
           file: backend/Dockerfile
-          tags: ${{ secrets.NCP_DOCKER_REGISTRY }}/moyeo-server:${{ github.sha }}, ${{ secrets.NCP_DOCKER_REGISTRY }}/moyeo-server:latest
+          tags: |
+            ${{ secrets.NCP_DOCKER_REGISTRY }}/moyeo-server:latest
+            ${{ secrets.NCP_DOCKER_REGISTRY }}/moyeo-server:${{ github.sha }}
           push: true
 
       - name: Image digest
