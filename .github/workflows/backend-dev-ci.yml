@@ -1,0 +1,52 @@
+name: Backend Dev CI
+run-name: ${{ github.actor }}가 실행함
+on:
+  pull_request:
+    branches:
+      - develop
+    paths:
+      - 'backend/**'
+      - '.github/workflows/backend-dev-ci.yml'
+      - '.github/workflows/slack-notification.yml'
+jobs:
+  CI:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: './backend'
+    outputs:
+      status: ${{ job.status }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: nodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.18.1
+
+      - name: dependency install
+        run: npm install
+
+      - name: lint test
+        run: npm run lint
+
+      - name: build
+        run: npm run build
+
+      - name: test
+        run: npm run test
+
+      - name: e2e test
+        run: npm run test:e2e
+
+  slack-notifications:
+    needs: [CI]
+    if: ${{ always() }}
+    uses: ./.github/workflows/slack-notification.yml
+    with:
+      title: 백엔드 개발용 CI
+      status: '${{ needs.CI.outputs.status }}'
+      commit_url: ${{ github.event.pull_request.html_url || github.event.head_commit.url }}
+    secrets:
+      webhook_url: ${{ secrets.SLACK_NOTIFICATION_WEBHOOK_URL }}
