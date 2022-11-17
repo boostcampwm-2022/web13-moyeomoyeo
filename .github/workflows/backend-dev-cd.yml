@@ -68,7 +68,7 @@ jobs:
           script: ${{secrets.BACKEND_DEV_SSH_SCRIPT}}
 
   slack-notifications:
-    needs: [Register-Docker-Image]
+    needs: [Register-Docker-Image,CD]
     if: ${{ always() }}
     uses: ./.github/workflows/slack-notification.yml
     with:
