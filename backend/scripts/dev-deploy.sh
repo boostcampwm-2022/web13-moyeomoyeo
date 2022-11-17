@@ -4,6 +4,6 @@ echo $2 | docker login -u $1 $3 --password-stdin
 
 echo "docker logined"
 
-pwd
+cd backend
 
 docker-compose up -d
