@@ -53,7 +53,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: moyeo-server:$(git log -1 --format=%h)
+          tags: user/app:latest
 
   slack-notifications:
     needs: [CI]
