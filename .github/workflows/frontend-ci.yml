@@ -55,7 +55,8 @@ jobs:
         run: | 
           npm install -g @lhci/cli
           lhci autorun || echo "Fail to Run Lighthouse CI"
-          - name: Format lighthouse score
+
+      - name: Format lighthouse score
         id: format_lighthouse_score
         uses: actions/github-script@v3
         with:
@@ -64,7 +65,7 @@ jobs:
 
             const fs = require('fs');
             # 본인의 환경에 맞게 설정해주세요
-            const results = JSON.parse(fs.readFileSync("/frontend/lhci_reports/manifest.json"));
+            const results = JSON.parse(fs.readFileSync("./frontend/lhci_reports/manifest.json"));
             # comment를 담을 변수 입니다.
             let comments = "";
 
