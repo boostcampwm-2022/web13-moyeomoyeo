@@ -62,11 +62,8 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-
             const fs = require('fs');
-            # 본인의 환경에 맞게 설정해주세요
             const results = JSON.parse(fs.readFileSync("./frontend/lhci_reports/manifest.json"));
-            # comment를 담을 변수 입니다.
             let comments = "";
 
             results.forEach((result) => {
@@ -80,7 +77,6 @@ jobs:
                 (key) => (summary[key] = formatResult(summary[key]))
               );
 
-              # 점수가 색상으로 구분되는 방식 (https://web.dev/performance-scoring/#color-coding)
               const score = (res) => (res >= 90 ? "🟢" : res >= 50 ? "🟠" : "🔴");
 
               const comment = [
@@ -103,7 +99,6 @@ jobs:
               ].join("\n");
               comments += comment + "\n" + detail + "\n";
             });
-            # comments 변수의 값을 다음 job으로 넘겨줍니다.
             core.setOutput('comments', comments)
 
       - name: comment PR
