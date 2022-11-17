@@ -72,7 +72,7 @@ jobs:
           
             cd web13-moyeomoyeo
             
-            git checkout origin/develop
+            git checkout -t origin/develop
             
             ./backend/scripts/dev-deploy.sh ${{ secrets.NCP_ACCESS_KEY }} ${{ secrets.NCP_SECRET_KEY }} ${{ secrets.NCP_DOCKER_REGISTRY }}
 
