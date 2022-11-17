@@ -4,6 +4,14 @@ on:
   pull_request:
     branches:
       - develop
+    paths:
+      - 'backend/**'
+      - '.github/workflows/backend-dev-ci.yml'
+      - '.github/workflows/slack-notification.yml'
+    paths-ignore:
+      - '*.md'
+      - 'Dockerfile'
+      - 'docker-compose'
 jobs:
   CI:
     runs-on: ubuntu-latest
