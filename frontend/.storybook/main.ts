@@ -5,7 +5,6 @@ module.exports = {
     '@storybook/addon-essentials',
     '@storybook/addon-interactions',
     'storybook-addon-next',
-    'storybook-addon-mantine',
   ],
   framework: '@storybook/react',
   core: {
