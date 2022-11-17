@@ -56,7 +56,7 @@ jobs:
           file: backend/Dockerfile
           build-args: |
             GIT_COMMIT=$(git log -1 --format=%h)
-          tags: moyeo-docker-registry/app:latest
+          tags: moyeo/app:latest
           push: true
 
       - name: Image digest
