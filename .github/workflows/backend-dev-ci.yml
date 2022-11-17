@@ -51,7 +51,10 @@ jobs:
       - name: build and push
         uses: docker/build-push-action@v3
         with:
+          context: backend
           push: true
+          build-args: |
+            "GIT_COMMIT=$(git log -1 --format=%h)"
           tags: user/app:latest
 
   slack-notifications:
