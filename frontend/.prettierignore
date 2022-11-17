@@ -10,3 +10,4 @@ Dockerfile
 .nvmrc
 .vscode
 .idea
+.lighthouserc.js

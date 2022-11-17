@@ -25,7 +25,12 @@ jobs:
         run: npm install
 
       - name: test
-        run: npm run build
+        run: npm run test-all
+
+      - name: lighthouse
+        run: | 
+          npm install -g @lhci/cli
+          lhci autorun || echo "Fail to Run Lighthouse CI"
   
   docker:
     needs: [CI]
@@ -70,7 +75,7 @@ jobs:
     uses: ./.github/workflows/slack-notification.yml
     with:
       title: 프론트엔드 개발용 CI
-      status: '${{ needs.CI.outputs.status }} && ${{ needs.docker.outputs.status }}'
+      status: 'CI : ${{ needs.CI.outputs.status }} && docker : ${{ needs.docker.outputs.status }}'
       commit_url: ${{ github.event.pull_request.html_url || github.event.head_commit.url }}
     secrets:
       webhook_url: ${{ secrets.SLACK_NOTIFICATION_WEBHOOK_URL }}
