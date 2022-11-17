@@ -54,7 +54,7 @@ jobs:
           context: backend
           push: true
           build-args: |
-            "GIT_COMMIT=$(git log -1 --format=%h)"
+            GIT_COMMIT=$(git log -1 --format=%h)
           tags: user/app:latest
 
   slack-notifications:
