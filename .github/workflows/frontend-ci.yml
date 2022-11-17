@@ -4,6 +4,11 @@ on:
   pull_request:
     branches:
       - develop
+    paths:
+      - 'frontend/**'
+      - './github/workflows/frontend-ci.yml'
+      - './github/workflows/slack-notification.yml'
+    
 jobs:
   CI:
     runs-on: ubuntu-latest
@@ -66,7 +71,7 @@ jobs:
             const results = JSON.parse(fs.readFileSync("./frontend/lhci_reports/manifest.json"));
             let comments = "";
 
-            results.forEach((result) => {
+            results.forEach((result, idx) => {
               const { summary, jsonPath } = result;
               const details = JSON.parse(fs.readFileSync(jsonPath));
               const { audits } = details;
@@ -79,22 +84,50 @@ jobs:
               const score = (res) => (res >= 90 ? "🟢" : res >= 50 ? "🟠" : "🔴");
 
               const comment = [
-                `⚡️ Lighthouse report!`,
+                `⚡️ Lighthouse report #${idx + 1}!`,
                 `| Category | Score |`,
                 `| --- | --- |`,
-                `| ${score(summary.performance)} Performance | ${summary.performance} |`
+                `| ${score(summary.performance)} Performance | ${summary.performance} |`,
+                `| ${score(summary.accessibility)} Accessbility | ${summary.accessibility} |`,
+                `| ${score(summary.seo)} SEO | ${summary.seo} |`,
+                `| ${score(summary.pwa)} PWA | ${summary.pwa} |`,
               ].join("\n");
 
               const detail = [
                 `| Category | Score |`,
                 `| --- | --- |`,
                 `| ${score(
+                  audits["largest-contentful-paint"].score * 100
+                )} Largest Contentful Paint | ${
+                  audits["largest-contentful-paint"].displayValue
+                } |`,
+                `| ${score(
                   audits["first-contentful-paint"].score * 100
                 )} First Contentful Paint | ${
                   audits["first-contentful-paint"].displayValue
-                } |`
+                } |`,
+                `| ${score(
+                  audits["speed-index"].score * 100
+                )} Speed Index | ${
+                  audits["speed-index"].displayValue
+                } |`,
+                `| ${score(
+                  audits["total-blocking-time"].score * 100
+                )} Total Blocking Time | ${
+                  audits["total-blocking-time"].displayValue
+                } |`,
+                `| ${score(
+                  audits["interactive"].score * 100
+                )} Time To Interactive | ${
+                  audits["interactive"].displayValue
+                } |`,
+                `| ${score(
+                  audits["cumulative-layout-shift"].score * 100
+                )} Cumulative Layout Shift | ${
+                  audits["cumulative-layout-shift"].displayValue
+                } |`,
               ].join("\n");
-              comments += comment + "\n" + detail + "\n";
+              comments += comment + "\n" + "\n" + detail + "\n" + "\n";
             });
             core.setOutput('comments', comments)
 

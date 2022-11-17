@@ -11,3 +11,5 @@ Dockerfile
 .vscode
 .idea
 .lighthouserc.js
+.lighthouseci
+lhci_reports
