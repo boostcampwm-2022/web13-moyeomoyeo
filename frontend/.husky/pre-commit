@@ -1,27 +1,15 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
+GIT_DIFFS=$(git diff --cached --name-only | grep "frontend")
+
+if [ -z GIT_DIFFS ]; then
+  exit 0
+fi
+
 echo '🏗️👷 Before commit, Checking format, linting and typing your project.'
 
 cd frontend
-
-# Check Prettier standards
-echo '🔎 Check formatting...'
-npm run check-format ||
-(
-    echo '🤣🤣🤣🤣 Prettier Check Failed.🤣🤣🤣🤣
-                Run npm run format, add changes and try commit again.';
-    false;
-)
-
-# Check ESLint Standards
-echo '🔎 Check linting...'
-npm run check-lint ||
-(
-        echo '😤🏀👋😤 Get that weak s**t out of here! 😤🏀👋😤
-                ESLint Check Failed. Make the required changes listed above, add changes and try to commit again.'
-        false;
-)
 
 # Check tsconfig standards
 echo '🔎 Check typing...'
@@ -32,5 +20,4 @@ npm run check-types ||
     false;
 )
 
-# If everything passes... Now we can commit
-echo '✅✅✅✅ You win this time... I am committing this now. ✅✅✅✅'
+npx lint-staged

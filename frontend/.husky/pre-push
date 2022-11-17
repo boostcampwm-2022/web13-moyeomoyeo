@@ -1,4 +1,11 @@
-. "$(dirname -- "$0")/_/husky.sh"
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+GIT_DIFFS=$(git diff --cached --name-only | grep "frontend")
+
+if [ -z GIT_DIFFS ]; then
+  exit 0
+fi
 
 echo '🏛🏛🏛🏛... Before push, Trying to build now. 🏛🏛🏛🏛'
 
