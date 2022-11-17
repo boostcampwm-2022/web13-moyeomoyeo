@@ -58,14 +58,14 @@ jobs:
       - name: deploy
         uses: appleboy/ssh-action@master
         env:
-          DOCKER_SERVER_IMAGE: ${{ secrets.NCP_DOCKER_REGISTRY }}/moyeo-server:${{ github.SHA }}
+          DOCKER_SERVER_IMAGE: ${{ secrets.NCP_DOCKER_REGISTRY }}/moyeo-server:${{ github.sha }}
         with:
           host: ${{secrets.BACKEND_DEV_REMOTE_IP}}
           username: ${{secrets.BACKEND_DEV_REMOTE_SSH_ID}}
           password: ${{secrets.BACKEND_DEV_REMOTE_ADMIN_KEY}}
           port: ${{secrets.BACKEND_DEV_REMOTE_SSH_PORT}}
           envs: DOCKER_SERVER_IMAGE
-          script: ${{secrets.BACKEND_DEV_SSH_SCRIPT}}
+          script: ./scripts/dev-deploy.sh ${{ secrets.NCP_ACCESS_KEY }} ${{ secrets.NCP_SECRET_KEY }} ${{ secrets.NCP_DOCKER_REGISTRY }}
 
   slack-notifications:
     needs: [Register-Docker-Image,CD]
