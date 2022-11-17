@@ -27,10 +27,35 @@ jobs:
       - name: test
         run: npm run test-all
 
+  lhci:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: './frontend'
+    outputs:
+      status: ${{ job.status }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: nodeJS
+        uses: actions/setup-node@v3
+        with: 
+          node-version: 16.18.1
+        
+      - name: dependency install
+        run: |
+          npm install
+      
+      - name: Build
+        run: |
+          npm run build
+      
       - name: lighthouse
         run: | 
           npm install -g @lhci/cli
           lhci autorun || echo "Fail to Run Lighthouse CI"
+
   
   docker:
     needs: [CI]
@@ -70,12 +95,12 @@ jobs:
         run: echo ${{ steps.docker_build.outputs.digest }}
 
   slack-notifications:
-    needs: [CI, docker]
+    needs: [CI, docker, lhci]
     if: ${{ always() }}
     uses: ./.github/workflows/slack-notification.yml
     with:
       title: 프론트엔드 개발용 CI
-      status: 'CI : ${{ needs.CI.outputs.status }} && docker : ${{ needs.docker.outputs.status }}'
+      status: 'CI : ${{ needs.CI.outputs.status }} && docker : ${{ needs.docker.outputs.status }} && lhci : ${{ needs.lhci.outputs.status }}'
       commit_url: ${{ github.event.pull_request.html_url || github.event.head_commit.url }}
     secrets:
       webhook_url: ${{ secrets.SLACK_NOTIFICATION_WEBHOOK_URL }}
