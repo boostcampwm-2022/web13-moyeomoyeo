@@ -1,4 +1,4 @@
-name: Backend Dev CI
+name: Backend Dev CD
 run-name: ${{ github.actor }}가 실행함
 on:
   pull_request:
@@ -65,7 +65,14 @@ jobs:
           password: ${{secrets.BACKEND_DEV_REMOTE_ADMIN_KEY}}
           port: ${{secrets.BACKEND_DEV_REMOTE_SSH_PORT}}
           envs: DOCKER_SERVER_IMAGE
-          script: ./scripts/dev-deploy.sh ${{ secrets.NCP_ACCESS_KEY }} ${{ secrets.NCP_SECRET_KEY }} ${{ secrets.NCP_DOCKER_REGISTRY }}
+          script: |
+            rm -rf web13-moyeomoyeo
+
+            git clone git@github.com:boostcampwm-2022/web13-moyeomoyeo.git
+
+            cd web13-moyeomoyeo/backend
+            
+            ./scripts/dev-deploy.sh ${{ secrets.NCP_ACCESS_KEY }} ${{ secrets.NCP_SECRET_KEY }} ${{ secrets.NCP_DOCKER_REGISTRY }}
 
   slack-notifications:
     needs: [Register-Docker-Image,CD]
