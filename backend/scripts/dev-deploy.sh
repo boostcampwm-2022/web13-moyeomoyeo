@@ -6,4 +6,8 @@ echo "docker logined"
 
 cd backend
 
+touch .env
+
+echo $4 > .env
+
 docker-compose up -d
