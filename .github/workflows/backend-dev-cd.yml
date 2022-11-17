@@ -59,8 +59,6 @@ jobs:
     steps:
       - name: deploy
         uses: appleboy/ssh-action@master
-        env:
-          DOCKER_SERVER_IMAGE: ${{ secrets.NCP_DOCKER_REGISTRY }}/moyeo-server:latest
         with:
           host: ${{secrets.BACKEND_DEV_REMOTE_IP}}
           username: ${{secrets.BACKEND_DEV_REMOTE_SSH_ID}}
@@ -78,7 +76,7 @@ jobs:
 
             sudo chmod +x ./backend/scripts/dev-deploy.sh
 
-            ./backend/scripts/dev-deploy.sh ${{ secrets.NCP_ACCESS_KEY }} ${{ secrets.NCP_SECRET_KEY }} ${{ secrets.NCP_DOCKER_REGISTRY }}
+            ./backend/scripts/dev-deploy.sh ${{ secrets.NCP_ACCESS_KEY }} ${{ secrets.NCP_SECRET_KEY }} ${{ secrets.NCP_DOCKER_REGISTRY }} ${{ secrets.DOCKER_SERVER_IMAGE }}
 
   slack-notifications:
     needs: [Register-Docker-Image, CD]
