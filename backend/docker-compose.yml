@@ -3,13 +3,9 @@ version: '3.4'
 services:
   backend:
     container_name: moyeo-server
-    image: backend
-    build:
-      context: backend
-      dockerfile: ./Dockerfile
-      target: development
+    image: ${DOCKER_SERVER_IMAGE}
     environment:
-      NODE_ENV: production
+      NODE_ENV: development
     ports:
       - 3000:3000
     command: npm run start:dev
