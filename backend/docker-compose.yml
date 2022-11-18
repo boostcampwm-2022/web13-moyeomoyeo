@@ -8,4 +8,4 @@ services:
       NODE_ENV: development
     ports:
       - 3000:3000
-    command: npm run start:dev
+    command: npm run dev
