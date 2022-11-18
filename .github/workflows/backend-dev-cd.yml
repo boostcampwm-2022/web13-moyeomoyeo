@@ -1,7 +1,7 @@
 name: Backend Dev CD
 run-name: ${{ github.actor }}가 실행함
 on:
-  merge:
+  push:
     branches:
       - develop
     paths:
