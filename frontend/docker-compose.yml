@@ -5,7 +5,7 @@ services:
     container_name: moyeo-client
     image: frontend
     build:
-      context: frontend
+      context: .
       dockerfile: ./Dockerfile
       target: development
     environment:
