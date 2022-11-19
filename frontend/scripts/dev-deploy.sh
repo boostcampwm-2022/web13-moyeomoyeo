@@ -2,7 +2,7 @@
 
 echo $2 | docker login -u $1 $3 --password-stdin
 
-echo "docker logined"
+echo "docker has been logged in"
 
 cd frontend
 
