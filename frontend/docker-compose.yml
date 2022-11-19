@@ -3,11 +3,7 @@ version: '3.4'
 services:
   frontend:
     container_name: moyeo-client
-    image: frontend
-    build:
-      context: .
-      dockerfile: ./Dockerfile
-      target: development
+    image: ${DOCKER_CLIENT_IMAGE}
     environment:
       NODE_ENV: development
     ports:
