@@ -139,7 +139,7 @@ jobs:
           msg: ${{ steps.format_lighthouse_score.outputs.comments }}
 
   slack-notifications:
-    needs: [CI, docker, lhci]
+    needs: [CI, lhci]
     if: ${{ always() }}
     uses: ./.github/workflows/slack-notification.yml
     with:
