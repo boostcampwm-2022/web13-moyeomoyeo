@@ -1,7 +1,20 @@
 version: '3.4'
 
 services:
-  backend:
+  nginx:
+    container_name: moyeo-nginx
+    build:
+      context: .
+      dockerfile: nginx.Dockerfile
+    restart: always
+    ports:
+      - 80:80
+    depends_on:
+      - nest-server
+    networks:
+      - backbone
+
+  nest-server:
     container_name: moyeo-server
     image: ${DOCKER_SERVER_IMAGE}
     environment:
@@ -9,6 +22,8 @@ services:
     ports:
       - 3000:3000
     command: npm run start:dev
+    networks:
+      - backbone
 
   db:
     container_name: moyeo-db
@@ -26,3 +41,10 @@ services:
     command:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
+    networks:  
+      - backbone
+
+networks:
+  backbone:
+    name: backbone
+    driver: bridge
