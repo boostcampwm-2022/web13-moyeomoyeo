@@ -7,7 +7,6 @@ module.exports = {
     '@storybook/addon-essentials',
     '@storybook/addon-interactions',
     'storybook-addon-next',
-    '@storybook/addon-interactions',
   ],
   framework: '@storybook/react',
   core: {
@@ -21,6 +20,7 @@ module.exports = {
       ...config.resolve.alias,
       '@styles': path.resolve(__dirname, '../src/styles'),
     };
+
     return config;
   },
 };

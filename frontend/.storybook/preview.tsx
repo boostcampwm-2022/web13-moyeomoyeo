@@ -1,5 +1,4 @@
 import { ReactNode } from 'react';
-import { MantineProvider } from '@mantine/core';
 import CommonStyles from '@styles/CommonStyles';
 
 const ThemeWrapper = (props: { children: ReactNode }) => {
