@@ -22,9 +22,10 @@
     "strictNullChecks": false,
     "target": "es2018",
     "incremental": true,
-    "baseUrl": "src",
+    "baseUrl": ".",
     "paths": {
-      "@*": ["*"]
+      "@src/*": ["src/*"],
+      "@public/*": ["public/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".storybook/**/*.tsx"],
