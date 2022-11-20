@@ -38,3 +38,4 @@ next-env.d.ts
 .vscode
 .lighthouseci
 /lhci_reports
+.storybook-static
