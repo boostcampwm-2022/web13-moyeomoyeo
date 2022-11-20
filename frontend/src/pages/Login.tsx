@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import LogoIcon from '@public/icons/logo.svg';
-import GithubLogoIcon from '@public/icons/githubLogo.svg';
+import GitLoginButton from '@src/components/GitLoginButton';
 
 const Login = () => {
   return (
@@ -12,10 +12,7 @@ const Login = () => {
           <SubTitle>개발자를 위한 모임 활성화 커뮤니티</SubTitle>
         </TextWrapper>
       </InfoWrapper>
-      <LoginButton>
-        <GithubLogoIcon />
-        <GithubLoginText>Github로 로그인</GithubLoginText>
-      </LoginButton>
+      <GitLoginButton />
     </PageWrapper>
   );
 };
@@ -50,24 +47,6 @@ const SubTitle = styled.span`
   font-size: 1.2rem;
   font-weight: 400;
   color: ${({ theme }) => theme.colors.indigo[7]};
-`;
-
-const LoginButton = styled.button`
-  display: flex;
-  gap: 0.8rem;
-  width: 34.2rem;
-  height: 5.6rem;
-  justify-content: center;
-  align-items: center;
-  background-color: ${({ theme }) => theme.colors.dark[9]};
-  border: none;
-  border-radius: 8px;
-`;
-
-const GithubLoginText = styled.span`
-  color: #ffffff;
-  font-size: 1.6rem;
-  font-weight: 800;
 `;
 
 export default Login;
