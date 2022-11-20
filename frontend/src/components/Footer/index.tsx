@@ -1,28 +1,32 @@
 import styled from '@emotion/styled';
-import { IconHome2, IconBell, IconUser } from '@tabler/icons';
+import { IconBell, IconHome2, IconUser } from '@tabler/icons';
 import { useTheme } from '@emotion/react';
-import { Tabs } from '@constants/tabs';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 
-interface Props {
-  currentTab: Tabs;
-}
-
-const Footer = ({ currentTab }: Props) => {
+const Footer = () => {
   const {
     colors: { indigo, gray },
   } = useTheme();
+  const { pathname } = useRouter();
 
   return (
     <FooterWrapper>
-      <TabDiv>
-        <IconHome2 color={currentTab === Tabs.MAIN ? indigo[7] : gray[2]} />
-      </TabDiv>
-      <TabDiv>
-        <IconBell color={currentTab === Tabs.NOTIFICATION ? indigo[7] : gray[2]} />
-      </TabDiv>
-      <TabDiv>
-        <IconUser color={currentTab === Tabs.MY ? indigo[7] : gray[2]} />
-      </TabDiv>
+      <Link href={'/'}>
+        <TabDiv>
+          <IconHome2 color={pathname === '/' ? indigo[7] : gray[2]} />
+        </TabDiv>
+      </Link>
+      <Link href={'/Notification'}>
+        <TabDiv>
+          <IconBell color={pathname === '/Notification' ? indigo[7] : gray[2]} />
+        </TabDiv>
+      </Link>
+      <Link href={'/My'}>
+        <TabDiv>
+          <IconUser color={pathname === '/My' ? indigo[7] : gray[2]} />
+        </TabDiv>
+      </Link>
     </FooterWrapper>
   );
 };
@@ -37,6 +41,7 @@ const TabDiv = styled.div`
 
 const FooterWrapper = styled.div`
   display: flex;
+  width: 100%;
   height: 5.6rem;
   justify-content: space-between;
   background-color: #ffffff;

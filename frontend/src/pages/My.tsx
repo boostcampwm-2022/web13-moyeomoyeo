@@ -1,15 +1,15 @@
-import Footer from '@components/Footer';
 import styled from '@emotion/styled';
+import Footer from '@components/Footer';
 
-export default function Main() {
+const My = () => {
   return (
     <PageWrapper>
       <div>header</div>
-      <ContentWrapper>main page</ContentWrapper>
+      <ContentWrapper>my page</ContentWrapper>
       <Footer />
     </PageWrapper>
   );
-}
+};
 
 const PageWrapper = styled.div`
   display: flex;
@@ -22,3 +22,5 @@ const PageWrapper = styled.div`
 const ContentWrapper = styled.div`
   height: 100%;
 `;
+
+export default My;
