@@ -1,5 +1,5 @@
 import Footer from '@components/Footer';
-import styled from '@emotion/styled';
+import { ContentWrapper, PageWrapper } from '@pages/style';
 
 export default function Main() {
   return (
@@ -10,15 +10,3 @@ export default function Main() {
     </PageWrapper>
   );
 }
-
-const PageWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  align-items: center;
-  gap: 0.5rem;
-`;
-
-const ContentWrapper = styled.div`
-  height: 100%;
-`;
