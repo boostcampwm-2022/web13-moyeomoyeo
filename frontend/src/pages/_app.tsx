@@ -3,10 +3,9 @@ import Head from 'next/head';
 import { AppProps } from 'next/app';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-
-import RouterTransition from '@components/RouterTransition';
-import theme from '@styles/theme';
-import CustomFonts from '@styles/CustomFont';
+import RouterTransition from '@src/components/RouterTransition';
+import theme from '@src/styles/theme';
+import CustomFonts from '@src/styles/CustomFont';
 
 const queryClient = new QueryClient();
 
