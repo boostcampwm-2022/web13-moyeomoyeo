@@ -16,7 +16,9 @@ services:
 
   nest-server:
     container_name: moyeo-server
-    image: ${DOCKER_SERVER_IMAGE}
+    build: 
+      context: .
+      dockerfile: Dockerfile
     environment:
       NODE_ENV: development
     ports:
@@ -24,6 +26,9 @@ services:
     command: npm run start:dev
     networks:
       - backbone
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
 
   db:
     container_name: moyeo-db
@@ -32,10 +37,10 @@ services:
     ports:
       - ${MYSQL_PORT}:3306
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: test
+      MYSQL_DATABASE: test
+      MYSQL_USER: test
+      MYSQL_PASSWORD: test
     volumes:
       - ~/db:/var/lib/mysql
     command:

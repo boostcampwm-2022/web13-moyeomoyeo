@@ -10,6 +10,4 @@ touch .env
 
 echo $4 > .env
 
-docker-compose down --rmi all
-
 docker-compose up -d
