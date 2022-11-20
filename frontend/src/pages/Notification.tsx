@@ -1,14 +1,7 @@
-import Footer from '@components/Footer';
-import { ContentWrapper, PageWrapper } from '@pages/style';
+import PageLayout from '@components/common/PageLayout';
 
 const Notification = () => {
-  return (
-    <PageWrapper>
-      <div>header</div>
-      <ContentWrapper>notification page</ContentWrapper>
-      <Footer />
-    </PageWrapper>
-  );
+  return <PageLayout>notification page</PageLayout>;
 };
 
 export default Notification;

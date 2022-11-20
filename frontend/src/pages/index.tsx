@@ -1,12 +1,7 @@
-import Footer from '@components/Footer';
-import { ContentWrapper, PageWrapper } from '@pages/style';
+import PageLayout from '@components/common/PageLayout';
 
-export default function Main() {
-  return (
-    <PageWrapper>
-      <div>header</div>
-      <ContentWrapper>main page</ContentWrapper>
-      <Footer />
-    </PageWrapper>
-  );
-}
+const Main = () => {
+  return <PageLayout>my page</PageLayout>;
+};
+
+export default Main;

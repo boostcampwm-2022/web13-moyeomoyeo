@@ -1,14 +1,7 @@
-import Footer from '@components/Footer';
-import { ContentWrapper, PageWrapper } from '@pages/style';
+import PageLayout from '@components/common/PageLayout';
 
 const My = () => {
-  return (
-    <PageWrapper>
-      <div>header</div>
-      <ContentWrapper>my page</ContentWrapper>
-      <Footer />
-    </PageWrapper>
-  );
+  return <PageLayout>my page</PageLayout>;
 };
 
 export default My;
