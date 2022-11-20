@@ -20,6 +20,10 @@ const LoginButton = styled.button`
   background-color: ${({ theme }) => theme.colors.dark[9]};
   border: none;
   border-radius: 8px;
+  &:hover {
+    cursor: pointer;
+    background-color: ${({ theme }) => theme.colors.dark[4]};
+  }
 `;
 
 const GithubLoginText = styled.span`
