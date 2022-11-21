@@ -1,6 +1,6 @@
 import { Global } from '@mantine/core';
 
-const globalStyle = () => {
+const GlobalStyle = () => {
   return (
     <Global
       styles={{
@@ -15,4 +15,4 @@ const globalStyle = () => {
   );
 };
 
-export default globalStyle;
+export default GlobalStyle;
