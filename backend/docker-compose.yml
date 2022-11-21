@@ -21,7 +21,7 @@ services:
 
   certbot:
     container_name: certbot
-    image: certbot/certbot:arm32v6-latest
+    image: certbot/certbot
     restart: unless-stopped
     volumes:
       - ./certbot/conf:/etc/letsencrypt
