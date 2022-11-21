@@ -1,7 +1,18 @@
 import { Global } from '@mantine/core';
 
-const GlobalStyles = () => {
-  return <Global styles={{ '*': { fontSize: '10px', boxSizing: 'border-box' } }} />;
+const GlobalStyle = () => {
+  return (
+    <Global
+      styles={{
+        '*, *::before, *::after': {
+          boxSizing: 'border-box',
+        },
+        html: {
+          fontSize: '62.5%',
+        },
+      }}
+    />
+  );
 };
 
-export default GlobalStyles;
+export default GlobalStyle;

@@ -41,7 +41,7 @@ const StatCounter = ({ variant, count = 0 }: Props) => {
 const StatCounterWrapper = styled.div`
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
 `;
 
 export default StatCounter;
