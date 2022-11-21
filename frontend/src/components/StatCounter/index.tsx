@@ -3,7 +3,7 @@ import { useTheme } from '@emotion/react';
 import { IconHeart, IconBookmark, IconMessageCircle2 } from '@tabler/icons';
 import { Text } from '@mantine/core';
 
-export interface Props {
+interface Props {
   /**
    * Stat의 종류를 입력합니다.
    * 각각 좋아요, 댓글, 스크랩을 의미합니다.

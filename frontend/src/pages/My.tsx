@@ -1,7 +1,7 @@
 import PageLayout from '@components/common/PageLayout';
 
-const Main = () => {
+const My = () => {
   return <PageLayout>my page</PageLayout>;
 };
 
-export default Main;
+export default My;
