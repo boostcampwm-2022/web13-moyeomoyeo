@@ -21,9 +21,13 @@
     "strictNullChecks": false,
     "target": "es2018",
     "incremental": true,
-    "baseUrl": "src",
+    "baseUrl": ".",
     "paths": {
-      "@*": ["*"]
+      "@public/*": ["public/*"],
+      "@components/*": ["src/components/*"],
+      "@pages/*": ["src/pages/*"],
+      "@styles/*": ["src/styles/*"],
+      "@typings/*": ["src/typings/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".storybook/**/*.tsx"],
