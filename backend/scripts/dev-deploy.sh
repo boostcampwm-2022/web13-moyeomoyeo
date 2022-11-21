@@ -14,4 +14,4 @@ cat .env
 
 docker-compose down --rmi all
 
-docker-compose up -d
+docker-compose up -d --build
