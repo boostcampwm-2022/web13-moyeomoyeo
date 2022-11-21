@@ -9,6 +9,6 @@ export default {
 const Template: ComponentStory<typeof RootTitle> = (args) => <RootTitle {...args} />;
 export const _RootTitle = Template.bind({});
 _RootTitle.args = {
-  title: '모임게시판',
+  title: '모임게시판!!!!',
   subTitle: '다양한 소모임을 위한 게시판',
 };

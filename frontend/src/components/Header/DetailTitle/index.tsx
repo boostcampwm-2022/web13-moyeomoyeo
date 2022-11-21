@@ -13,7 +13,7 @@ const DetailTitle = ({ title, subTitle }: Props) => {
   const router = useRouter();
   return (
     <DetailTitleWrapper>
-      <ActionIcon variant="transparent" onClick={() => router.back()}>
+      <ActionIcon variant="transparent" color="dark" onClick={() => router.back()}>
         <IconChevronLeft size={24} />
       </ActionIcon>
       <DetailTitleTextWrapper>

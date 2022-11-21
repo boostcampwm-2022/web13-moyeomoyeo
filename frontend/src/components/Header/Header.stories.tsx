@@ -1,10 +1,11 @@
 import Header from '.';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import Logo from '@components/Logo';
-import { Avatar } from '@mantine/core';
+import { Avatar, Menu, Text } from '@mantine/core';
 import LoginButton from '@components/Header/LoginButton';
 import RootTitle from '@components/Header/RootTitle';
-import DetailTitle from './DetailTitle';
+import DetailTitle from '@components/Header/DetailTitle';
+import UtilButton from '@components/Header/UtilButton';
 
 export default {
   title: 'Component/Header',
@@ -58,7 +59,26 @@ OtherRootNotLogin.args = {
   rightNode: <LoginButton />,
 };
 
-export const Detail = Template.bind({});
-Detail.args = {
+export const DetailPlain = Template.bind({});
+DetailPlain.args = {
   leftNode: <DetailTitle title="모임게시판" subTitle="다양한 소모임을 위한 게시판" />,
+};
+
+export const DetailFull = Template.bind({});
+DetailFull.args = {
+  leftNode: <DetailTitle title="모임게시판" subTitle="다양한 소모임을 위한 게시판" />,
+  rightNode: (
+    <UtilButton>
+      <Menu.Item p="md">
+        <Text fz="md" fw={500}>
+          로그아웃
+        </Text>
+      </Menu.Item>
+      <Menu.Item p="md">
+        <Text fz="md" fw={500}>
+          이름이 엄청 긴거
+        </Text>
+      </Menu.Item>
+    </UtilButton>
+  ),
 };
