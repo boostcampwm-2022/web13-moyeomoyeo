@@ -10,7 +10,7 @@ services:
     ports:
       - 80:80
     depends_on:
-      - nest-server
+      - moyeo-server
     networks:
       - backbone
 
