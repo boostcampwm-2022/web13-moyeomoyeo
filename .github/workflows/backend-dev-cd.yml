@@ -21,6 +21,13 @@ jobs:
       - name: checkout
         uses: actions/checkout@v3
 
+      - name: backend environment setting
+        run: |
+          cd backend
+          touch .env
+          echo ${{ secrets.BACKEND_DEVELOPMENT_ENVIRONMENT }} > .env
+          cd ..
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
 
@@ -33,13 +40,6 @@ jobs:
           registry: ${{ secrets.NCP_DOCKER_REGISTRY }}
           username: ${{ secrets.NCP_ACCESS_KEY }}
           password: ${{ secrets.NCP_SECRET_KEY }}
-
-      - name: backend environment setting
-        run: |
-          cd backend
-          touch .env
-          echo ${{ secrets.BACKEND_DEVELOPMENT_ENVIRONMENT }} > .env
-          cd ..
 
       - name: build and push
         id: docker_build
