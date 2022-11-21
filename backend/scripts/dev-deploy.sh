@@ -8,7 +8,7 @@ cd backend
 
 touch .env
 
-echo $4 > .env
+echo -e $4 > .env
 
 cat .env
 
