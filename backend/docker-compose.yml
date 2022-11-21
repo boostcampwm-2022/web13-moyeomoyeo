@@ -1,7 +1,7 @@
-version: '3.4'
+version: '3.9'
 
 services:
-  nginx:
+  moyeo-nginx:
     container_name: moyeo-nginx
     build:
       context: .
@@ -10,11 +10,11 @@ services:
     ports:
       - 80:80
     depends_on:
-      - nest-server
+      - moyeo-server
     networks:
       - backbone
 
-  nest-server:
+  moyeo-server:
     container_name: moyeo-server
     image: ${DOCKER_SERVER_IMAGE}
     environment:
@@ -25,7 +25,7 @@ services:
     networks:
       - backbone
 
-  db:
+  moyeo-db:
     container_name: moyeo-db
     image: mysql:8.0
     restart: always
@@ -41,10 +41,9 @@ services:
     command:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
-    networks:  
+    networks:
       - backbone
 
 networks:
   backbone:
-    name: backbone
     driver: bridge
