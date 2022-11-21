@@ -1,7 +1,9 @@
-import Header from '.';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
-import Logo from '@components/Logo';
 import { Avatar, Menu, Text } from '@mantine/core';
+import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { within, userEvent } from '@storybook/testing-library';
+
+import Header from '.';
+import Logo from '@components/Logo';
 import LoginButton from '@components/Header/LoginButton';
 import RootTitle from '@components/Header/RootTitle';
 import DetailTitle from '@components/Header/DetailTitle';
@@ -81,4 +83,28 @@ DetailFull.args = {
       </Menu.Item>
     </UtilButton>
   ),
+};
+
+export const DetailFullClicked = Template.bind({});
+DetailFullClicked.args = {
+  leftNode: <DetailTitle title="모임게시판" subTitle="다양한 소모임을 위한 게시판" />,
+  rightNode: (
+    <UtilButton>
+      <Menu.Item p="md" data-testid="item">
+        <Text fz="md" fw={500}>
+          로그아웃
+        </Text>
+      </Menu.Item>
+      <Menu.Item p="md" data-testid="item">
+        <Text fz="md" fw={500}>
+          클릭이 잘 되나용?
+        </Text>
+      </Menu.Item>
+    </UtilButton>
+  ),
+};
+DetailFullClicked.play = async ({ canvasElement }) => {
+  const canvas = within(canvasElement);
+  const clickedUtilButton = await canvas.findAllByRole('button');
+  await userEvent.click(clickedUtilButton[1]);
 };

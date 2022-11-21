@@ -9,7 +9,7 @@ interface Props {
   /**
    * 오른쪽에 위치할 자식 요소를 전달합니다.
    */
-  rightNode: ReactNode;
+  rightNode?: ReactNode;
 }
 
 const Header = ({ leftNode, rightNode }: Props) => {
