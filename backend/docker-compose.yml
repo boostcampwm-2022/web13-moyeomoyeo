@@ -5,10 +5,11 @@ services:
     container_name: moyeo-nginx
     build:
       context: .
-      dockerfile: nginx.Dockerfile
+      dockerfile: nginx.prod.Dockerfile
     restart: always
     ports:
       - 80:80
+      - 443:443
     depends_on:
       - moyeo-server
     networks:
