@@ -12,4 +12,6 @@ echo -e $4 > .env
 
 cat .env
 
+docker-compose down --rmi all
+
 docker-compose up -d
