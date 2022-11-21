@@ -15,9 +15,10 @@ interface Props {
 }
 
 const ArticleTag = ({ id, content }: Props) => {
-  const getBadgeColor = (targetId: number) => {
+  // TODO 이 함수를 util로 분리하는게 좋을지 고민
+  const getBadgeColor = (id: number) => {
     const colorCount = BADGE_COLORS.length;
-    return BADGE_COLORS[targetId % colorCount];
+    return BADGE_COLORS[id % colorCount];
   };
 
   return (
