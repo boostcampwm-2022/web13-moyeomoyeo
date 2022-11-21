@@ -7,14 +7,11 @@ const nextConfig = {
       test: /\.svg$/i,
       use: ["@svgr/webpack"]
     });
-    return config;
-  },
-  webpackDevMiddleware: config => {
     config.watchOptions = {
       poll: 500,
       aggregateTimeout: 300,
     }
-    return config
+    return config;
   },
 }
 
