@@ -27,7 +27,8 @@
       "@pages/*": ["src/pages/*"],
       "@styles/*": ["src/styles/*"],
       "@typings/*": ["src/typings/*"],
-      "@public/*": ["public/*"]
+      "@public/*": ["public/*"],
+      "@constants/*": ["src/constants/*"]
     }
   },
   "include": ["custom.d.ts", "next-env.d.ts", "**/*.ts", "**/*.tsx", ".storybook/**/*.tsx"],
