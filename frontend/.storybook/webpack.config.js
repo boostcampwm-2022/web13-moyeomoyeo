@@ -1,6 +1,11 @@
 const path = require('path');
 
 module.exports = async ({ config }) => {
+  config.resolve.alias = {
+    ...config.resolve.alias,
+    '@public': path.resolve(__dirname, '../public'),
+    '@styles': path.resolve(__dirname, '../src/styles'),
+  };
   config.module.rules.push({
     test: /\.(sass|scss)$/,
     use: ['resolve-url-loader'],

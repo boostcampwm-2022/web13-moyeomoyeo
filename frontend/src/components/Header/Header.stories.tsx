@@ -3,7 +3,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { within, userEvent } from '@storybook/testing-library';
 
 import Header from '.';
-import Logo from '@components/Logo';
+import Logo from '@public/icons/logo-md.svg';
 import LoginButton from '@components/Header/LoginButton';
 import RootTitle from '@components/Header/RootTitle';
 import DetailTitle from '@components/Header/DetailTitle';
@@ -20,13 +20,6 @@ export const HomeRootNotLogin = Template.bind({});
 HomeRootNotLogin.args = {
   leftNode: <Logo />,
   rightNode: <LoginButton />,
-};
-
-HomeRootNotLogin.parameters = {
-  nextRouter: {
-    path: '/login',
-    asPath: '/',
-  },
 };
 
 export const HomeRootLogin = Template.bind({});
