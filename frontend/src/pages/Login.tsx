@@ -1,19 +1,22 @@
 import styled from '@emotion/styled';
 import LogoIcon from '@public/icons/logo.svg';
 import GitLoginButton from '@components/GitLoginButton';
+import PageLayout from '@components/common/PageLayout';
 
 const Login = () => {
   return (
-    <PageWrapper>
-      <InfoWrapper>
-        <LogoIcon />
-        <TextWrapper>
-          <Title>모여모여</Title>
-          <SubTitle>개발자를 위한 모임 활성화 커뮤니티</SubTitle>
-        </TextWrapper>
-      </InfoWrapper>
-      <GitLoginButton />
-    </PageWrapper>
+    <PageLayout>
+      <PageWrapper>
+        <InfoWrapper>
+          <LogoIcon />
+          <TextWrapper>
+            <Title>모여모여</Title>
+            <SubTitle>개발자를 위한 모임 활성화 커뮤니티</SubTitle>
+          </TextWrapper>
+        </InfoWrapper>
+        <GitLoginButton />
+      </PageWrapper>
+    </PageLayout>
   );
 };
 
@@ -21,7 +24,7 @@ const PageWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 3.6rem;
-  height: 100vh;
+  height: 100%;
   justify-content: center;
   align-items: center;
 `;

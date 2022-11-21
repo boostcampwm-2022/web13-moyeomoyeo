@@ -1,10 +1,13 @@
-import GithubLogoIcon from '@public/icons/githubLogo.svg';
+import { IconBrandGithub } from '@tabler/icons';
 import styled from '@emotion/styled';
+import { useTheme } from '@emotion/react';
 
 const GitLoginButton = () => {
+  const { white } = useTheme();
+
   return (
     <LoginButton>
-      <GithubLogoIcon />
+      <IconBrandGithub color={white} />
       <GithubLoginText>Github로 로그인</GithubLoginText>
     </LoginButton>
   );
