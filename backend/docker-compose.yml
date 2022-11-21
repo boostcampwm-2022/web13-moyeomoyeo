@@ -7,6 +7,9 @@ services:
       context: .
       dockerfile: nginx.prod.Dockerfile
     restart: always
+    volumes:
+      - ./data/cerbot/conf:/etc/letsencrypt
+      - ./data/cerbot/www:/var/www/cerbot
     ports:
       - 80:80
       - 443:443
@@ -14,6 +17,16 @@ services:
       - moyeo-server
     networks:
       - backbone
+    command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
+
+  certbot:
+    container_name: certbot
+    image: certbot/certbot:arm32v6-latest
+    restart: unless-stopped
+    volumes:
+      - <data_path>/conf:/etc/letsencrypt
+      - <data_path>/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
   moyeo-server:
     container_name: moyeo-server
