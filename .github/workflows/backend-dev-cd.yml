@@ -72,7 +72,7 @@ jobs:
 
             cd web13-moyeomoyeo
 
-            git checkout -t origin/develop
+            git checkout -t origin/feature/35-bugfix-backnd-cd-environment
 
             sudo chmod +x ./backend/scripts/dev-deploy.sh
 

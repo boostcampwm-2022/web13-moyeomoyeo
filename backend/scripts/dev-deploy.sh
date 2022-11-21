@@ -8,8 +8,8 @@ cd backend
 
 touch .env
 
-echo $4 > .env
-
-cat .env
+cat > .env << EOF
+$4
+EOF
 
 docker-compose up -d
