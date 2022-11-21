@@ -19,6 +19,8 @@ docker rm `docker ps -a -q`
 # 도커 이미지 전체 삭제
 docker compose down --rmi all
 
+chmod +x ./init-letsencrypt.sh
+
 ./init-letsencrypt.sh
 
 docker compose up -d --build
