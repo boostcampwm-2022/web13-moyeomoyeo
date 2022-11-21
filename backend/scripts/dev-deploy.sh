@@ -10,6 +10,6 @@ touch .env
 
 echo $4 > .env
 
-echo .env
+cat .env
 
 docker-compose up -d
