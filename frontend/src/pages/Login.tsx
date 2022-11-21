@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import LogoIcon from '@public/icons/logo.svg';
-import Index from '@components/gitLoginButton';
 import PageLayout from '@components/common/PageLayout';
+import GitLoginButton from '@components/gitLoginButton';
 
 const Login = () => {
   return (
@@ -14,7 +14,7 @@ const Login = () => {
             <SubTitle>개발자를 위한 모임 활성화 커뮤니티</SubTitle>
           </TextWrapper>
         </InfoWrapper>
-        <Index />
+        <GitLoginButton />
       </PageWrapper>
     </PageLayout>
   );
