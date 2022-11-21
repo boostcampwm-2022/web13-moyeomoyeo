@@ -23,13 +23,13 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@public/*": ["public/*"],
       "@components/*": ["src/components/*"],
       "@pages/*": ["src/pages/*"],
       "@styles/*": ["src/styles/*"],
-      "@typings/*": ["src/typings/*"]
+      "@typings/*": ["src/typings/*"],
+      "@public/*": ["public/*"]
     }
   },
   "include": ["custom.d.ts", "next-env.d.ts", "**/*.ts", "**/*.tsx", ".storybook/**/*.tsx"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules/*"]
 }
