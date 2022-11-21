@@ -36,12 +36,12 @@ const theme: MantineThemeOverride = {
     fontFamily: 'NanumSquareNeo, sans-serif',
     fontWeight: 900,
     sizes: {
-      h1: { fontSize: 32 },
-      h2: { fontSize: 24 },
-      h3: { fontSize: 20 },
-      h4: { fontSize: 16 },
-      h5: { fontSize: 14 },
-      h6: { fontSize: 12 },
+      h1: { fontSize: 32, lineHeight: 1.2 },
+      h2: { fontSize: 24, lineHeight: 1.2 },
+      h3: { fontSize: 20, lineHeight: 1.2 },
+      h4: { fontSize: 16, lineHeight: 1.2 },
+      h5: { fontSize: 14, lineHeight: 1.2 },
+      h6: { fontSize: 12, lineHeight: 1.2 },
     },
   },
 };

@@ -1,12 +1,9 @@
-import { MantineProvider } from '@mantine/core';
 import Head from 'next/head';
 import { AppProps } from 'next/app';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import RouterTransition from '@components/RouterTransition';
-import theme from '@styles/theme';
-import CustomFonts from '@styles/CustomFont';
-import GlobalStyles from '@styles/GlobalStyles';
+import CommonStyles from '@styles/CommonStyles';
 
 const queryClient = new QueryClient();
 
@@ -19,12 +16,10 @@ export default function App({ Component, pageProps }: AppProps) {
       </Head>
       <QueryClientProvider client={queryClient}>
         <ReactQueryDevtools initialIsOpen={false} />
-        <MantineProvider withGlobalStyles withNormalizeCSS theme={theme}>
-          <CustomFonts />
-          <GlobalStyles />
+        <CommonStyles>
           <RouterTransition />
           <Component {...pageProps} />
-        </MantineProvider>
+        </CommonStyles>
       </QueryClientProvider>
     </>
   );
