@@ -1,5 +1,5 @@
-import { HttpAdapterHost, NestFactory } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
+import { HttpAdapterHost, NestFactory, Reflector } from '@nestjs/core';
+import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { ValidationError } from 'class-validator';
 import { AppModule } from './app.module';
 import { AppConfigService } from './common/config/app/config.service';
@@ -23,6 +23,8 @@ async function bootstrap() {
 
   const httpAdapterHost = app.get(HttpAdapterHost);
   app.useGlobalFilters(new AllExceptionFilter(httpAdapterHost));
+
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
   const appConfigService = app.get(AppConfigService);
   await app.listen(appConfigService.port);
