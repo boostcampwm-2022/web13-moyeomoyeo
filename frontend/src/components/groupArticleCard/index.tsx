@@ -1,8 +1,14 @@
 import { Image } from '@mantine/core';
-import styled from '@emotion/styled';
 import { Types } from '@typings/types';
 import ArticleTag from '@components/articleTag';
 import StatCounter from '@components/StatCounter';
+import {
+  CardWrapper,
+  InfoWrapper,
+  TagWrapper,
+  TitleText,
+  CapacityText,
+} from '@components/groupArticleCard/styles';
 
 interface Props {
   article: Types;
@@ -26,41 +32,5 @@ const GroupArticleCard = ({ article }: Props) => {
     </CardWrapper>
   );
 };
-
-const CardWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 17.3rem;
-  height: 30.7rem;
-  border-radius: 12px;
-  border: 1px solid ${({ theme }) => theme.colors.gray[2]};
-  overflow: hidden;
-`;
-
-const InfoWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 0.8rem;
-`;
-
-const TagWrapper = styled.div`
-  display: flex;
-  gap: 8px;
-`;
-
-const TitleText = styled.span`
-  font-size: 14px;
-  font-weight: 800;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const CapacityText = styled.span`
-  font-size: 10px;
-  font-weight: 400;
-  color: ${({ theme }) => theme.colors.gray[6]};
-`;
 
 export default GroupArticleCard;
