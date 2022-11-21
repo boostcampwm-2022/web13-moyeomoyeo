@@ -8,6 +8,12 @@ cd backend
 
 touch .env
 
-echo $4 > .env
+echo -e $4 > .env
 
-docker-compose up -d
+# 도커 컨테이너 전체 삭제
+docker rm `docker ps -a -q`
+
+# 도커 이미지 전체 삭제
+docker compose down --rmi all
+
+docker compose up -d --build
