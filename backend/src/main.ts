@@ -1,39 +1,13 @@
-import { HttpAdapterHost, NestFactory, Reflector } from '@nestjs/core';
-import {
-  ClassSerializerInterceptor,
-  ValidationPipe,
-  VersioningType,
-} from '@nestjs/common';
-import { ValidationError } from 'class-validator';
+import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { AppConfigService } from './common/config/app/config.service';
-import { AllExceptionFilter } from './common/filter/all-exception.filter';
-import { BadParameterException } from './common/exception/bad-parameter.exception';
+
+import { setNestApp } from './setNestApp';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.enableVersioning({
-    type: VersioningType.URI,
-    defaultVersion: '1',
-  });
-
-  app.useGlobalPipes(
-    new ValidationPipe({
-      transform: true,
-      stopAtFirstError: true,
-      exceptionFactory: (validationErrors: ValidationError[]) => {
-        return new BadParameterException(
-          Object.values(validationErrors[0].constraints).join(','),
-        );
-      },
-    }),
-  );
-
-  const httpAdapterHost = app.get(HttpAdapterHost);
-  app.useGlobalFilters(new AllExceptionFilter(httpAdapterHost));
-
-  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
+  setNestApp(app);
 
   const appConfigService = app.get(AppConfigService);
   await app.listen(appConfigService.port);
