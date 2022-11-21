@@ -1,5 +1,9 @@
 node_modules
 
 .DS.Store
+
 dist
+
 .env
+.env.*
+
