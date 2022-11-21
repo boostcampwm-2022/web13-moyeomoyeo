@@ -2,12 +2,15 @@ import { Image } from '@mantine/core';
 import { Types } from '@typings/types';
 import ArticleTag from '@components/articleTag';
 import StatCounter from '@components/StatCounter';
+import { ArticleStatus } from '@constants/article';
 import {
+  CapacityText,
   CardWrapper,
+  DimmedBox,
   InfoWrapper,
   TagWrapper,
   TitleText,
-  CapacityText,
+  ClosedText,
 } from '@components/groupArticleCard/styles';
 
 interface Props {
@@ -17,6 +20,11 @@ interface Props {
 const GroupArticleCard = ({ article }: Props) => {
   return (
     <CardWrapper>
+      {article.status !== ArticleStatus.PROGRESS && (
+        <DimmedBox>
+          <ClosedText>모집 종료</ClosedText>
+        </DimmedBox>
+      )}
       <Image src={article.thumbnail} alt={'thumbnail-image'} height={200} />
       <InfoWrapper>
         <TagWrapper>

@@ -10,6 +10,24 @@ const CardWrapper = styled.div`
   overflow: hidden;
 `;
 
+const DimmedBox = styled.div`
+  display: flex;
+  position: absolute;
+  width: 17.3rem;
+  height: 30.7rem;
+  z-index: 1;
+  border-radius: 12px;
+  background-color: rgba(0, 0, 0, 0.4);
+  align-items: center;
+  justify-content: center;
+`;
+
+const ClosedText = styled.div`
+  color: ${({ theme }) => theme.white};
+  font-size: 2rem;
+  font-weight: 800;
+`;
+
 const InfoWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -36,4 +54,4 @@ const CapacityText = styled.span`
   color: ${({ theme }) => theme.colors.gray[6]};
 `;
 
-export { CardWrapper, InfoWrapper, TagWrapper, TitleText, CapacityText };
+export { CardWrapper, DimmedBox, InfoWrapper, TagWrapper, TitleText, CapacityText, ClosedText };

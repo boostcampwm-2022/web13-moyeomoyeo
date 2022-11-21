@@ -19,8 +19,8 @@ const dummyArticle: Types = {
   thumbnail: 'https://avatars.githubusercontent.com/u/90585081?v=4',
   maxCapacity: 5,
   currentCapacity: 3,
-  status: ArticleStatus.SUCCEED,
-  createdAt: '2021-04-03',
+  status: ArticleStatus.PROGRESS,
+  createdAt: '2021-04-03T18:45:19Z',
 };
 
 export { dummyArticle };
