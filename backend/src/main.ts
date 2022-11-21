@@ -1,5 +1,9 @@
 import { HttpAdapterHost, NestFactory, Reflector } from '@nestjs/core';
-import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
+import {
+  ClassSerializerInterceptor,
+  ValidationPipe,
+  VersioningType,
+} from '@nestjs/common';
 import { ValidationError } from 'class-validator';
 import { AppModule } from './app.module';
 import { AppConfigService } from './common/config/app/config.service';
@@ -8,6 +12,11 @@ import { BadParameterException } from './common/exception/bad-parameter.exceptio
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.enableVersioning({
+    type: VersioningType.URI,
+    defaultVersion: '1',
+  });
 
   app.useGlobalPipes(
     new ValidationPipe({
