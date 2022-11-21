@@ -2,7 +2,7 @@ import { IconBrandGithub } from '@tabler/icons';
 import styled from '@emotion/styled';
 import { useTheme } from '@emotion/react';
 
-const Index = () => {
+const GitLoginButton = () => {
   const { white } = useTheme();
 
   return (
@@ -35,4 +35,4 @@ const GithubLoginText = styled.span`
   font-weight: 800;
 `;
 
-export default Index;
+export default GitLoginButton;
