@@ -1,11 +1,15 @@
 import {
   ArgumentsHost,
+  BadRequestException,
   Catch,
   ExceptionFilter,
   HttpException,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
+import { ApiNotFoundException } from '../exception/api-not-found.exception';
+import { BadParameterException } from '../exception/bad-parameter.exception';
 
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {
@@ -27,6 +31,14 @@ export class AllExceptionFilter implements ExceptionFilter {
   convertException(exception: Error) {
     if (!(exception instanceof HttpException)) {
       return new InternalServerErrorException();
+    }
+
+    if (exception.name === NotFoundException.name) {
+      return new ApiNotFoundException();
+    }
+
+    if (exception.name === BadRequestException.name) {
+      return new BadParameterException(exception.message);
     }
 
     return exception;
