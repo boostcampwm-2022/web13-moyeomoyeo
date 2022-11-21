@@ -1,5 +1,5 @@
 import { Image } from '@mantine/core';
-import { Types } from '@typings/types';
+import { ArticleType } from '@typings/types';
 import ArticleTag from '@components/articleTag';
 import StatCounter from '@components/StatCounter';
 import { ArticleStatus } from '@constants/article';
@@ -14,7 +14,7 @@ import {
 } from '@components/groupArticleCard/styles';
 
 interface Props {
-  article: Types;
+  article: ArticleType;
 }
 
 const GroupArticleCard = ({ article }: Props) => {

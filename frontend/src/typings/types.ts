@@ -1,7 +1,7 @@
 import { Location } from '@constants/location';
 import { ArticleStatus } from '@constants/article';
 
-interface Types {
+interface ArticleType {
   id: number;
   title: string;
   location: LocationType;
@@ -25,4 +25,4 @@ interface CategoryType {
   name: string;
 }
 
-export type { Types, LocationType, CategoryType };
+export type { ArticleType, LocationType, CategoryType };

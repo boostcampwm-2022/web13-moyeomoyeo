@@ -1,9 +1,9 @@
-import { Types } from '@typings/types';
+import { ArticleType } from '@typings/types';
 import { Location } from '@constants/location';
 import { ArticleStatus } from '@constants/article';
 
 // TODO 개발용 dummy data, 추후 삭제
-const dummyArticle: Types = {
+const dummyArticle: ArticleType = {
   id: 1,
   title: '모집 테스트1',
   location: {
