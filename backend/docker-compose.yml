@@ -8,8 +8,8 @@ services:
       dockerfile: nginx.prod.Dockerfile
     restart: always
     volumes:
-      - ./data/cerbot/conf:/etc/letsencrypt
-      - ./data/cerbot/www:/var/www/cerbot
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
     ports:
       - 80:80
       - 443:443
@@ -24,8 +24,10 @@ services:
     image: certbot/certbot:arm32v6-latest
     restart: unless-stopped
     volumes:
-      - <data_path>/conf:/etc/letsencrypt
-      - <data_path>/www:/var/www/certbot
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    depends_on:
+      - moyeo-nginx
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
   moyeo-server:
