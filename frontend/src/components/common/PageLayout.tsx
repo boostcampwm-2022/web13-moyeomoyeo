@@ -2,14 +2,16 @@ import Footer from '@components/Footer';
 import { PropsWithChildren } from 'react';
 import styled from '@emotion/styled';
 
-interface Props extends PropsWithChildren {}
+interface Props extends PropsWithChildren {
+  footer?: boolean;
+}
 
-const PageLayout = ({ children }: Props) => {
+const PageLayout = ({ footer, children }: Props) => {
   return (
     <PageWrapper>
       <div>header</div>
       <ContentWrapper>{children}</ContentWrapper>
-      <Footer />
+      {footer && <Footer />}
     </PageWrapper>
   );
 };
