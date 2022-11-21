@@ -23,10 +23,8 @@ jobs:
 
       - name: backend environment setting
         run: |
-          pwd
-          ls -al
-          touch ./backend/.env
-          echo ${{ secrets.BACKEND_DEVELOPMENT_ENVIRONMENT }} > ./backend/.env
+          touch .env
+          echo ${{ secrets.BACKEND_DEVELOPMENT_ENVIRONMENT }} > .env
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
