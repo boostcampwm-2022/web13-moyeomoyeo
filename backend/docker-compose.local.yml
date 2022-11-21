@@ -1,7 +1,7 @@
 version: '3.4'
 
 services:
-  nginx:
+  moyeo-nginx:
     container_name: moyeo-nginx
     build:
       context: .
@@ -14,9 +14,9 @@ services:
     networks:
       - backbone
 
-  nest-server:
+  moyeo-server:
     container_name: moyeo-server
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile
     environment:
@@ -30,7 +30,7 @@ services:
       - .:/usr/src/app
       - /usr/src/app/node_modules
 
-  db:
+  moyeo-db:
     container_name: moyeo-db
     image: mysql:8.0
     restart: always
@@ -46,7 +46,7 @@ services:
     command:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
-    networks:  
+    networks:
       - backbone
 
 networks:

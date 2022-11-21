@@ -1,7 +1,7 @@
 version: '3.4'
 
 services:
-  nginx:
+  moyeo-nginx:
     container_name: moyeo-nginx
     build:
       context: .
@@ -14,7 +14,7 @@ services:
     networks:
       - backbone
 
-  nest-server:
+  moyeo-server:
     container_name: moyeo-server
     image: ${DOCKER_SERVER_IMAGE}
     environment:
@@ -25,7 +25,7 @@ services:
     networks:
       - backbone
 
-  db:
+  moyeo-db:
     container_name: moyeo-db
     image: mysql:8.0
     restart: always
