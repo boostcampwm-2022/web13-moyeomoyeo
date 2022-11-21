@@ -30,7 +30,7 @@ const LoginButton = styled.button`
 `;
 
 const GithubLoginText = styled.span`
-  color: #ffffff;
+  color: ${({ theme }) => theme.white};
   font-size: 1.6rem;
   font-weight: 800;
 `;

@@ -36,7 +36,7 @@ const FooterWrapper = styled.div`
   width: 100%;
   height: 5.6rem;
   justify-content: space-between;
-  background-color: #ffffff;
+  background-color: ${({ theme }) => theme.white};
   box-shadow: 0px -4px 4px rgba(0, 0, 0, 0.1);
 `;
 
