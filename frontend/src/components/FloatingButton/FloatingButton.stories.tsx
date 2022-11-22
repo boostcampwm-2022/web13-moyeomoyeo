@@ -18,7 +18,7 @@ export default {
   },
 } as ComponentMeta<typeof FloatingButton>;
 
-const FloatingItemChilren = () => (
+const FloatingItemChildren = () => (
   <>
     <Menu.Item p="md" icon={<IconArrowAutofitUp color="black" size={20} />}>
       <Text fz="md" fw={500}>
@@ -56,12 +56,12 @@ const OverflowTemplate: ComponentStory<typeof FloatingButton> = (args) => (
 
 export const Default = DefaultTemplate.bind({});
 Default.args = {
-  children: <FloatingItemChilren />,
+  children: <FloatingItemChildren />,
 };
 
 export const Clicked = DefaultTemplate.bind({});
 Clicked.args = {
-  children: <FloatingItemChilren />,
+  children: <FloatingItemChildren />,
 };
 Clicked.play = async ({ canvasElement }) => {
   const canvas = within(canvasElement);
@@ -71,7 +71,7 @@ Clicked.play = async ({ canvasElement }) => {
 
 export const InOverflowPage = OverflowTemplate.bind({});
 InOverflowPage.args = {
-  children: <FloatingItemChilren />,
+  children: <FloatingItemChildren />,
 };
 InOverflowPage.play = async ({ canvasElement }) => {
   const canvas = within(canvasElement);
