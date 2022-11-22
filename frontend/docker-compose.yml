@@ -1,11 +1,11 @@
-version: '3.9'
+version: '3.3'
 
 services:
   frontend:
     container_name: moyeo-client
     image: ${DOCKER_CLIENT_IMAGE}
     environment:
-      NODE_ENV: development
+      NODE_ENV: production
     ports:
       - 3000:3000
     command: npm run start
