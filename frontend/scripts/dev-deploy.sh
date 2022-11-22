@@ -20,4 +20,4 @@ chmod +x ./init-letsencrypt.sh
 
 ./init-letsencrypt.sh
 
-docker compose up -d
+docker compose up -d --build
