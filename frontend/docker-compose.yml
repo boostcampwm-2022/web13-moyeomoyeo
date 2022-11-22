@@ -1,4 +1,4 @@
-version: '3.4'
+version: '3.9'
 
 services:
   frontend:
@@ -8,4 +8,24 @@ services:
       NODE_ENV: development
     ports:
       - 3000:3000
-    command: npm run dev
+    command: npm run start
+    networks:
+      - backbone
+
+  nginx:
+    container_name: moyeo-nginx
+    build:
+      context: .
+      dockerfile: nginx.Dockerfile
+    ports:
+      - 80:80
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - frontend
+    networks:
+      - backbone
+
+networks:
+  backbone:
+    driver: bridge

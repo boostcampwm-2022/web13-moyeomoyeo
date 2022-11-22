@@ -1,11 +1,9 @@
-version: '3.4'
+version: '3.9'
 
 services:
   frontend:
-    container_name: moyeo-client
-    build:
-      context: .
-      dockerfile: Dockerfile
+    container_name: moyeo-nextjs
+    image: moyeo-frontend-dev
     environment:
       NODE_ENV: development
     ports:
@@ -16,15 +14,12 @@ services:
       - /usr/src/app/node_modules
   storybook:
     container_name: moyeo-storybook
-    image: frontend_frontend
+    image: moyeo-frontend-dev
     environment:
       NODE_ENV: development
     ports:
       - 6006:6006
-    command: >
-      sh -c "
-        npm run storybook 
-      "
+    command: npm run storybook
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
