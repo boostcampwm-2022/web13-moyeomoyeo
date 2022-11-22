@@ -41,13 +41,13 @@ jobs:
       status: ${{ job.status }}
     steps:
       - name: checkout
-      - uses: actions/checkout@v3
+        uses: actions/checkout@v3
 
       - name: depedency install
-      - run: npm install
+        run: npm install
 
       - name: chromatic
-      - uses: chromaui/action@v1
+        uses: chromaui/action@v1
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           token: ${{ secrets.GITHUB_TOKEN }}
