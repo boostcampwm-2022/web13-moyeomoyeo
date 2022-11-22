@@ -3,9 +3,7 @@ version: '3.4'
 services:
   frontend:
     container_name: moyeo-client
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ${DOCKER_CLIENT_IMAGE}
     environment:
       NODE_ENV: development
     ports:
@@ -31,4 +29,3 @@ services:
 networks:
   backbone:
     driver: bridge
-# image: ${DOCKER_CLIENT_IMAGE}
