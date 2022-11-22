@@ -1,9 +1,8 @@
 import { useState, ReactNode } from 'react';
 import { Menu } from '@mantine/core';
 import { useClickOutside } from '@mantine/hooks';
-import { IconPlus } from '@tabler/icons';
 
-import { FABWrapper } from './styles';
+import { FABWrapper, StyledIconPlus } from './styles';
 
 interface Props {
   /**
@@ -25,10 +24,9 @@ const FloatingButton = ({ children }: Props) => {
           radius="xl"
           size={48}
           onClick={() => setOpened((o) => !o)}
-          opened={opened}
           ref={ref}
         >
-          <IconPlus size={24} />
+          <StyledIconPlus size={24} opened={opened ? 'opened' : null} />
         </FABWrapper>
       </Menu.Target>
       <Menu.Dropdown>{children}</Menu.Dropdown>
