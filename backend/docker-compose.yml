@@ -3,9 +3,7 @@ version: '3.9'
 services:
   moyeo-nginx:
     container_name: moyeo-nginx
-    build:
-      context: .
-      dockerfile: nginx.prod.Dockerfile
+    image: nginx
     restart: always
     volumes:
       - ./data/nginx:/etc/nginx/conf.d
