@@ -4,10 +4,25 @@ import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import RouterTransition from '@components/RouterTransition';
 import CommonStyles from '@styles/CommonStyles';
+import initMockApi from '../mocks';
+import { useEffect, useState } from 'react';
 
 const queryClient = new QueryClient();
 
 export default function App({ Component, pageProps }: AppProps) {
+  const [shouldRender, setShouldRender] = useState<boolean>(false);
+
+  useEffect(() => {
+    (async () => {
+      if (process.env.NODE_ENV === 'development') {
+        await initMockApi();
+        setShouldRender(true);
+      }
+    })();
+  }, []);
+
+  if (!shouldRender) return null;
+
   return (
     <>
       <Head>
