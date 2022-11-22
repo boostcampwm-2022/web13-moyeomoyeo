@@ -33,7 +33,7 @@ const Footer = () => {
 
 const FooterWrapper = styled.footer`
   display: flex;
-  position: fixed;
+  position: sticky;
   bottom: 0;
   width: 100%;
   height: 5.6rem;
