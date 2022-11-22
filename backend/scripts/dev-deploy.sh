@@ -16,9 +16,6 @@ docker compose down
 # 도커 컨테이너 전체 삭제
 docker rm `docker ps -a -q`
 
-# 도커 이미지 전체 삭제
-docker compose down --rmi all
-
 chmod +x ./init-letsencrypt.sh
 
 ./init-letsencrypt.sh
