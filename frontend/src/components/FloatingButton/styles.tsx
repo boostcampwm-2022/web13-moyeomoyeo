@@ -7,6 +7,9 @@ interface FABWrapperProps extends ActionIconProps {
 
 // https://mantine.dev/styles/styled/#polymorphic-components
 const _FABWrapper = styled(ActionIcon)<{ opened: boolean }>`
+  position: fixed;
+  bottom: 7.2rem;
+  right: 1.6rem;
   transition: transform 0.2s ease-in-out;
   ${({ opened }) => opened && `transform: rotate(45deg);`}
 `;
