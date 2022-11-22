@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { ResponseEntity } from '@common/response-entity';
 
 describe('AppController', () => {
   let appController: AppController;
@@ -15,8 +16,16 @@ describe('AppController', () => {
   });
 
   describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(appController.getHello()).toBe('Hello World!');
+    test('example test', async () => {
+      // given
+      const id = 11;
+
+      // when
+      const result = appController.getHello({ id });
+
+      // then
+
+      expect(result).toEqual(ResponseEntity.OK_WITH_DATA('Hello World!'));
     });
   });
 });

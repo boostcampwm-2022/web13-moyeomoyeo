@@ -34,6 +34,11 @@ jobs:
       - name: build
         run: npm run build
 
+      - name: create environment variable file
+        run: |
+          touch .env.test
+          echo -e ${{ secrets.BACKEND_CI_TEST_ENVIRONMENT }} > .env.test
+
       - name: test
         run: npm run test
 
@@ -41,7 +46,7 @@ jobs:
         run: npm run test:e2e
 
   slack-notifications:
-    needs: [CI]
+    needs: [ CI ]
     if: ${{ always() }}
     uses: ./.github/workflows/slack-notification.yml
     with:

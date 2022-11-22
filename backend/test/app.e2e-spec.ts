@@ -1,7 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { AppModule } from './../src/app.module';
+import { AppModule } from '@src/app.module';
+import { setNestApp } from '@src/setNestApp';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -12,13 +13,28 @@ describe('AppController (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
+
+    setNestApp(app);
+
     await app.init();
   });
+  describe('GET /v1/:id', () => {
+    const url = (id) => `/v1/${id}`;
 
-  it('/ (GET)', () => {
-    return request(app.getHttpServer())
-      .get('/')
-      .expect(200)
-      .expect('Hello World!');
+    test('example test', async () => {
+      // given
+      const id = 11;
+
+      // when
+      const result = await request(app.getHttpServer()).get(url(id));
+
+      // then
+      expect(result.status).toEqual(200);
+      expect(result.body).toMatchObject({
+        status: 'OK',
+        message: '',
+        data: 'Hello World!',
+      });
+    });
   });
 });
