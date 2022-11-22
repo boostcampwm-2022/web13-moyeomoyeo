@@ -34,22 +34,20 @@ const FloatingItemChildren = () => (
 );
 
 const DefaultTemplate: ComponentStory<typeof FloatingButton> = (args) => (
-  <PageLayout footer data-testid="page">
+  <PageLayout footer>
     <FloatingButton {...args} />
   </PageLayout>
 );
 
 const OverflowTemplate: ComponentStory<typeof FloatingButton> = (args) => (
   <PageLayout footer>
-    <div style={{ width: '100%', height: '100%' }} data-testid="page">
-      {Array.from({ length: 100 })
-        .fill(0)
-        .map((_, i) => (
-          <Chip defaultChecked key={i}>
-            Awesome chip
-          </Chip>
-        ))}
-    </div>
+    {Array.from({ length: 100 })
+      .fill(0)
+      .map((_, i) => (
+        <Chip defaultChecked key={i}>
+          Awesome chip
+        </Chip>
+      ))}
     <FloatingButton {...args} />
   </PageLayout>
 );
