@@ -8,8 +8,10 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
+import { instanceToPlain } from 'class-transformer';
 import { ApiNotFoundException } from '../exception/api-not-found.exception';
 import { BadParameterException } from '../exception/bad-parameter.exception';
+import { ResponseEntity } from '../response-entity';
 
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {
@@ -23,9 +25,17 @@ export class AllExceptionFilter implements ExceptionFilter {
     const convertedException = this.convertException(exception);
 
     const httpStatus = convertedException.getStatus();
-    const response = convertedException.getResponse();
+    const { status, message, ...data } = convertedException.getResponse() as {
+      status: string;
+      message: string;
+      [key: string]: any;
+    };
 
-    httpAdapter.reply(ctx.getResponse(), response, httpStatus);
+    httpAdapter.reply(
+      ctx.getResponse(),
+      instanceToPlain(ResponseEntity.ERROR_WITH_DATA(status, message, data)),
+      httpStatus,
+    );
   }
 
   convertException(exception: Error) {
