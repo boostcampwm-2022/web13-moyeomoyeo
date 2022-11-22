@@ -26,6 +26,8 @@
       "@pages/*": ["src/pages/*"],
       "@styles/*": ["src/styles/*"],
       "@typings/*": ["src/typings/*"],
+      "@hooks/*": ["src/hooks/*"],
+      "@apis/*": ["src/apis/*"],
       "@public/*": ["public/*"]
     }
   },
