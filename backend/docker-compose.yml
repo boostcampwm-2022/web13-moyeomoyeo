@@ -7,8 +7,8 @@ services:
     restart: always
     volumes:
       - ./data/nginx:/etc/nginx/conf.d
-      - ./data/certbot/conf:/etc/letsencrypt
-      - ./data/certbot/www:/var/www/certbot
+      - /letsencrypt/certbot/conf:/etc/letsencrypt
+      - /letsencrypt/certbot/www:/var/www/certbot
     ports:
       - 80:80
       - 443:443
@@ -23,8 +23,8 @@ services:
     image: certbot/certbot
     restart: unless-stopped
     volumes:
-      - ./data/certbot/conf:/etc/letsencrypt
-      - ./data/certbot/www:/var/www/certbot
+      - /letsencrypt/certbot/conf:/etc/letsencrypt
+      - /letsencrypt/certbot/www:/var/www/certbot
     depends_on:
       - moyeo-nginx
     networks:

@@ -33,8 +33,8 @@ services:
     image: certbot/certbot
     restart: unless-stopped
     volumes:
-      - ./dev/certbot/conf:/etc/letsencrypt
-      - ./dev/certbot/www:/var/www/certbot
+      - /letsencrypt/certbot/conf:/etc/letsencrypt
+      - /letsencrypt/certbot/www:/var/www/certbot
     depends_on:
       - nginx
     networks:
