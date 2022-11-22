@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@src/*": [
+        "src/*"
+      ],
+      "@common/*": [
+        "src/common/*"
+      ],
+      "@middleware/*": [
+        "src/common/middleware/*"
+      ],
+      "@filter/*": [
+        "src/common/filter/*"
+      ],
+      "@config/*": [
+        "src/common/config/*"
+      ],
+      "@decorator/*": [
+        "src/common/decorator/*"
+      ],
+      "@exception/*": [
+        "src/common/exception/*"
+      ],
+      "@app/*": [
+        "src/app/*"
+      ]
+    }
+  }
+}

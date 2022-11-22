@@ -6,8 +6,8 @@ import {
   VersioningType,
 } from '@nestjs/common';
 import { ValidationError } from 'class-validator';
-import { BadParameterException } from './common/exception/bad-parameter.exception';
-import { AllExceptionFilter } from './common/filter/all-exception.filter';
+import { BadParameterException } from '@exception/bad-parameter.exception';
+import { AllExceptionFilter } from '@filter/all-exception.filter';
 
 export const setNestApp = (app: INestApplication) => {
   app.enableVersioning({

@@ -1,9 +1,9 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AppConfigModule } from './common/config/app/config.module';
-import { ApiSuccessLoggerMiddleware } from './common/middleware/api-success-logger.middleware';
-import { ApiExceptionLoggerMiddleware } from './common/middleware/api-exception-logger.middleware';
+import { AppConfigModule } from '@config/app/config.module';
+import { ApiSuccessLoggerMiddleware } from '@middleware/api-success-logger.middleware';
+import { ApiExceptionLoggerMiddleware } from '@middleware/api-exception-logger.middleware';
 
 @Module({
   imports: [AppConfigModule],

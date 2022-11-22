@@ -2,12 +2,12 @@ import { Controller, Get, HttpCode, HttpStatus, Param } from '@nestjs/common';
 import { ApiProperty, ApiTags } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsNumber } from 'class-validator';
+import { ResponseEntity } from '@common/response-entity';
+import { ApiSuccessResponse } from '@decorator/api-success-resposne.decorator';
+import { ApiErrorResponse } from '@decorator/api-error-response.decorator';
+import { BadParameterException } from '@exception/bad-parameter.exception';
+import { ApiNotFoundException } from '@exception/api-not-found.exception';
 import { AppService } from './app.service';
-import { ResponseEntity } from './common/response-entity';
-import { ApiSuccessResponse } from './common/decorator/api-success-resposne.decorator';
-import { BadParameterException } from './common/exception/bad-parameter.exception';
-import { ApiErrorResponse } from './common/decorator/api-error-response.decorator';
-import { ApiNotFoundException } from './common/exception/api-not-found.exception';
 
 export class ExampleDto {
   @IsNumber()

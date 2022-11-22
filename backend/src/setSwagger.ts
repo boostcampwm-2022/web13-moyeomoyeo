@@ -1,7 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { AppConfigService } from './common/config/app/config.service';
-import { ResponseEntity } from './common/response-entity';
+import { AppConfigService } from '@config/app/config.service';
+import { ResponseEntity } from '@common/response-entity';
 
 export const setSwagger = (app: INestApplication) => {
   const appConfigService = app.get(AppConfigService);
