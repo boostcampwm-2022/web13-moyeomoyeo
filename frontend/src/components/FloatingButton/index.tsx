@@ -1,5 +1,6 @@
 import { useState, ReactNode } from 'react';
 import { Menu } from '@mantine/core';
+import { useClickOutside } from '@mantine/hooks';
 import { IconPlus } from '@tabler/icons';
 
 import { FABWrapper } from './styles';
@@ -13,6 +14,7 @@ interface Props {
 
 const FloatingButton = ({ children }: Props) => {
   const [opened, setOpened] = useState(false);
+  const ref = useClickOutside(() => setOpened(false));
 
   return (
     <Menu position="top-end" transition="rotate-right" transitionDuration={200}>
@@ -24,6 +26,7 @@ const FloatingButton = ({ children }: Props) => {
           size={48}
           onClick={() => setOpened((o) => !o)}
           opened={opened}
+          ref={ref}
         >
           <IconPlus size={24} />
         </FABWrapper>

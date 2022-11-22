@@ -8,14 +8,6 @@ import { IconArrowAutofitUp, IconPencil } from '@tabler/icons';
 export default {
   title: 'Component/FloatingButton',
   component: FloatingButton,
-  argTypes: {
-    authorized: {
-      name: 'authorized',
-      control: {
-        type: 'boolean',
-      },
-    },
-  },
 } as ComponentMeta<typeof FloatingButton>;
 
 const FloatingItemChildren = () => (
