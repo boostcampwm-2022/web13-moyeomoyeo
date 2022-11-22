@@ -14,15 +14,27 @@ services:
 
   nginx:
     container_name: moyeo-nginx
-    build:
-      context: .
-      dockerfile: nginx.Dockerfile
+    image: nginx
     ports:
       - 80:80
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./dev/nginx:/etc/nginx/conf.d
+      - ./dev/certbot/conf:/etc/letsencrypt
+      - ./dev/certbot/www:/var/www/certbot
     depends_on:
       - frontend
+    networks:
+      - backbone
+
+  certbot:
+    container_name: certbot
+    image: certbot/certbot
+    restart: unless-stopped
+    volumes:
+      - ./dev/certbot/conf:/etc/letsencrypt
+      - ./dev/certbot/www:/var/www/certbot
+    depends_on:
+      - moyeo-nginx
     networks:
       - backbone
 
