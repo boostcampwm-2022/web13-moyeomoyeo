@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const getTestData = async (nextId: number) => {
-  return await axios.get(`/test`, {
+  return await axios.get(`http://localhost:3000/test`, {
     params: { limit: 5, nextId },
   });
 };
