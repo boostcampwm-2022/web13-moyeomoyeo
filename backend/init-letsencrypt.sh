@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# 오픈 소스: https://github.com/wmnnd/nginx-certbot 참고
+
 if ! [ -x "$(command -v docker-compose)" ]; then
   echo 'Error: docker-compose is not installed.' >&2
   exit 1
