@@ -10,6 +10,14 @@ touch .env
 
 echo $4 > .env
 
-docker compose down --rmi all
+# docker down
+docker compose down
+
+# 도커 컨테이너 전체 삭제
+docker rm `docker ps -a -q`
+
+chmod +x ./init-letsencrypt.sh
+
+./init-letsencrypt.sh
 
 docker compose up -d
