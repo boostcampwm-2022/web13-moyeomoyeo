@@ -27,8 +27,7 @@ export const setNestApp = (app: INestApplication) => {
     }),
   );
 
-  const httpAdapterHost = app.get(HttpAdapterHost);
-  app.useGlobalFilters(new AllExceptionFilter(httpAdapterHost));
+  app.useGlobalFilters(new AllExceptionFilter(app.get(HttpAdapterHost)));
 
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 };
