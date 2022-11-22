@@ -49,6 +49,7 @@ jobs:
       - name: chromatic
         uses: chromaui/action@v1
         with:
+          workingDir: frontend
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
