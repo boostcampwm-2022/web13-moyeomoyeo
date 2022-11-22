@@ -1,15 +1,16 @@
 import Footer from '@components/Footer';
-import { PropsWithChildren } from 'react';
+import { ReactNode, PropsWithChildren } from 'react';
 import styled from '@emotion/styled';
 
 interface Props extends PropsWithChildren {
+  header?: ReactNode;
   footer?: boolean;
 }
 
-const PageLayout = ({ footer, children }: Props) => {
+const PageLayout = ({ header, footer, children }: Props) => {
   return (
     <PageWrapper>
-      <div>header</div>
+      {header}
       <ContentWrapper>{children}</ContentWrapper>
       {footer && <Footer />}
     </PageWrapper>
@@ -17,17 +18,13 @@ const PageLayout = ({ footer, children }: Props) => {
 };
 
 const PageWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  align-items: center;
-  gap: 0.5rem;
+  width: 100%;
+  height: 100%;
 `;
 
 const ContentWrapper = styled.div`
   width: 100%;
-  height: 100%;
-  overflow: auto;
+  min-height: calc(100vh - 6.4rem - 5.6rem);
 `;
 
 export default PageLayout;

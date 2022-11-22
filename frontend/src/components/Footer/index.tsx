@@ -31,8 +31,10 @@ const Footer = () => {
   );
 };
 
-const FooterWrapper = styled.div`
+const FooterWrapper = styled.footer`
   display: flex;
+  position: fixed;
+  bottom: 0;
   width: 100%;
   height: 5.6rem;
   justify-content: space-between;

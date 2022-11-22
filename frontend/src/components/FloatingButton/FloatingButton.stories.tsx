@@ -1,14 +1,21 @@
-import FloatingButton from '.';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { userEvent, within } from '@storybook/testing-library';
-import PageLayout from '@components/common/PageLayout';
 import { Chip, Menu, Text } from '@mantine/core';
 import { IconArrowAutofitUp, IconPencil } from '@tabler/icons';
+
+import FloatingButton from '.';
+import PageLayout from '@components/common/PageLayout';
+import Header from '@components/Header';
+import DetailTitle from '@components/Header/DetailTitle';
 
 export default {
   title: 'Component/FloatingButton',
   component: FloatingButton,
 } as ComponentMeta<typeof FloatingButton>;
+
+const SampleHeader = () => (
+  <Header leftNode={<DetailTitle title="로그인" subTitle="로그인을 해주세요" />} />
+);
 
 const FloatingItemChildren = () => (
   <>
@@ -26,13 +33,13 @@ const FloatingItemChildren = () => (
 );
 
 const DefaultTemplate: ComponentStory<typeof FloatingButton> = (args) => (
-  <PageLayout footer>
-    <FloatingButton {...args} />
+  <PageLayout header={<SampleHeader />} footer>
+    <FloatingButton {...args} data-testid="floating" />
   </PageLayout>
 );
 
 const OverflowTemplate: ComponentStory<typeof FloatingButton> = (args) => (
-  <PageLayout footer>
+  <PageLayout header={<SampleHeader />} footer>
     {Array.from({ length: 100 })
       .fill(0)
       .map((_, i) => (
@@ -55,8 +62,8 @@ Clicked.args = {
 };
 Clicked.play = async ({ canvasElement }) => {
   const canvas = within(canvasElement);
-  const button = await canvas.findByRole('button');
-  userEvent.click(button);
+  const buttons = await canvas.findAllByRole('button');
+  userEvent.click(buttons[1]);
 };
 
 export const InOverflowPage = OverflowTemplate.bind({});
@@ -65,6 +72,6 @@ InOverflowPage.args = {
 };
 InOverflowPage.play = async ({ canvasElement }) => {
   const canvas = within(canvasElement);
-  const button = await canvas.findByRole('button');
-  userEvent.click(button);
+  const buttons = await canvas.findAllByRole('button');
+  userEvent.click(buttons[1]);
 };
