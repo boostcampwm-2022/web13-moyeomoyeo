@@ -2,7 +2,8 @@ import FloatingButton from '.';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { userEvent, within } from '@storybook/testing-library';
 import PageLayout from '@components/common/PageLayout';
-import { Chip } from '@mantine/core';
+import { Chip, Menu, Text } from '@mantine/core';
+import { IconArrowAutofitUp, IconPencil } from '@tabler/icons';
 
 export default {
   title: 'Component/FloatingButton',
@@ -16,6 +17,21 @@ export default {
     },
   },
 } as ComponentMeta<typeof FloatingButton>;
+
+const FloatingItemChilren = () => (
+  <>
+    <Menu.Item p="md" icon={<IconArrowAutofitUp color="black" size={20} />}>
+      <Text fz="md" fw={500}>
+        상단으로 이동
+      </Text>
+    </Menu.Item>
+    <Menu.Item p="md" icon={<IconPencil color="black" size={20} />}>
+      <Text fz="md" fw={500}>
+        게시글 작성
+      </Text>
+    </Menu.Item>
+  </>
+);
 
 const DefaultTemplate: ComponentStory<typeof FloatingButton> = (args) => (
   <PageLayout footer data-testid="page">
@@ -40,12 +56,12 @@ const OverflowTemplate: ComponentStory<typeof FloatingButton> = (args) => (
 
 export const Default = DefaultTemplate.bind({});
 Default.args = {
-  authorized: false,
+  children: <FloatingItemChilren />,
 };
 
 export const Clicked = DefaultTemplate.bind({});
 Clicked.args = {
-  authorized: true,
+  children: <FloatingItemChilren />,
 };
 Clicked.play = async ({ canvasElement }) => {
   const canvas = within(canvasElement);
@@ -55,7 +71,7 @@ Clicked.play = async ({ canvasElement }) => {
 
 export const InOverflowPage = OverflowTemplate.bind({});
 InOverflowPage.args = {
-  authorized: true,
+  children: <FloatingItemChilren />,
 };
 InOverflowPage.play = async ({ canvasElement }) => {
   const canvas = within(canvasElement);
