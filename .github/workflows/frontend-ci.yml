@@ -38,7 +38,7 @@ jobs:
       run:
         working-directory: './frontend'
     outputs:
-      status: ${{ job.status }}
+      status: ${{ steps.chromatic.outputs.storybookUrl }}
     steps:
       - name: checkout
         uses: actions/checkout@v3
@@ -61,7 +61,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          message: ${{ steps.chromatic.outputs.storybookUrl }}
+          message: 'storybook link -> ${{ steps.chromatic.outputs.storybookUrl }}'
           reactions: rocket
 
 
