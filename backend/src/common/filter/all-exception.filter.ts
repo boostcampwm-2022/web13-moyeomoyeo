@@ -33,7 +33,7 @@ export class AllExceptionFilter implements ExceptionFilter {
 
     httpAdapter.reply(
       ctx.getResponse(),
-      instanceToPlain(ResponseEntity.ERROR_WITH_DATA(status, message, data)),
+      instanceToPlain(ResponseEntity.ERROR_WITH_DATA(message, status, data)),
       httpStatus,
     );
   }
