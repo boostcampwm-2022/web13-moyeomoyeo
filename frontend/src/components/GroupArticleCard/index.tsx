@@ -1,6 +1,6 @@
 import { Image } from '@mantine/core';
 import { ArticleType } from '@typings/types';
-import ArticleTag from '@components/articleTag';
+import ArticleTag from '@components/ArticleTag';
 import StatCounter from '@components/StatCounter';
 import { ArticleStatus } from '@constants/article';
 import {
@@ -11,7 +11,7 @@ import {
   TagWrapper,
   TitleText,
   ClosedText,
-} from '@components/groupArticleCard/styles';
+} from '@components/GroupArticleCard/styles';
 
 interface Props {
   article: ArticleType;
