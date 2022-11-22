@@ -17,6 +17,7 @@ services:
     image: nginx
     ports:
       - 80:80
+      - 443:443
     volumes:
       - ./dev/nginx:/etc/nginx/conf.d
       - ./dev/certbot/conf:/etc/letsencrypt
