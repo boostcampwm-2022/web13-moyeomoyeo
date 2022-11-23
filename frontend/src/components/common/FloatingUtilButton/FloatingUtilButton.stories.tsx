@@ -1,31 +1,43 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { userEvent, within } from '@storybook/testing-library';
 
-import FloatingButton from '.';
+import FloatingUtilButton from '.';
 import PageLayout from '@components/common/PageLayout';
 import Header from '@components/common/Header';
 import DetailTitle from '@components/common/Header/DetailTitle';
 
 export default {
-  title: 'Component/FloatingButton',
-  component: FloatingButton,
-} as ComponentMeta<typeof FloatingButton>;
+  title: 'Component/FloatingUtilButton',
+  component: FloatingUtilButton,
+  argTypes: {
+    authorized: {
+      description: '로그인 여부를 나타냅니다.',
+      control: {
+        type: 'boolean',
+      },
+    },
+  },
+} as ComponentMeta<typeof FloatingUtilButton>;
 
 const SampleHeader = () => (
   <Header leftNode={<DetailTitle title="로그인" subTitle="로그인을 해주세요" />} />
 );
 
-const DefaultTemplate: ComponentStory<typeof FloatingButton> = (args) => (
+const DefaultTemplate: ComponentStory<typeof FloatingUtilButton> = (args) => (
   <PageLayout header={<SampleHeader />} footer>
-    <FloatingButton {...args} />
+    <FloatingUtilButton {...args} />
   </PageLayout>
 );
 
 export const Default = DefaultTemplate.bind({});
-Default.args = {};
+Default.args = {
+  authorized: true,
+};
 
 export const Clicked = DefaultTemplate.bind({});
-Clicked.args = {};
+Clicked.args = {
+  authorized: true,
+};
 Clicked.play = async ({ canvasElement }) => {
   const canvas = within(canvasElement);
   const buttons = await canvas.findAllByRole('button');

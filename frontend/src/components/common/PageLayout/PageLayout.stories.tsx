@@ -29,6 +29,8 @@ RootPageLayout.args = {
 
 export const DetailPageLayout = Template.bind({});
 DetailPageLayout.args = {
+  footer: false,
+  floatingUtil: false,
   header: (
     <Header
       leftNode={<DetailTitle title="페이지 대제목" subTitle="페이지 소제목" />}
@@ -47,5 +49,49 @@ DetailPageLayout.args = {
         </UtilButton>
       }
     />
+  ),
+};
+
+export const PageLayoutInOverflow = Template.bind({});
+PageLayoutInOverflow.args = {
+  footer: true,
+  floatingUtil: true,
+  header: (
+    <Header
+      leftNode={<DetailTitle title="페이지 대제목" subTitle="페이지 소제목" />}
+      rightNode={
+        <UtilButton>
+          <Menu.Item p="md">
+            <Text fz="md" fw={500}>
+              로그아웃
+            </Text>
+          </Menu.Item>
+          <Menu.Item p="md">
+            <Text fz="md" fw={500}>
+              이름이 엄청 긴거
+            </Text>
+          </Menu.Item>
+        </UtilButton>
+      }
+    />
+  ),
+  children: (
+    <>
+      <div
+        style={{ width: '300px', height: '300px', backgroundColor: 'red', marginBottom: '10px' }}
+      ></div>
+      <div
+        style={{ width: '300px', height: '300px', backgroundColor: 'red', marginBottom: '10px' }}
+      ></div>
+      <div
+        style={{ width: '300px', height: '300px', backgroundColor: 'red', marginBottom: '10px' }}
+      ></div>
+      <div
+        style={{ width: '300px', height: '300px', backgroundColor: 'red', marginBottom: '10px' }}
+      ></div>
+      <div
+        style={{ width: '300px', height: '300px', backgroundColor: 'red', marginBottom: '10px' }}
+      ></div>
+    </>
   ),
 };
