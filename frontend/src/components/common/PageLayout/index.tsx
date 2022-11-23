@@ -35,7 +35,7 @@ const PageWrapper = styled.div`
 const ContentWrapper = styled.div`
   width: 100%;
   height: 100%;
-  min-height: calc(100vh - 6.4rem - 5.6rem);
+  flex: 1;
 `;
 
 export default PageLayout;
