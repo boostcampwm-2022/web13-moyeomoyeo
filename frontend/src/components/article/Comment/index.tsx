@@ -1,5 +1,5 @@
 import { Avatar, Text } from '@mantine/core';
-import TimeFormatter from '@components/common/TimeFormatter/index';
+import dateTimeFormat from '@utils/dateTime';
 import { Comment as CommentItem } from '@typings/types';
 import {
   CommentWrapper,
@@ -40,7 +40,7 @@ const Comment = ({ comment = mockComment }: Props) => {
             {comment.authorName}
           </Text>
           <Text fz="sm" fw={300} c="gray.4">
-            <TimeFormatter datetime={comment.createdAt} />
+            {dateTimeFormat(comment.createdAt)}
           </Text>
         </CommentAuthor>
         <CommentUtils>

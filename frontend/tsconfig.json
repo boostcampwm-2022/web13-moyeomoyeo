@@ -28,7 +28,8 @@
       "@styles/*": ["src/styles/*"],
       "@typings/*": ["src/typings/*"],
       "@public/*": ["public/*"],
-      "@constants/*": ["src/constants/*"]
+      "@constants/*": ["src/constants/*"],
+      "@utils/*": ["src/utils/*"]
     }
   },
   "include": ["custom.d.ts", "next-env.d.ts", "**/*.ts", "**/*.tsx", ".storybook/**/*.tsx"],
