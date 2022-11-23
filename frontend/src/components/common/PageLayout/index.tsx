@@ -3,8 +3,8 @@ import { ReactNode, PropsWithChildren } from 'react';
 import styled from '@emotion/styled';
 import { IconArrowAutofitUp, IconPencil } from '@tabler/icons';
 
-import Footer from '@components/Footer';
-import FloatingButton from '@components/FloatingButton';
+import Footer from '@components/common/Footer';
+import FloatingButton from '@components/common/FloatingButton';
 
 interface Props extends PropsWithChildren {
   header?: ReactNode;

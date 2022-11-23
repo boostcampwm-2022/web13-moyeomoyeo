@@ -5,8 +5,8 @@ import { IconArrowAutofitUp, IconPencil } from '@tabler/icons';
 
 import FloatingButton from '.';
 import PageLayout from '@components/common/PageLayout';
-import Header from '@components/Header';
-import DetailTitle from '@components/Header/DetailTitle';
+import Header from '@components/common/Header';
+import DetailTitle from '@components/common/Header/DetailTitle';
 
 export default {
   title: 'Component/FloatingButton',

@@ -1,6 +1,6 @@
 import PageLayout from '@components/common/PageLayout';
-import Header from '@components/Header';
-import DetailTitle from '@components/Header/DetailTitle';
+import Header from '@components/common/Header';
+import DetailTitle from '@components/common/Header/DetailTitle';
 
 import { Chip } from '@mantine/core';
 

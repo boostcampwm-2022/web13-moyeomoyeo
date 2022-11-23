@@ -4,10 +4,10 @@ import { within, userEvent } from '@storybook/testing-library';
 
 import Header from '.';
 import Logo from '@public/icons/logo-md.svg';
-import LoginButton from '@components/Header/LoginButton';
-import RootTitle from '@components/Header/RootTitle';
-import DetailTitle from '@components/Header/DetailTitle';
-import UtilButton from '@components/Header/UtilButton';
+import LoginButton from '@components/common/Header/LoginButton';
+import RootTitle from '@components/common/Header/RootTitle';
+import DetailTitle from '@components/common/Header/DetailTitle';
+import UtilButton from '@components/common/Header/UtilButton';
 
 export default {
   title: 'Component/Header',
