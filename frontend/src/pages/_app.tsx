@@ -13,7 +13,7 @@ export default function App({ Component, pageProps }: AppProps) {
   const [shouldRender, setShouldRender] = useState<boolean>(false);
 
   useEffect(() => {
-    (async () => {
+    void (async () => {
       // TODO development일때만 실행
       await initMockApi();
       setShouldRender(true);
