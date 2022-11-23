@@ -10,13 +10,14 @@ interface Props {
    * 뱃지에 들어갈 내용이 입력됩니다.
    */
   content: string;
+  size?: 'sm' | 'lg';
 }
 
-const ArticleTag = ({ color, content }: Props) => {
+const ArticleTag = ({ color, content, size = 'sm' }: Props) => {
   return (
     <BadgeWrapper>
-      <Badge color={color} size="sm">
-        {content}
+      <Badge color={color} size={size} radius="sm">
+        <BadgeContent>{content}</BadgeContent>
       </Badge>
     </BadgeWrapper>
   );
@@ -25,5 +26,7 @@ const ArticleTag = ({ color, content }: Props) => {
 const BadgeWrapper = styled.div`
   width: fit-content;
 `;
+
+const BadgeContent = styled.span``;
 
 export default ArticleTag;
