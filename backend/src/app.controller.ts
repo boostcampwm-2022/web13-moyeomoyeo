@@ -8,7 +8,7 @@ import { ApiErrorResponse } from '@decorator/api-error-response.decorator';
 import { BadParameterException } from '@exception/bad-parameter.exception';
 import { ApiNotFoundException } from '@exception/api-not-found.exception';
 import { AppService } from './app.service';
-import { JwtAuthGuard } from '@common/guard/jwt-auth.guard';
+import { JwtAuth } from '@decorator/jwt-auth.decorator';
 
 export class ExampleDto {
   @IsNumber()
@@ -23,7 +23,7 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get(':id')
-  @UseGuards(JwtAuthGuard)
+  @JwtAuth()
   @ApiSuccessResponse(HttpStatus.OK, String)
   @ApiErrorResponse(BadParameterException, ApiNotFoundException)
   getHello(@Param() params: ExampleDto) {

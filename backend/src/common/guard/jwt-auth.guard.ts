@@ -22,14 +22,14 @@ export class JwtAuthGuard implements CanActivate {
       if (!access_token) throw new Error('엑세스 토큰이 존재하지 않습니다');
 
       try {
-        const { userId } = this.jwtTokenService.verifyAuthToken(
+        const authTokenPayload = this.jwtTokenService.verifyAuthToken(
           access_token,
           TokenType.ACCESS,
         );
 
         const user = await this.dataSource
           .getRepository(User)
-          .findOneBy({ id: userId });
+          .findOneBy({ id: authTokenPayload.userId });
 
         if (!user) throw new Error('유저가 존재하지 않습니다');
 
@@ -39,14 +39,14 @@ export class JwtAuthGuard implements CanActivate {
       } catch (e) {
         if (!refresh_token) throw new Error('Not Found RefreshToken');
 
-        const { userId } = this.jwtTokenService.verifyAuthToken(
+        const authTokenPayload = this.jwtTokenService.verifyAuthToken(
           refresh_token,
           TokenType.REFRESH,
         );
 
         const user = await this.dataSource
           .getRepository(User)
-          .findOneBy({ id: userId });
+          .findOneBy({ id: authTokenPayload.userId });
 
         if (!user) throw new Error('Not Found User');
 
