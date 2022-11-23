@@ -1,10 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { LocalDateTime, ZoneId, ZoneOffset } from '@js-joda/core';
+import { plainToInstance } from 'class-transformer';
+import { validateSync } from 'class-validator';
 import { JwtConfigService } from '@config/jwt/config.service';
 import { TokenType } from '@common/module/jwt-token/type/token-type';
 import { toLocalDateTime } from '@common/util/date-time';
 import { User } from '@app/user/user.entity';
+import { AuthTokenPayload } from '@common/module/jwt-token/type/auth-token-payload';
 
 @Injectable()
 export class JwtTokenService {
@@ -54,10 +57,34 @@ export class JwtTokenService {
     };
   }
 
-  verifyToken(token: string, tokenType: TokenType) {
-    const payload = this.jwtService.verify(token);
-    if (payload.tokenType !== tokenType) throw new Error('Invalid Token Type');
+  verifyAuthToken(token: string, tokenType: TokenType) {
+    try {
+      const payload = this.jwtService.verify(token);
+      const authTokenPayload = plainToInstance(AuthTokenPayload, payload);
 
-    return payload;
+      if (!this.isValidPayload(authTokenPayload, tokenType))
+        throw new Error('Invalid Token Payload');
+
+      return authTokenPayload;
+    } catch (e) {
+      throw new Error('Invalid Token');
+    }
+  }
+
+  private isValidPayload(
+    authTokenPayload: AuthTokenPayload,
+    tokenType: TokenType,
+  ) {
+    const errors = validateSync(authTokenPayload);
+
+    if (errors.length > 0) {
+      return false;
+    }
+
+    if (authTokenPayload.tokenType !== tokenType) {
+      return false;
+    }
+
+    return true;
   }
 }
