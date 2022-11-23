@@ -3,6 +3,7 @@ import { Menu, Text } from '@mantine/core';
 
 import PageLayout from '.';
 import Header from '@components/common/Header';
+import Footer from '@components/common/Footer';
 import RootTitle from '@components/common/Header/RootTitle';
 import UserLoginItem from '@components/common/Header/UserLoginItem';
 import DetailTitle from '@components/common/Header/DetailTitle';
@@ -17,7 +18,7 @@ const Template: ComponentStory<typeof PageLayout> = (args) => <PageLayout {...ar
 
 export const RootPageLayout = Template.bind({});
 RootPageLayout.args = {
-  hasFooter: true,
+  footer: <Footer />,
   hasFloatingUtil: true,
   header: (
     <Header
@@ -29,7 +30,7 @@ RootPageLayout.args = {
 
 export const DetailPageLayout = Template.bind({});
 DetailPageLayout.args = {
-  hasFooter: false,
+  footer: <Footer />,
   hasFloatingUtil: false,
   header: (
     <Header
@@ -54,7 +55,7 @@ DetailPageLayout.args = {
 
 export const PageLayoutInOverflow = Template.bind({});
 PageLayoutInOverflow.args = {
-  hasFooter: true,
+  footer: <Footer />,
   hasFloatingUtil: true,
   header: (
     <Header

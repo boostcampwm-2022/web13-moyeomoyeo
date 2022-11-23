@@ -4,6 +4,7 @@ import { userEvent, within } from '@storybook/testing-library';
 import FloatingUtilButton from '.';
 import PageLayout from '@components/common/PageLayout';
 import Header from '@components/common/Header';
+import Footer from '@components/common/Footer';
 import DetailTitle from '@components/common/Header/DetailTitle';
 
 export default {
@@ -24,7 +25,7 @@ const SampleHeader = () => (
 );
 
 const DefaultTemplate: ComponentStory<typeof FloatingUtilButton> = (args) => (
-  <PageLayout header={<SampleHeader />} hasFooter>
+  <PageLayout header={<SampleHeader />} footer={<Footer />}>
     <FloatingUtilButton {...args} />
   </PageLayout>
 );

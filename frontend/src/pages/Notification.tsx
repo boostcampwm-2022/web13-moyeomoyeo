@@ -1,7 +1,8 @@
 import PageLayout from '@components/common/PageLayout';
+import Footer from '@components/common/Footer';
 
 const Notification = () => {
-  return <PageLayout hasFooter>notification page</PageLayout>;
+  return <PageLayout footer={<Footer />}>notification page</PageLayout>;
 };
 
 export default Notification;

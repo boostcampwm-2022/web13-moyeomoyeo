@@ -1,6 +1,7 @@
 import PageLayout from '@components/common/PageLayout';
 import Header from '@components/common/Header';
 import DetailTitle from '@components/common/Header/DetailTitle';
+import Footer from '@components/common/Footer';
 
 import { Chip } from '@mantine/core';
 
@@ -12,7 +13,7 @@ const Main = () => {
           leftNode={<DetailTitle title="모임게시판" subTitle="다양한 소모임을 위한 게시판" />}
         />
       }
-      hasFooter
+      footer={<Footer />}
       hasFloatingUtil
     >
       {Array.from({ length: 100 })
