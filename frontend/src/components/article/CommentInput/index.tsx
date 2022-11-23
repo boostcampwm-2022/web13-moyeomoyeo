@@ -14,6 +14,7 @@ const CommentInput = () => {
   return (
     <CommentInputWrapper>
       <TextInput
+        size="lg"
         placeholder="댓글을 입력해주세요."
         ref={inputRef}
         rightSection={
@@ -21,6 +22,7 @@ const CommentInput = () => {
             <IconSend size={24} />
           </ActionIcon>
         }
+        rightSectionWidth={48}
       />
     </CommentInputWrapper>
   );
