@@ -33,9 +33,7 @@ export class JwtAuthGuard implements CanActivate {
           .getRepository(User)
           .findOneBy({ id: userId });
 
-        if (!user) {
-          throw new Error('유저가 존재하지 않습니다');
-        }
+        if (!user) throw new Error('유저가 존재하지 않습니다');
 
         request.user = user;
 
@@ -54,9 +52,7 @@ export class JwtAuthGuard implements CanActivate {
           .getRepository(User)
           .findOneBy({ id: userId });
 
-        if (!user) {
-          throw new Error('Not Found User');
-        }
+        if (!user) throw new Error('Not Found User');
 
         request.user = user;
 
