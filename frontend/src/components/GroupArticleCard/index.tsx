@@ -12,7 +12,7 @@ import {
   TitleText,
   ClosedText,
 } from '@components/GroupArticleCard/styles';
-import { getCommonBadgeColor, getStatusBadgeColor } from '../../util/colors';
+import { getCommonBadgeColor, getStatusBadgeColor } from '../../utils/colors';
 
 interface Props {
   article: ArticlePreviewType;

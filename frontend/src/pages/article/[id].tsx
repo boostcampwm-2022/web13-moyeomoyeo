@@ -1,9 +1,9 @@
 import PageLayout from '@components/common/PageLayout';
-import { Avatar, Progress } from '@mantine/core';
+import { Avatar, Progress, TypographyStylesProvider } from '@mantine/core';
 import styled from '@emotion/styled';
 import { dummyArticle } from '@constants/dummy';
 import ArticleTag from '@components/ArticleTag';
-import { getCommonBadgeColor, getStatusBadgeColor } from '../../util/colors';
+import { getCommonBadgeColor, getStatusBadgeColor } from '../../utils/colors';
 import { ArticleStatusKr } from '@constants/article';
 import { CategoryKr } from '@constants/category';
 import { LocationKr } from '@constants/location';
@@ -78,7 +78,9 @@ const ArticleDetail = () => {
             color={indigo[7]}
           />
           {/* TODO html로 렌더링 */}
-          <ContentBox>{contents}</ContentBox>
+          <TypographyStylesProvider>
+            <ContentBox dangerouslySetInnerHTML={{ __html: contents }} />
+          </TypographyStylesProvider>
           <button>참가하기 버튼 자리</button>
           <StatCounter variant="comment" count={commentCount} />
         </DetailWrapper>
