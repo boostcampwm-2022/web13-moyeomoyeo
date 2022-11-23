@@ -7,6 +7,7 @@ const _FABWrapper = styled(ActionIcon)`
   position: fixed;
   bottom: 7.2rem;
   right: 1.6rem;
+  z-index: 100;
 `;
 
 const FABWrapper = createPolymorphicComponent<'button', ActionIconProps>(_FABWrapper);

@@ -16,25 +16,27 @@ const PageLayout = ({ header, footer, floatingUtil, children }: Props) => {
   return (
     <PageWrapper>
       {header}
-      <ContentWrapper>{children}</ContentWrapper>
-      {floatingUtil && (
-        <FloatingButton>
-          <Menu.Item
-            p="md"
-            icon={<IconArrowAutofitUp color="black" size={20} />}
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          >
-            <Text fz="md" fw={500}>
-              상단으로 이동
-            </Text>
-          </Menu.Item>
-          <Menu.Item p="md" icon={<IconPencil color="black" size={20} />}>
-            <Text fz="md" fw={500}>
-              게시글 작성
-            </Text>
-          </Menu.Item>
-        </FloatingButton>
-      )}
+      <ContentWrapper>
+        {children}
+        {floatingUtil && (
+          <FloatingButton>
+            <Menu.Item
+              p="md"
+              icon={<IconArrowAutofitUp color="black" size={20} />}
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            >
+              <Text fz="md" fw={500}>
+                상단으로 이동
+              </Text>
+            </Menu.Item>
+            <Menu.Item p="md" icon={<IconPencil color="black" size={20} />}>
+              <Text fz="md" fw={500}>
+                게시글 작성
+              </Text>
+            </Menu.Item>
+          </FloatingButton>
+        )}
+      </ContentWrapper>
       {footer && <Footer />}
     </PageWrapper>
   );
@@ -52,7 +54,7 @@ const PageWrapper = styled.div`
 const ContentWrapper = styled.div`
   width: 100%;
   height: 100%;
-  flex: 1;
+  min-height: calc(100vh - 6.4rem - 5.6rem);
 `;
 
 export default PageLayout;
