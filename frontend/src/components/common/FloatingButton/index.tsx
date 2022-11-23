@@ -26,7 +26,7 @@ const FloatingButton = ({ children }: Props) => {
           onClick={() => setOpened((o) => !o)}
           ref={ref}
         >
-          <StyledIconPlus size={24} opened={opened ? 'opened' : null} />
+          <StyledIconPlus size={24} $opened={opened} />
         </FABWrapper>
       </Menu.Target>
       <Menu.Dropdown>{children}</Menu.Dropdown>

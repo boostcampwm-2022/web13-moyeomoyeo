@@ -1,6 +1,7 @@
+import { IconPlus } from '@tabler/icons';
 import styled from '@emotion/styled';
 import { ActionIcon, ActionIconProps, createPolymorphicComponent } from '@mantine/core';
-import { IconPlus } from '@tabler/icons';
+import { transientOptions } from '@styles/utils';
 
 // https://mantine.dev/styles/styled/#polymorphic-components
 const _FABWrapper = styled(ActionIcon)`
@@ -12,9 +13,13 @@ const _FABWrapper = styled(ActionIcon)`
 
 const FABWrapper = createPolymorphicComponent<'button', ActionIconProps>(_FABWrapper);
 
-const StyledIconPlus = styled(IconPlus)<{ opened: 'opened' | null }>`
+interface StyledIconPlusProps {
+  $opened: boolean;
+}
+
+const StyledIconPlus = styled(IconPlus, transientOptions)<StyledIconPlusProps>`
   transition: transform 0.2s ease-in-out;
-  ${({ opened }) => opened === 'opened' && `transform: rotate(45deg);`}
+  ${({ $opened }) => $opened && `transform: rotate(45deg);`}
 `;
 
 export { FABWrapper, StyledIconPlus };
