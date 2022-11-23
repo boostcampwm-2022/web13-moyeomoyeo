@@ -32,6 +32,39 @@ jobs:
       - name: test
         run: npm run test-all
 
+  storybook:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: './frontend'
+    outputs:
+      status: ${{ steps.chromatic.outputs.storybookUrl }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: depedency install
+        run: npm install
+
+      - name: chromatic
+        id: chromatic
+        uses: chromaui/action@v1
+        with:
+          workingDir: frontend
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: comment PR
+        uses: thollander/actions-comment-pull-request@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          message: 'storybook link -> ${{ steps.chromatic.outputs.storybookUrl }}'
+          reactions: rocket
+
+
   lhci:
     runs-on: ubuntu-latest
     defaults:
@@ -139,12 +172,12 @@ jobs:
           msg: ${{ steps.format_lighthouse_score.outputs.comments }}
 
   slack-notifications:
-    needs: [CI, lhci]
+    needs: [CI, lhci, storybook]
     if: ${{ always() }}
     uses: ./.github/workflows/slack-notification.yml
     with:
       title: 프론트엔드 개발용 CI
-      status: 'CI : ${{ needs.CI.outputs.status }} && lhci : ${{ needs.lhci.outputs.status }}'
+      status: 'CI : ${{ needs.CI.outputs.status }} && lhci : ${{ needs.lhci.outputs.status }} && storybook : {{ needs.storybook.outputs.status }}'
       commit_url: ${{ github.event.pull_request.html_url || github.event.head_commit.url }}
     secrets:
       webhook_url: ${{ secrets.SLACK_NOTIFICATION_WEBHOOK_URL }}

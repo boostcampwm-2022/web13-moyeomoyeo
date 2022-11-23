@@ -1,4 +1,4 @@
-version: '3.9'
+version: '3.3'
 
 services:
   moyeo-nginx:
@@ -35,14 +35,29 @@ services:
     image: mysql:8.0
     restart: always
     ports:
-      - ${MYSQL_PORT}:3306
+      - 3330:3306
+    env_file:
+      - .env.development
     environment:
       MYSQL_ROOT_PASSWORD: test
-      MYSQL_DATABASE: test
-      MYSQL_USER: test
-      MYSQL_PASSWORD: test
     volumes:
       - ~/db:/var/lib/mysql
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    networks:
+      - backbone
+
+  moyeo-test-db:
+    container_name: moyeo-test-db
+    image: mysql:8.0
+    restart: always
+    env_file:
+      - .env.test
+    ports:
+      - 3331:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: test
     command:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci

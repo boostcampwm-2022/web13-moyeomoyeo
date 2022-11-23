@@ -15,7 +15,8 @@
     "format": "prettier --write .",
     "test-all": "npm run check-format && npm run check-lint && npm run check-types && npm run build",
     "storybook": "start-storybook -p 6006 -c .storybook",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "chromatic": "npx chromatic --project-token=9744c2ad3f91"
   },
   "lint-staged": {
     "./src/**/*.{js,jsx,ts,tsx}": [
@@ -56,6 +57,7 @@
     "@types/react-dom": "^18.0.9",
     "@typescript-eslint/eslint-plugin": "^5.43.0",
     "babel-loader": "^8.3.0",
+    "chromatic": "^6.11.4",
     "eslint": "8.22.0",
     "eslint-config-next": "^13.0.3",
     "eslint-config-prettier": "^8.5.0",
@@ -77,5 +79,7 @@
   },
   "msw": {
     "workerDirectory": "public"
-  }
+  },
+  "readme": "ERROR: No README data found!",
+  "_id": "frontend@0.1.0"
 }

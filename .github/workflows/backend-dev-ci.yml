@@ -16,6 +16,23 @@ jobs:
         working-directory: './backend'
     outputs:
       status: ${{ job.status }}
+
+    services:
+      mysql:
+        image: mysql:8.0
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: "test"
+          MYSQL_USER: "test"
+          MYSQL_PASSWORD: "test"
+          MYSQL_DATABASE: "test"
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
     steps:
       - name: checkout
         uses: actions/checkout@v3
@@ -34,6 +51,11 @@ jobs:
       - name: build
         run: npm run build
 
+      - name: create environment variable file
+        run: |
+          touch .env.test
+          echo -e ${{ secrets.BACKEND_CI_TEST_ENVIRONMENT }} > .env.test
+
       - name: test
         run: npm run test
 
@@ -41,7 +63,7 @@ jobs:
         run: npm run test:e2e
 
   slack-notifications:
-    needs: [CI]
+    needs: [ CI ]
     if: ${{ always() }}
     uses: ./.github/workflows/slack-notification.yml
     with:

@@ -1,10 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { AppModule } from './../src/app.module';
+import { DataSource } from 'typeorm';
+import { AppModule } from '@src/app.module';
+import { setNestApp } from '@src/setNestApp';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
+  let dataSource: DataSource;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -12,13 +15,35 @@ describe('AppController (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
+
+    setNestApp(app);
+
+    dataSource = app.get(DataSource);
+
     await app.init();
   });
 
-  it('/ (GET)', () => {
-    return request(app.getHttpServer())
-      .get('/')
-      .expect(200)
-      .expect('Hello World!');
+  afterAll(async () => {
+    await dataSource.destroy();
+  });
+
+  describe('GET /v1/:id', () => {
+    const url = (id) => `/v1/${id}`;
+
+    test('example test', async () => {
+      // given
+      const id = 11;
+
+      // when
+      const result = await request(app.getHttpServer()).get(url(id));
+
+      // then
+      expect(result.status).toEqual(200);
+      expect(result.body).toMatchObject({
+        status: 'OK',
+        message: '',
+        data: 'Hello World!',
+      });
+    });
   });
 });
