@@ -10,6 +10,7 @@ import FloatingButton from '@components/common/FloatingButton';
 interface Props {
   /**
    * 유저 인증 여부를 넘겨준다.
+   * (userQuery 붙이면 지우자)
    */
   authorized?: boolean;
 }
