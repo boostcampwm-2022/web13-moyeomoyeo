@@ -1,4 +1,24 @@
 enum Location {
+  SEOUL = 'SEOUL',
+  INCHEON = 'INCHEON',
+  BUSAN = 'BUSAN',
+  DAEGU = 'DAEGU',
+  GWANGJU = 'GWANGJU',
+  DAEJEON = 'DAEJEON',
+  ULSAN = 'ULSAN',
+  SEJONG = 'SEJONG',
+  GYEONGGI = 'GYEONGGI',
+  GANGWON = 'GANGWON',
+  CHUNGBUK = 'CHUNGBUK',
+  CHUNGNAM = 'CHUNGNAM',
+  JEONBUK = 'JEONBUK',
+  JEONNAM = 'JEONNAM',
+  GYEONGBUK = 'GYEONGBUK',
+  GYEONGNAM = 'GYEONGNAM',
+  JEJU = 'JEJU',
+}
+
+enum LocationKr {
   SEOUL = '서울',
   INCHEON = '인천',
   BUSAN = '부산',
@@ -18,4 +38,4 @@ enum Location {
   JEJU = '제주',
 }
 
-export { Location };
+export { Location, LocationKr };
