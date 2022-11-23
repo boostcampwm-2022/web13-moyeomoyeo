@@ -1,10 +1,8 @@
-import { Menu, Text } from '@mantine/core';
 import { ReactNode, PropsWithChildren } from 'react';
 import styled from '@emotion/styled';
-import { IconArrowAutofitUp, IconPencil } from '@tabler/icons';
+import FloatingUtilButton from '@components/common/FloatingUtilButton';
 
 import Footer from '@components/common/Footer';
-import FloatingButton from '@components/common/FloatingButton';
 
 interface Props extends PropsWithChildren {
   header?: ReactNode;
@@ -18,24 +16,7 @@ const PageLayout = ({ header, footer, floatingUtil, children }: Props) => {
       {header}
       <ContentWrapper>
         {children}
-        {floatingUtil && (
-          <FloatingButton>
-            <Menu.Item
-              p="md"
-              icon={<IconArrowAutofitUp color="black" size={20} />}
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            >
-              <Text fz="md" fw={500}>
-                상단으로 이동
-              </Text>
-            </Menu.Item>
-            <Menu.Item p="md" icon={<IconPencil color="black" size={20} />}>
-              <Text fz="md" fw={500}>
-                게시글 작성
-              </Text>
-            </Menu.Item>
-          </FloatingButton>
-        )}
+        {floatingUtil && <FloatingUtilButton authorized />}
       </ContentWrapper>
       {footer && <Footer />}
     </PageWrapper>
