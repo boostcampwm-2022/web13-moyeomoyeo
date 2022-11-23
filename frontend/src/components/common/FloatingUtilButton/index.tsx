@@ -16,7 +16,7 @@ interface Props {
   authorized?: boolean;
 }
 
-const PageUtilButton = ({ authorized = false }: Props) => {
+const FloatingUtilButton = ({ authorized = false }: Props) => {
   return (
     <FloatingButton>
       <Menu.Item
@@ -29,7 +29,7 @@ const PageUtilButton = ({ authorized = false }: Props) => {
         </Text>
       </Menu.Item>
       {authorized && (
-        <Link href="/write">
+        <Link href="/article/write">
           <Menu.Item p="md" icon={<IconPencil color="black" size={20} />}>
             <Text fz="md" fw={500}>
               게시글 작성
@@ -41,4 +41,4 @@ const PageUtilButton = ({ authorized = false }: Props) => {
   );
 };
 
-export default PageUtilButton;
+export default FloatingUtilButton;
