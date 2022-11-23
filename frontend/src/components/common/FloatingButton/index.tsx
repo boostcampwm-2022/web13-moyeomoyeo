@@ -4,11 +4,15 @@ import { useClickOutside } from '@mantine/hooks';
 
 import { FABWrapper, StyledIconPlus } from './styles';
 
+/**
+ * FloatingButton의 자체의 UI 로직만 정의한 컴포넌트
+ */
+
 interface Props {
   /**
    * 플로팅 버튼을 눌렀을 때 나오는 요소들을 넣는다.
    */
-  children: ReactNode;
+  children?: ReactNode;
 }
 
 const FloatingButton = ({ children }: Props) => {
