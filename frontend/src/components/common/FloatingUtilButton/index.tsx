@@ -1,5 +1,6 @@
 import { Menu, Text } from '@mantine/core';
 import { IconArrowAutofitUp, IconPencil } from '@tabler/icons';
+import Link from 'next/link';
 import FloatingButton from '@components/common/FloatingButton';
 
 /**
@@ -28,11 +29,13 @@ const PageUtilButton = ({ authorized = false }: Props) => {
         </Text>
       </Menu.Item>
       {authorized && (
-        <Menu.Item p="md" icon={<IconPencil color="black" size={20} />}>
-          <Text fz="md" fw={500}>
-            게시글 작성
-          </Text>
-        </Menu.Item>
+        <Link href="/write">
+          <Menu.Item p="md" icon={<IconPencil color="black" size={20} />}>
+            <Text fz="md" fw={500}>
+              게시글 작성
+            </Text>
+          </Menu.Item>
+        </Link>
       )}
     </FloatingButton>
   );
