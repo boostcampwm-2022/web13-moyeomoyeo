@@ -91,6 +91,8 @@ const ArticleDetail = () => {
   );
 };
 
+export default ArticleDetail;
+
 const PageWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -194,5 +196,3 @@ const Divider = styled.div`
   height: 0.05rem;
   background-color: ${({ theme }) => theme.colors.gray[4]};
 `;
-
-export default ArticleDetail;
