@@ -28,6 +28,7 @@
       "@typings/*": ["src/typings/*"],
       "@hooks/*": ["src/hooks/*"],
       "@apis/*": ["src/apis/*"],
+      "@mocks/*": ["src/mocks/*"],
       "@public/*": ["public/*"]
     }
   },

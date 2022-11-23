@@ -4,7 +4,7 @@ import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import RouterTransition from '@components/RouterTransition';
 import CommonStyles from '@styles/CommonStyles';
-import initMockApi from '../mocks';
+import initMockApi from '@mocks/.';
 import { useEffect, useState } from 'react';
 
 const queryClient = new QueryClient();
