@@ -1,4 +1,4 @@
-import { Controller, Get, HttpCode, HttpStatus, Param } from '@nestjs/common';
+import { Controller, Get, HttpStatus, Param, UseGuards } from '@nestjs/common';
 import { ApiProperty, ApiTags } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsNumber } from 'class-validator';
@@ -8,6 +8,7 @@ import { ApiErrorResponse } from '@decorator/api-error-response.decorator';
 import { BadParameterException } from '@exception/bad-parameter.exception';
 import { ApiNotFoundException } from '@exception/api-not-found.exception';
 import { AppService } from './app.service';
+import { JwtAuthGuard } from '@common/guard/jwt-auth.guard';
 
 export class ExampleDto {
   @IsNumber()
@@ -22,7 +23,7 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get(':id')
-  @HttpCode(HttpStatus.OK)
+  @UseGuards(JwtAuthGuard)
   @ApiSuccessResponse(HttpStatus.OK, String)
   @ApiErrorResponse(BadParameterException, ApiNotFoundException)
   getHello(@Param() params: ExampleDto) {

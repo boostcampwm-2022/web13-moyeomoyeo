@@ -53,4 +53,11 @@ export class JwtTokenService {
       refreshTokenExpires,
     };
   }
+
+  verifyToken(token: string, tokenType: TokenType) {
+    const payload = this.jwtService.verify(token);
+    if (payload.tokenType !== tokenType) throw new Error('Invalid Token Type');
+
+    return payload;
+  }
 }
