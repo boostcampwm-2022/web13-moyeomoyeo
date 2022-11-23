@@ -14,10 +14,9 @@ export default function App({ Component, pageProps }: AppProps) {
 
   useEffect(() => {
     (async () => {
-      if (process.env.NODE_ENV === 'development') {
-        await initMockApi();
-        setShouldRender(true);
-      }
+      // TODO development일때만 실행
+      await initMockApi();
+      setShouldRender(true);
     })();
   }, []);
 
