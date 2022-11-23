@@ -17,8 +17,8 @@ const Template: ComponentStory<typeof PageLayout> = (args) => <PageLayout {...ar
 
 export const RootPageLayout = Template.bind({});
 RootPageLayout.args = {
-  footer: true,
-  floatingUtil: true,
+  hasFooter: true,
+  hasFloatingUtil: true,
   header: (
     <Header
       leftNode={<RootTitle title="페이지 대제목" subTitle="페이지 소제목" />}
@@ -29,8 +29,8 @@ RootPageLayout.args = {
 
 export const DetailPageLayout = Template.bind({});
 DetailPageLayout.args = {
-  footer: false,
-  floatingUtil: false,
+  hasFooter: false,
+  hasFloatingUtil: false,
   header: (
     <Header
       leftNode={<DetailTitle title="페이지 대제목" subTitle="페이지 소제목" />}
@@ -54,8 +54,8 @@ DetailPageLayout.args = {
 
 export const PageLayoutInOverflow = Template.bind({});
 PageLayoutInOverflow.args = {
-  footer: true,
-  floatingUtil: true,
+  hasFooter: true,
+  hasFloatingUtil: true,
   header: (
     <Header
       leftNode={<DetailTitle title="페이지 대제목" subTitle="페이지 소제목" />}

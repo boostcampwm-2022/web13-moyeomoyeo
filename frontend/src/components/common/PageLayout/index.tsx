@@ -6,19 +6,19 @@ import Footer from '@components/common/Footer';
 
 interface Props extends PropsWithChildren {
   header?: ReactNode;
-  footer?: boolean;
-  floatingUtil?: boolean;
+  hasFooter?: boolean;
+  hasFloatingUtil?: boolean;
 }
 
-const PageLayout = ({ header, footer, floatingUtil, children }: Props) => {
+const PageLayout = ({ header, hasFooter, hasFloatingUtil, children }: Props) => {
   return (
     <PageWrapper>
       {header}
       <ContentWrapper>
         {children}
-        {floatingUtil && <FloatingUtilButton authorized />}
+        {hasFloatingUtil && <FloatingUtilButton authorized />}
       </ContentWrapper>
-      {footer && <Footer />}
+      {hasFooter && <Footer />}
     </PageWrapper>
   );
 };

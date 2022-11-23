@@ -12,8 +12,8 @@ const Main = () => {
           leftNode={<DetailTitle title="모임게시판" subTitle="다양한 소모임을 위한 게시판" />}
         />
       }
-      footer
-      floatingUtil
+      hasFooter
+      hasFloatingUtil
     >
       {Array.from({ length: 100 })
         .fill(0)

@@ -16,7 +16,7 @@ const SampleHeader = () => (
 );
 
 const DefaultTemplate: ComponentStory<typeof FloatingButton> = (args) => (
-  <PageLayout header={<SampleHeader />} footer>
+  <PageLayout header={<SampleHeader />} hasFooter>
     <FloatingButton {...args} />
   </PageLayout>
 );
