@@ -77,7 +77,6 @@ const ArticleDetail = () => {
             radius="lg"
             color={indigo[7]}
           />
-          {/* TODO html로 렌더링 */}
           <TypographyStylesProvider>
             <ContentBox dangerouslySetInnerHTML={{ __html: contents }} />
           </TypographyStylesProvider>
