@@ -25,4 +25,13 @@ interface CategoryType {
   name: string;
 }
 
-export type { ArticleType, LocationType, CategoryType };
+interface Comment {
+  id: number;
+  authorId: number;
+  authorName: string;
+  authorProfileImage: string;
+  contents: string;
+  createdAt: string;
+}
+
+export type { ArticleType, LocationType, CategoryType, Comment };
