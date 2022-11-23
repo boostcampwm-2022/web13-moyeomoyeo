@@ -4,9 +4,10 @@ import { AppService } from './app.service';
 import { AppConfigModule } from '@config/app/config.module';
 import { ApiSuccessLoggerMiddleware } from '@middleware/api-success-logger.middleware';
 import { ApiExceptionLoggerMiddleware } from '@middleware/api-exception-logger.middleware';
+import { DatabaseModule } from '@config/database/database.module';
 
 @Module({
-  imports: [AppConfigModule],
+  imports: [AppConfigModule, DatabaseModule],
   controllers: [AppController],
   providers: [AppService],
 })
