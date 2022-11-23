@@ -1,18 +1,8 @@
-import { AxiosResponse } from 'axios';
 import { useMemo } from 'react';
-import useIntersect from '../hooks/useIntersect';
-import PageLayout from '@components/common/PageLayout';
-import { useInfiniteQuery } from '@tanstack/react-query';
 import styled from '@emotion/styled';
-import { TestResponseType } from '@typings/types';
-import getTestData from '../apis/test/getTestData';
-
-const useFetchTestData = () => {
-  return useInfiniteQuery(['test'], async ({ pageParam = 0 }) => await getTestData(pageParam), {
-    getNextPageParam: (lastPage: AxiosResponse<TestResponseType>) =>
-      lastPage.data.isLast ? undefined : lastPage.data.currentId + 1,
-  });
-};
+import useIntersect from '@hooks/useIntersect';
+import PageLayout from '@components/common/PageLayout';
+import useFetchTestData from '@hooks/queries/useFetchTestData';
 
 const Test = () => {
   const { data, fetchNextPage, hasNextPage, isFetching } = useFetchTestData();
@@ -25,7 +15,7 @@ const Test = () => {
   const ref = useIntersect((entry, observer) => {
     observer.unobserve(entry.target);
     if (hasNextPage && !isFetching) {
-      fetchNextPage();
+      void fetchNextPage();
     }
   });
 
@@ -42,5 +32,19 @@ const Test = () => {
 const TestDiv = styled.div`
   height: 300px;
 `;
+
+// TODO SSR 적용
+// export const getServerSideProps = async () => {
+//   console.log('hesr');
+//   const queryClient = new QueryClient();
+//   await queryClient.prefetchInfiniteQuery(['test'], async () => await getTestData(0), {
+//     staleTime: 1000,
+//   });
+//   return {
+//     props: {
+//       dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
+//     },
+//   };
+// };
 
 export default Test;
