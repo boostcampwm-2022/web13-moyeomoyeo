@@ -2,7 +2,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import Footer from '.';
 
 export default {
-  title: 'Component/Footer',
+  title: 'Component/Layout/Footer',
   component: Footer,
 } as ComponentMeta<typeof Footer>;
 
