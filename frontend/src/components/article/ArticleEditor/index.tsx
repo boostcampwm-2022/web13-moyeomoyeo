@@ -1,14 +1,20 @@
 import dynamic from 'next/dynamic';
-import { Text } from '@mantine/core';
-
 import styled from '@emotion/styled';
+import { Text, LoadingOverlay } from '@mantine/core';
+import { RichTextEditorProps } from '@mantine/rte';
 
 const RichTextEditor = dynamic(() => import('@mantine/rte'), {
   ssr: false,
-  loading: () => null,
+  loading: () => (
+    <LoadingWrapper>
+      <LoadingOverlay visible overlayBlur={2} />,
+    </LoadingWrapper>
+  ),
 });
 
-const ArticleEditor = () => {
+interface Props extends RichTextEditorProps {}
+
+const ArticleEditor = (props: Props) => {
   return (
     <ArticleEditorWrapper>
       <ArticleEditorLabel>
@@ -28,6 +34,7 @@ const ArticleEditor = () => {
           ['unorderedList', 'orderedList'],
           ['blockquote', 'code', 'link', 'image'],
         ]}
+        {...props}
       />
     </ArticleEditorWrapper>
   );
@@ -50,6 +57,14 @@ const StyledEditor = styled(RichTextEditor)`
     overflow: auto;
     font-size: 1.4rem;
   }
+`;
+
+const LoadingWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  height: 447px;
+  border: 1px solid ${({ theme }) => theme.colors.gray[4]};
+  border-radius: '0.8rem';
 `;
 
 export default ArticleEditor;
