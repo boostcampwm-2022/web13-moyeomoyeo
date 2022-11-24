@@ -38,12 +38,7 @@ describe('AppController (e2e)', () => {
       const result = await request(app.getHttpServer()).get(url(id));
 
       // then
-      expect(result.status).toEqual(200);
-      expect(result.body).toMatchObject({
-        status: 'OK',
-        message: '',
-        data: 'Hello World!',
-      });
+      expect(result.status).toEqual(401);
     });
   });
 });
