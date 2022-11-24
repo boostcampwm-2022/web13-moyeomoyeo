@@ -1,8 +1,8 @@
 import PageLayout from '@components/common/PageLayout';
-import Footer from '@components/common/Footer';
+import NavigationTab from '@components/common/NavigationTab';
 
 const My = () => {
-  return <PageLayout footer={<Footer />}>my page</PageLayout>;
+  return <PageLayout footer={<NavigationTab />}>my page</PageLayout>;
 };
 
 export default My;

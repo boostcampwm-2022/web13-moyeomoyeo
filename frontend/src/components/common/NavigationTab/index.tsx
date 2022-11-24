@@ -4,14 +4,14 @@ import { useTheme } from '@emotion/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-const Footer = () => {
+const NavigationTab = () => {
   const {
     colors: { indigo, gray },
   } = useTheme();
   const { pathname } = useRouter();
 
   return (
-    <FooterWrapper>
+    <NavigationTabWrapper>
       <Link href={'/'}>
         <TabDiv>
           <IconHome2 color={pathname === '/' ? indigo[7] : gray[2]} />
@@ -27,11 +27,11 @@ const Footer = () => {
           <IconUser color={pathname === '/My' ? indigo[7] : gray[2]} />
         </TabDiv>
       </Link>
-    </FooterWrapper>
+    </NavigationTabWrapper>
   );
 };
 
-const FooterWrapper = styled.footer`
+const NavigationTabWrapper = styled.footer`
   display: flex;
   position: sticky;
   bottom: 0;
@@ -53,4 +53,4 @@ const TabDiv = styled.div`
   }
 `;
 
-export default Footer;
+export default NavigationTab;
