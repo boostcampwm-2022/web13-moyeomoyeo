@@ -26,6 +26,11 @@ export class S3Config {
   @Type(() => String)
   @Expose()
   STORAGE_BUCKET: string;
+
+  @IsString()
+  @Type(() => String)
+  @Expose()
+  STORAGE_BUCKET_PATH: string;
 }
 
 export const validate = (config: Record<string, unknown>) => {
