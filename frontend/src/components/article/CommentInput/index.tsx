@@ -5,6 +5,9 @@ import { IconSend } from '@tabler/icons';
 
 const CommentInput = () => {
   const inputRef = useRef<HTMLInputElement>(null);
+  /**
+   * TODO : 댓글 입력 핸들러 수정
+   */
   const handleSubmitComment = () => {
     alert('댓글 입력');
     if (inputRef.current) {
