@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { IconMoodEmpty } from '@tabler/icons';
 import { useTheme } from '@emotion/react';
 
-const NoGroupMessage = () => {
+const Index = () => {
   const {
     colors: { gray },
   } = useTheme();
@@ -15,7 +15,7 @@ const NoGroupMessage = () => {
   );
 };
 
-export default NoGroupMessage;
+export default Index;
 
 const MessageWrapper = styled.div`
   display: flex;

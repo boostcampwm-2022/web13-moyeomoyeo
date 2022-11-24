@@ -12,7 +12,7 @@ import GroupArticleCard from '@components/common/GroupArticleCard';
 import useIntersect from '@hooks/useIntersect';
 import useFetchGroupArticles from '@hooks/queries/useFetchGroupArticles';
 import { PAGE_TITLE } from '@constants/pageTitle';
-import NoGroupMessage from '@components/common/NoGroupMessage/NoGroupMessage';
+import Index from '@components/common/NoGroupMessage';
 
 const Main = () => {
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
@@ -98,7 +98,7 @@ const Main = () => {
             <div ref={ref}></div>
           </ArticleList>
         ) : (
-          <NoGroupMessage />
+          <Index />
         )}
       </ContentWrapper>
     </PageLayout>
