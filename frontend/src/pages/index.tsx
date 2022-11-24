@@ -135,5 +135,5 @@ const FilterWrapper = styled.div`
 const ArticleList = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  grid-column-gap: 1.3rem;
+  grid-gap: 1.3rem;
 `;
