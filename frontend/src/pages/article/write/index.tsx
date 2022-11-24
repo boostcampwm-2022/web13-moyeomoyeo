@@ -23,7 +23,7 @@ import ImageThumbnail from '@components/article/ImageThumbnail';
 const WritePage = () => {
   const [category, setCategory] = useState<Category | null>(null);
   const [location, setLocation] = useState<Location | null>(null);
-  const [personLimit, setPersonLimit] = useState<number>(5);
+  const [maxCapacity, setmaxCapacity] = useState<number>(5);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [chatLink, setChatLink] = useState('');
@@ -32,7 +32,7 @@ const WritePage = () => {
   const possibleToSubmit =
     category &&
     location &&
-    personLimit &&
+    maxCapacity &&
     title.length > 0 &&
     content.length > 0 &&
     chatLink.length > 0 &&
@@ -91,7 +91,7 @@ const WritePage = () => {
                 인원제한
               </Text>
               <Text size="md" weight={500}>
-                {personLimit}명
+                {maxCapacity}명
               </Text>
             </PersonSectionHeader>
             <Slider
@@ -99,10 +99,10 @@ const WritePage = () => {
               thumbSize={26}
               styles={{ thumb: { borderWidth: 2, padding: 3 } }}
               label={null}
-              min={0}
+              min={1}
               max={15}
-              value={personLimit}
-              onChange={setPersonLimit}
+              value={maxCapacity}
+              onChange={setmaxCapacity}
             />
           </PersonSection>
         </TermSection>
