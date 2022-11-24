@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 
 interface Props {
   /**
-   * id를 통해 색상이 결정됩니다.
+   * 뱃지의 색상을 결정합니다. 존재하지 않는 색상을 입력할 경우, indigo로 설정됩니다.
    */
   color: string;
   /**
@@ -17,7 +17,7 @@ const ArticleTag = ({ color, content, size = 'sm' }: Props) => {
   return (
     <BadgeWrapper>
       <Badge color={color} size={size} radius="sm">
-        <BadgeContent>{content}</BadgeContent>
+        {content}
       </Badge>
     </BadgeWrapper>
   );
@@ -26,7 +26,5 @@ const ArticleTag = ({ color, content, size = 'sm' }: Props) => {
 const BadgeWrapper = styled.div`
   width: fit-content;
 `;
-
-const BadgeContent = styled.span``;
 
 export default ArticleTag;
