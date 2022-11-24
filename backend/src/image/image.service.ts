@@ -13,7 +13,7 @@ export class ImageService {
   async uploadImage(files: Array<Express.Multer.File>) {
     const s3 = this.certificateS3();
     const keyList = await this.pushImageAndGetKey(s3, files);
-    const urlList = await this.takeGetSignedUrl(s3, keyList);
+    const urlList = await this.getStorageUrl(s3, keyList);
     return { keyList, urlList };
   }
 
@@ -71,7 +71,7 @@ export class ImageService {
     );
   }
 
-  async takeGetSignedUrl(s3: S3, keyList: string[]) {
+  async getStorageUrl(s3: S3, keyList: string[]) {
     return keyList.map((key) => {
       return path.join(
         this.s3ConfigService.endpoint,
