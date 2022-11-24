@@ -19,9 +19,7 @@ describe('App Config Service Test', () => {
     // when
 
     // then
-    expect(s3ConfigService.accessKey).toEqual(
-      parseInt(process.env.STORAGE_ACCESSKEY, 10),
-    );
+    expect(s3ConfigService.accessKey).toEqual(process.env.STORAGE_ACCESSKEY);
   });
 
   test('Storage Secret Key를 잘 가져오는가', async () => {
