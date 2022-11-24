@@ -1,5 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import StatCounter from './index';
+import StatCounter from '.';
 
 export default {
   title: 'Component/StatCounter',
