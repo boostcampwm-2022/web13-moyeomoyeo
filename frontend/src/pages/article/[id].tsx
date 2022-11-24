@@ -2,13 +2,13 @@ import PageLayout from '@components/common/PageLayout';
 import { Avatar, Progress, TypographyStylesProvider } from '@mantine/core';
 import styled from '@emotion/styled';
 import { dummyArticle } from '@constants/dummy';
-import ArticleTag from '@components/ArticleTag';
+import ArticleTag from '@components/common/ArticleTag';
 import { getCommonBadgeColor, getStatusBadgeColor } from '../../utils/colors';
 import { ArticleStatusKr } from '@constants/article';
 import { CategoryKr } from '@constants/category';
 import { LocationKr } from '@constants/location';
 import { useTheme } from '@emotion/react';
-import StatCounter from '@components/StatCounter';
+import StatCounter from '@components/common/StatCounter';
 import { IconList } from '@tabler/icons';
 
 const ArticleDetail = () => {
