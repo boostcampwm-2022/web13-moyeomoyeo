@@ -9,6 +9,9 @@ const CardWrapper = styled.div`
   border-radius: 12px;
   border: 1px solid ${({ theme }) => theme.colors.gray[2]};
   overflow: hidden;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const DimmedBox = styled.div`
