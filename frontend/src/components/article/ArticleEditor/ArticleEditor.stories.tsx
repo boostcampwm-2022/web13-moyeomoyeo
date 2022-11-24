@@ -6,6 +6,6 @@ export default {
   component: ArticleEditor,
 } as ComponentMeta<typeof ArticleEditor>;
 
-const Template: ComponentStory<typeof ArticleEditor> = (args) => <ArticleEditor />;
+const Template: ComponentStory<typeof ArticleEditor> = () => <ArticleEditor />;
 
 export const Default = Template.bind({});
