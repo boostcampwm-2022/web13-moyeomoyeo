@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { S3ConfigService } from '@src/common/config/s3/config.service';
-import { Endpoint, S3 } from 'aws-sdk';
+import { CodeStarNotifications, Endpoint, S3 } from 'aws-sdk';
 import * as path from 'path';
 import { v4 } from 'uuid';
 
@@ -32,18 +32,40 @@ export class ImageService {
   }
 
   async pushImageAndGetKey(s3: S3, files: Express.Multer.File[]) {
-    return files.map((file) => {
-      const key = `${new Date().getTime()}-${v4()}`;
+    const keyList = [];
 
-      const upload = s3.putObject({
-        Bucket: this.s3ConfigService.bucket,
-        Key: key,
-        Body: file.buffer,
-      });
+    files.map((file) => {
+      const extension = this.findImageExtension(file.originalname);
+      if (extension.length === 0) return;
+
+      const key = path.join(
+        this.s3ConfigService.path,
+        `${new Date().getTime()}-${v4()}${extension}`,
+      );
+
+      const upload = s3.upload(
+        {
+          Bucket: this.s3ConfigService.bucket,
+          Key: key,
+          Body: file.buffer,
+          ACL: 'public-read',
+        },
+        (err, data) => {
+          this.logger.error(err);
+        },
+      );
 
       this.logger.log(upload);
-      return key;
+      keyList.push(key);
     });
+
+    return keyList;
+  }
+
+  findImageExtension(fileName: string) {
+    const regex = /(\.gif|\.jpg|\.jpeg|\.png)$/gi;
+    const result = fileName.match(regex);
+    return result === null ? '' : result[0];
   }
 
   async takeGetSignedUrl(s3: S3, keyList: string[]) {
