@@ -23,7 +23,7 @@ interface Props {
 const GroupArticleCard = ({ article }: Props) => {
   return (
     <CardWrapper>
-      {article.status === ArticleStatus.PROGRESS && (
+      {article.status !== ArticleStatus.PROGRESS && (
         <DimmedBox>
           <ClosedText>모집 종료</ClosedText>
         </DimmedBox>
