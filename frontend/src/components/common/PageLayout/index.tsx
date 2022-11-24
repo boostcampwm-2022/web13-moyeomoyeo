@@ -11,12 +11,12 @@ interface Props extends PropsWithChildren {
 const PageLayout = ({ header, footer, hasFloatingUtil, children }: Props) => {
   return (
     <PageWrapper>
-      {header}
+      <HeaderWrapper>{header}</HeaderWrapper>
       <ContentWrapper>
         {children}
         {hasFloatingUtil && <FloatingUtilButton authorized />}
       </ContentWrapper>
-      {footer}
+      <FooterWrapper>{footer}</FooterWrapper>
     </PageWrapper>
   );
 };
@@ -33,7 +33,22 @@ const PageWrapper = styled.div`
 const ContentWrapper = styled.div`
   width: 100%;
   height: 100%;
+  padding: 1.6rem;
   flex: 1;
+`;
+
+const HeaderWrapper = styled.div`
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+`;
+
+const FooterWrapper = styled.div`
+  position: sticky;
+  bottom: 0;
+  width: 100%;
+  z-index: 100;
 `;
 
 export default PageLayout;

@@ -1,20 +1,24 @@
 import styled from '@emotion/styled';
 
 const CardWrapper = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
-  width: 17.3rem;
+  width: 100%;
   height: 30.7rem;
   border-radius: 12px;
   border: 1px solid ${({ theme }) => theme.colors.gray[2]};
   overflow: hidden;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const DimmedBox = styled.div`
   display: flex;
   position: absolute;
-  width: 17.3rem;
-  height: 30.7rem;
+  width: 100%;
+  height: 100%;
   z-index: 1;
   border-radius: 12px;
   background-color: rgba(0, 0, 0, 0.4);
