@@ -2,15 +2,13 @@ import { ReactNode, PropsWithChildren } from 'react';
 import styled from '@emotion/styled';
 import FloatingUtilButton from '@components/common/FloatingUtilButton';
 
-import Footer from '@components/common/Footer';
-
 interface Props extends PropsWithChildren {
   header?: ReactNode;
-  hasFooter?: boolean;
+  footer?: ReactNode;
   hasFloatingUtil?: boolean;
 }
 
-const PageLayout = ({ header, hasFooter, hasFloatingUtil, children }: Props) => {
+const PageLayout = ({ header, footer, hasFloatingUtil, children }: Props) => {
   return (
     <PageWrapper>
       {header}
@@ -18,7 +16,7 @@ const PageLayout = ({ header, hasFooter, hasFloatingUtil, children }: Props) => 
         {children}
         {hasFloatingUtil && <FloatingUtilButton authorized />}
       </ContentWrapper>
-      {hasFooter && <Footer />}
+      {footer}
     </PageWrapper>
   );
 };

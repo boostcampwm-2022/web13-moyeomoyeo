@@ -3,7 +3,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { Menu, Text } from '@mantine/core';
 
 export default {
-  title: 'Component/Header/HeaderItems/UtilButton',
+  title: 'Component/Layout/Header/HeaderItems/UtilButton',
   component: UtilButton,
 } as ComponentMeta<typeof UtilButton>;
 

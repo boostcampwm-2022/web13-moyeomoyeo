@@ -44,10 +44,26 @@ interface CategoryType {
   name: Category;
 }
 
+interface Comment {
+  id: number;
+  authorId: number;
+  authorName: string;
+  authorProfileImage: string;
+  contents: string;
+  createdAt: string;
+}
+
 interface TestResponseType {
   dataArr: string[];
   isLast: boolean;
   currentId: number;
 }
 
-export type { ArticlePreviewType, ArticleType, LocationType, CategoryType, TestResponseType };
+export type {
+  ArticlePreviewType,
+  ArticleType,
+  LocationType,
+  CategoryType,
+  TestResponseType,
+  Comment,
+};

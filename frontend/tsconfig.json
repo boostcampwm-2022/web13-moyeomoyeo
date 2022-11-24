@@ -30,7 +30,8 @@
       "@apis/*": ["src/apis/*"],
       "@mocks/*": ["src/mocks/*"],
       "@public/*": ["public/*"],
-      "@constants/*": ["src/constants/*"]
+      "@constants/*": ["src/constants/*"],
+      "@utils/*": ["src/utils/*"]
     }
   },
   "include": ["custom.d.ts", "next-env.d.ts", "**/*.ts", "**/*.tsx", ".storybook/**/*.tsx"],

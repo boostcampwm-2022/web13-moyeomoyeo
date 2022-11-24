@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 import useIntersect from '@hooks/useIntersect';
 import PageLayout from '@components/common/PageLayout';
 import useFetchTestData from '@hooks/queries/useFetchTestData';
+import NavigationTab from '@components/common/NavigationTab';
 
 const Test = () => {
   const { data, fetchNextPage, hasNextPage, isFetching } = useFetchTestData();
@@ -20,7 +21,7 @@ const Test = () => {
   });
 
   return (
-    <PageLayout hasFooter>
+    <PageLayout footer={<NavigationTab />}>
       {testData.map((data, index) => (
         <TestDiv key={index}>{data}</TestDiv>
       ))}

@@ -2,7 +2,7 @@ import RootTitle from '.';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 export default {
-  title: 'Component/Header/HeaderItems/RootTitle',
+  title: 'Component/Layout/Header/HeaderItems/RootTitle',
   component: RootTitle,
 } as ComponentMeta<typeof RootTitle>;
 

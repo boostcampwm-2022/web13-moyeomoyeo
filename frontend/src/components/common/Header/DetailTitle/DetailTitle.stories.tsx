@@ -2,7 +2,7 @@ import DetailTitle from '.';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 export default {
-  title: 'Component/Header/HeaderItems/DetailTitle',
+  title: 'Component/Layout/Header/HeaderItems/DetailTitle',
   component: DetailTitle,
 } as ComponentMeta<typeof DetailTitle>;
 

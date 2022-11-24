@@ -10,7 +10,7 @@ import DetailTitle from '@components/common/Header/DetailTitle';
 import UtilButton from '@components/common/Header/UtilButton';
 
 export default {
-  title: 'Component/Header',
+  title: 'Component/Layout/Header',
   component: Header,
 } as ComponentMeta<typeof Header>;
 
