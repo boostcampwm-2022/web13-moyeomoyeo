@@ -34,7 +34,7 @@ export class ImageService {
   async pushImageAndGetKey(s3: S3, files: Express.Multer.File[]) {
     const keyList = [];
 
-    files.map((file) => {
+    files.forEach((file) => {
       const extension = this.findImageExtension(file.originalname);
       if (extension.length === 0) return;
 
