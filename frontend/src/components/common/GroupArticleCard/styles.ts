@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 
 const CardWrapper = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -13,8 +14,8 @@ const CardWrapper = styled.div`
 const DimmedBox = styled.div`
   display: flex;
   position: absolute;
-  width: 17.3rem;
-  height: 30.7rem;
+  width: 100%;
+  height: 100%;
   z-index: 1;
   border-radius: 12px;
   background-color: rgba(0, 0, 0, 0.4);
