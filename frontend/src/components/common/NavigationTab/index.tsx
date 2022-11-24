@@ -17,14 +17,14 @@ const NavigationTab = () => {
           <IconHome2 color={pathname === '/' ? indigo[7] : gray[2]} />
         </TabDiv>
       </Link>
-      <Link href={'/Notification'}>
+      <Link href={'/notification'}>
         <TabDiv>
-          <IconBell color={pathname === '/Notification' ? indigo[7] : gray[2]} />
+          <IconBell color={pathname === '/notification' ? indigo[7] : gray[2]} />
         </TabDiv>
       </Link>
-      <Link href={'/My'}>
+      <Link href={'/my'}>
         <TabDiv>
-          <IconUser color={pathname === '/My' ? indigo[7] : gray[2]} />
+          <IconUser color={pathname === '/my' ? indigo[7] : gray[2]} />
         </TabDiv>
       </Link>
     </NavigationTabWrapper>
