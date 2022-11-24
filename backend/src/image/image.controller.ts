@@ -22,10 +22,10 @@ export class ImageController {
 
   @Post('upload')
   @UseInterceptors(FilesInterceptor('files'))
-  @ApiSuccessResponse(HttpStatus.CREATED, Object)
+  @ApiSuccessResponse(HttpStatus.CREATED, ImagesUploadResponse)
   @ApiErrorResponse()
   async uploadImage(@UploadedFiles() files: Array<Express.Multer.File>) {
-    const { keyList, urlList } = await this.imageService.uploadImage(files);
+    const { keyList, urlList } = this.imageService.uploadImage(files);
     const data = keyList.map(
       (key, index) => new ImagesUploadResponse(key, urlList[index]),
     );

@@ -10,10 +10,10 @@ export class ImageService {
 
   constructor(private s3ConfigService: S3ConfigService) {}
 
-  async uploadImage(files: Array<Express.Multer.File>) {
+  uploadImage(files: Array<Express.Multer.File>) {
     const s3 = this.certificateS3();
-    const keyList = await this.pushImageAndGetKey(s3, files);
-    const urlList = await this.getStorageUrl(s3, keyList);
+    const keyList = this.pushImageAndGetKey(s3, files);
+    const urlList = this.getStorageUrl(s3, keyList);
     return { keyList, urlList };
   }
 
@@ -31,7 +31,7 @@ export class ImageService {
     return s3;
   }
 
-  async pushImageAndGetKey(s3: S3, files: Express.Multer.File[]) {
+  pushImageAndGetKey(s3: S3, files: Express.Multer.File[]) {
     const keyList = [];
 
     files.forEach((file) => {
@@ -72,7 +72,7 @@ export class ImageService {
     );
   }
 
-  async getStorageUrl(s3: S3, keyList: string[]) {
+  getStorageUrl(s3: S3, keyList: string[]) {
     return keyList.map((key) => {
       return path.join(
         this.s3ConfigService.endpoint,

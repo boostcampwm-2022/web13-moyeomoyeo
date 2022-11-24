@@ -10,10 +10,4 @@ import { S3ConfigModule } from '@src/common/config/s3/config.module';
   controllers: [ImageController],
   providers: [ImageService],
 })
-export class ImageModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(ApiSuccessLoggerMiddleware, ApiExceptionLoggerMiddleware)
-      .forRoutes('*');
-  }
-}
+export class ImageModule {}
