@@ -5,10 +5,11 @@ import { AppConfigModule } from '@config/app/config.module';
 import { ApiSuccessLoggerMiddleware } from '@middleware/api-success-logger.middleware';
 import { ApiExceptionLoggerMiddleware } from '@middleware/api-exception-logger.middleware';
 import { DatabaseModule } from '@config/database/database.module';
+import { JwtTokenModule } from '@common/module/jwt-token/jwt-token.module';
 import { ImageModule } from './image/image.module';
 
 @Module({
-  imports: [AppConfigModule, DatabaseModule, ImageModule],
+  imports: [AppConfigModule, DatabaseModule, JwtTokenModule, ImageModule],
   controllers: [AppController],
   providers: [AppService],
 })

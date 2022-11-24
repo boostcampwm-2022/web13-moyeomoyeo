@@ -6,10 +6,13 @@ import {
   VersioningType,
 } from '@nestjs/common';
 import { ValidationError } from 'class-validator';
+import * as cookieParser from 'cookie-parser';
 import { BadParameterException } from '@exception/bad-parameter.exception';
 import { AllExceptionFilter } from '@filter/all-exception.filter';
 
 export const setNestApp = (app: INestApplication) => {
+  app.use(cookieParser());
+
   app.enableVersioning({
     type: VersioningType.URI,
     defaultVersion: '1',

@@ -1,6 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import GroupArticleCard from '.';
-import { dummyArticle } from '@constants/dummy';
+import { dummyArticlePreview } from '@constants/dummy';
 import { ArticleStatus } from '@constants/article';
 
 export default {
@@ -11,14 +11,14 @@ export default {
 const Template: ComponentStory<typeof GroupArticleCard> = (args) => <GroupArticleCard {...args} />;
 
 export const NormalCard = Template.bind({});
-NormalCard.args = { article: dummyArticle };
+NormalCard.args = { article: dummyArticlePreview };
 
 export const LongTitleCard = Template.bind({});
 LongTitleCard.args = {
-  article: { ...dummyArticle, title: '길어지는 제목입니다. 제목이 길어서 잘려요.' },
+  article: { ...dummyArticlePreview, title: '길어지는 제목입니다. 제목이 길어서 잘려요.' },
 };
 
 export const ClosedCard = Template.bind({});
 ClosedCard.args = {
-  article: { ...dummyArticle, status: ArticleStatus.SUCCEED },
+  article: { ...dummyArticlePreview, status: ArticleStatus.SUCCEED },
 };

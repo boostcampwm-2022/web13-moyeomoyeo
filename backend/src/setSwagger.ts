@@ -1,15 +1,17 @@
 import { INestApplication } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { AppConfigService } from '@config/app/config.service';
 import { ResponseEntity } from '@common/response-entity';
 
 export const setSwagger = (app: INestApplication) => {
-  const appConfigService = app.get(AppConfigService);
-
   const config = new DocumentBuilder()
     .setTitle('MoyeoMoyeo REST API Specification')
     .setVersion('1.0.0')
-    .addServer(`http://localhost:${appConfigService.port}`)
+    .addServer(`http://localhost`)
+    .addCookieAuth(
+      'access_token',
+      { type: 'apiKey', in: 'cookie' },
+      'cookieAuth',
+    )
     .build();
 
   const document = SwaggerModule.createDocument(app, config, {
