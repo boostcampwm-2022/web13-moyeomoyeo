@@ -44,4 +44,10 @@ interface CategoryType {
   name: Category;
 }
 
-export type { ArticlePreviewType, ArticleType, LocationType, CategoryType };
+interface TestResponseType {
+  dataArr: string[];
+  isLast: boolean;
+  currentId: number;
+}
+
+export type { ArticlePreviewType, ArticleType, LocationType, CategoryType, TestResponseType };

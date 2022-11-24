@@ -1,13 +1,13 @@
-import { Avatar, Menu, Text } from '@mantine/core';
+import { Menu, Text } from '@mantine/core';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { within, userEvent } from '@storybook/testing-library';
 
 import Header from '.';
+import UserLoginItem from '@components/common/Header/UserLoginItem';
 import Logo from '@public/icons/logo-md.svg';
-import LoginButton from '@components/Header/LoginButton';
-import RootTitle from '@components/Header/RootTitle';
-import DetailTitle from '@components/Header/DetailTitle';
-import UtilButton from '@components/Header/UtilButton';
+import RootTitle from '@components/common/Header/RootTitle';
+import DetailTitle from '@components/common/Header/DetailTitle';
+import UtilButton from '@components/common/Header/UtilButton';
 
 export default {
   title: 'Component/Header',
@@ -19,39 +19,25 @@ const Template: ComponentStory<typeof Header> = (args) => <Header {...args} />;
 export const HomeRootNotLogin = Template.bind({});
 HomeRootNotLogin.args = {
   leftNode: <Logo />,
-  rightNode: <LoginButton />,
+  rightNode: <UserLoginItem />,
 };
 
 export const HomeRootLogin = Template.bind({});
 HomeRootLogin.args = {
   leftNode: <Logo />,
-  rightNode: (
-    <Avatar
-      radius="xl"
-      size="md"
-      alt="avatar"
-      src="https://avatars.githubusercontent.com/u/90585081?v=4"
-    />
-  ),
+  rightNode: <UserLoginItem authorized />,
 };
 
 export const OtherRootLogin = Template.bind({});
 OtherRootLogin.args = {
   leftNode: <RootTitle title="모임게시판" subTitle="다양한 소모임을 위한 게시판" />,
-  rightNode: (
-    <Avatar
-      radius="xl"
-      size="md"
-      alt="avatar"
-      src="https://avatars.githubusercontent.com/u/90585081?v=4"
-    />
-  ),
+  rightNode: <UserLoginItem authorized />,
 };
 
 export const OtherRootNotLogin = Template.bind({});
 OtherRootNotLogin.args = {
   leftNode: <RootTitle title="모임게시판" subTitle="다양한 소모임을 위한 게시판" />,
-  rightNode: <LoginButton />,
+  rightNode: <UserLoginItem />,
 };
 
 export const DetailPlain = Template.bind({});

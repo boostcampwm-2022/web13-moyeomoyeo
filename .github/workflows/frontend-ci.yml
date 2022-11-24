@@ -1,6 +1,6 @@
 name: Frontend CI
 run-name: ${{ github.actor }}가 실행함
-on: 
+on:
   pull_request:
     branches:
       - develop
@@ -8,9 +8,9 @@ on:
       - 'frontend/**'
       - './github/workflows/frontend-ci.yml'
       - './github/workflows/slack-notification.yml'
-    
+
 jobs:
-  CI:
+  checking:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -23,7 +23,7 @@ jobs:
 
       - name: nodeJS
         uses: actions/setup-node@v3
-        with: 
+        with:
           node-version: 16.18.1
 
       - name: dependency install
@@ -38,7 +38,7 @@ jobs:
       run:
         working-directory: './frontend'
     outputs:
-      status: ${{ steps.chromatic.outputs.storybookUrl }}
+      status: ${{ job.status }}
     steps:
       - name: checkout
         uses: actions/checkout@v3
@@ -78,17 +78,17 @@ jobs:
 
       - name: nodeJS
         uses: actions/setup-node@v3
-        with: 
+        with:
           node-version: 16.18.1
-        
+
       - name: dependency install
         run: |
           npm install
-      
+
       - name: Build
         run: |
           npm run build
-      
+
       - name: lighthouse
         run: | 
           npm install -g @lhci/cli
@@ -172,12 +172,12 @@ jobs:
           msg: ${{ steps.format_lighthouse_score.outputs.comments }}
 
   slack-notifications:
-    needs: [CI, lhci, storybook]
+    needs: [checking, lhci, storybook]
     if: ${{ always() }}
     uses: ./.github/workflows/slack-notification.yml
     with:
       title: 프론트엔드 개발용 CI
-      status: 'CI : ${{ needs.CI.outputs.status }} && lhci : ${{ needs.lhci.outputs.status }} && storybook : {{ needs.storybook.outputs.status }}'
+      status: 'checking : ${{ needs.checking.outputs.status }} && lhci : ${{ needs.lhci.outputs.status }} && storybook : ${{ needs.storybook.outputs.status }}'
       commit_url: ${{ github.event.pull_request.html_url || github.event.head_commit.url }}
     secrets:
       webhook_url: ${{ secrets.SLACK_NOTIFICATION_WEBHOOK_URL }}

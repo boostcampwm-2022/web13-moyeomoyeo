@@ -41,6 +41,8 @@
     "@typescript-eslint/space-before-function-paren": "off",
     "no-console": "warn",
     "@typescript-eslint/strict-boolean-expressions": "off",
-    "@typescript-eslint/no-floating-promises": "warn"
+    "@typescript-eslint/no-floating-promises": "warn",
+    "@typescript-eslint/return-await": "off",
+    "@typescript-eslint/promise-function-async": "off"
   }
 }
