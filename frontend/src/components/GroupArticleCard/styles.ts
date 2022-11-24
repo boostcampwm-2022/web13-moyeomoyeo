@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 const CardWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 17.3rem;
+  width: 100%;
   height: 30.7rem;
   border-radius: 12px;
   border: 1px solid ${({ theme }) => theme.colors.gray[2]};
