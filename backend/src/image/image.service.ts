@@ -43,18 +43,7 @@ export class ImageService {
         `${new Date().getTime()}-${v4()}${extension}`,
       );
 
-      const upload = s3.upload(
-        {
-          Bucket: this.s3ConfigService.bucket,
-          Key: key,
-          Body: file.buffer,
-          ACL: 'public-read',
-        },
-        (err, data) => {
-          this.logger.error(err);
-        },
-      );
-
+      const upload = this.uploadImageToS3(s3, file, key);
       this.logger.log(upload);
       keyList.push(key);
     });
@@ -68,14 +57,27 @@ export class ImageService {
     return result === null ? '' : result[0];
   }
 
-  async takeGetSignedUrl(s3: S3, keyList: string[]) {
-    const url = path.join(
-      this.s3ConfigService.endpoint,
-      this.s3ConfigService.path,
+  uploadImageToS3(s3: S3, file: Express.Multer.File, key: string) {
+    return s3.upload(
+      {
+        Bucket: this.s3ConfigService.bucket,
+        Key: key,
+        Body: file.buffer,
+        ACL: 'public-read',
+      },
+      (err, data) => {
+        this.logger.error(err);
+      },
     );
+  }
 
+  async takeGetSignedUrl(s3: S3, keyList: string[]) {
     return keyList.map((key) => {
-      return path.join(url, key);
+      return path.join(
+        this.s3ConfigService.endpoint,
+        this.s3ConfigService.bucket,
+        key,
+      );
     });
   }
 }
