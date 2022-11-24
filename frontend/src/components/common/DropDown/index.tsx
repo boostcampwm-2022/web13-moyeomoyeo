@@ -10,7 +10,7 @@ const DropDown = (props: Props) => {
 const StyledSelect = styled(Select)`
   width: 100%;
   & .mantine-Select-item {
-    padding: 1.2rem 1.6rem;
+    padding: 1.6rem;
     &[data-selected] {
       &,
       &:hover {
@@ -19,6 +19,7 @@ const StyledSelect = styled(Select)`
       }
     }
   }
+
   & .mantine-Select-label {
     padding-bottom: 0.4rem;
   }
