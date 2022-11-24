@@ -1,5 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import NoGroupMessage from './index';
+import NoGroupMessage from '.';
 
 export default {
   title: 'Component/NoGroupMessage',

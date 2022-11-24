@@ -1,5 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import GroupArticleCard from './index';
+import GroupArticleCard from '.';
 import { dummyArticlePreview } from '@constants/dummy';
 import { ArticleStatus } from '@constants/article';
 
