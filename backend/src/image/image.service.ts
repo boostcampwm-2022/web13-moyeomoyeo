@@ -1,53 +1,64 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { S3ConfigService } from '@src/common/config/s3/config.service';
-import multer from 'multer';
-import multerS3 from 'multer-s3';
-import { S3Client } from '@aws-sdk/client-s3';
-import AWS from 'aws-sdk';
+import { Endpoint, S3 } from 'aws-sdk';
+import * as path from 'path';
 import { v4 } from 'uuid';
-import { Request } from 'express';
 
 @Injectable()
 export class ImageService {
-  private s3: S3Client;
+  private readonly logger = new Logger(ImageService.name);
 
   constructor(private s3ConfigService: S3ConfigService) {}
 
-  async uploadImage(file: Express.Multer.File) {
-    this.certificateS3();
-    this.s3.send();
+  async uploadImage(files: Array<Express.Multer.File>) {
+    try {
+      const s3 = this.certificateS3();
+      const keyList = await this.pushImageAndGetKey(s3, files);
+      const signedUrlList = await this.takeGetSignedUrl(s3, keyList);
+      return { keyList, signedUrlList };
+    } catch (e) {
+      this.logger.error(e);
+      throw new Error(e);
+    }
   }
 
-  // loadStorage() {
-  //   const s3Access = this.certificateS3();
-
-  //   return multerS3({
-  //     s3: s3Access,
-  //     bucket: this.s3ConfigService.bucket,
-  //     contentType: multerS3.AUTO_CONTENT_TYPE,
-  //     acl: 'public-read',
-
-  //     key(req: Request, file, callback) {
-  //       const originFilename = file.originalname;
-  //       const extension = originFilename.substring(
-  //         originFilename.lastIndexOf('.'),
-  //       );
-  //       callback(
-  //         null,
-  //         `uploads/profile-images/${new Date().getTime()}-${v4()}${extension}`,
-  //       );
-  //     },
-  //   });
-  // }
-
   certificateS3() {
-    this.s3 = new S3Client({
+    const endpoint = new Endpoint(this.s3ConfigService.endpoint);
+    const s3 = new S3({
+      endpoint: endpoint,
+      region: this.s3ConfigService.region,
       credentials: {
         accessKeyId: this.s3ConfigService.accessKey,
         secretAccessKey: this.s3ConfigService.secretKey,
       },
-      endpoint: this.s3ConfigService.endpoint,
-      region: this.s3ConfigService.region,
+    });
+
+    return s3;
+  }
+
+  async pushImageAndGetKey(s3: S3, files: Express.Multer.File[]) {
+    return files.map((file) => {
+      const key = `${new Date().getTime()}-${v4()}`;
+
+      const upload = s3.putObject({
+        Bucket: this.s3ConfigService.bucket,
+        Key: key,
+        Body: file.buffer,
+      });
+
+      this.logger.log(upload);
+      return key;
+    });
+  }
+
+  async takeGetSignedUrl(s3: S3, keyList: string[]) {
+    const url = path.join(
+      this.s3ConfigService.endpoint,
+      this.s3ConfigService.path,
+    );
+
+    return keyList.map((key) => {
+      return path.join(url, key);
     });
   }
 }
