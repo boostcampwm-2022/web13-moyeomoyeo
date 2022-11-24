@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { HeaderWrapper } from '@components/Header/styles';
+import { HeaderWrapper } from '@components/common/Header/styles';
 
 interface Props {
   /**

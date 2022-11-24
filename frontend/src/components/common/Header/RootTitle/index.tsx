@@ -1,5 +1,5 @@
 import { Title, Text } from '@mantine/core';
-import { RootTitleWrapper } from '@components/Header/RootTitle/styles';
+import { RootTitleWrapper } from '@components/common/Header/RootTitle/styles';
 
 interface Props {
   title: string;
