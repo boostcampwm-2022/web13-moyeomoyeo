@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # 오픈 소스: https://github.com/wmnnd/nginx-certbot 참고
 
 if ! [ -x "$(command -v docker-compose)" ]; then
@@ -7,7 +6,7 @@ if ! [ -x "$(command -v docker-compose)" ]; then
   exit 1
 fi
 
-domains=(api.moyeomoyeo.com)
+domains=(www.moyeomoyeo.com)
 rsa_key_size=4096
 data_path="/letsencrypt/certbot"
 email="pythonstrup@gmail.com" # Adding a valid address is strongly recommended

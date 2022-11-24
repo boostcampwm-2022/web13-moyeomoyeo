@@ -10,6 +10,13 @@ touch .env
 
 echo $4 > .env
 
-docker compose down --rmi all
+# docker down
+docker compose down
 
-docker compose up -d
+# 도커 컨테이너 전체 삭제
+docker rm `docker ps -a -q`
+
+# 도커 이미지 전체 삭제
+docker rmi `docker images -q`
+
+docker compose up -d --build

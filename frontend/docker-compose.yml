@@ -13,18 +13,33 @@ services:
       - backbone
 
   nginx:
-    container_name: moyeo-nginx
-    build:
-      context: .
-      dockerfile: nginx.Dockerfile
+    container_name: nginx
+    image: nginx
     ports:
       - 80:80
+      - 443:443
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./dev/nginx:/etc/nginx/conf.d
+      - /letsencrypt/certbot/conf:/etc/letsencrypt
+      - /letsencrypt/certbot/www:/var/www/certbot
     depends_on:
       - frontend
     networks:
       - backbone
+    command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
+
+  certbot:
+    container_name: certbot
+    image: certbot/certbot
+    restart: unless-stopped
+    volumes:
+      - /letsencrypt/certbot/conf:/etc/letsencrypt
+      - /letsencrypt/certbot/www:/var/www/certbot
+    depends_on:
+      - nginx
+    networks:
+      - backbone
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
 networks:
   backbone:
