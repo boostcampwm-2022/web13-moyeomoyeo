@@ -25,4 +25,10 @@ interface CategoryType {
   name: string;
 }
 
-export type { ArticleType, LocationType, CategoryType };
+interface TestResponseType {
+  dataArr: string[];
+  isLast: boolean;
+  currentId: number;
+}
+
+export type { ArticleType, LocationType, CategoryType, TestResponseType };
