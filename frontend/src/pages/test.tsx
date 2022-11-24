@@ -20,7 +20,7 @@ const Test = () => {
   });
 
   return (
-    <PageLayout footer>
+    <PageLayout hasFooter>
       {testData.map((data, index) => (
         <TestDiv key={index}>{data}</TestDiv>
       ))}

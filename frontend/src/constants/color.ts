@@ -1,14 +1,11 @@
-const BADGE_COLORS = [
-  'cyan',
-  'green',
-  'yellow',
-  'orange',
-  'grape',
-  'red',
-  'indigo',
-  'violet',
-  'lime',
-  'teal',
-];
+import { ArticleStatus } from '@constants/article';
 
-export { BADGE_COLORS };
+const BADGE_COLORS = ['cyan', 'green', 'yellow', 'orange', 'grape', 'violet', 'teal', 'pink'];
+
+const STATUS_COLOR = {
+  [ArticleStatus.PROGRESS]: 'lime',
+  [ArticleStatus.SUCCEED]: 'indigo',
+  [ArticleStatus.FAIL]: 'red',
+};
+
+export { BADGE_COLORS, STATUS_COLOR };

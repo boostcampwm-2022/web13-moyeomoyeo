@@ -10,6 +10,6 @@ const Template: ComponentStory<typeof ArticleTag> = (args) => <ArticleTag {...ar
 
 export const _ArticleTag = Template.bind({});
 _ArticleTag.args = {
-  id: 2,
+  color: 'lime',
   content: '제주',
 };

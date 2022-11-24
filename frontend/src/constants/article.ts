@@ -1,7 +1,13 @@
 enum ArticleStatus {
-  PROGRESS = '모집중',
-  SUCCEED = '모집성공',
-  FAIL = '모집중단',
+  PROGRESS = 'PROGRESS',
+  SUCCEED = 'SUCCEED',
+  FAIL = 'FAIL',
 }
 
-export { ArticleStatus };
+enum ArticleStatusKr {
+  PROGRESS = '모집중',
+  SUCCEED = '모집완료',
+  FAIL = '모집증단',
+}
+
+export { ArticleStatus, ArticleStatusKr };

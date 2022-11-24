@@ -1,8 +1,8 @@
 import { Image } from '@mantine/core';
-import { ArticleType } from '@typings/types';
+import { ArticlePreviewType } from '@typings/types';
 import ArticleTag from '@components/ArticleTag';
 import StatCounter from '@components/StatCounter';
-import { ArticleStatus } from '@constants/article';
+import { ArticleStatus, ArticleStatusKr } from '@constants/article';
 import {
   CapacityText,
   CardWrapper,
@@ -12,9 +12,10 @@ import {
   TitleText,
   ClosedText,
 } from '@components/GroupArticleCard/styles';
+import { getCommonBadgeColor, getStatusBadgeColor } from '../../utils/colors';
 
 interface Props {
-  article: ArticleType;
+  article: ArticlePreviewType;
 }
 
 const GroupArticleCard = ({ article }: Props) => {
@@ -28,8 +29,18 @@ const GroupArticleCard = ({ article }: Props) => {
       <Image src={article.thumbnail} alt={'thumbnail-image'} height={200} />
       <InfoWrapper>
         <TagWrapper>
-          <ArticleTag id={article.category.id} content={article.category.name} />
-          <ArticleTag id={article.location.id} content={article.location.name} />
+          <ArticleTag
+            color={getStatusBadgeColor(article.status)}
+            content={ArticleStatusKr[article.status]}
+          />
+          <ArticleTag
+            color={getCommonBadgeColor(article.category.id)}
+            content={article.category.name}
+          />
+          <ArticleTag
+            color={getCommonBadgeColor(article.location.id)}
+            content={article.location.name}
+          />
         </TagWrapper>
         <TitleText>{article.title}</TitleText>
         <CapacityText>

@@ -1,9 +1,28 @@
 import { Location } from '@constants/location';
 import { ArticleStatus } from '@constants/article';
+import { Category } from '@constants/category';
+
+interface ArticlePreviewType {
+  id: number;
+  title: string;
+  location: LocationType;
+  category: CategoryType;
+  commentCount: number;
+  scrapCount: number;
+  thumbnail: string;
+  maxCapacity: number;
+  currentCapacity: number;
+  status: ArticleStatus;
+  createdAt: string;
+}
 
 interface ArticleType {
   id: number;
   title: string;
+  contents: string;
+  authorId: number;
+  authorName: string;
+  authorThumbnail: string;
   location: LocationType;
   category: CategoryType;
   commentCount: number;
@@ -22,7 +41,7 @@ interface LocationType {
 
 interface CategoryType {
   id: number;
-  name: string;
+  name: Category;
 }
 
 interface TestResponseType {
@@ -31,4 +50,4 @@ interface TestResponseType {
   currentId: number;
 }
 
-export type { ArticleType, LocationType, CategoryType, TestResponseType };
+export type { ArticlePreviewType, ArticleType, LocationType, CategoryType, TestResponseType };
