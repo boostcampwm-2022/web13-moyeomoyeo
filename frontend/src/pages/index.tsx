@@ -11,6 +11,7 @@ import { Location, LocationKr } from '@constants/location';
 import GroupArticleCard from '@components/GroupArticleCard';
 import useIntersect from '@hooks/useIntersect';
 import useFetchGroupArticles from '@hooks/queries/useFetchGroupArticles';
+import { PAGE_TITLE } from '@constants/pageTitle';
 
 const Main = () => {
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
@@ -39,7 +40,9 @@ const Main = () => {
     <PageLayout
       header={
         <Header
-          leftNode={<RootTitle title="모임게시판" subTitle="다양한 소모임을 위한 게시판" />}
+          leftNode={
+            <RootTitle title={PAGE_TITLE.ARTICLE.title} subTitle={PAGE_TITLE.ARTICLE.subTitle} />
+          }
         />
       }
       footer={<NavigationTab />}

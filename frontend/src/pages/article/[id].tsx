@@ -12,6 +12,7 @@ import PageLayout from '@components/common/PageLayout';
 import StatCounter from '@components/StatCounter';
 import Header from '@components/common/Header';
 import DetailTitle from '@components/common/Header/DetailTitle';
+import { PAGE_TITLE } from '@constants/pageTitle';
 
 const ArticleDetail = () => {
   const {
@@ -37,7 +38,9 @@ const ArticleDetail = () => {
       // TODO rightNode에 작성자 여부에 따라 메뉴버튼 렌더링 필요
       header={
         <Header
-          leftNode={<DetailTitle title="모임게시판" subTitle="다양한 소모임을 위한 게시판" />}
+          leftNode={
+            <DetailTitle title={PAGE_TITLE.ARTICLE.title} subTitle={PAGE_TITLE.ARTICLE.subTitle} />
+          }
         />
       }
     >
