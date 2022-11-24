@@ -7,9 +7,9 @@ import { v4 } from 'uuid';
 @Injectable()
 export class ImageService {
   private readonly logger = new Logger(ImageService.name);
-  private s3: S3;
+  private readonly s3: S3;
 
-  constructor(private s3ConfigService: S3ConfigService) {
+  constructor(private readonly s3ConfigService: S3ConfigService) {
     this.s3 = this.certificateS3();
   }
 
@@ -45,8 +45,7 @@ export class ImageService {
         `${new Date().getTime()}-${v4()}${extension}`,
       );
 
-      const upload = this.uploadImageToS3(file, key);
-      this.logger.log(upload);
+      this.uploadImageToS3(file, key);
       keyList.push(key);
     });
 
@@ -69,7 +68,7 @@ export class ImageService {
       },
 
       (err, data) => {
-        this.logger.error(err);
+        if (err) this.logger.error(err);
       },
     );
   }

@@ -6,7 +6,6 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { S3ConfigService } from '@src/common/config/s3/config.service';
 import { ApiErrorResponse } from '@src/common/decorator/api-error-response.decorator';
 import { ApiSuccessResponse } from '@src/common/decorator/api-success-resposne.decorator';
 import { ResponseEntity } from '@src/common/response-entity';
@@ -15,10 +14,7 @@ import { ImageService } from './image.service';
 
 @Controller('images')
 export class ImageController {
-  constructor(
-    private imageService: ImageService,
-    private s3ConfigService: S3ConfigService,
-  ) {}
+  constructor(private readonly imageService: ImageService) {}
 
   @Post('upload')
   @UseInterceptors(FilesInterceptor('files'))
