@@ -1,18 +1,39 @@
+import Link from 'next/link';
+import { useMemo, useState } from 'react';
 import { Checkbox, Select } from '@mantine/core';
+import styled from '@emotion/styled';
 import PageLayout from '@components/common/PageLayout';
 import Header from '@components/common/Header';
 import NavigationTab from '@components/common/NavigationTab';
 import RootTitle from '@components/common/Header/RootTitle';
-import styled from '@emotion/styled';
-import { useState } from 'react';
 import { Category, CategoryKr } from '@constants/category';
 import { Location, LocationKr } from '@constants/location';
 import GroupArticleCard from '@components/GroupArticleCard';
-import { dummyArticle } from '@constants/dummy';
+import useIntersect from '@hooks/useIntersect';
+import useFetchGroupArticles from '@hooks/queries/useFetchGroupArticles';
 
 const Main = () => {
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
+  const [progressChecked, setProgressChecked] = useState<boolean>(false);
+
+  const { data, fetchNextPage, hasNextPage, isFetching } = useFetchGroupArticles(
+    selectedCategory,
+    selectedLocation,
+    progressChecked
+  );
+
+  const ref = useIntersect((entry, observer) => {
+    observer.unobserve(entry.target);
+    if (hasNextPage && !isFetching) {
+      void fetchNextPage();
+    }
+  });
+
+  const articles = useMemo(
+    () => (data ? data.pages.flatMap(({ data }) => data.articles) : []),
+    [data]
+  );
 
   return (
     <PageLayout
@@ -55,18 +76,28 @@ const Main = () => {
             maxDropdownHeight={200}
           />
         </FilterWrapper>
-        <Checkbox label="모집 중인 모임만 보기" size="md" />
+        <Checkbox
+          checked={progressChecked}
+          onChange={(event) => setProgressChecked(event.currentTarget.checked)}
+          label="모집 중인 모임만 보기"
+          size="md"
+        />
         <ArticleList>
-          {Array.from({ length: 20 })
-            .fill(0)
-            .map((_, index) => (
-              <GroupArticleCard key={index} article={dummyArticle} />
-            ))}
+          {articles.map((article) => (
+            <Link key={article.id} href={`/article/${article.id}`}>
+              <div key={article.id}>
+                <GroupArticleCard article={article} />
+              </div>
+            </Link>
+          ))}
+          <div ref={ref}></div>
         </ArticleList>
       </ContentWrapper>
     </PageLayout>
   );
 };
+
+export default Main;
 
 // TODO 공통 Dropdown 컴포넌트로 변경
 const StyledSelect = styled(Select)`
@@ -98,5 +129,3 @@ const ArticleList = styled.div`
   grid-template-columns: repeat(2, 1fr);
   grid-column-gap: 1.3rem;
 `;
-
-export default Main;
