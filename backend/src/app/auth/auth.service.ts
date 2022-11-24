@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UserRepository } from '@app/user/user.repository';
+import { User } from '@app/user/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -19,7 +20,17 @@ export class AuthService {
     socialType: string;
   }) {
     const user = await this.userRepository.findBySocial(id, socialType);
-
+    if (!user) {
+      const newUser = User.signup({
+        socialId: id,
+        githubUrl,
+        profileImage,
+        blogUrl,
+        socialType,
+      });
+      await this.userRepository.save(newUser);
+      return newUser;
+    }
     return user;
   }
 }

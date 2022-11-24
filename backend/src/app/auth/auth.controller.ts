@@ -18,7 +18,15 @@ export class AuthController {
 
   @Get('/github/callback')
   @UseGuards(GithubAuthGuard)
-  githubCallback(@RequestGithubProfile() githubProfile: GithubProfile) {
-    return githubProfile;
+  async githubCallback(@RequestGithubProfile() githubProfile: GithubProfile) {
+    const user = await this.authService.socialLogin({
+      id: githubProfile.id,
+      profileImage: githubProfile._json.avatar_url,
+      blogUrl: githubProfile._json.blog,
+      githubUrl: githubProfile.profileUrl,
+      socialType: 'GITHUB',
+    });
+
+    return user;
   }
 }
