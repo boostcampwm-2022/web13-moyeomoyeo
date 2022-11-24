@@ -7,13 +7,15 @@ import { v4 } from 'uuid';
 @Injectable()
 export class ImageService {
   private readonly logger = new Logger(ImageService.name);
+  private s3: S3;
 
-  constructor(private s3ConfigService: S3ConfigService) {}
+  constructor(private s3ConfigService: S3ConfigService) {
+    this.s3 = this.certificateS3();
+  }
 
   uploadImage(files: Array<Express.Multer.File>) {
-    const s3 = this.certificateS3();
-    const keyList = this.pushImageAndGetKey(s3, files);
-    const urlList = this.getStorageUrl(s3, keyList);
+    const keyList = this.pushImageAndGetKey(files);
+    const urlList = this.getStorageUrl(keyList);
     return { keyList, urlList };
   }
 
@@ -31,7 +33,7 @@ export class ImageService {
     return s3;
   }
 
-  pushImageAndGetKey(s3: S3, files: Express.Multer.File[]) {
+  pushImageAndGetKey(files: Express.Multer.File[]) {
     const keyList = [];
 
     files.forEach((file) => {
@@ -43,7 +45,7 @@ export class ImageService {
         `${new Date().getTime()}-${v4()}${extension}`,
       );
 
-      const upload = this.uploadImageToS3(s3, file, key);
+      const upload = this.uploadImageToS3(file, key);
       this.logger.log(upload);
       keyList.push(key);
     });
@@ -57,8 +59,8 @@ export class ImageService {
     return result === null ? '' : result[0];
   }
 
-  uploadImageToS3(s3: S3, file: Express.Multer.File, key: string) {
-    return s3.upload(
+  uploadImageToS3(file: Express.Multer.File, key: string) {
+    return this.s3.upload(
       {
         Bucket: this.s3ConfigService.bucket,
         Key: key,
@@ -72,7 +74,7 @@ export class ImageService {
     );
   }
 
-  getStorageUrl(s3: S3, keyList: string[]) {
+  getStorageUrl(keyList: string[]) {
     return keyList.map((key) => {
       return path.join(
         this.s3ConfigService.endpoint,
