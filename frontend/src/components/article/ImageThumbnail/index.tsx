@@ -15,6 +15,7 @@ const ImageThumbnail = ({ src = null }: Props) => {
   const {
     colors: { gray },
   } = useTheme();
+
   return (
     <ThumbnailWrapper>
       {src ? (

@@ -9,8 +9,8 @@ import Header from '@components/common/Header';
 import TextInput from '@components/common/TextInput';
 import DetailTitle from '@components/common/Header/DetailTitle';
 import DropDown from '@components/common/DropDown';
-import { CategoryKr } from '@constants/category';
-import { LocationKr } from '@constants/location';
+import { Category, CategoryKr } from '@constants/category';
+import { Location, LocationKr } from '@constants/location';
 import ArticleEditor from '@components/article/ArticleEditor';
 import ImageThumbnail from '@components/article/ImageThumbnail';
 
@@ -21,8 +21,8 @@ import ImageThumbnail from '@components/article/ImageThumbnail';
  */
 
 const WritePage = () => {
-  const [category, setCategory] = useState<string | null>(null);
-  const [location, setLocation] = useState<string | null>(null);
+  const [category, setCategory] = useState<Category | null>(null);
+  const [location, setLocation] = useState<Location | null>(null);
   const [personLimit, setPersonLimit] = useState<number>(5);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -69,7 +69,7 @@ const WritePage = () => {
                 value: key,
               }))}
               value={category}
-              onChange={setCategory}
+              onChange={(value) => setCategory(value as Category)}
               required
             />
 
@@ -81,7 +81,7 @@ const WritePage = () => {
                 value: key,
               }))}
               value={location}
-              onChange={setLocation}
+              onChange={(value) => setLocation(value as Location)}
               required
             />
           </SelectSection>
