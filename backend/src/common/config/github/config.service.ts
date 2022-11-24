@@ -19,4 +19,8 @@ export class GithubConfigService {
   get callbackUrl() {
     return this.configService.get('GITHUB_CALLBACK_URL', { infer: true });
   }
+
+  get redirectUrl() {
+    return this.configService.get('GITHUB_REDIRECT_URL', { infer: true });
+  }
 }

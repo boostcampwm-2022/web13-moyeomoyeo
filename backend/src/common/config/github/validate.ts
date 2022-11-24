@@ -13,6 +13,10 @@ export class GithubConfig {
   @IsString()
   @Expose()
   GITHUB_CALLBACK_URL: string;
+
+  @IsString()
+  @Expose()
+  GITHUB_REDIRECT_URL: string;
 }
 
 export const validate = (config: Record<string, unknown>) => {
