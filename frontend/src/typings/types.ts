@@ -59,4 +59,11 @@ interface TestResponseType {
   currentId: number;
 }
 
-export type { ArticlePreviewType, ArticleType, LocationType, CategoryType, TestResponseType, Comment };
+export type {
+  ArticlePreviewType,
+  ArticleType,
+  LocationType,
+  CategoryType,
+  TestResponseType,
+  Comment,
+};
