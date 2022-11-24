@@ -1,6 +1,6 @@
 name: Frontend CI
 run-name: ${{ github.actor }}가 실행함
-on: 
+on:
   pull_request:
     branches:
       - develop
@@ -8,7 +8,7 @@ on:
       - 'frontend/**'
       - './github/workflows/frontend-ci.yml'
       - './github/workflows/slack-notification.yml'
-    
+
 jobs:
   checking:
     runs-on: ubuntu-latest
@@ -23,7 +23,7 @@ jobs:
 
       - name: nodeJS
         uses: actions/setup-node@v3
-        with: 
+        with:
           node-version: 16.18.1
 
       - name: dependency install
@@ -78,17 +78,17 @@ jobs:
 
       - name: nodeJS
         uses: actions/setup-node@v3
-        with: 
+        with:
           node-version: 16.18.1
-        
+
       - name: dependency install
         run: |
           npm install
-      
+
       - name: Build
         run: |
           npm run build
-      
+
       - name: lighthouse
         run: | 
           npm install -g @lhci/cli

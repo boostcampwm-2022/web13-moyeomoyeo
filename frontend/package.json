@@ -35,6 +35,7 @@
     "@tabler/icons": "^1.111.0",
     "@tanstack/react-query": "^4.16.1",
     "@tanstack/react-query-devtools": "^4.16.1",
+    "axios": "^1.1.3",
     "next": "^12.3.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -70,11 +71,15 @@
     "eslint-plugin-storybook": "^0.6.7",
     "husky": "^8.0.2",
     "lint-staged": "^13.0.3",
+    "msw": "^0.29.0",
     "prettier": "^2.7.1",
     "storybook-addon-next": "^1.6.10",
     "storybook-addon-next-router": "^3.1.1",
     "typescript": "^4.8.4",
     "webpack": "^5.75.0"
+  },
+  "msw": {
+    "workerDirectory": "public"
   },
   "readme": "ERROR: No README data found!",
   "_id": "frontend@0.1.0"

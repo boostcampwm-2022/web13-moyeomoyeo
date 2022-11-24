@@ -34,4 +34,10 @@ interface Comment {
   createdAt: string;
 }
 
-export type { ArticleType, LocationType, CategoryType, Comment };
+interface TestResponseType {
+  dataArr: string[];
+  isLast: boolean;
+  currentId: number;
+}
+
+export type { ArticleType, LocationType, CategoryType, Comment, TestResponseType };
