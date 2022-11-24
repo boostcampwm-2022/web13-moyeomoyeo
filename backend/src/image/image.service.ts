@@ -65,6 +65,7 @@ export class ImageService {
         Body: file.buffer,
         ACL: 'public-read',
       },
+
       (err, data) => {
         this.logger.error(err);
       },
