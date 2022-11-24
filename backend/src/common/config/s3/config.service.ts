@@ -25,4 +25,8 @@ export class S3ConfigService {
   get bucket() {
     return this.configService.get('STORAGE_BUCKET', { infer: true });
   }
+
+  get path() {
+    return this.configService.get('STORAGE_BUCKET_PATH', { infer: true });
+  }
 }
