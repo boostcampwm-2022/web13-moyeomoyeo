@@ -1,5 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import ArticleTag from '.';
+import ArticleTag from './index';
 
 export default {
   title: 'Component/ArticleTag',

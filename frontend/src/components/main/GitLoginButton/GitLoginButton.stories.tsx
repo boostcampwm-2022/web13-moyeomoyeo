@@ -1,5 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import GitLoginButton from '.';
+import GitLoginButton from './index';
 
 export default {
   title: 'Component/GitLoginButton',

@@ -8,7 +8,7 @@ import NavigationTab from '@components/common/NavigationTab';
 import RootTitle from '@components/common/Header/RootTitle';
 import { Category, CategoryKr } from '@constants/category';
 import { Location, LocationKr } from '@constants/location';
-import GroupArticleCard from '@components/GroupArticleCard';
+import GroupArticleCard from '@components/common/GroupArticleCard';
 import useIntersect from '@hooks/useIntersect';
 import useFetchGroupArticles from '@hooks/queries/useFetchGroupArticles';
 import { PAGE_TITLE } from '@constants/pageTitle';

@@ -1,7 +1,7 @@
 import { Image } from '@mantine/core';
 import { ArticlePreviewType } from '@typings/types';
-import ArticleTag from '@components/ArticleTag';
-import StatCounter from '@components/StatCounter';
+import ArticleTag from '@components/common/ArticleTag';
+import StatCounter from '@components/common/StatCounter';
 import { ArticleStatus, ArticleStatusKr } from '@constants/article';
 import {
   CapacityText,
@@ -11,7 +11,7 @@ import {
   TagWrapper,
   TitleText,
   ClosedText,
-} from '@components/GroupArticleCard/styles';
+} from '@components/common/GroupArticleCard/styles';
 import { getCommonBadgeColor, getStatusBadgeColor } from '@utils/colors';
 import { CategoryKr } from '@constants/category';
 import { LocationKr } from '@constants/location';
