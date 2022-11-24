@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import LogoIcon from '@public/icons/logo-lg.svg';
 import PageLayout from '@components/common/PageLayout';
-import GitLoginButton from '@components/main/GitLoginButton';
+import GitLoginButton from '@components/login/GitLoginButton';
 
 const Login = () => {
   return (
