@@ -12,7 +12,9 @@ import {
   TitleText,
   ClosedText,
 } from '@components/GroupArticleCard/styles';
-import { getCommonBadgeColor, getStatusBadgeColor } from '../../utils/colors';
+import { getCommonBadgeColor, getStatusBadgeColor } from '@utils/colors';
+import { CategoryKr } from '@constants/category';
+import { LocationKr } from '@constants/location';
 
 interface Props {
   article: ArticlePreviewType;
@@ -35,11 +37,11 @@ const GroupArticleCard = ({ article }: Props) => {
           />
           <ArticleTag
             color={getCommonBadgeColor(article.category.id)}
-            content={article.category.name}
+            content={CategoryKr[article.category.name]}
           />
           <ArticleTag
             color={getCommonBadgeColor(article.location.id)}
-            content={article.location.name}
+            content={LocationKr[article.location.name]}
           />
         </TagWrapper>
         <TitleText>{article.title}</TitleText>
