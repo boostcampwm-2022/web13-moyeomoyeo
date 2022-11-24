@@ -3,32 +3,26 @@ import { Expose, plainToClass, Type } from 'class-transformer';
 
 export class S3Config {
   @IsString()
-  @Type(() => String)
   @Expose()
   STORAGE_ACCESSKEY: string;
 
   @IsString()
-  @Type(() => String)
   @Expose()
   STORAGE_SECRETKEY: string;
 
   @IsString()
-  @Type(() => String)
   @Expose()
   STORAGE_REGION: string;
 
   @IsUrl()
-  @Type(() => String)
   @Expose()
   STORAGE_ENDPOINT: string;
 
   @IsString()
-  @Type(() => String)
   @Expose()
   STORAGE_BUCKET: string;
 
   @IsString()
-  @Type(() => String)
   @Expose()
   STORAGE_BUCKET_PATH: string;
 }
