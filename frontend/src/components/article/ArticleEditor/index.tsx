@@ -19,7 +19,16 @@ const ArticleEditor = () => {
           *
         </Text>
       </ArticleEditorLabel>
-      <StyledEditor id="rte" />
+      <StyledEditor
+        id="rte"
+        controls={[
+          ['bold', 'italic', 'underline', 'strike'],
+          ['h1', 'h2', 'h3'],
+          ['alignLeft', 'alignCenter', 'alignRight'],
+          ['unorderedList', 'orderedList'],
+          ['blockquote', 'code', 'link', 'image'],
+        ]}
+      />
     </ArticleEditorWrapper>
   );
 };
