@@ -12,6 +12,7 @@ import GroupArticleCard from '@components/common/GroupArticleCard';
 import useIntersect from '@hooks/useIntersect';
 import useFetchGroupArticles from '@hooks/queries/useFetchGroupArticles';
 import { PAGE_TITLE } from '@constants/pageTitle';
+import NoGroupMessage from '@components/common/NoGroupMessage/NoGroupMessage';
 
 const Main = () => {
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
@@ -85,16 +86,20 @@ const Main = () => {
           label="모집 중인 모임만 보기"
           size="md"
         />
-        <ArticleList>
-          {articles.map((article) => (
-            <Link key={article.id} href={`/article/${article.id}`}>
-              <div key={article.id}>
-                <GroupArticleCard article={article} />
-              </div>
-            </Link>
-          ))}
-          <div ref={ref}></div>
-        </ArticleList>
+        {articles.length ? (
+          <ArticleList>
+            {articles.map((article) => (
+              <Link key={article.id} href={`/article/${article.id}`}>
+                <div key={article.id}>
+                  <GroupArticleCard article={article} />
+                </div>
+              </Link>
+            ))}
+            <div ref={ref}></div>
+          </ArticleList>
+        ) : (
+          <NoGroupMessage />
+        )}
       </ContentWrapper>
     </PageLayout>
   );
