@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { S3ConfigService } from '@src/common/config/s3/config.service';
-import { CodeStarNotifications, Endpoint, S3 } from 'aws-sdk';
+import { Endpoint, S3 } from 'aws-sdk';
 import * as path from 'path';
 import { v4 } from 'uuid';
 
