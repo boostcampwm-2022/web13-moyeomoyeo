@@ -12,17 +12,17 @@ const NavigationTab = () => {
 
   return (
     <NavigationTabWrapper>
-      <Link href={'/'}>
+      <Link href="/">
         <TabDiv>
           <IconHome2 color={pathname === '/' ? indigo[7] : gray[2]} />
         </TabDiv>
       </Link>
-      <Link href={'/notification'}>
+      <Link href="/notification">
         <TabDiv>
           <IconBell color={pathname === '/notification' ? indigo[7] : gray[2]} />
         </TabDiv>
       </Link>
-      <Link href={'/my'}>
+      <Link href="/my">
         <TabDiv>
           <IconUser color={pathname === '/my' ? indigo[7] : gray[2]} />
         </TabDiv>
