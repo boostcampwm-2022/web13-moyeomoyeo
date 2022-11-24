@@ -13,12 +13,18 @@ import useIntersect from '@hooks/useIntersect';
 import useFetchGroupArticles from '@hooks/queries/useFetchGroupArticles';
 import { PAGE_TITLE } from '@constants/pageTitle';
 import Index from '@components/common/NoGroupMessage';
+import { IconRefresh } from '@tabler/icons';
+import { useTheme } from '@emotion/react';
+import { useQueryClient } from '@tanstack/react-query';
 
 const Main = () => {
+  const {
+    colors: { gray },
+  } = useTheme();
+  const queryClient = useQueryClient();
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
   const [progressChecked, setProgressChecked] = useState<boolean>(false);
-
   const { data, fetchNextPage, hasNextPage, isFetching } = useFetchGroupArticles(
     selectedCategory,
     selectedLocation,
@@ -36,6 +42,10 @@ const Main = () => {
     () => (data ? data.pages.flatMap(({ data }) => data.articles) : []),
     [data]
   );
+
+  const refreshArticleList = () => {
+    void queryClient.resetQueries(['articles']);
+  };
 
   return (
     <PageLayout
@@ -80,12 +90,17 @@ const Main = () => {
             maxDropdownHeight={200}
           />
         </FilterWrapper>
-        <Checkbox
-          checked={progressChecked}
-          onChange={(event) => setProgressChecked(event.currentTarget.checked)}
-          label="모집 중인 모임만 보기"
-          size="md"
-        />
+        <RefreshWrapper>
+          <Checkbox
+            checked={progressChecked}
+            onChange={(event) => setProgressChecked(event.currentTarget.checked)}
+            label="모집 중인 모임만 보기"
+            size="md"
+          />
+          <RefreshButton>
+            <IconRefresh color={gray[6]} onClick={refreshArticleList} />
+          </RefreshButton>
+        </RefreshWrapper>
         {articles.length ? (
           <ArticleList>
             {articles.map((article) => (
@@ -130,6 +145,20 @@ const ContentWrapper = styled.div`
 const FilterWrapper = styled.div`
   display: flex;
   gap: 1.2rem;
+`;
+
+const RefreshWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const RefreshButton = styled.button`
+  background-color: ${({ theme }) => theme.white};
+  border: none;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const ArticleList = styled.div`
