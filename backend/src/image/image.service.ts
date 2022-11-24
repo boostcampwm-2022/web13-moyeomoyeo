@@ -11,15 +11,10 @@ export class ImageService {
   constructor(private s3ConfigService: S3ConfigService) {}
 
   async uploadImage(files: Array<Express.Multer.File>) {
-    try {
-      const s3 = this.certificateS3();
-      const keyList = await this.pushImageAndGetKey(s3, files);
-      const signedUrlList = await this.takeGetSignedUrl(s3, keyList);
-      return { keyList, signedUrlList };
-    } catch (e) {
-      this.logger.error(e);
-      throw new Error(e);
-    }
+    const s3 = this.certificateS3();
+    const keyList = await this.pushImageAndGetKey(s3, files);
+    const urlList = await this.takeGetSignedUrl(s3, keyList);
+    return { keyList, urlList };
   }
 
   certificateS3() {
