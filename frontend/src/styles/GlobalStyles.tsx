@@ -6,6 +6,7 @@ const GlobalStyle = () => {
       styles={{
         '*, *::before, *::after': {
           boxSizing: 'border-box',
+          fontFamily: 'NanumSquareNeo, sans-serif',
         },
         html: {
           fontSize: '62.5%',
