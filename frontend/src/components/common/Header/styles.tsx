@@ -1,9 +1,6 @@
 import styled from '@emotion/styled';
 
 const HeaderWrapper = styled.header`
-  position: sticky;
-  top: 0;
-  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;

@@ -1,15 +1,18 @@
-import PageLayout from '@components/common/PageLayout';
-import { Avatar, Progress, TypographyStylesProvider } from '@mantine/core';
+import { useTheme } from '@emotion/react';
 import styled from '@emotion/styled';
+import { Avatar, Progress, TypographyStylesProvider } from '@mantine/core';
+import { IconList } from '@tabler/icons';
 import { dummyArticle } from '@constants/dummy';
-import ArticleTag from '@components/ArticleTag';
-import { getCommonBadgeColor, getStatusBadgeColor } from '../../utils/colors';
+import ArticleTag from '@components/common/ArticleTag';
+import { getCommonBadgeColor, getStatusBadgeColor } from '@utils/colors';
 import { ArticleStatusKr } from '@constants/article';
 import { CategoryKr } from '@constants/category';
 import { LocationKr } from '@constants/location';
-import { useTheme } from '@emotion/react';
-import StatCounter from '@components/StatCounter';
-import { IconList } from '@tabler/icons';
+import PageLayout from '@components/common/PageLayout';
+import StatCounter from '@components/common/StatCounter';
+import Header from '@components/common/Header';
+import DetailTitle from '@components/common/Header/DetailTitle';
+import { PAGE_TITLE } from '@constants/pageTitle';
 
 const ArticleDetail = () => {
   const {
@@ -31,7 +34,16 @@ const ArticleDetail = () => {
   } = dummyArticle;
 
   return (
-    <PageLayout>
+    <PageLayout
+      // TODO rightNode에 작성자 여부에 따라 메뉴버튼 렌더링 필요
+      header={
+        <Header
+          leftNode={
+            <DetailTitle title={PAGE_TITLE.ARTICLE.title} subTitle={PAGE_TITLE.ARTICLE.subTitle} />
+          }
+        />
+      }
+    >
       <PageWrapper>
         <DetailWrapper>
           <ProfileWrapper>
@@ -103,7 +115,6 @@ const DetailWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
-  padding: 1.6rem;
 `;
 
 const ProfileWrapper = styled.div`
