@@ -1,26 +1,27 @@
-import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { GithubConfig } from '@config/github/validate';
+import { Inject, Injectable } from '@nestjs/common';
+import { ConfigType } from '@nestjs/config';
+import { githubConfig } from '@config/github/configuration';
 
 @Injectable()
 export class GithubConfigService {
   constructor(
-    private readonly configService: ConfigService<GithubConfig, true>,
+    @Inject(githubConfig.KEY)
+    private readonly githubConfiguration: ConfigType<typeof githubConfig>,
   ) {}
 
   get clientId() {
-    return this.configService.get('GITHUB_CLIENT_ID', { infer: true });
+    return this.githubConfiguration.GITHUB_CLIENT_ID;
   }
 
   get clientSecret() {
-    return this.configService.get('GITHUB_CLIENT_SECRET', { infer: true });
+    return this.githubConfiguration.GITHUB_CLIENT_SECRET;
   }
 
   get callbackUrl() {
-    return this.configService.get('GITHUB_CALLBACK_URL', { infer: true });
+    return this.githubConfiguration.GITHUB_CALLBACK_URL;
   }
 
   get redirectUrl() {
-    return this.configService.get('GITHUB_REDIRECT_URL', { infer: true });
+    return this.githubConfiguration.GITHUB_REDIRECT_URL;
   }
 }

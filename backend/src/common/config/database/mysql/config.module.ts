@@ -1,17 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { getEnvironmentFilePath, isIgnoreEnvFile } from '@config/config-option';
 import { MysqlConfigService } from '@config/database/mysql/config.service';
-import { validate } from '@config/database/mysql/validate';
+import { mysqlConfig } from '@config/database/mysql/configuration';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot({
-      envFilePath: getEnvironmentFilePath(),
-      ignoreEnvFile: isIgnoreEnvFile(),
-      validate,
-    }),
-  ],
+  imports: [ConfigModule.forFeature(mysqlConfig)],
   providers: [MysqlConfigService],
   exports: [MysqlConfigService],
 })
