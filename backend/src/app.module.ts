@@ -6,9 +6,10 @@ import { ApiSuccessLoggerMiddleware } from '@middleware/api-success-logger.middl
 import { ApiExceptionLoggerMiddleware } from '@middleware/api-exception-logger.middleware';
 import { DatabaseModule } from '@config/database/database.module';
 import { JwtTokenModule } from '@common/module/jwt-token/jwt-token.module';
+import { ImageModule } from './app/image/image.module';
 
 @Module({
-  imports: [AppConfigModule, DatabaseModule, JwtTokenModule],
+  imports: [AppConfigModule, DatabaseModule, JwtTokenModule, ImageModule],
   controllers: [AppController],
   providers: [AppService],
 })
