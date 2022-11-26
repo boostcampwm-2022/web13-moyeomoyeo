@@ -2,10 +2,14 @@ import styled from '@emotion/styled';
 import LogoIcon from '@public/icons/logo-lg.svg';
 import PageLayout from '@components/common/PageLayout';
 import GitLoginButton from '@components/login/GitLoginButton';
+import Header from '@components/common/Header';
+import DetailTitle from '@components/common/Header/DetailTitle';
 
 const Login = () => {
   return (
-    <PageLayout>
+    <PageLayout
+      header={<Header leftNode={<DetailTitle title="로그인" subTitle="로그인을 해주세요." />} />}
+    >
       <PageWrapper>
         <InfoWrapper>
           <LogoIcon />
@@ -24,7 +28,7 @@ const PageWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 3.6rem;
-  height: 100%;
+  height: calc(100vh - 6.4rem - 3.2rem);
   justify-content: center;
   align-items: center;
 `;
