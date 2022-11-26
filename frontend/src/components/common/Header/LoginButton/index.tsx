@@ -1,4 +1,5 @@
 import Link from 'next/link';
+
 import { Button } from '@mantine/core';
 
 const LoginButton = () => {

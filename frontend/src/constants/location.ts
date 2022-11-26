@@ -1,4 +1,5 @@
 enum Location {
+  ONLINE = 'ONLINE',
   SEOUL = 'SEOUL',
   INCHEON = 'INCHEON',
   BUSAN = 'BUSAN',
@@ -19,6 +20,7 @@ enum Location {
 }
 
 enum LocationKr {
+  ONLINE = '온라인',
   SEOUL = '서울',
   INCHEON = '인천',
   BUSAN = '부산',

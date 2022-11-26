@@ -1,7 +1,7 @@
-import { ArticlePreviewType, ArticleType } from '@typings/types';
-import { Location } from '@constants/location';
 import { ArticleStatus } from '@constants/article';
 import { Category } from '@constants/category';
+import { Location } from '@constants/location';
+import { ArticlePreviewType, ArticleType } from '@typings/types';
 
 // TODO 개발용 dummy data, 추후 삭제
 const dummyArticlePreview: ArticlePreviewType = {

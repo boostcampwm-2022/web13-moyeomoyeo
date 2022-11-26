@@ -1,11 +1,13 @@
-import Head from 'next/head';
 import { AppProps } from 'next/app';
-import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import RouterTransition from '@components/common/RouterTransition';
-import CommonStyles from '@styles/CommonStyles';
-import initMockApi from '@mocks/.';
+import Head from 'next/head';
 import { useEffect, useState } from 'react';
+
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+
+import RouterTransition from '@components/common/RouterTransition';
+import initMockApi from '@mocks/.';
+import CommonStyles from '@styles/CommonStyles';
 
 const queryClient = new QueryClient();
 

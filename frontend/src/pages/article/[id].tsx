@@ -2,17 +2,18 @@ import { useTheme } from '@emotion/react';
 import styled from '@emotion/styled';
 import { Avatar, Progress, TypographyStylesProvider } from '@mantine/core';
 import { IconList } from '@tabler/icons';
-import { dummyArticle } from '@constants/dummy';
+
 import ArticleTag from '@components/common/ArticleTag';
-import { getCommonBadgeColor, getStatusBadgeColor } from '@utils/colors';
-import { ArticleStatusKr } from '@constants/article';
-import { CategoryKr } from '@constants/category';
-import { LocationKr } from '@constants/location';
-import PageLayout from '@components/common/PageLayout';
-import StatCounter from '@components/common/StatCounter';
 import Header from '@components/common/Header';
 import DetailTitle from '@components/common/Header/DetailTitle';
+import PageLayout from '@components/common/PageLayout';
+import StatCounter from '@components/common/StatCounter';
+import { ArticleStatusKr } from '@constants/article';
+import { CategoryKr } from '@constants/category';
+import { dummyArticle } from '@constants/dummy';
+import { LocationKr } from '@constants/location';
 import { PAGE_TITLE } from '@constants/pageTitle';
+import { getCommonBadgeColor, getStatusBadgeColor } from '@utils/colors';
 
 const ArticleDetail = () => {
   const {

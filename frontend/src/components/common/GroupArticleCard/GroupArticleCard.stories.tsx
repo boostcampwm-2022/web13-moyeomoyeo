@@ -1,7 +1,9 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import GroupArticleCard from '.';
-import { dummyArticlePreview } from '@constants/dummy';
+
 import { ArticleStatus } from '@constants/article';
+import { dummyArticlePreview } from '@constants/dummy';
+
+import GroupArticleCard from '.';
 
 export default {
   title: 'Component/GroupArticleCard',

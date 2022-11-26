@@ -1,5 +1,5 @@
-import { Badge } from '@mantine/core';
 import styled from '@emotion/styled';
+import { Badge } from '@mantine/core';
 
 interface Props {
   /**

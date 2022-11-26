@@ -1,21 +1,24 @@
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
-import { Checkbox, Select } from '@mantine/core';
+
+import { useQueryClient } from '@tanstack/react-query';
+
+import { useTheme } from '@emotion/react';
 import styled from '@emotion/styled';
-import PageLayout from '@components/common/PageLayout';
+import { Checkbox, Select } from '@mantine/core';
+import { IconRefresh } from '@tabler/icons';
+
+import GroupArticleCard from '@components/common/GroupArticleCard';
 import Header from '@components/common/Header';
-import NavigationTab from '@components/common/NavigationTab';
 import RootTitle from '@components/common/Header/RootTitle';
+import NavigationTab from '@components/common/NavigationTab';
+import Index from '@components/common/NoGroupMessage';
+import PageLayout from '@components/common/PageLayout';
 import { Category, CategoryKr } from '@constants/category';
 import { Location, LocationKr } from '@constants/location';
-import GroupArticleCard from '@components/common/GroupArticleCard';
-import useIntersect from '@hooks/useIntersect';
-import useFetchGroupArticles from '@hooks/queries/useFetchGroupArticles';
 import { PAGE_TITLE } from '@constants/pageTitle';
-import Index from '@components/common/NoGroupMessage';
-import { IconRefresh } from '@tabler/icons';
-import { useTheme } from '@emotion/react';
-import { useQueryClient } from '@tanstack/react-query';
+import useFetchGroupArticles from '@hooks/queries/useFetchGroupArticles';
+import useIntersect from '@hooks/useIntersect';
 
 const Main = () => {
   const {
@@ -128,11 +131,12 @@ const StyledSelect = styled(Select)`
   & .mantine-Select-item {
     padding: 1.2rem 1.6rem;
     &[data-selected] {
-      &, &:hover {
+      &,
+      &:hover {
         background-color: ${({ theme }) => theme.colors.indigo[0]};
         color: ${({ theme }) => theme.colors.indigo[7]};
-      },
-    },
+      }
+    }
   }
 `;
 

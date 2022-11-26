@@ -1,13 +1,15 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+
 import { Menu, Text } from '@mantine/core';
 
-import PageLayout from '.';
 import Header from '@components/common/Header';
-import NavigationTab from '@components/common/NavigationTab';
+import DetailTitle from '@components/common/Header/DetailTitle';
 import RootTitle from '@components/common/Header/RootTitle';
 import UserLoginItem from '@components/common/Header/UserLoginItem';
-import DetailTitle from '@components/common/Header/DetailTitle';
 import UtilButton from '@components/common/Header/UtilButton';
+import NavigationTab from '@components/common/NavigationTab';
+
+import PageLayout from '.';
 
 export default {
   title: 'Component/Layout/PageLayout',

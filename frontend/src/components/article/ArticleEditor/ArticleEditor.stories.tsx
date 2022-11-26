@@ -1,5 +1,6 @@
-import ArticleEditor from '.';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+
+import ArticleEditor from '.';
 
 export default {
   title: 'Component/ArticleEditor',

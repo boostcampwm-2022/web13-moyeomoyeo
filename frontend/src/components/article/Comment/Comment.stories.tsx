@@ -1,5 +1,6 @@
-import Comment from '.';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+
+import Comment from '.';
 
 export default {
   title: 'Component/Comment',

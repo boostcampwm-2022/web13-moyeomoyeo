@@ -1,9 +1,10 @@
-import CommentInput from '.';
-import PageLayout from '@components/common/PageLayout';
+import { ComponentMeta, ComponentStory } from '@storybook/react';
+
 import Header from '@components/common/Header';
 import RootTitle from '@components/common/Header/RootTitle';
+import PageLayout from '@components/common/PageLayout';
 
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import CommentInput from '.';
 
 export default {
   title: 'Component/CommentInput',

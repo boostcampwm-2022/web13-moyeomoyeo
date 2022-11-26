@@ -1,6 +1,7 @@
-import styled from '@emotion/styled';
 import Image from 'next/image';
+
 import { useTheme } from '@emotion/react';
+import styled from '@emotion/styled';
 import { IconPhoto } from '@tabler/icons';
 
 interface Props {

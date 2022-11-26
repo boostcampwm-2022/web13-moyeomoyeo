@@ -1,6 +1,8 @@
 import { rest } from 'msw';
-import { getTest } from './resolvers/test';
+
 import { getGroupArticles } from '@mocks/resolvers/getGroupArticles';
+
+import { getTest } from './resolvers/test';
 
 export const handlers = [
   rest.get('http://testServer/test', getTest),
