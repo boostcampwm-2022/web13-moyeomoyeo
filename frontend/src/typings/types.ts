@@ -44,7 +44,7 @@ interface CategoryType {
   name: Category;
 }
 
-interface Comment {
+interface CommentType {
   id: number;
   authorId: number;
   authorName: string;
@@ -59,11 +59,21 @@ interface TestResponseType {
   currentId: number;
 }
 
+interface UserType {
+  id: number;
+  userName: string;
+  profileImage: string;
+  description: string;
+  githubUrl: string;
+  blogUrl: string;
+}
+
 export type {
   ArticlePreviewType,
   ArticleType,
   LocationType,
   CategoryType,
   TestResponseType,
-  Comment,
+  CommentType,
+  UserType,
 };

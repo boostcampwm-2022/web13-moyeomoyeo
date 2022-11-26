@@ -8,11 +8,11 @@ import styled from '@emotion/styled';
 import { Checkbox, Select } from '@mantine/core';
 import { IconRefresh } from '@tabler/icons';
 
+import EmptyMessage from '@components/common/EmptyMessage';
 import GroupArticleCard from '@components/common/GroupArticleCard';
 import Header from '@components/common/Header';
 import RootTitle from '@components/common/Header/RootTitle';
 import NavigationTab from '@components/common/NavigationTab';
-import Index from '@components/common/NoGroupMessage';
 import PageLayout from '@components/common/PageLayout';
 import { Category, CategoryKr } from '@constants/category';
 import { Location, LocationKr } from '@constants/location';
@@ -116,7 +116,7 @@ const Main = () => {
             <div ref={ref}></div>
           </ArticleList>
         ) : (
-          <Index />
+          <EmptyMessage target="article" large />
         )}
       </ContentWrapper>
     </PageLayout>
