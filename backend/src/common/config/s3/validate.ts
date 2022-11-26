@@ -1,5 +1,5 @@
 import { IsString, IsUrl, validateSync } from 'class-validator';
-import { Expose, plainToClass, Type } from 'class-transformer';
+import { Expose, plainToClass } from 'class-transformer';
 
 export class S3Config {
   @IsString()

@@ -67,7 +67,7 @@ export class ImageService {
         ACL: 'public-read',
       },
 
-      (err, data) => {
+      (err) => {
         if (err) this.logger.error(err);
       },
     );
