@@ -24,9 +24,9 @@ const ParticipantItem = ({ participant }: Props) => {
         </ProfileTextWrapper>
       </ProfileWrapper>
       {/* TODO 클릭 시 유저 프로필 페이지로 이동 */}
-      <ProfileButton>
+      <ProfileLinkButton>
         <IconExternalLink color={gray[6]} />
-      </ProfileButton>
+      </ProfileLinkButton>
     </ItemWrapper>
   );
 };
@@ -63,9 +63,9 @@ const IntroduceText = styled.span`
   color: ${({ theme }) => theme.colors.gray[4]};
 `;
 
-const ProfileButton = styled.div`
-  background-color: ${({ theme }) => theme.white}
-  border: none;  
+const ProfileLinkButton = styled.div`
+  background-color: ${({ theme }) => theme.white};
+  border: none;
   &:hover {
     cursor: pointer;
   }

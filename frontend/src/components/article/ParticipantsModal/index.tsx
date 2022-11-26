@@ -32,7 +32,7 @@ export default ParticipantsModal;
 const StyledModal = styled(Modal)`
   & .mantine-Modal-title {
     font-size: 2rem;
-    font-weight: 800;
+    font-weight: 700;
   }
 
   & .mantine-Modal-body {
