@@ -44,7 +44,7 @@ const ArticleDetail = () => {
         />
       }
     >
-      <PageWrapper>
+      <ContenxtWrapper>
         <DetailWrapper>
           <ProfileWrapper>
             <Avatar radius="xl" size="lg" alt="avatar" src={authorThumbnail} />
@@ -99,16 +99,17 @@ const ArticleDetail = () => {
         <CommentWrapper>
           <div>댓글영역</div>
         </CommentWrapper>
-      </PageWrapper>
+      </ContenxtWrapper>
     </PageLayout>
   );
 };
 
 export default ArticleDetail;
 
-const PageWrapper = styled.div`
+const ContenxtWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  padding: 1.6rem;
 `;
 
 const DetailWrapper = styled.div`
