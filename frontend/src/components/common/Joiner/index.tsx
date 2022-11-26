@@ -13,11 +13,11 @@ export default function Joiner({ components, before, after }: JoinerProps) {
       {before && <Separator />}
       {components.length > 0 &&
         components.reduce((prev, curr) => (
-          <Fragment>
+          <>
             {prev}
             <Separator />
             {curr}
-          </Fragment>
+          </>
         ))}
       {after && <Separator />}
     </>
