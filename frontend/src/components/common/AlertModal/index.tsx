@@ -26,21 +26,17 @@ const StyledModal = styled(Modal)`
   & .mantine-Modal-body {
     display: flex;
     flex-direction: column;
-    width: 100%;
     justify-content: center;
     align-items: center;
-    border-radius: 0.8rem;
   }
 `;
 
 const ModalContent = styled.div`
   padding: 1.6rem;
+  text-align: center;
 `;
 
 const OkButton = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: center;
   padding: 1.6rem;
   color: ${({ theme }) => theme.colors.indigo[7]};
   background-color: ${({ theme }) => theme.white};
