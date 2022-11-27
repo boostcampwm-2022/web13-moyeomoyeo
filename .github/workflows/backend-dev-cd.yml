@@ -77,6 +77,10 @@ jobs:
             cd web13-moyeomoyeo
 
             git checkout -t origin/develop
+            
+            touch .env.development
+
+            echo -e ${{ secrets.BACKEND_DEVELOPMENT_ENVIRONMENT }} > .env.development
 
             sudo chmod +x ./backend/scripts/dev-deploy.sh
 

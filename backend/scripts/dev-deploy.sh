@@ -6,14 +6,14 @@ echo "docker logined"
 
 cd backend
 
-touch .env.development
+#touch .env.development
 
-echo -e $4 > .env.development
+#echo -e $4 > .env.development
 
-ls -al
+#echo "create .env.development"
 
 # docker down
-docker compose --env-file='.env.development' down
+docker compose --env-file=.env.development down
 
 # 도커 컨테이너 전체 삭제
 # docker rm `docker ps -a -q`
