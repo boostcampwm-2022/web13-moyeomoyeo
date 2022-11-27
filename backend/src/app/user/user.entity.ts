@@ -9,7 +9,7 @@ import { randomUUID } from 'crypto';
 
 @Entity({ name: 'user' })
 export class User {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ unsigned: true })
   id: number;
 
   @Column({ type: 'varchar', length: 100 })

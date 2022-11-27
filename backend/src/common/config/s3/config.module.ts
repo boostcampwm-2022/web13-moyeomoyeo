@@ -1,17 +1,10 @@
 import { Module } from '@nestjs/common';
 import { S3ConfigService } from './config.service';
 import { ConfigModule } from '@nestjs/config';
-import { getEnvironmentFilePath, isIgnoreEnvFile } from '../config-option';
-import { validate } from './validate';
+import { s3Config } from './configuration';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot({
-      envFilePath: getEnvironmentFilePath(),
-      ignoreEnvFile: isIgnoreEnvFile(),
-      validate,
-    }),
-  ],
+  imports: [ConfigModule.forFeature(s3Config)],
   providers: [S3ConfigService],
   exports: [S3ConfigService],
 })

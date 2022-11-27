@@ -1,32 +1,35 @@
-import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { S3Config } from './validate';
+import { Inject, Injectable } from '@nestjs/common';
+import { ConfigType } from '@nestjs/config';
+import { s3Config } from './configuration';
 
 @Injectable()
 export class S3ConfigService {
-  constructor(private readonly configService: ConfigService<S3Config, true>) {}
+  constructor(
+    @Inject(s3Config.KEY)
+    private readonly s3Configuration: ConfigType<typeof s3Config>,
+  ) {}
 
   get accessKey() {
-    return this.configService.get('STORAGE_ACCESSKEY', { infer: true });
+    return this.s3Configuration.STORAGE_ACCESSKEY;
   }
 
   get secretKey() {
-    return this.configService.get('STORAGE_SECRETKEY', { infer: true });
+    return this.s3Configuration.STORAGE_SECRETKEY;
   }
 
   get region() {
-    return this.configService.get('STORAGE_REGION', { infer: true });
+    return this.s3Configuration.STORAGE_REGION;
   }
 
   get endpoint() {
-    return this.configService.get('STORAGE_ENDPOINT', { infer: true });
+    return this.s3Configuration.STORAGE_ENDPOINT;
   }
 
   get bucket() {
-    return this.configService.get('STORAGE_BUCKET', { infer: true });
+    return this.s3Configuration.STORAGE_BUCKET;
   }
 
   get path() {
-    return this.configService.get('STORAGE_BUCKET_PATH', { infer: true });
+    return this.s3Configuration.STORAGE_BUCKET_PATH;
   }
 }
