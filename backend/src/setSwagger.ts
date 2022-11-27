@@ -1,6 +1,8 @@
 import { INestApplication } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ResponseEntity } from '@common/response-entity';
+import { AuthModule } from '@app/auth/auth.module';
+import { ImageModule } from '@app/image/image.module';
 
 export const setSwagger = (app: INestApplication) => {
   const config = new DocumentBuilder()
@@ -15,7 +17,7 @@ export const setSwagger = (app: INestApplication) => {
     .build();
 
   const document = SwaggerModule.createDocument(app, config, {
-    include: [],
+    include: [AuthModule, ImageModule],
     extraModels: [ResponseEntity],
   });
 

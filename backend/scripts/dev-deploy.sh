@@ -6,9 +6,9 @@ echo "docker logined"
 
 cd backend
 
-touch .env
+touch .env.development
 
-echo -e $4 > .env
+echo -e $4 > .env.development
 
 # docker down
 docker compose down
@@ -19,4 +19,4 @@ docker rm `docker ps -a -q`
 # 도커 이미지 전체 삭제
 docker rmi `docker images -q`
 
-docker compose up -d --build
+docker compose --env-file .env.development up -d --build

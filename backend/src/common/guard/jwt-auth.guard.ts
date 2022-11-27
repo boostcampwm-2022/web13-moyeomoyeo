@@ -57,7 +57,7 @@ export class JwtAuthGuard implements CanActivate {
 
         response.cookie('access_token', accessToken, {
           httpOnly: true,
-          expires: new Date(accessTokenExpires),
+          expires: new Date(accessTokenExpires * 1000),
         });
 
         return true;
