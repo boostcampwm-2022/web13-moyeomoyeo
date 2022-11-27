@@ -1,8 +1,9 @@
 import { Button } from '@mantine/core';
-import { ParticipateButtonStatus } from '@constants/participateButton';
-import ChatLinkButton from '@components/article/ParticipateButton/ChatLinkButton';
+
 import ApplyButton from '@components/article/ParticipateButton/ApplyButton';
 import CancelButton from '@components/article/ParticipateButton/CancelButton';
+import ChatLinkButton from '@components/article/ParticipateButton/ChatLinkButton';
+import { ParticipateButtonStatus } from '@constants/participateButton';
 
 interface Props {
   status: ParticipateButtonStatus;

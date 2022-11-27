@@ -1,20 +1,21 @@
 import { Image } from '@mantine/core';
-import { ArticlePreviewType } from '@typings/types';
+
 import ArticleTag from '@components/common/ArticleTag';
-import StatCounter from '@components/common/StatCounter';
-import { ArticleStatus, ArticleStatusKr } from '@constants/article';
 import {
   CapacityText,
   CardWrapper,
+  ClosedText,
   DimmedBox,
   InfoWrapper,
   TagWrapper,
   TitleText,
-  ClosedText,
 } from '@components/common/GroupArticleCard/styles';
-import { getCommonBadgeColor, getStatusBadgeColor } from '@utils/colors';
+import StatCounter from '@components/common/StatCounter';
+import { ArticleStatus, ArticleStatusKr } from '@constants/article';
 import { CategoryKr } from '@constants/category';
 import { LocationKr } from '@constants/location';
+import { ArticlePreviewType } from '@typings/types';
+import { getCommonBadgeColor, getStatusBadgeColor } from '@utils/colors';
 
 interface Props {
   article: ArticlePreviewType;

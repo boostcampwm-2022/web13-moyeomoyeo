@@ -1,6 +1,7 @@
-import { IconPlus } from '@tabler/icons';
 import styled from '@emotion/styled';
 import { ActionIcon, ActionIconProps, createPolymorphicComponent } from '@mantine/core';
+import { IconPlus } from '@tabler/icons';
+
 import { transientOptions } from '@styles/utils';
 
 // https://mantine.dev/styles/styled/#polymorphic-components

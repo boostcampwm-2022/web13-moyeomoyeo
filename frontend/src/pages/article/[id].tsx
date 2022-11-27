@@ -1,22 +1,24 @@
 import { useState } from 'react';
+
 import { useTheme } from '@emotion/react';
 import styled from '@emotion/styled';
 import { Avatar, Progress, TypographyStylesProvider } from '@mantine/core';
 import { IconList } from '@tabler/icons';
-import { dummyArticle, dummyParticipants } from '@constants/dummy';
+
+import ParticipantsModal from '@components/article/ParticipantsModal';
+import ParticipateButton from '@components/article/ParticipateButton';
 import ArticleTag from '@components/common/ArticleTag';
-import { getCommonBadgeColor, getStatusBadgeColor } from '@utils/colors';
-import { ArticleStatusKr } from '@constants/article';
-import { CategoryKr } from '@constants/category';
-import { LocationKr } from '@constants/location';
-import PageLayout from '@components/common/PageLayout';
-import StatCounter from '@components/common/StatCounter';
 import Header from '@components/common/Header';
 import DetailTitle from '@components/common/Header/DetailTitle';
+import PageLayout from '@components/common/PageLayout';
+import StatCounter from '@components/common/StatCounter';
+import { ArticleStatusKr } from '@constants/article';
+import { CategoryKr } from '@constants/category';
+import { dummyArticle, dummyParticipants } from '@constants/dummy';
+import { LocationKr } from '@constants/location';
 import { PAGE_TITLE } from '@constants/pageTitle';
-import ParticipantsModal from '@components/article/ParticipantsModal';
 import { ParticipateButtonStatus } from '@constants/participateButton';
-import ParticipateButton from '@components/article/ParticipateButton';
+import { getCommonBadgeColor, getStatusBadgeColor } from '@utils/colors';
 
 const ArticleDetail = () => {
   const {

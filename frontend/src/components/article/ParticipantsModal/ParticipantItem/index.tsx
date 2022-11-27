@@ -1,7 +1,8 @@
-import { Avatar } from '@mantine/core';
-import styled from '@emotion/styled';
 import { useTheme } from '@emotion/react';
+import styled from '@emotion/styled';
+import { Avatar } from '@mantine/core';
 import { IconExternalLink } from '@tabler/icons';
+
 import { UserType } from '@typings/types';
 
 interface Props {

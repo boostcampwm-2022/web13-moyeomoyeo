@@ -1,6 +1,8 @@
-import ParticipantsModal from '.';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+
 import { dummyParticipants } from '@constants/dummy';
+
+import ParticipantsModal from '.';
 
 export default {
   title: 'Component/ParticipantsModal',

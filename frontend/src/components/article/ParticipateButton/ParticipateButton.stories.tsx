@@ -1,6 +1,8 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import ParticipateButton from '.';
+
 import { ParticipateButtonStatus } from '@constants/participateButton';
+
+import ParticipateButton from '.';
 
 export default {
   title: 'Component/ParticipateButton',

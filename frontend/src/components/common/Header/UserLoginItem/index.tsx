@@ -1,5 +1,6 @@
-import LoginButton from '@components/common/Header/LoginButton';
 import { Avatar } from '@mantine/core';
+
+import LoginButton from '@components/common/Header/LoginButton';
 
 /**
  * 로그인 여부를 확인하여

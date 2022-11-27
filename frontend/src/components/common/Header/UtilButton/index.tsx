@@ -1,6 +1,7 @@
+import { ReactNode } from 'react';
+
 import { ActionIcon, Menu } from '@mantine/core';
 import { IconDotsVertical } from '@tabler/icons';
-import { ReactNode } from 'react';
 
 interface Props {
   /**

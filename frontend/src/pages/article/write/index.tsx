@@ -1,18 +1,19 @@
-import { useState } from 'react';
 import Head from 'next/head';
-import styled from '@emotion/styled';
-import { Slider, Text, FileInput, ActionIcon } from '@mantine/core';
-import { IconCheck, IconUser, IconUpload } from '@tabler/icons';
+import { useState } from 'react';
 
-import PageLayout from '@components/common/PageLayout';
-import Header from '@components/common/Header';
-import TextInput from '@components/common/TextInput';
-import DetailTitle from '@components/common/Header/DetailTitle';
-import DropDown from '@components/common/DropDown';
-import { Category, CategoryKr } from '@constants/category';
-import { Location, LocationKr } from '@constants/location';
+import styled from '@emotion/styled';
+import { ActionIcon, FileInput, Slider, Text } from '@mantine/core';
+import { IconCheck, IconUpload, IconUser } from '@tabler/icons';
+
 import ArticleEditor from '@components/article/ArticleEditor';
 import ImageThumbnail from '@components/article/ImageThumbnail';
+import DropDown from '@components/common/DropDown';
+import Header from '@components/common/Header';
+import DetailTitle from '@components/common/Header/DetailTitle';
+import PageLayout from '@components/common/PageLayout';
+import TextInput from '@components/common/TextInput';
+import { Category, CategoryKr } from '@constants/category';
+import { Location, LocationKr } from '@constants/location';
 
 /**
  * Todo

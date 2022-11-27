@@ -1,6 +1,8 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import DropDown from '.';
+
 import { CategoryKr } from '@constants/category';
+
+import DropDown from '.';
 
 export default {
   title: 'Component/DropDown',

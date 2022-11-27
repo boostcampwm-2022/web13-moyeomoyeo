@@ -1,9 +1,10 @@
-import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+
 import {
-  startNavigationProgress,
-  completeNavigationProgress,
   NavigationProgress,
+  completeNavigationProgress,
+  startNavigationProgress,
 } from '@mantine/nprogress';
 
 const RouterTransition = () => {

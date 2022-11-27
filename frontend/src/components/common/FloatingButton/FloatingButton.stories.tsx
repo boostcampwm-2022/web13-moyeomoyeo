@@ -1,11 +1,12 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { userEvent, within } from '@storybook/testing-library';
 
-import FloatingButton from '.';
-import PageLayout from '@components/common/PageLayout';
 import Header from '@components/common/Header';
-import NavigationTab from '@components/common/NavigationTab';
 import DetailTitle from '@components/common/Header/DetailTitle';
+import NavigationTab from '@components/common/NavigationTab';
+import PageLayout from '@components/common/PageLayout';
+
+import FloatingButton from '.';
 
 export default {
   title: 'Component/FloatingButton',
