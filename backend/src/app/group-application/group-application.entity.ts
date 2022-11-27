@@ -20,7 +20,7 @@ export class GroupApplication {
   @Column({ unsigned: true })
   userId: number;
 
-  @ManyToOne(() => User, { lazy: true })
+  @ManyToOne(() => User, { lazy: true, createForeignKeyConstraints: false })
   @JoinColumn({ referencedColumnName: 'id', name: 'user_id' })
   user: Promise<User>;
 
