@@ -4,12 +4,9 @@ const useClipboard = () => {
   const [isCopied, setIsCopied] = useState<boolean>(false);
 
   const doCopy = (text: string) => {
-    navigator.clipboard
-      .writeText(text)
-      .then(() => {
-        setIsCopied(true);
-      })
-      .catch(() => {});
+    void navigator.clipboard.writeText(text).then(() => {
+      setIsCopied(true);
+    });
   };
 
   return { isCopied, setIsCopied, doCopy };
