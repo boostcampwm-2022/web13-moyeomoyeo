@@ -4,7 +4,7 @@ import { Modal } from '@mantine/core';
 interface Props {
   message: string;
   open: boolean;
-  onClose?: () => void;
+  onClose: () => void;
 }
 
 const AlertModal = ({ message, open, onClose }: Props) => {

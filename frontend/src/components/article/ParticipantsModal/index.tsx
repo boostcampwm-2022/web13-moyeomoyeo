@@ -9,7 +9,7 @@ import { UserType } from '@typings/types';
 interface Props {
   participants: Array<Partial<UserType>>;
   open: boolean;
-  onClose?: () => void;
+  onClose: () => void;
 }
 
 const ParticipantsModal = ({ participants, open, onClose }: Props) => {
