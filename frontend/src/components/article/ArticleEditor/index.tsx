@@ -1,6 +1,7 @@
 import dynamic from 'next/dynamic';
+
 import styled from '@emotion/styled';
-import { Text, LoadingOverlay } from '@mantine/core';
+import { LoadingOverlay, Text } from '@mantine/core';
 import { RichTextEditorProps } from '@mantine/rte';
 
 const RichTextEditor = dynamic(() => import('@mantine/rte'), {

@@ -1,23 +1,28 @@
+import { useState } from 'react';
+
 import { useTheme } from '@emotion/react';
 import styled from '@emotion/styled';
 import { Avatar, Progress, TypographyStylesProvider } from '@mantine/core';
 import { IconList } from '@tabler/icons';
-import { dummyArticle } from '@constants/dummy';
+
+import ParticipantsModal from '@components/article/ParticipantsModal';
 import ArticleTag from '@components/common/ArticleTag';
-import { getCommonBadgeColor, getStatusBadgeColor } from '@utils/colors';
-import { ArticleStatusKr } from '@constants/article';
-import { CategoryKr } from '@constants/category';
-import { LocationKr } from '@constants/location';
-import PageLayout from '@components/common/PageLayout';
-import StatCounter from '@components/common/StatCounter';
 import Header from '@components/common/Header';
 import DetailTitle from '@components/common/Header/DetailTitle';
+import PageLayout from '@components/common/PageLayout';
+import StatCounter from '@components/common/StatCounter';
+import { ArticleStatusKr } from '@constants/article';
+import { CategoryKr } from '@constants/category';
+import { dummyArticle, dummyParticipants } from '@constants/dummy';
+import { LocationKr } from '@constants/location';
 import { PAGE_TITLE } from '@constants/pageTitle';
+import { getCommonBadgeColor, getStatusBadgeColor } from '@utils/colors';
 
 const ArticleDetail = () => {
   const {
     colors: { indigo, gray },
   } = useTheme();
+  const [participantsModalOpen, setParticipantsModalOpen] = useState<boolean>(false);
 
   const {
     authorName,
@@ -44,7 +49,7 @@ const ArticleDetail = () => {
         />
       }
     >
-      <PageWrapper>
+      <ContenxtWrapper>
         <DetailWrapper>
           <ProfileWrapper>
             <Avatar radius="xl" size="lg" alt="avatar" src={authorThumbnail} />
@@ -78,7 +83,7 @@ const ArticleDetail = () => {
                 {currentCapacity}명 / {maxCapacity}명
               </CountText>
             </StatusWrapper>
-            <ParticipantButton>
+            <ParticipantButton onClick={() => setParticipantsModalOpen(true)}>
               <IconList width="16" height="16" color={gray[6]} />
               <ViewText>신청자 확인</ViewText>
             </ParticipantButton>
@@ -99,16 +104,23 @@ const ArticleDetail = () => {
         <CommentWrapper>
           <div>댓글영역</div>
         </CommentWrapper>
-      </PageWrapper>
+      </ContenxtWrapper>
+      {/* TODO participants API 요청 */}
+      <ParticipantsModal
+        participants={dummyParticipants}
+        open={participantsModalOpen}
+        onClose={() => setParticipantsModalOpen(false)}
+      />
     </PageLayout>
   );
 };
 
 export default ArticleDetail;
 
-const PageWrapper = styled.div`
+const ContenxtWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  padding: 1.6rem;
 `;
 
 const DetailWrapper = styled.div`

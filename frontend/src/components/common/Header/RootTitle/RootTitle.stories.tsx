@@ -1,5 +1,6 @@
-import RootTitle from '.';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+
+import RootTitle from '.';
 
 export default {
   title: 'Component/Layout/Header/HeaderItems/RootTitle',

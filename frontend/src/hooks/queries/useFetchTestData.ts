@@ -1,6 +1,7 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import getTestData from '@apis/test/getTestData';
 import { AxiosResponse } from 'axios';
+
+import getTestData from '@apis/test/getTestData';
 import { TestResponseType } from '@typings/types';
 
 const useFetchTestData = () => {

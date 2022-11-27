@@ -1,7 +1,7 @@
-import styled from '@emotion/styled';
 import { useTheme } from '@emotion/react';
-import { IconHeart, IconBookmark, IconMessageCircle2 } from '@tabler/icons';
+import styled from '@emotion/styled';
 import { Text } from '@mantine/core';
+import { IconBookmark, IconHeart, IconMessageCircle2 } from '@tabler/icons';
 
 interface Props {
   /**

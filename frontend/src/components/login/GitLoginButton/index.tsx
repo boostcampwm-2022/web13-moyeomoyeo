@@ -1,6 +1,6 @@
-import { IconBrandGithub } from '@tabler/icons';
-import styled from '@emotion/styled';
 import { useTheme } from '@emotion/react';
+import styled from '@emotion/styled';
+import { IconBrandGithub } from '@tabler/icons';
 
 const GitLoginButton = () => {
   const { white } = useTheme();

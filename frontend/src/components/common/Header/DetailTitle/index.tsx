@@ -1,8 +1,9 @@
-import { IconChevronLeft } from '@tabler/icons';
-import { ActionIcon, Title, Text } from '@mantine/core';
-
-import { DetailTitleWrapper, DetailTitleTextWrapper } from './styles';
 import { useRouter } from 'next/router';
+
+import { ActionIcon, Text, Title } from '@mantine/core';
+import { IconChevronLeft } from '@tabler/icons';
+
+import { DetailTitleTextWrapper, DetailTitleWrapper } from './styles';
 
 interface Props {
   title: string;

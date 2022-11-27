@@ -1,17 +1,10 @@
 import { Module } from '@nestjs/common';
 import { AppConfigService } from './config.service';
 import { ConfigModule } from '@nestjs/config';
-import { getEnvironmentFilePath, isIgnoreEnvFile } from '../config-option';
-import { validate } from './validate';
+import { appConfig } from '@config/app/configuration';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot({
-      envFilePath: getEnvironmentFilePath(),
-      ignoreEnvFile: isIgnoreEnvFile(),
-      validate,
-    }),
-  ],
+  imports: [ConfigModule.forFeature(appConfig)],
   providers: [AppConfigService],
   exports: [AppConfigService],
 })

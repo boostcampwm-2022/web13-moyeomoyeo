@@ -20,6 +20,10 @@ export class ResponseEntity<T> {
     return new ResponseEntity<T>('OK', '', data);
   }
 
+  static CREATED_WITH_DATA<T>(data: T) {
+    return new ResponseEntity<T>('CREATED', '', data);
+  }
+
   static ERROR() {
     return new ResponseEntity<string>(
       'INTERNAL_SERVER_ERROR',

@@ -1,13 +1,15 @@
 import { Avatar, Text } from '@mantine/core';
+
+import { CommentType as CommentItem } from '@typings/types';
 import dateTimeFormat from '@utils/dateTime';
-import { Comment as CommentItem } from '@typings/types';
+
 import {
-  CommentWrapper,
-  CommentHeader,
   CommentAuthor,
-  CommentUtils,
-  CommentUtilItem,
   CommentContent,
+  CommentHeader,
+  CommentUtilItem,
+  CommentUtils,
+  CommentWrapper,
 } from './styles';
 
 /**

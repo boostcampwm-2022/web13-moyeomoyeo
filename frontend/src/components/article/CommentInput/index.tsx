@@ -1,7 +1,9 @@
 import { useRef } from 'react';
-import { CommentInputWrapper } from './styles';
-import { TextInput, ActionIcon } from '@mantine/core';
+
+import { ActionIcon, TextInput } from '@mantine/core';
 import { IconSend } from '@tabler/icons';
+
+import { CommentInputWrapper } from './styles';
 
 const CommentInput = () => {
   const inputRef = useRef<HTMLInputElement>(null);

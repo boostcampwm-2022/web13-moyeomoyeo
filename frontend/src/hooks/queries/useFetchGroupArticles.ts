@@ -1,9 +1,10 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
-import { ArticleType } from '@typings/types';
+
 import getTestGroupArticles from '@apis/test/getTestGroupArticles';
 import { Category } from '@constants/category';
 import { Location } from '@constants/location';
+import { ArticleType } from '@typings/types';
 
 interface ArticleResponseType {
   articles: ArticleType[];

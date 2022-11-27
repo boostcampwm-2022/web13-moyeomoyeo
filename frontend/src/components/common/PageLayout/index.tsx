@@ -1,5 +1,7 @@
-import { ReactNode, PropsWithChildren } from 'react';
+import { PropsWithChildren, ReactNode } from 'react';
+
 import styled from '@emotion/styled';
+
 import FloatingUtilButton from '@components/common/FloatingUtilButton';
 
 interface Props extends PropsWithChildren {
@@ -33,7 +35,6 @@ const PageWrapper = styled.div`
 const ContentWrapper = styled.div`
   width: 100%;
   height: 100%;
-  padding: 1.6rem;
   flex: 1;
 `;
 

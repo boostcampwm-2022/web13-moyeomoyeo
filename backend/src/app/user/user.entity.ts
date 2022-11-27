@@ -5,13 +5,14 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { randomUUID } from 'crypto';
 
 @Entity({ name: 'user' })
 export class User {
   @PrimaryGeneratedColumn({ unsigned: true })
   id: number;
 
-  @Column({ type: 'varchar', length: 30 })
+  @Column({ type: 'varchar', length: 100 })
   username: string;
 
   @Column({ type: 'varchar', length: 400, default: '' })
@@ -40,4 +41,27 @@ export class User {
 
   @Column({ type: 'timestamp' })
   deletedAt: Date;
+
+  static signup({
+    socialId,
+    socialType,
+    blogUrl,
+    githubUrl,
+    profileImage,
+  }: {
+    socialId: string;
+    socialType: string;
+    blogUrl: string;
+    githubUrl: string;
+    profileImage: string;
+  }) {
+    const user = new User();
+    user.socialId = socialId;
+    user.githubUrl = githubUrl;
+    user.blogUrl = blogUrl;
+    user.socialType = socialType;
+    user.profileImage = profileImage;
+    user.username = randomUUID();
+    return user;
+  }
 }

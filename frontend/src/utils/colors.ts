@@ -1,5 +1,5 @@
-import { BADGE_COLORS, STATUS_COLOR } from '@constants/color';
 import { ArticleStatus } from '@constants/article';
+import { BADGE_COLORS, STATUS_COLOR } from '@constants/color';
 
 const getCommonBadgeColor = (id: number) => {
   const colorCount = BADGE_COLORS.length;

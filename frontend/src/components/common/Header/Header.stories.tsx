@@ -1,13 +1,15 @@
-import { Menu, Text } from '@mantine/core';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { within, userEvent } from '@storybook/testing-library';
+import { userEvent, within } from '@storybook/testing-library';
+
+import { Menu, Text } from '@mantine/core';
+
+import DetailTitle from '@components/common/Header/DetailTitle';
+import RootTitle from '@components/common/Header/RootTitle';
+import UserLoginItem from '@components/common/Header/UserLoginItem';
+import UtilButton from '@components/common/Header/UtilButton';
+import Logo from '@public/icons/logo-md.svg';
 
 import Header from '.';
-import UserLoginItem from '@components/common/Header/UserLoginItem';
-import Logo from '@public/icons/logo-md.svg';
-import RootTitle from '@components/common/Header/RootTitle';
-import DetailTitle from '@components/common/Header/DetailTitle';
-import UtilButton from '@components/common/Header/UtilButton';
 
 export default {
   title: 'Component/Layout/Header',

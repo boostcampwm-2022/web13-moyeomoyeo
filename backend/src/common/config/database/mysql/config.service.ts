@@ -1,30 +1,31 @@
-import { ConfigService } from '@nestjs/config';
-import { Injectable } from '@nestjs/common';
-import { MysqlConfig } from '@config/database/mysql/validate';
+import { ConfigType } from '@nestjs/config';
+import { Inject, Injectable } from '@nestjs/common';
+import { mysqlConfig } from '@config/database/mysql/configuration';
 
 @Injectable()
 export class MysqlConfigService {
   constructor(
-    private readonly configService: ConfigService<MysqlConfig, true>,
+    @Inject(mysqlConfig.KEY)
+    private readonly mysqlConfiguration: ConfigType<typeof mysqlConfig>,
   ) {}
 
   get port() {
-    return this.configService.get('MYSQL_PORT', { infer: true });
+    return this.mysqlConfiguration.MYSQL_PORT;
   }
 
   get hostname() {
-    return this.configService.get('MYSQL_HOST', { infer: true });
+    return this.mysqlConfiguration.MYSQL_HOST;
   }
 
   get username() {
-    return this.configService.get('MYSQL_USER', { infer: true });
+    return this.mysqlConfiguration.MYSQL_USER;
   }
 
   get password() {
-    return this.configService.get('MYSQL_PASSWORD', { infer: true });
+    return this.mysqlConfiguration.MYSQL_PASSWORD;
   }
 
   get database() {
-    return this.configService.get('MYSQL_DATABASE', { infer: true });
+    return this.mysqlConfiguration.MYSQL_DATABASE;
   }
 }
