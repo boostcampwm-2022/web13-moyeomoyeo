@@ -1,4 +1,4 @@
-import { User } from '@app/user/user.entity';
+import { User } from '@app/user/entity/user.entity';
 
 export const getUserFixture = (user: Partial<User>) => {
   const fixture = new User();

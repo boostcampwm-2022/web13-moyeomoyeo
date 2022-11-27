@@ -8,8 +8,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { GroupArticle } from '@app/group-article/group-article.entity';
-import { GroupCategory } from '@app/group-article/group-category.entity';
+import { GroupArticle } from '@app/group-article/entity/group-article.entity';
+import { GroupCategory } from '@app/group-article/entity/group-category.entity';
 
 @Entity()
 export class Group {

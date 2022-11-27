@@ -7,16 +7,13 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { User } from '@app/user/user.entity';
-import { Notification } from '@app/notification/notification.entity';
+import { User } from '@app/user/entity/user.entity';
+import { Article } from '@app/group-article/entity/article.entity';
 
-@Entity({ name: 'user_notification' })
-export class UserNotification {
+@Entity()
+export class Comment {
   @PrimaryGeneratedColumn({ unsigned: true })
   id: number;
-
-  @Column({ unsigned: true })
-  notificationId: number;
 
   @Column({ unsigned: true })
   userId: number;
@@ -25,9 +22,15 @@ export class UserNotification {
   @JoinColumn({ referencedColumnName: 'id', name: 'user_id' })
   user: Promise<User>;
 
-  @ManyToOne(() => Notification, { lazy: true })
-  @JoinColumn({ referencedColumnName: 'id', name: 'notification_id' })
-  notification: Promise<Notification>;
+  @Column({ unsigned: true })
+  articleId: number;
+
+  @ManyToOne(() => Article, { lazy: true })
+  @JoinColumn({ referencedColumnName: 'id', name: 'article_id' })
+  article: Promise<Article>;
+
+  @Column({ type: 'varchar', length: 10000 })
+  contents: string;
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
@@ -35,6 +38,6 @@ export class UserNotification {
   @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
 
-  @Column({ type: 'timestamp', nullable: true })
+  @Column({ type: 'timestamp' })
   deletedAt: Date | null;
 }

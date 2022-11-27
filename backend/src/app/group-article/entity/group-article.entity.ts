@@ -1,6 +1,6 @@
 import { ChildEntity, OneToOne } from 'typeorm';
-import { Article } from '@app/group-article/article.entity';
-import { Group } from '@app/group-article/group.entity';
+import { Article } from '@app/group-article/entity/article.entity';
+import { Group } from '@app/group-article/entity/group.entity';
 
 @ChildEntity('GROUP')
 export class GroupArticle extends Article {

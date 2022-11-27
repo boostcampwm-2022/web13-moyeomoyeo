@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { User } from '@app/user/user.entity';
+import { User } from '@app/user/entity/user.entity';
 
 @Entity({ name: 'notification_setting' })
 export class NotificationSetting {
