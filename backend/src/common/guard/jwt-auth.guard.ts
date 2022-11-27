@@ -2,7 +2,7 @@ import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { JwtTokenService } from '@common/module/jwt-token/jwt-token.service';
 import { TokenType } from '@common/module/jwt-token/type/token-type';
 import { DataSource } from 'typeorm';
-import { User } from '@app/user/user.entity';
+import { User } from '@app/user/entity/user.entity';
 import { InvalidTokenException } from '@exception/invalid-token.exception';
 
 @Injectable()

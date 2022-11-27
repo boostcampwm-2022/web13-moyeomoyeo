@@ -6,7 +6,7 @@ import { validateSync } from 'class-validator';
 import { JwtConfigService } from '@config/jwt/config.service';
 import { TokenType } from '@common/module/jwt-token/type/token-type';
 import { toLocalDateTime } from '@common/util/date-time';
-import { User } from '@app/user/user.entity';
+import { User } from '@app/user/entity/user.entity';
 import { AuthTokenPayload } from '@common/module/jwt-token/type/auth-token-payload';
 
 @Injectable()
