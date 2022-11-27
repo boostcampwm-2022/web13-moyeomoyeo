@@ -1,9 +1,10 @@
-import { Modal } from '@mantine/core';
 import styled from '@emotion/styled';
+import { Modal } from '@mantine/core';
+
 import ParticipantItem from '@components/article/ParticipantsModal/ParticipantItem';
+import EmptyMessage from '@components/common/EmptyMessage';
 import Joiner from '@components/common/Joiner';
 import { UserType } from '@typings/types';
-import EmptyMessage from '@components/common/EmptyMessage';
 
 interface Props {
   participants: Array<Partial<UserType>>;

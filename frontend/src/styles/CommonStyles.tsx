@@ -1,8 +1,10 @@
 import { ReactNode } from 'react';
+
 import { MantineProvider } from '@mantine/core';
-import theme from '@styles/theme';
+
 import CustomFonts from '@styles/CustomFont';
 import GlobalStyles from '@styles/GlobalStyles';
+import theme from '@styles/theme';
 
 interface Props {
   children: ReactNode;

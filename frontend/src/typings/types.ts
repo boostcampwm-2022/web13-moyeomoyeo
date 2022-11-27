@@ -1,6 +1,6 @@
-import { Location } from '@constants/location';
 import { ArticleStatus } from '@constants/article';
 import { Category } from '@constants/category';
+import { Location } from '@constants/location';
 
 interface ArticlePreviewType {
   id: number;

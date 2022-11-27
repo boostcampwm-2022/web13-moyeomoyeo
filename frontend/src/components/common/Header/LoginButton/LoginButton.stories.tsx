@@ -1,5 +1,6 @@
-import LoginButton from '.';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+
+import LoginButton from '.';
 
 export default {
   title: 'Component/Layout/Header/HeaderItems/LoginButton',

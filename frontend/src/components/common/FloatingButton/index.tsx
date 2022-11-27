@@ -1,4 +1,5 @@
-import { useState, ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
+
 import { Menu } from '@mantine/core';
 import { useClickOutside } from '@mantine/hooks';
 

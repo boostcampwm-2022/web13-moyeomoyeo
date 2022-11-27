@@ -1,9 +1,10 @@
 import styled from '@emotion/styled';
-import LogoIcon from '@public/icons/logo-lg.svg';
-import PageLayout from '@components/common/PageLayout';
-import GitLoginButton from '@components/login/GitLoginButton';
+
 import Header from '@components/common/Header';
 import DetailTitle from '@components/common/Header/DetailTitle';
+import PageLayout from '@components/common/PageLayout';
+import GitLoginButton from '@components/login/GitLoginButton';
+import LogoIcon from '@public/icons/logo-lg.svg';
 
 const Login = () => {
   return (

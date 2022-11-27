@@ -1,6 +1,8 @@
+import Link from 'next/link';
+
 import { Menu, Text } from '@mantine/core';
 import { IconArrowAutofitUp, IconPencil } from '@tabler/icons';
-import Link from 'next/link';
+
 import FloatingButton from '@components/common/FloatingButton';
 
 /**

@@ -1,6 +1,8 @@
-import ParticipantItem from '.';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+
 import { dummyParticipants } from '@constants/dummy';
+
+import ParticipantItem from '.';
 
 export default {
   title: 'Component/ParticipantItem',
