@@ -15,8 +15,8 @@ import Header from '@components/common/Header';
 import DetailTitle from '@components/common/Header/DetailTitle';
 import { PAGE_TITLE } from '@constants/pageTitle';
 import ParticipantsModal from '@components/article/ParticipantsModal';
-import ParticipateButton from '@components/article/ParticipateButton';
 import { ParticipateButtonStatus } from '@constants/participateButton';
+import ParticipateButton from '@components/article/ParticipateButton';
 
 const ArticleDetail = () => {
   const {
@@ -98,7 +98,7 @@ const ArticleDetail = () => {
             <ContentBox dangerouslySetInnerHTML={{ __html: contents }} />
           </TypographyStylesProvider>
           {/* TODO 모집상태와 유저 참가 상태에 따라 렌더링 */}
-          <ParticipateButton status={ParticipateButtonStatus.APPLY} />
+          <ParticipateButton status={ParticipateButtonStatus.LINK} chatRoomLink={'tetetetetet'} />
           <StatCounter variant="comment" count={commentCount} />
         </DetailWrapper>
         <Divider />
