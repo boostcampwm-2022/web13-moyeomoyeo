@@ -12,5 +12,6 @@ const Template: ComponentStory<typeof AlertModal> = (args) => <AlertModal {...ar
 export const _AlertModal = Template.bind({});
 _AlertModal.args = {
   open: true,
+  onClose: () => {},
   message: '테스트 문구입니다',
 };

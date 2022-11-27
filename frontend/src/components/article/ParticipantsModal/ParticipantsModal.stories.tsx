@@ -17,10 +17,12 @@ export const Default = Template.bind({});
 Default.args = {
   participants: dummyParticipants,
   open: true,
+  onClose: () => {},
 };
 
 export const NoParticipants = Template.bind({});
 NoParticipants.args = {
   participants: [],
   open: true,
+  onClose: () => {},
 };
