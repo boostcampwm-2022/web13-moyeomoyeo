@@ -1,6 +1,6 @@
 import { Avatar, Text } from '@mantine/core';
 import dateTimeFormat from '@utils/dateTime';
-import { Comment as CommentItem } from '@typings/types';
+import { CommentType as CommentItem } from '@typings/types';
 import {
   CommentWrapper,
   CommentHeader,

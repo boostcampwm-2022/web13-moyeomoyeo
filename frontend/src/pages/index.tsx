@@ -2,6 +2,9 @@ import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import { Checkbox, Select } from '@mantine/core';
 import styled from '@emotion/styled';
+import { useTheme } from '@emotion/react';
+import { useQueryClient } from '@tanstack/react-query';
+import { IconRefresh } from '@tabler/icons';
 import PageLayout from '@components/common/PageLayout';
 import Header from '@components/common/Header';
 import NavigationTab from '@components/common/NavigationTab';
@@ -12,10 +15,7 @@ import GroupArticleCard from '@components/common/GroupArticleCard';
 import useIntersect from '@hooks/useIntersect';
 import useFetchGroupArticles from '@hooks/queries/useFetchGroupArticles';
 import { PAGE_TITLE } from '@constants/pageTitle';
-import Index from '@components/common/NoGroupMessage';
-import { IconRefresh } from '@tabler/icons';
-import { useTheme } from '@emotion/react';
-import { useQueryClient } from '@tanstack/react-query';
+import EmptyMessage from '@components/common/EmptyMessage';
 
 const Main = () => {
   const {
@@ -113,7 +113,7 @@ const Main = () => {
             <div ref={ref}></div>
           </ArticleList>
         ) : (
-          <Index />
+          <EmptyMessage target="article" large />
         )}
       </ContentWrapper>
     </PageLayout>
@@ -140,6 +140,7 @@ const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
+  padding: 1.6rem;
 `;
 
 const FilterWrapper = styled.div`
