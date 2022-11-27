@@ -1,7 +1,7 @@
 name: Backend Dev CD
 run-name: ${{ github.actor }}가 실행함
 on:
-  pull_request:
+  push:
     branches:
       - develop
     paths:
@@ -78,10 +78,6 @@ jobs:
 
             git checkout -t origin/develop
             
-            touch .env.development
-
-            echo -e ${{ secrets.BACKEND_DEVELOPMENT_ENVIRONMENT }} > .env.development
-
             sudo chmod +x ./backend/scripts/dev-deploy.sh
 
             ./backend/scripts/dev-deploy.sh ${{ secrets.NCP_ACCESS_KEY }} ${{ secrets.NCP_SECRET_KEY }} ${{ secrets.NCP_DOCKER_REGISTRY }} ${{ secrets.BACKEND_DEVELOPMENT_ENVIRONMENT }}

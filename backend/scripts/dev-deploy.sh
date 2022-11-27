@@ -6,11 +6,11 @@ echo "docker logined"
 
 cd backend
 
-#touch .env.development
+touch .env.development
 
-#echo -e $4 > .env.development
+echo -e $4 > .env.development
 
-#echo "create .env.development"
+echo "create .env.development"
 
 # docker down
 docker compose --env-file=.env.development down
