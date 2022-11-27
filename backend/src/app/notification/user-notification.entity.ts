@@ -35,6 +35,6 @@ export class UserNotification {
   @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
 
-  @Column({ type: 'timestamp' })
+  @Column({ type: 'timestamp', nullable: true })
   deletedAt: Date | null;
 }
