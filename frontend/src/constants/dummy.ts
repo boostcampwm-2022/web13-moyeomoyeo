@@ -105,4 +105,13 @@ const dummyParticipants: Array<Partial<UserType>> = [
   },
 ];
 
-export { dummyArticlePreview, dummyArticle, dummyParticipants };
+const dummyUser: UserType = {
+  id: 1,
+  userName: '테스트유저1',
+  description: '테스트유저1입니다',
+  profileImage: 'https://avatars.githubusercontent.com/u/90585081?v=4',
+  githubUrl: 'https://github.com/pythonstrup',
+  blogUrl: 'https://myvelop.tistory.com/',
+};
+
+export { dummyArticlePreview, dummyArticle, dummyParticipants, dummyUser };
