@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum } from 'class-validator';
+import { IsEnum, IsString } from 'class-validator';
 import {
   CATEGORY,
   LOCATION,
@@ -11,6 +11,7 @@ export class GroupArticleRegisterResquest {
     description: '모집게시글 제목',
     required: true,
   })
+  @IsString()
   title: string;
 
   @ApiProperty({
@@ -21,6 +22,7 @@ export class GroupArticleRegisterResquest {
     description: '마크다운 형식의 게시글 내용',
     required: true,
   })
+  @IsString()
   contents: string;
 
   @ApiProperty({
@@ -52,6 +54,7 @@ export class GroupArticleRegisterResquest {
     description: '썸네일 이미지가 저장되어있는 주소',
     required: true,
   })
+  @IsString()
   thumbnail: string;
 
   @ApiProperty({
@@ -59,23 +62,6 @@ export class GroupArticleRegisterResquest {
     description: '카카오톡과 기타 채팅서비스의 주소를 담아놓을 수 있다.',
     required: false,
   })
+  @IsString()
   chatUrl: string;
-
-  constructor(
-    title: string,
-    contents: string,
-    category: CATEGORY,
-    location: LOCATION,
-    maxCapacity: number,
-    thumbnail: string,
-    chatUrl: string,
-  ) {
-    this.title = title;
-    this.contents = contents;
-    this.category = category;
-    this.location = location;
-    this.maxCapacity = maxCapacity;
-    this.thumbnail = thumbnail;
-    this.chatUrl = chatUrl;
-  }
 }

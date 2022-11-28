@@ -16,7 +16,7 @@ export class GroupArticleController {
   constructor(private readonly groupArticleService: GroupArticleService) {}
 
   @Post()
-  @JwtAuth()
+  // @JwtAuth()
   @ApiSuccessResponse(HttpStatus.CREATED, GroupArticleRegisterResponse)
   @ApiErrorResponse(GroupCategoryNotFound)
   async registerBoard(
@@ -24,9 +24,8 @@ export class GroupArticleController {
   ) {
     const article = await this.groupArticleService.registerGroupArticle(
       groupArticleRegisterResquest,
-      ARTICLE.GROUP,
     );
-    const data = new GroupArticleRegisterResponse(article.id);
+    const data = GroupArticleRegisterResponse.from(article);
 
     return ResponseEntity.CREATED_WITH_DATA(data);
   }

@@ -19,17 +19,17 @@ export class GroupArticleService {
 
   async registerGroupArticle(
     groupArticleRegisterResquest: GroupArticleRegisterResquest,
-    type: ARTICLE,
   ) {
     const category = await this.groupCategoryRepository.findByCategoryName(
       groupArticleRegisterResquest.category,
     );
-    if (category === null) throw new GroupCategoryNotFound();
+    if (!category) {
+      throw new GroupCategoryNotFound();
+    }
 
     const groupArticle = GroupArticle.register({
       title: groupArticleRegisterResquest.title,
       contents: groupArticleRegisterResquest.contents,
-      type: type,
       thumbnail: groupArticleRegisterResquest.thumbnail,
       location: groupArticleRegisterResquest.location,
       maxCapacity: groupArticleRegisterResquest.maxCapacity,

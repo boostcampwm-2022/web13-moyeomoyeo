@@ -33,9 +33,9 @@ export enum GROUP_APPLICATION_STATUS {
 }
 
 export enum GROUP_STATUS {
-  STILL = '모집중',
-  SUCCESS = '모집완료',
-  CANCEL = '모집중단',
+  PROGRESS = '모집중',
+  SUCCEED = '모집완료',
+  FAIL = '모집중단',
 }
 
 export enum ARTICLE {

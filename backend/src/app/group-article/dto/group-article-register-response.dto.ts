@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { GroupArticle } from '@app/group-article/entity/group-article.entity';
 
 export class GroupArticleRegisterResponse {
   @ApiProperty({
@@ -8,7 +9,9 @@ export class GroupArticleRegisterResponse {
   })
   id: number;
 
-  constructor(id: number) {
-    this.id = id;
+  static from(groupArticle: GroupArticle) {
+    const response = new GroupArticleRegisterResponse();
+    response.id = groupArticle.id;
+    return response;
   }
 }

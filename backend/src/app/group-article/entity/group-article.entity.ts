@@ -2,8 +2,9 @@ import { ChildEntity, OneToOne } from 'typeorm';
 import { Article } from '@app/group-article/entity/article.entity';
 import { Group } from '@app/group-article/entity/group.entity';
 import { GroupCategory } from '@app/group-article/entity/group-category.entity';
+import { ARTICLE } from '@app/group-article/constants/group-article.constants';
 
-@ChildEntity('GROUP')
+@ChildEntity(ARTICLE.GROUP)
 export class GroupArticle extends Article {
   @OneToOne(() => Group, (group) => group.article, {
     eager: true,
@@ -14,7 +15,6 @@ export class GroupArticle extends Article {
   static register({
     title,
     contents,
-    type,
     thumbnail,
     location,
     chatUrl,
@@ -23,7 +23,6 @@ export class GroupArticle extends Article {
   }: {
     title: string;
     contents: string;
-    type: string;
     thumbnail: string;
     location: string;
     chatUrl: string;
@@ -33,7 +32,7 @@ export class GroupArticle extends Article {
     const article = new GroupArticle();
     article.title = title;
     article.contents = contents;
-    article.type = type;
+    article.type = ARTICLE.GROUP;
     article.thumbnail = thumbnail;
     article.group = Group.register({
       location,

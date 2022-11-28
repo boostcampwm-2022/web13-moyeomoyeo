@@ -56,20 +56,11 @@ export class Group {
   }) {
     const group = new Group();
     group.location = location;
-    group.status = GROUP_STATUS.STILL;
+    group.status = GROUP_STATUS.PROGRESS;
     group.chatUrl = chatUrl;
     group.maxCapacity = maxCapacity;
     group.category = category;
 
     return group;
-  }
-
-  success() {
-    this.updatedAt = new Date();
-    this.status = GROUP_STATUS.SUCCESS;
-  }
-
-  cancel() {
-    this.status = GROUP_STATUS.CANCEL;
   }
 }
