@@ -53,5 +53,6 @@ export class MyInfoGetResponse {
     response.description = user.description;
     response.githubUrl = user.githubUrl;
     response.blogUrl = user.blogUrl;
+    return response;
   }
 }
