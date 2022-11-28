@@ -1,6 +1,6 @@
-import { S3ConfigService } from '../config.service';
+import { S3ConfigService } from '@config/s3/config.service';
 import { Test } from '@nestjs/testing';
-import { S3ConfigModule } from '../config.module';
+import { S3ConfigModule } from '@config/s3/config.module';
 
 describe('App Config Service Test', () => {
   let s3ConfigService: S3ConfigService;

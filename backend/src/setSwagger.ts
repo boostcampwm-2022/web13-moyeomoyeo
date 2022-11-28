@@ -3,7 +3,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ResponseEntity } from '@common/response-entity';
 import { AuthModule } from '@app/auth/auth.module';
 import { ImageModule } from '@app/image/image.module';
-import { GroupArticleModule } from './app/group-article/group-article.module';
+import { GroupArticleModule } from '@app/group-article/group-article.module';
 
 export const setSwagger = (app: INestApplication) => {
   const config = new DocumentBuilder()
