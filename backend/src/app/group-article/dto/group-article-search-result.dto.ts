@@ -6,6 +6,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { GroupCategoryResponse } from '@app/group-article/dto/get-cateogories-response.dto';
 import { IGroupArticleSearchResult } from '@app/group-article/dto/group-article-search-result.interface';
 import { ImageService } from '@app/image/image.service';
+import { IamgeResponse } from '@common/dto/image-response.dto';
 
 export class GroupArticleSearchResult {
   @ApiProperty({ example: 1, description: '게시글 아이디' })
@@ -14,11 +15,8 @@ export class GroupArticleSearchResult {
   @ApiProperty({ example: 'test001', description: '게시글 제목' })
   title: string;
 
-  @ApiProperty({ example: 'test.png', description: '썸네일' })
-  thumbnail: {
-    key: string;
-    url: string;
-  };
+  @ApiProperty({ type: IamgeResponse })
+  thumbnail: IamgeResponse;
 
   @ApiProperty({
     example: GROUP_STATUS.PROGRESS,
