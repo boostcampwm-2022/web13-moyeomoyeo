@@ -143,4 +143,5 @@ const InputsSections = styled.div`
   width: 100%;
   padding-left: 1.6rem;
   padding-right: 1.6rem;
+  padding-bottom: 1.6rem;
 `;
