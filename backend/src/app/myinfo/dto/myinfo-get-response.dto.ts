@@ -20,7 +20,7 @@ export class MyInfoGetResponse {
     example:
       'https://kr.object.ncloudstorage.com/uploads/images/1669276833875-64adca9c-94cd-4162-a53f-f75e951e39db',
     description: '프로필 이미지',
-    required: false,
+    required: true,
   })
   profileImage: string;
 
