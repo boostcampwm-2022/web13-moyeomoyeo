@@ -87,6 +87,7 @@ const UrlIconWrapper = styled.div`
 
 const Url = styled.a`
   font-size: 1.2rem;
+  text-decoration: none;
   color: ${({ theme }) => theme.colors.gray[6]};
   max-width: 20rem;
   overflow: hidden;
