@@ -28,13 +28,13 @@ export class Group {
   @JoinColumn({ referencedColumnName: 'id', name: 'category_id' })
   category: GroupCategory;
 
-  @Column({ type: 'varchar', enum: LOCATION })
+  @Column({ type: 'varchar', length: 30 })
   location: LOCATION;
 
   @Column()
   maxCapacity: number;
 
-  @Column({ type: 'varchar', enum: GROUP_STATUS })
+  @Column({ type: 'varchar', length: 30 })
   status: GROUP_STATUS;
 
   @Column()
