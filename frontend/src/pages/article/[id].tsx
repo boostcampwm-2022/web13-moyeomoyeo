@@ -6,6 +6,7 @@ import { Avatar, Progress, TypographyStylesProvider } from '@mantine/core';
 import { IconList } from '@tabler/icons';
 
 import ParticipantsModal from '@components/article/ParticipantsModal';
+import ParticipateButton from '@components/article/ParticipateButton';
 import ArticleTag from '@components/common/ArticleTag';
 import Header from '@components/common/Header';
 import DetailTitle from '@components/common/Header/DetailTitle';
@@ -16,6 +17,7 @@ import { CategoryKr } from '@constants/category';
 import { dummyArticle, dummyParticipants } from '@constants/dummy';
 import { LocationKr } from '@constants/location';
 import { PAGE_TITLE } from '@constants/pageTitle';
+import { ParticipateButtonStatus } from '@constants/participateButton';
 import { getCommonBadgeColor, getStatusBadgeColor } from '@utils/colors';
 
 const ArticleDetail = () => {
@@ -97,7 +99,8 @@ const ArticleDetail = () => {
           <TypographyStylesProvider>
             <ContentBox dangerouslySetInnerHTML={{ __html: contents }} />
           </TypographyStylesProvider>
-          <button>참가하기 버튼 자리</button>
+          {/* TODO 모집상태와 유저 참가 상태에 따라 렌더링 */}
+          <ParticipateButton status={ParticipateButtonStatus.LINK} chatRoomLink={'tetetetetet'} />
           <StatCounter variant="comment" count={commentCount} />
         </DetailWrapper>
         <Divider />
