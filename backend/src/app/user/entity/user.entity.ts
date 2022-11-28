@@ -39,6 +39,9 @@ export class User {
   @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
 
+  @Column({ type: 'timestamp', nullable: true })
+  deletedAt: Date;
+
   static signup({
     socialId,
     socialType,

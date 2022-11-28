@@ -1,35 +1,14 @@
 import { DataSource, Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
-import { Article } from '../entity/article.entity';
+import { GroupArticle } from '../entity/group-article.entity';
 
 @Injectable()
-export class ArticleRepository extends Repository<Article> {
+export class GroupArticleRepository extends Repository<GroupArticle> {
   constructor(private readonly dataSource: DataSource) {
     super(
-      Article,
+      GroupArticle,
       dataSource.createEntityManager(),
       dataSource.createQueryRunner(),
-    );
-  }
-
-  registerArticle({
-    title,
-    contents,
-    type,
-    thumbnail,
-  }: {
-    title: string;
-    contents: string;
-    type: string;
-    thumbnail: string;
-  }) {
-    return this.insert(
-      Article.register({
-        title,
-        contents,
-        type,
-        thumbnail,
-      }),
     );
   }
 }

@@ -1,8 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ARTICLE } from './constants/group-article.constants';
 import { GroupArticleRegisterResquest } from './dto/group-article-register-request.dto';
+import { GroupArticle } from './entity/group-article.entity';
 import { GroupCategoryNotFound } from './exception/group-category-not-found';
-import { ArticleRepository } from './repository/article.repository';
+import { GroupArticleRepository } from './repository/article.repository';
 import { GroupCategoryRepository } from './repository/group-category.repository';
 import { GroupRepository } from './repository/group.repository';
 
@@ -12,37 +13,29 @@ export class GroupArticleService {
 
   constructor(
     private readonly groupRepository: GroupRepository,
-    private readonly articleRepository: ArticleRepository,
+    private readonly groupArticleRepository: GroupArticleRepository,
     private readonly groupCategoryRepository: GroupCategoryRepository,
   ) {}
 
-  async registerArticle(
+  async registerGroupArticle(
     groupArticleRegisterResquest: GroupArticleRegisterResquest,
     type: ARTICLE,
-  ) {
-    return this.articleRepository.registerArticle({
-      title: groupArticleRegisterResquest.title,
-      contents: groupArticleRegisterResquest.contents,
-      type: type,
-      thumbnail: groupArticleRegisterResquest.thumbnail,
-    });
-  }
-
-  async registerGroup(
-    groupArticleRegisterResquest: GroupArticleRegisterResquest,
-    articleId: number,
   ) {
     const category = await this.groupCategoryRepository.findByCategoryName(
       groupArticleRegisterResquest.category,
     );
     if (category === null) throw new GroupCategoryNotFound();
 
-    return this.groupRepository.registerGroup({
+    const groupArticle = GroupArticle.register({
+      title: groupArticleRegisterResquest.title,
+      contents: groupArticleRegisterResquest.contents,
+      type: type,
+      thumbnail: groupArticleRegisterResquest.thumbnail,
       location: groupArticleRegisterResquest.location,
       maxCapacity: groupArticleRegisterResquest.maxCapacity,
       chatUrl: groupArticleRegisterResquest.chatUrl,
-      articleId,
       category: category,
     });
+    return this.groupArticleRepository.save(groupArticle);
   }
 }

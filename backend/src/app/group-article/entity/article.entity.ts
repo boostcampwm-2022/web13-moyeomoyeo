@@ -1,7 +1,6 @@
 import {
   Column,
   CreateDateColumn,
-  DeleteDateColumn,
   Entity,
   PrimaryGeneratedColumn,
   TableInheritance,
@@ -10,7 +9,7 @@ import {
 
 @Entity({ name: 'article' })
 @TableInheritance({ pattern: 'STI', column: { type: 'varchar', name: 'type' } })
-export class Article {
+export abstract class Article {
   @PrimaryGeneratedColumn({ unsigned: true })
   id: number;
 
@@ -34,27 +33,4 @@ export class Article {
 
   @Column({ type: 'timestamp', nullable: true })
   deletedAt: Date | null;
-
-  static register({
-    title,
-    contents,
-    type,
-    thumbnail,
-  }: {
-    title: string;
-    contents: string;
-    type: string;
-    thumbnail: string;
-  }) {
-    const article = new Article();
-    article.title = title;
-    article.contents = contents;
-    article.type = type;
-    article.thumbnail = thumbnail;
-    return article;
-  }
-
-  delete() {
-    this.deletedAt = new Date();
-  }
 }

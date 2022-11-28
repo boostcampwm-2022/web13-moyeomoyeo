@@ -17,9 +17,6 @@ export class Group {
   @PrimaryGeneratedColumn({ unsigned: true })
   id: number;
 
-  @Column({ unsigned: true })
-  articleId: number;
-
   @OneToOne(() => GroupArticle, { lazy: true })
   @JoinColumn({ referencedColumnName: 'id', name: 'article_id' })
   article: Promise<GroupArticle>;
@@ -50,13 +47,11 @@ export class Group {
     location,
     chatUrl,
     maxCapacity,
-    articleId,
     category,
   }: {
     location: string;
     chatUrl: string;
     maxCapacity: number;
-    articleId: number;
     category: GroupCategory;
   }) {
     const group = new Group();
@@ -64,7 +59,6 @@ export class Group {
     group.status = GROUP_STATUS.STILL;
     group.chatUrl = chatUrl;
     group.maxCapacity = maxCapacity;
-    group.articleId = articleId;
     group.category = category;
 
     return group;
