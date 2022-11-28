@@ -6,6 +6,8 @@ import { GroupCategory } from '@app/group-article/entity/group-category.entity';
 import { GroupApplication } from '@app/group-application/entity/group-application.entity';
 import { Scrap } from '@app/scrap/entity/scrap.entity';
 import { Comment } from '@app/comment/entity/comment.entity';
+import { SearchGroupArticlesRequest } from '@app/group-article/dto/search-group-articles-request.dto';
+import { IGroupArticleSearchResult } from '@app/group-article/dto/group-article-search-result.interface';
 
 @Injectable()
 export class GroupArticleRepository extends Repository<GroupArticle> {
@@ -17,35 +19,25 @@ export class GroupArticleRepository extends Repository<GroupArticle> {
     );
   }
 
-  search({
-    limit,
-    nextId,
-    location,
-    categoryId,
-    status,
-  }: {
-    limit: number;
-    nextId: number;
-    location?: string;
-    categoryId?: number;
-    status?: string;
-  }) {
+  async search(
+    searchRequest: SearchGroupArticlesRequest,
+  ): Promise<[any[], number]> {
     const query = this.createQueryBuilder('groupArticle')
       .select([
-        'groupArticle.id',
-        'groupArticle.title',
-        'groupArticle.createdAt',
-        'group.maxCapacity',
-        'group.thumbnail',
-        'group.status',
-        'group.location',
-        'groupCategory.id',
-        'groupCategory.name',
+        'groupArticle.id as id',
+        'groupArticle.title as title',
+        'groupArticle.createdAt as createdAt',
+        'group.maxCapacity as maxCapacity',
+        'group.thumbnail as thumbnail',
+        'group.status as status',
+        'group.location as location',
+        'groupCategory.id as groupCategoryId',
+        'groupCategory.name as groupCategoryName',
         'COUNT(DISTINCT groupApplication.id) as currentCapacity',
         'COUNT(DISTINCT scrap.id) as scrapCount',
         'COUNT(DISTINCT comment.id) as commentCount',
       ])
-      .leftJoin(Group, 'group', 'groupArticle.id = group.articleId')
+      .leftJoin(Group, 'group', 'groupArticle.id = group.article_id')
       .leftJoin(
         GroupCategory,
         'groupCategory',
@@ -54,7 +46,7 @@ export class GroupArticleRepository extends Repository<GroupArticle> {
       .leftJoin(
         GroupApplication,
         'groupApplication',
-        'group.id = groupApplication.groupId',
+        'group.id = groupApplication.groupId AND groupApplication.deletedAt IS NULL',
       )
       .leftJoin(
         Comment,
@@ -62,26 +54,34 @@ export class GroupArticleRepository extends Repository<GroupArticle> {
         'groupArticle.id = comment.articleId AND comment.deletedAt IS NULL',
       )
       .leftJoin(Scrap, 'scrap', 'groupArticle.id = scrap.articleId')
-      .where('groupArticle.id < :nextId', { nextId })
-      .andWhere('groupArticle.deletedAt IS NULL')
+      .where('groupArticle.deletedAt IS NULL')
       .groupBy('groupArticle.id')
-      .orderBy('groupArticle.id DESC')
-      .take(limit);
+      .orderBy('groupArticle.id', 'DESC');
 
-    if (location) {
-      query.where('group.location = :location', {
-        location,
+    if (searchRequest.location) {
+      query.andWhere('group.location = :location', {
+        location: searchRequest.location,
       });
     }
 
-    if (categoryId) {
-      query.where('group.categoryId = :categoryId', { categoryId });
+    if (searchRequest.category) {
+      query.andWhere('groupCategory.name = :categoryName', {
+        categoryName: searchRequest.category,
+      });
     }
 
-    if (status) {
-      query.where('group.status = :status', { status });
+    if (searchRequest.status) {
+      query.andWhere('group.status = :status', {
+        status: searchRequest.status,
+      });
     }
 
-    return query.getRawMany();
+    const count = await query.clone().getCount();
+    const result = await query
+      .limit(searchRequest.getLimit())
+      .offset(searchRequest.getOffset())
+      .getRawMany<IGroupArticleSearchResult>();
+
+    return [result, count];
   }
 }
