@@ -17,7 +17,7 @@ export class ExampleDto {
   id: number;
 }
 
-@Controller()
+@Controller('test')
 @ApiTags('example')
 export class AppController {
   constructor(private readonly appService: AppService) {}
