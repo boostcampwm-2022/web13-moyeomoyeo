@@ -12,6 +12,4 @@ export default {
 const Template: ComponentStory<typeof Profile> = (args) => <Profile {...args} />;
 
 export const _Profile = Template.bind({});
-_Profile.args = {
-  ...dummyUser,
-};
+_Profile.args = { user: dummyUser };
