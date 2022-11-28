@@ -8,7 +8,10 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { GROUP_STATUS } from '@app/group-article/constants/group-article.constants';
+import {
+  GROUP_STATUS,
+  LOCATION,
+} from '@app/group-article/constants/group-article.constants';
 import { GroupArticle } from '@app/group-article/entity/group-article.entity';
 import { GroupCategory } from '@app/group-article/entity/group-category.entity';
 
@@ -25,17 +28,20 @@ export class Group {
   @JoinColumn({ referencedColumnName: 'id', name: 'category_id' })
   category: GroupCategory;
 
-  @Column()
-  location: string;
+  @Column({ type: 'varchar', enum: LOCATION })
+  location: LOCATION;
 
   @Column()
   maxCapacity: number;
 
-  @Column()
-  status: string;
+  @Column({ type: 'varchar', enum: GROUP_STATUS })
+  status: GROUP_STATUS;
 
   @Column()
   chatUrl: string;
+
+  @Column({ type: 'varchar', length: 300 })
+  thumbnail: string;
 
   @CreateDateColumn()
   createdAt: Date;
@@ -48,11 +54,13 @@ export class Group {
     chatUrl,
     maxCapacity,
     category,
+    thumbnail,
   }: {
-    location: string;
+    location: LOCATION;
     chatUrl: string;
     maxCapacity: number;
     category: GroupCategory;
+    thumbnail: string;
   }) {
     const group = new Group();
     group.location = location;
@@ -60,6 +68,7 @@ export class Group {
     group.chatUrl = chatUrl;
     group.maxCapacity = maxCapacity;
     group.category = category;
+    group.thumbnail = thumbnail;
 
     return group;
   }

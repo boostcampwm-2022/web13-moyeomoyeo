@@ -10,6 +10,7 @@ import { GroupCategoryNotFound } from '@app/group-article/exception/group-catego
 import { GroupArticleService } from '@app/group-article/group-article.service';
 import { GroupCategoryRepository } from '@app/group-article/repository/group-category.repository';
 import { GroupCategoryResponse } from '@app/group-article/dto/get-cateogories-response.dto';
+import { GroupArticleRepository } from '@app/group-article/repository/group-article.repository';
 
 @Controller('group-articles')
 @ApiTags('Group-Article')
@@ -17,6 +18,7 @@ export class GroupArticleController {
   constructor(
     private readonly groupArticleService: GroupArticleService,
     private readonly groupCategoryRepository: GroupCategoryRepository,
+    private readonly groupArticleRepository: GroupArticleRepository,
   ) {}
 
   @Get('/categories')
@@ -44,5 +46,16 @@ export class GroupArticleController {
     const data = GroupArticleRegisterResponse.from(article);
 
     return ResponseEntity.CREATED_WITH_DATA(data);
+  }
+
+  @Get('/search')
+  search() {
+    return this.groupArticleRepository.search({
+      limit: 20,
+      nextId: 0,
+      status: '모집중',
+      categoryId: 1,
+      location: '서울',
+    });
   }
 }

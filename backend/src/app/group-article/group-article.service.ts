@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { GroupArticleRegisterResquest } from '@app/group-article/dto/group-article-register-request.dto';
 import { GroupArticle } from '@app/group-article/entity/group-article.entity';
 import { GroupCategoryNotFound } from '@app/group-article/exception/group-category-not-found';
-import { GroupArticleRepository } from '@app/group-article/repository/article.repository';
 import { GroupCategoryRepository } from '@app/group-article/repository/group-category.repository';
+import { GroupArticleRepository } from '@app/group-article/repository/group-article.repository';
 
 @Injectable()
 export class GroupArticleService {
