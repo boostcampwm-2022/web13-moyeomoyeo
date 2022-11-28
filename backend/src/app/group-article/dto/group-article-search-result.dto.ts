@@ -5,6 +5,7 @@ import {
 import { ApiProperty } from '@nestjs/swagger';
 import { GroupCategoryResponse } from '@app/group-article/dto/get-cateogories-response.dto';
 import { IGroupArticleSearchResult } from '@app/group-article/dto/group-article-search-result.interface';
+import { ImageService } from '@app/image/image.service';
 
 export class GroupArticleSearchResult {
   @ApiProperty({ example: 1, description: '게시글 아이디' })
@@ -14,7 +15,10 @@ export class GroupArticleSearchResult {
   title: string;
 
   @ApiProperty({ example: 'test.png', description: '썸네일' })
-  thumbnail: string;
+  thumbnail: {
+    key: string;
+    url: string;
+  };
 
   @ApiProperty({
     example: GROUP_STATUS.PROGRESS,
@@ -46,11 +50,14 @@ export class GroupArticleSearchResult {
   })
   createdAt: Date;
 
-  static from(row: IGroupArticleSearchResult) {
+  static from(row: IGroupArticleSearchResult, imageService: ImageService) {
     const res = new GroupArticleSearchResult();
     res.id = row.id;
     res.title = row.title;
-    res.thumbnail = row.thumbnail;
+    res.thumbnail = {
+      key: row.thumbnail,
+      url: imageService.getStorageUrl([row.thumbnail])[0],
+    };
     res.category = {
       id: row.groupCategoryId,
       name: row.groupCategoryName,

@@ -5,9 +5,10 @@ import { GroupArticleService } from '@app/group-article/group-article.service';
 import { GroupCategoryRepository } from '@app/group-article/repository/group-category.repository';
 import { GroupRepository } from '@app/group-article/repository/group.repository';
 import { GroupArticleRepository } from '@app/group-article/repository/group-article.repository';
+import { ImageModule } from '@app/image/image.module';
 
 @Module({
-  imports: [JwtTokenModule],
+  imports: [JwtTokenModule, ImageModule],
   controllers: [GroupArticleController],
   providers: [
     GroupArticleService,

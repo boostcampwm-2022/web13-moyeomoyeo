@@ -14,6 +14,7 @@ import { GroupArticleRepository } from '@app/group-article/repository/group-arti
 import { SearchGroupArticlesRequest } from '@app/group-article/dto/search-group-articles-request.dto';
 import { SearchGroupArticleResponse } from '@app/group-article/dto/search-group-articles-response.dto';
 import { GroupArticleSearchResult } from '@app/group-article/dto/group-article-search-result.dto';
+import { ImageService } from '@app/image/image.service';
 
 @Controller('group-articles')
 @ApiTags('Group-Article')
@@ -22,6 +23,7 @@ export class GroupArticleController {
     private readonly groupArticleService: GroupArticleService,
     private readonly groupCategoryRepository: GroupCategoryRepository,
     private readonly groupArticleRepository: GroupArticleRepository,
+    private readonly imageService: ImageService,
   ) {}
 
   @Get('/categories')
@@ -52,6 +54,7 @@ export class GroupArticleController {
   }
 
   @Get('/search')
+  @JwtAuth()
   @ApiSuccessResponse(HttpStatus.OK, SearchGroupArticleResponse)
   async search(@Query() query: SearchGroupArticlesRequest) {
     const result = await this.groupArticleRepository.search(query);
@@ -61,7 +64,9 @@ export class GroupArticleController {
         result[1],
         query.currentPage,
         query.countPerPage,
-        result[0].map((row) => GroupArticleSearchResult.from(row)),
+        result[0].map((row) =>
+          GroupArticleSearchResult.from(row, this.imageService),
+        ),
       ),
     );
   }
