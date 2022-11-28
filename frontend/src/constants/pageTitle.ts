@@ -21,7 +21,7 @@ const PAGE_TITLE = {
   },
   OWN_GROUP: {
     title: '내가 작성한 모임',
-    subTItle: '내가 작성한 모임들을 확인해보세요',
+    subTitle: '내가 작성한 모임들을 확인해보세요',
   },
   USER: {
     title: '프로필',
