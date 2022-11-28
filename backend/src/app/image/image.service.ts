@@ -53,7 +53,7 @@ export class ImageService {
   }
 
   findImageExtension(fileName: string) {
-    const regex = /(\.gif|\.jpg|\.jpeg|\.png)$/gi;
+    const regex = /(\.gif|\.jpg|\.jpeg|\.png|\.webp)$/gi;
     const result = fileName.match(regex);
     return result === null ? '' : result[0];
   }

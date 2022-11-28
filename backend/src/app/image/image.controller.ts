@@ -6,12 +6,14 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
+import { ApiTags } from '@nestjs/swagger';
 import { ApiSuccessResponse } from '@src/common/decorator/api-success-resposne.decorator';
 import { ResponseEntity } from '@src/common/response-entity';
-import { ImagesUploadResponse } from './dto/images-upload-response.dto';
-import { ImageService } from './image.service';
+import { ImagesUploadResponse } from '@app/image/dto/images-upload-response.dto';
+import { ImageService } from '@app/image/image.service';
 
 @Controller('images')
+@ApiTags('Image')
 export class ImageController {
   constructor(private readonly imageService: ImageService) {}
 
