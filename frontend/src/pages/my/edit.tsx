@@ -27,9 +27,6 @@ const MyEditPage = () => {
     githubUrl: '',
     blogUrl: '',
   });
-  const [userNameError, setUserNameError] = useState(false);
-  const [githubUrlError, setGithubUrlError] = useState(false);
-  const [descriptionError, setDescriptionError] = useState(false);
 
   useEffect(() => {
     if (!isLoading) {
@@ -38,22 +35,9 @@ const MyEditPage = () => {
     }
   }, [isLoading, myData]);
 
-  const handleUserNameChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const inputUserName = e.target.value;
-    setUserDataInput((prev) => ({ ...prev, userName: e.target.value }));
-    setUserNameError(inputUserName.length > 10 || inputUserName.length === 0);
-  };
-
-  const handleGithubUrlChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const inputGithubUrl = e.target.value;
-    setUserDataInput((prev) => ({ ...prev, githubUrl: e.target.value }));
-    setGithubUrlError(inputGithubUrl.length <= 0);
-  };
-
-  const handleDescriptionChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const inputDescription = e.target.value;
-    setUserDataInput((prev) => ({ ...prev, description: e.target.value }));
-    setDescriptionError(inputDescription.length > 20);
+  const handleUserDataChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setUserDataInput((prev) => ({ ...prev, [name]: value }));
   };
 
   return (
@@ -83,39 +67,36 @@ const MyEditPage = () => {
           styles={{ label: { paddingBottom: '0.4rem' } }}
         />
         <TextInput
-          label="닉네임 (최대 10자)"
+          required
+          name="userName"
+          label="닉네임 (필수, 최대 10자)"
           placeholder="닉네임을 입력하세요"
           value={userDataInput.userName}
-          onChange={handleUserNameChange}
-          error={
-            userNameError &&
-            (userDataInput.userName.length > 10
-              ? '닉네임은 10자 이내로 입력해주세요'
-              : '닉네임은 필수 입니다')
-          }
-          required
+          onChange={handleUserDataChange}
+          error={userDataInput.userName.length <= 0 && '닉네임은 필수입니다'}
+          maxLength={10}
         />
         <TextInput
+          required
+          disabled
           label="Github 링크"
           placeholder="Github 링크를 입력하세요"
           value={userDataInput.githubUrl}
-          onChange={handleGithubUrlChange}
-          required
-          disabled
-          error={githubUrlError && 'Github 링크를 입력하세요'}
         />
         <TextInput
           label="블로그 링크"
+          name="blogUrl"
           placeholder="블로그 링크를 입력하세요"
           value={userDataInput.blogUrl}
-          onChange={(e) => setUserDataInput((prev) => ({ ...prev, blogUrl: e.target.value }))}
+          onChange={handleUserDataChange}
         />
         <TextInput
           label="한 줄 소개 (최대 20자)"
+          name="description"
           placeholder="자신에 대해 한 줄로 소개해주세요"
+          onChange={handleUserDataChange}
           value={userDataInput.description}
-          onChange={handleDescriptionChange}
-          error={descriptionError && '한 줄 소개는 20자 이내로 입력해주세요'}
+          maxLength={20}
         />
       </InputsSections>
     </PageLayout>
