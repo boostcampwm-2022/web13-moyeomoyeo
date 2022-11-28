@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
-import { s3Config } from './configuration';
+import { s3Config } from '@config/s3/configuration';
 
 @Injectable()
 export class S3ConfigService {
