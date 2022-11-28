@@ -1,7 +1,7 @@
 import { ChildEntity, OneToOne } from 'typeorm';
 import { Article } from '@app/group-article/entity/article.entity';
 import { Group } from '@app/group-article/entity/group.entity';
-import { GroupCategory } from './group-category.entity';
+import { GroupCategory } from '@app/group-article/entity/group-category.entity';
 
 @ChildEntity('GROUP')
 export class GroupArticle extends Article {

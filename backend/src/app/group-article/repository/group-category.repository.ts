@@ -1,6 +1,6 @@
 import { DataSource, Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
-import { GroupCategory } from '../entity/group-category.entity';
+import { GroupCategory } from '@app/group-article/entity/group-category.entity';
 
 @Injectable()
 export class GroupCategoryRepository extends Repository<GroupCategory> {

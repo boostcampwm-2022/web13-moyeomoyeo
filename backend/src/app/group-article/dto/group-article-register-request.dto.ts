@@ -1,6 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum } from 'class-validator';
-import { CATEGORY, LOCATION } from '../constants/group-article.constants';
+import {
+  CATEGORY,
+  LOCATION,
+} from '@app/group-article/constants/group-article.constants';
 
 export class GroupArticleRegisterResquest {
   @ApiProperty({

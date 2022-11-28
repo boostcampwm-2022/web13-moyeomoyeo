@@ -8,9 +8,9 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { GROUP_STATUS } from '../constants/group-article.constants';
-import { GroupArticle } from './group-article.entity';
-import { GroupCategory } from './group-category.entity';
+import { GROUP_STATUS } from '@app/group-article/constants/group-article.constants';
+import { GroupArticle } from '@app/group-article/entity/group-article.entity';
+import { GroupCategory } from '@app/group-article/entity/group-category.entity';
 
 @Entity({ name: 'group' })
 export class Group {

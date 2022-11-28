@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { ImageController } from './image.controller';
-import { ImageService } from './image.service';
+import { ImageController } from '@app/image/image.controller';
+import { ImageService } from '@app/image/image.service';
 import { S3ConfigModule } from '@src/common/config/s3/config.module';
 
 @Module({
