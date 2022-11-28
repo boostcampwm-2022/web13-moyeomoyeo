@@ -83,7 +83,7 @@ const MyEditPage = () => {
           styles={{ label: { paddingBottom: '0.4rem' } }}
         />
         <TextInput
-          label="닉네임"
+          label="닉네임 (최대 10자)"
           placeholder="닉네임을 입력하세요"
           value={userDataInput.userName}
           onChange={handleUserNameChange}
@@ -91,7 +91,7 @@ const MyEditPage = () => {
             userNameError &&
             (userDataInput.userName.length > 10
               ? '닉네임은 10자 이내로 입력해주세요'
-              : '닉네임을 입력하세요')
+              : '닉네임은 필수 입니다')
           }
           required
         />
@@ -101,6 +101,7 @@ const MyEditPage = () => {
           value={userDataInput.githubUrl}
           onChange={handleGithubUrlChange}
           required
+          disabled
           error={githubUrlError && 'Github 링크를 입력하세요'}
         />
         <TextInput
@@ -110,7 +111,7 @@ const MyEditPage = () => {
           onChange={(e) => setUserDataInput((prev) => ({ ...prev, blogUrl: e.target.value }))}
         />
         <TextInput
-          label="한 줄 소개"
+          label="한 줄 소개 (최대 20자)"
           placeholder="자신에 대해 한 줄로 소개해주세요"
           value={userDataInput.description}
           onChange={handleDescriptionChange}
