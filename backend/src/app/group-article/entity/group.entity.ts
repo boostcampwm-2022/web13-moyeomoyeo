@@ -8,16 +8,14 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { GROUP_STATUS } from '@app/group-article/constants/group-article.constants';
 import { GroupArticle } from '@app/group-article/entity/group-article.entity';
 import { GroupCategory } from '@app/group-article/entity/group-category.entity';
 
-@Entity()
+@Entity({ name: 'group' })
 export class Group {
   @PrimaryGeneratedColumn({ unsigned: true })
   id: number;
-
-  @Column({ unsigned: true })
-  articleId: number;
 
   @OneToOne(() => GroupArticle, { lazy: true })
   @JoinColumn({ referencedColumnName: 'id', name: 'article_id' })
@@ -44,4 +42,25 @@ export class Group {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  static register({
+    location,
+    chatUrl,
+    maxCapacity,
+    category,
+  }: {
+    location: string;
+    chatUrl: string;
+    maxCapacity: number;
+    category: GroupCategory;
+  }) {
+    const group = new Group();
+    group.location = location;
+    group.status = GROUP_STATUS.PROGRESS;
+    group.chatUrl = chatUrl;
+    group.maxCapacity = maxCapacity;
+    group.category = category;
+
+    return group;
+  }
 }
