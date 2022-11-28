@@ -10,9 +10,9 @@ import {
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
 import { instanceToPlain } from 'class-transformer';
-import { ApiNotFoundException } from '../exception/api-not-found.exception';
-import { BadParameterException } from '../exception/bad-parameter.exception';
-import { ResponseEntity } from '../response-entity';
+import { ApiNotFoundException } from '@exception/api-not-found.exception';
+import { BadParameterException } from '@exception/bad-parameter.exception';
+import { ResponseEntity } from '@common/response-entity';
 
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {

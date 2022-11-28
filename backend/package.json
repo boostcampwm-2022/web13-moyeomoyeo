@@ -84,7 +84,8 @@
       "^@config/(.*)$": "<rootDir>/common/config/$1",
       "^@decorator/(.*)$": "<rootDir>/common/decorator/$1",
       "^@exception/(.*)$": "<rootDir>/common/exception/$1",
-      "^@app/(.*)$": "<rootDir>/app/$1"
+      "^@app/(.*)$": "<rootDir>/app/$1",
+      "^@src/(.*)$": "<rootDir>/$1"
     },
     "moduleFileExtensions": [
       "js",

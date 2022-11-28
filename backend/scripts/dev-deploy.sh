@@ -13,7 +13,7 @@ echo -e $4 > .env
 echo "create .env"
 
 # docker down
-docker compose down --rmi --remove-orphans
+docker compose down --rmi all --remove-orphans
 
 # docker up
 docker compose up -d --build

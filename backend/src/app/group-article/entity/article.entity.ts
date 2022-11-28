@@ -7,7 +7,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity()
+@Entity({ name: 'article' })
 @TableInheritance({ pattern: 'STI', column: { type: 'varchar', name: 'type' } })
 export abstract class Article {
   @PrimaryGeneratedColumn({ unsigned: true })
