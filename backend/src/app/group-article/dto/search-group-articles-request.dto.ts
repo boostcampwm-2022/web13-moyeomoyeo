@@ -1,4 +1,4 @@
-import { PageRequest } from '@common/page-request';
+import { PageRequest } from '@common/util/page-request';
 import {
   CATEGORY,
   GROUP_STATUS,
