@@ -1,66 +1,71 @@
 import {
   Column,
   CreateDateColumn,
-  DeleteDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { GROUP_STATUS } from '../constants/group-article.constants';
+import { GroupArticle } from './group-article.entity';
+import { GroupCategory } from './group-category.entity';
 
 @Entity({ name: 'group' })
 export class Group {
   @PrimaryGeneratedColumn({ unsigned: true })
   id: number;
 
-  @Column({ type: 'varchar', length: 20 })
-  location: string;
-
-  @Column({ type: 'varchar', length: 10 })
-  status: string;
-
-  @Column({ type: 'varchar', length: 200 })
-  chatRoomId: string;
-
-  @Column({ unsigned: true })
-  maxCapacity: number;
-
   @Column({ unsigned: true })
   articleId: number;
 
-  @Column({ unsigned: true })
-  categoryId: number;
+  @OneToOne(() => GroupArticle, { lazy: true })
+  @JoinColumn({ referencedColumnName: 'id', name: 'article_id' })
+  article: Promise<GroupArticle>;
 
-  @CreateDateColumn({ type: 'timestamp' })
+  @ManyToOne(() => GroupCategory, { eager: true })
+  @JoinColumn({ referencedColumnName: 'id', name: 'category_id' })
+  category: GroupCategory;
+
+  @Column()
+  location: string;
+
+  @Column()
+  maxCapacity: number;
+
+  @Column()
+  status: string;
+
+  @Column()
+  chatUrl: string;
+
+  @CreateDateColumn()
   createdAt: Date;
 
-  @UpdateDateColumn({ type: 'timestamp' })
+  @UpdateDateColumn()
   updatedAt: Date;
-
-  @DeleteDateColumn({ type: 'timestamp', default: null })
-  deletedAt: Date;
 
   static register({
     location,
-    status,
-    chatRoomUrl,
+    chatUrl,
     maxCapacity,
     articleId,
-    categoryId,
+    category,
   }: {
     location: string;
-    status: string;
-    chatRoomUrl: string;
+    chatUrl: string;
     maxCapacity: number;
     articleId: number;
-    categoryId: number;
+    category: GroupCategory;
   }) {
     const group = new Group();
     group.location = location;
-    group.status = status;
-    group.chatRoomId = chatRoomUrl;
+    group.status = GROUP_STATUS.STILL;
+    group.chatUrl = chatUrl;
     group.maxCapacity = maxCapacity;
     group.articleId = articleId;
-    group.categoryId = categoryId;
+    group.category = category;
 
     return group;
   }
@@ -70,13 +75,7 @@ export class Group {
     this.status = GROUP_STATUS.SUCCESS;
   }
 
-  end() {
-    this.updatedAt = new Date();
-    this.status = GROUP_STATUS.END;
-  }
-
   cancel() {
-    this.deletedAt = new Date();
     this.status = GROUP_STATUS.CANCEL;
   }
 }

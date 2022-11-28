@@ -4,25 +4,27 @@ import {
   DeleteDateColumn,
   Entity,
   PrimaryGeneratedColumn,
+  TableInheritance,
   UpdateDateColumn,
 } from 'typeorm';
 
 @Entity({ name: 'article' })
+@TableInheritance({ pattern: 'STI', column: { type: 'varchar', name: 'type' } })
 export class Article {
   @PrimaryGeneratedColumn({ unsigned: true })
   id: number;
 
+  @Column({ type: 'varchar', length: 300 })
+  thumbnail: string;
+
   @Column({ type: 'varchar', length: 100 })
   title: string;
 
-  @Column({ type: 'varchar', length: 65535 })
+  @Column({ type: 'text' })
   contents: string;
 
-  @Column({ type: 'varchar', length: 20, default: '' })
+  @Column({ type: 'varchar', length: 30 })
   type: string;
-
-  @Column({ type: 'varchar', length: 300, default: '' })
-  thumbnail: string;
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
@@ -30,8 +32,8 @@ export class Article {
   @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
 
-  @DeleteDateColumn({ type: 'timestamp', default: null })
-  deletedAt: Date;
+  @Column({ type: 'timestamp', nullable: true })
+  deletedAt: Date | null;
 
   static register({
     title,
