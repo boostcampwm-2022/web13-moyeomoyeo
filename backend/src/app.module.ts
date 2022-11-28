@@ -9,8 +9,6 @@ import { JwtTokenModule } from '@common/module/jwt-token/jwt-token.module';
 import { AuthModule } from '@app/auth/auth.module';
 import { ImageModule } from '@app/image/image.module';
 import { GroupArticleModule } from './app/group-article/group-article.module';
-import { APP_GUARD } from '@nestjs/core';
-import { JwtAuthGuard } from './common/guard/jwt-auth.guard';
 
 @Module({
   imports: [
