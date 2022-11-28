@@ -4,6 +4,9 @@ import { Group } from '@app/group-article/entity/group.entity';
 
 @ChildEntity('GROUP')
 export class GroupArticle extends Article {
-  @OneToOne(() => Group, (group) => group.article, { eager: true })
+  @OneToOne(() => Group, (group) => group.article, {
+    eager: true,
+    cascade: ['insert'],
+  })
   group: Group;
 }
