@@ -15,4 +15,8 @@ export class UserRepository extends Repository<User> {
   findBySocial(socialId: string, socialType: string) {
     return this.findOneBy({ socialId, socialType });
   }
+
+  findByUsername(username: string) {
+    return this.findOneBy({ username });
+  }
 }
