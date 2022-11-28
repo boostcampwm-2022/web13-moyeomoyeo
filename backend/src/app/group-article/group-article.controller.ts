@@ -1,6 +1,6 @@
 import { Controller, Get, HttpStatus } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { GroupCategoryRepository } from '@app/group-article/group-category.repository';
+import { GroupCategoryRepository } from '@app/group-article/repository/group-category.repository';
 import { ResponseEntity } from '@common/response-entity';
 import { GroupCategoryResponse } from '@app/group-article/dto/get-cateogories-response.dto';
 import { ApiSuccessResponse } from '@decorator/api-success-resposne.decorator';
