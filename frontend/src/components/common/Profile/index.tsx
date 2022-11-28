@@ -5,7 +5,11 @@ import { IconBrandGithub, IconLink } from '@tabler/icons';
 
 import { UserType } from '@typings/types';
 
-const Profile = (user: UserType) => {
+interface Props {
+  user: UserType;
+}
+
+const Profile = ({ user }: Props) => {
   const {
     colors: { gray },
   } = useTheme();
@@ -34,17 +38,18 @@ const Profile = (user: UserType) => {
 };
 export default Profile;
 
-const StyledAvatar = styled(Avatar)<AvatarProps>`
-  width: 8.4rem;
-  height: 8.4rem;
-  border-radius: 4.2rem;
-`;
-
 const ProfileWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
   align-items: center;
+  width: 100%;
+`;
+
+const StyledAvatar = styled(Avatar)<AvatarProps>`
+  width: 8.4rem;
+  height: 8.4rem;
+  border-radius: 4.2rem;
 `;
 
 const UserWrapper = styled.div`

@@ -23,6 +23,10 @@ const PAGE_TITLE = {
     title: '내가 작성한 모임',
     subTItle: '내가 작성한 모임들을 확인해보세요',
   },
+  USER: {
+    title: '프로필',
+    subTitle: '프로필 페이지',
+  },
 };
 
 export { PAGE_TITLE };
