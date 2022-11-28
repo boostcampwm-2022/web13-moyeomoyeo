@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Post, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { ApiErrorResponse } from '@src/common/decorator/api-error-response.decorator';
 import { ApiSuccessResponse } from '@src/common/decorator/api-success-resposne.decorator';
@@ -11,6 +11,9 @@ import { GroupArticleService } from '@app/group-article/group-article.service';
 import { GroupCategoryRepository } from '@app/group-article/repository/group-category.repository';
 import { GroupCategoryResponse } from '@app/group-article/dto/get-cateogories-response.dto';
 import { GroupArticleRepository } from '@app/group-article/repository/group-article.repository';
+import { SearchGroupArticlesRequest } from '@app/group-article/dto/search-group-articles-request.dto';
+import { SearchGroupArticleResponse } from '@app/group-article/dto/search-group-articles-response.dto';
+import { GroupArticleSearchResult } from '@app/group-article/dto/group-article-search-result.dto';
 
 @Controller('group-articles')
 @ApiTags('Group-Article')
@@ -49,13 +52,17 @@ export class GroupArticleController {
   }
 
   @Get('/search')
-  search() {
-    return this.groupArticleRepository.search({
-      limit: 20,
-      nextId: 0,
-      status: '모집중',
-      categoryId: 1,
-      location: '서울',
-    });
+  @ApiSuccessResponse(HttpStatus.OK, SearchGroupArticleResponse)
+  async search(@Query() query: SearchGroupArticlesRequest) {
+    const result = await this.groupArticleRepository.search(query);
+
+    return ResponseEntity.OK_WITH_DATA(
+      new SearchGroupArticleResponse(
+        result[1],
+        query.currentPage,
+        query.countPerPage,
+        result[0].map((row) => GroupArticleSearchResult.from(row)),
+      ),
+    );
   }
 }

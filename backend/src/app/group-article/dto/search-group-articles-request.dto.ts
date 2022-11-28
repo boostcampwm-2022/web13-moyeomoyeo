@@ -1,4 +1,4 @@
-import { NoOffsetPageRequest } from '@common/no-offset-page-request';
+import { PageRequest } from '@common/page-request';
 import {
   CATEGORY,
   GROUP_STATUS,
@@ -7,7 +7,7 @@ import {
 import { IsEnum, IsOptional } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class GetGroupArticlesRequest extends NoOffsetPageRequest {
+export class SearchGroupArticlesRequest extends PageRequest {
   @IsOptional()
   @IsEnum(CATEGORY)
   @ApiProperty({ example: CATEGORY.STUDY, enum: CATEGORY, required: false })

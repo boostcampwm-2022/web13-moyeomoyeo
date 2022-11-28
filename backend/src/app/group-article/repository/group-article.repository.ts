@@ -21,7 +21,7 @@ export class GroupArticleRepository extends Repository<GroupArticle> {
 
   async search(
     searchRequest: SearchGroupArticlesRequest,
-  ): Promise<[any[], number]> {
+  ): Promise<[IGroupArticleSearchResult[], number]> {
     const query = this.createQueryBuilder('groupArticle')
       .select([
         'groupArticle.id as id',
