@@ -1,4 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsEnum } from 'class-validator';
+import { CATEGORY, LOCATION } from '../constants/group-article.constants';
 
 export class GroupArticleRegisterResquest {
   @ApiProperty({
@@ -23,14 +25,16 @@ export class GroupArticleRegisterResquest {
     description: 'Enum 형태의 자료형 - 카테고리',
     required: true,
   })
-  category: CATEGORY_TYPE;
+  @IsEnum(CATEGORY)
+  category: CATEGORY;
 
   @ApiProperty({
     example: LOCATION.ONLINE,
     description: 'Enum 형태의 자료형 - 지역',
     required: true,
   })
-  location: LOCATION_TYPE;
+  @IsEnum(LOCATION)
+  location: LOCATION;
 
   @ApiProperty({
     example: 10,
@@ -57,8 +61,8 @@ export class GroupArticleRegisterResquest {
   constructor(
     title: string,
     contents: string,
-    category: CATEGORY_TYPE,
-    location: LOCATION_TYPE,
+    category: CATEGORY,
+    location: LOCATION,
     maxCapacity: number,
     thumbnail: string,
     chatUrl: string,
