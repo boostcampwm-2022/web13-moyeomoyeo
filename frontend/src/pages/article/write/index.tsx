@@ -7,6 +7,7 @@ import { IconCheck, IconUpload, IconUser } from '@tabler/icons';
 
 import ArticleEditor from '@components/article/ArticleEditor';
 import ImageThumbnail from '@components/article/ImageThumbnail';
+import AlertModal from '@components/common/AlertModal';
 import DropDown from '@components/common/DropDown';
 import Header from '@components/common/Header';
 import DetailTitle from '@components/common/Header/DetailTitle';
@@ -22,6 +23,7 @@ import { Location, LocationKr } from '@constants/location';
  */
 
 const WritePage = () => {
+  const [confirmModalOpen, setConfirmModalOpen] = useState(false);
   const [category, setCategory] = useState<Category | null>(null);
   const [location, setLocation] = useState<Location | null>(null);
   const [maxCapacity, setmaxCapacity] = useState<number>(5);
@@ -39,6 +41,12 @@ const WritePage = () => {
     chatLink.length > 0 &&
     uploadedImage;
 
+  const handleSubmit = () => {
+    if (!possibleToSubmit) return;
+    // TODO API 호출
+    setConfirmModalOpen(true);
+  };
+
   return (
     <>
       <Head>
@@ -52,7 +60,7 @@ const WritePage = () => {
               <ActionIcon
                 variant="transparent"
                 color={possibleToSubmit ? 'indigo' : 'gray'}
-                onClick={() => alert('게시글 등록!')}
+                onClick={handleSubmit}
               >
                 <IconCheck size={24} stroke={3} />
               </ActionIcon>
@@ -60,6 +68,11 @@ const WritePage = () => {
           />
         }
       >
+        <AlertModal
+          message="게시글 등록이 완료되었습니다."
+          open={confirmModalOpen}
+          onClose={() => setConfirmModalOpen(false)}
+        />
         <TermSection>
           <SelectSection>
             <DropDown
