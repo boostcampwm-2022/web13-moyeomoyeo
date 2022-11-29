@@ -12,6 +12,7 @@ export const setSwagger = (app: INestApplication) => {
     .setTitle('MoyeoMoyeo REST API Specification')
     .setVersion('1.0.0')
     .addServer(`http://localhost`)
+    .addServer('http://api.moyeomoyeo.com')
     .addCookieAuth(
       'access_token',
       { type: 'apiKey', in: 'cookie' },

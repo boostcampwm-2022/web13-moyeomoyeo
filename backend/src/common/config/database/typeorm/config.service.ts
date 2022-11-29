@@ -33,6 +33,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       entities: [entityPath],
       dropSchema: this.appConfigServce.isTest(),
       namingStrategy: new SnakeNamingStrategy(),
+      timezone: 'Z',
     };
   }
 }
