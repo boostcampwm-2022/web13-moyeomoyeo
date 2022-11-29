@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpStatus,
   Param,
@@ -28,6 +29,7 @@ import { CurrentUser } from '@decorator/current-user.decorator';
 import { User } from '@app/user/entity/user.entity';
 import { GetGroupArticleDetailResponse } from '@app/group-article/dto/get-group-article-detail-response.dto';
 import { GroupArticleNotFoundException } from '@app/group-article/exception/group-article-not-found.exception';
+import { NotAuthorException } from '@app/group-article/exception/not-author.exception';
 
 @Controller('group-articles')
 @ApiTags('Group-Article')
@@ -96,5 +98,16 @@ export class GroupArticleController {
     return ResponseEntity.OK_WITH_DATA(
       GetGroupArticleDetailResponse.from(groupArticleDetail, this.imageService),
     );
+  }
+
+  @Delete('/:id')
+  @JwtAuth()
+  @ApiSuccessResponse(HttpStatus.NO_CONTENT)
+  @ApiErrorResponse(NotAuthorException, GroupArticleNotFoundException)
+  async remove(
+    @CurrentUser() user: User,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    await this.groupArticleService.remove(user, id);
   }
 }

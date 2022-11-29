@@ -4,15 +4,17 @@ import { Group } from '@app/group-article/entity/group.entity';
 import { GroupCategory } from '@app/group-article/entity/group-category.entity';
 import {
   ARTICLE,
+  GROUP_STATUS,
   LOCATION,
 } from '@app/group-article/constants/group-article.constants';
 import { User } from '@app/user/entity/user.entity';
+import { NotAuthorException } from '@app/group-article/exception/not-author.exception';
 
 @ChildEntity(ARTICLE.GROUP)
 export class GroupArticle extends Article {
   @OneToOne(() => Group, (group) => group.article, {
     eager: true,
-    cascade: ['insert'],
+    cascade: ['insert', 'update'],
   })
   group: Group;
 
@@ -49,5 +51,14 @@ export class GroupArticle extends Article {
       thumbnail,
     });
     return article;
+  }
+
+  remove(user: User) {
+    if (this.userId !== user.id) {
+      throw new NotAuthorException();
+    }
+
+    this.group.status = GROUP_STATUS.FAIL;
+    this.deletedAt = new Date();
   }
 }
