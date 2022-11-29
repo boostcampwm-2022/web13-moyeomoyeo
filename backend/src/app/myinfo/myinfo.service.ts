@@ -10,22 +10,22 @@ export class MyInfoService {
   async modifyProfile(
     userId: number,
     userName: string,
-    profileModifyingRequest: ProfileModifyingRequest,
+    ModifyingContents: ProfileModifyingRequest,
   ) {
     const user = await this.userRepository.findByUsername(
-      profileModifyingRequest.userName,
+      ModifyingContents.userName,
     );
-    if (user && userName !== profileModifyingRequest.userName) {
+    if (user && userName !== ModifyingContents.userName) {
       throw new UserNameDuplicateException();
     }
 
     this.userRepository.updateUser({
       id: userId,
-      userName: profileModifyingRequest.userName,
-      profileImage: profileModifyingRequest.profileImage,
-      description: profileModifyingRequest.description,
-      githubUrl: profileModifyingRequest.githubUrl,
-      blogUrl: profileModifyingRequest.blogUrl,
+      userName: ModifyingContents.userName,
+      profileImage: ModifyingContents.profileImage,
+      description: ModifyingContents.description,
+      githubUrl: ModifyingContents.githubUrl,
+      blogUrl: ModifyingContents.blogUrl,
     });
   }
 }
