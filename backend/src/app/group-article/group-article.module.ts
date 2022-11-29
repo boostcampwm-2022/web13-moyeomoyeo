@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { JwtTokenModule } from '@src/common/module/jwt-token/jwt-token.module';
 import { GroupArticleController } from '@app/group-article/group-article.controller';
 import { GroupArticleService } from '@app/group-article/group-article.service';
 import { GroupCategoryRepository } from '@app/group-article/repository/group-category.repository';
@@ -8,7 +7,7 @@ import { GroupArticleRepository } from '@app/group-article/repository/group-arti
 import { ImageModule } from '@app/image/image.module';
 
 @Module({
-  imports: [JwtTokenModule, ImageModule],
+  imports: [ImageModule],
   controllers: [GroupArticleController],
   providers: [
     GroupArticleService,
