@@ -16,7 +16,7 @@ export class UserRepository extends Repository<User> {
     return this.findOneBy({ socialId, socialType });
   }
 
-  async findById(id: number) {
-    return this.findOneBy({ id });
+  findByUsername(username: string) {
+    return this.findOneBy({ username });
   }
 }
