@@ -1,7 +1,7 @@
 name: Frontend Dev CD
 run-name: ${{ github.actor }}가 실행함
 on:
-  push:
+  pull_request:
     branches:
       - develop
     paths:
@@ -71,7 +71,7 @@ jobs:
 
             cd web13-moyeomoyeo
 
-            git checkout -t origin/develop
+            git checkout -t origin/fix/120-frontend-https-deploy
 
             sudo chmod +x ./frontend/scripts/dev-deploy.sh
 
