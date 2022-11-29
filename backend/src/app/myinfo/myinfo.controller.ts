@@ -1,4 +1,4 @@
-import { Controller, Get, HttpStatus, Put } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Put } from '@nestjs/common';
 import { JwtAuth } from '@src/common/decorator/jwt-auth.decorator';
 import { MyInfoService } from '@app/myinfo/myinfo.service';
 import { ApiTags } from '@nestjs/swagger';
@@ -7,6 +7,9 @@ import { MyInfoGetResponse } from '@app/myinfo/dto/myinfo-get-response.dto';
 import { ResponseEntity } from '@src/common/response-entity';
 import { CurrentUser } from '@src/common/decorator/current-user.decorator';
 import { User } from '@app/user/entity/user.entity';
+import { ProfileModifyingRequest } from '@app/myinfo/dto/profile-modifying-request.dto';
+import { ApiErrorResponse } from '@src/common/decorator/api-error-response.decorator';
+import { UserNameDuplicateException } from './exception/username-duplicate.exception';
 
 @Controller('/my-info')
 @JwtAuth()
@@ -14,15 +17,25 @@ import { User } from '@app/user/entity/user.entity';
 export class MyInfoController {
   constructor(private readonly myInfoService: MyInfoService) {}
 
-  @Get()
+  @Get('/')
   @ApiSuccessResponse(HttpStatus.OK, MyInfoGetResponse)
   async getMyInfo(@CurrentUser() user: User) {
     const data = MyInfoGetResponse.from(user);
     return ResponseEntity.OK_WITH_DATA(data);
   }
 
-  @Put()
-  modifyMyInfo() {
-    return '';
+  @Put('/')
+  @ApiSuccessResponse(HttpStatus.NO_CONTENT)
+  @ApiErrorResponse(UserNameDuplicateException)
+  async modifyProfile(
+    @CurrentUser() user: User,
+    @Body() profileModifyingRequest: ProfileModifyingRequest,
+  ) {
+    await this.myInfoService.modifyProfile(
+      user.id,
+      user.userName,
+      profileModifyingRequest,
+    );
+    return ResponseEntity.NO_CONTENT();
   }
 }
