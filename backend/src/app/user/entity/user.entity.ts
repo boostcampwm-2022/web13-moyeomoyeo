@@ -64,4 +64,24 @@ export class User {
     user.userName = randomUUID();
     return user;
   }
+
+  updateProfile({
+    userName,
+    profileImage,
+    description,
+    blogUrl,
+    githubUrl,
+  }: {
+    userName: string;
+    profileImage: string;
+    description: string;
+    blogUrl: string;
+    githubUrl: string;
+  }) {
+    this.userName = userName;
+    this.profileImage = profileImage;
+    this.blogUrl = blogUrl;
+    this.description = description;
+    this.githubUrl = githubUrl;
+  }
 }

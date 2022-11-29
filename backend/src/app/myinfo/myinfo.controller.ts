@@ -31,11 +31,7 @@ export class MyInfoController {
     @CurrentUser() user: User,
     @Body() profileModifyingRequest: ProfileModifyingRequest,
   ) {
-    await this.myInfoService.modifyProfile(
-      user.id,
-      user.userName,
-      profileModifyingRequest,
-    );
+    await this.myInfoService.updateProfile(user, profileModifyingRequest);
     return ResponseEntity.NO_CONTENT();
   }
 }
