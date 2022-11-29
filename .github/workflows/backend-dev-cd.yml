@@ -1,7 +1,7 @@
 name: Backend Dev CD
 run-name: ${{ github.actor }}가 실행함
 on:
-  push:
+  pull_request:
     branches:
       - develop
     paths:
@@ -54,7 +54,7 @@ jobs:
         run: echo ${{ steps.docker_build.outputs.digest }}
 
   CD:
-    needs: [ Register-Docker-Image ]
+    needs: [Register-Docker-Image]
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -76,14 +76,14 @@ jobs:
 
             cd web13-moyeomoyeo
 
-            git checkout -t origin/develop
-            
+            git checkout -t origin/fix/123-backend-https-deploy
+
             sudo chmod +x ./backend/scripts/dev-deploy.sh
 
             ./backend/scripts/dev-deploy.sh ${{ secrets.NCP_ACCESS_KEY }} ${{ secrets.NCP_SECRET_KEY }} ${{ secrets.NCP_DOCKER_REGISTRY }} ${{ secrets.BACKEND_DEVELOPMENT_ENVIRONMENT }}
 
   slack-notifications:
-    needs: [ Register-Docker-Image, CD ]
+    needs: [Register-Docker-Image, CD]
     if: ${{ always() }}
     uses: ./.github/workflows/slack-notification.yml
     with:
