@@ -4,7 +4,8 @@ import { ResponseEntity } from '@common/response-entity';
 import { AuthModule } from '@app/auth/auth.module';
 import { ImageModule } from '@app/image/image.module';
 import { GroupArticleModule } from '@app/group-article/group-article.module';
-import { UserModule } from './app/user/user.module';
+import { UserModule } from '@app/user/user.module';
+import { MyInfoModule } from '@app/myinfo/myinfo.module';
 
 export const setSwagger = (app: INestApplication) => {
   const config = new DocumentBuilder()
@@ -19,7 +20,7 @@ export const setSwagger = (app: INestApplication) => {
     .build();
 
   const document = SwaggerModule.createDocument(app, config, {
-    include: [AuthModule, ImageModule, GroupArticleModule, UserModule],
+    include: [AuthModule, ImageModule, GroupArticleModule, UserModule, MyInfoModule],
     extraModels: [ResponseEntity],
   });
 
