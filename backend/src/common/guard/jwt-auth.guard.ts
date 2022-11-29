@@ -31,7 +31,7 @@ export class JwtAuthGuard implements CanActivate {
 
         const user = await this.dataSource
           .getRepository(User)
-          .findOneBy({ id: authTokenPayload.userId });
+          .findOneBy({ id: authTokenPayload.userId, deletedAt: null });
 
         if (!user) throw new Error('유저가 존재하지 않습니다');
 
@@ -48,7 +48,7 @@ export class JwtAuthGuard implements CanActivate {
 
         const user = await this.dataSource
           .getRepository(User)
-          .findOneBy({ id: authTokenPayload.userId });
+          .findOneBy({ id: authTokenPayload.userId, deletedAt: null });
 
         if (!user) throw new Error('Not Found User');
 

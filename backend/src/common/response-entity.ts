@@ -24,6 +24,10 @@ export class ResponseEntity<T> {
     return new ResponseEntity<T>('CREATED', '', data);
   }
 
+  static NO_CONTENT() {
+    return new ResponseEntity<string>('NO_CONTENT', '', '');
+  }
+
   static ERROR() {
     return new ResponseEntity<string>(
       'INTERNAL_SERVER_ERROR',
