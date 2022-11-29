@@ -15,9 +15,9 @@ export class GroupApplicationService {
   ) {}
 
   async attendGroup(userId: number, groupId: number) {
-    await this.validateRegister(userId, groupId);
     const article = await this.validateGroupId(groupId);
     this.validateUserTarget(userId, article.userId);
+    await this.validateRegister(userId, groupId);
 
     const groupApplication = GroupApplication.create(userId, groupId);
     return this.groupApplicationRepository.save(groupApplication);
