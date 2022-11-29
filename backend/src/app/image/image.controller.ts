@@ -6,7 +6,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { ApiSuccessResponse } from '@src/common/decorator/api-success-resposne.decorator';
 import { ResponseEntity } from '@src/common/response-entity';
 import { ImagesUploadResponse } from '@app/image/dto/images-upload-response.dto';
@@ -18,8 +18,23 @@ export class ImageController {
   constructor(private readonly imageService: ImageService) {}
 
   @Post('upload')
-  @UseInterceptors(FilesInterceptor('files'))
   @ApiSuccessResponse(HttpStatus.CREATED, ImagesUploadResponse)
+  @UseInterceptors(FilesInterceptor('files'))
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        files: {
+          type: 'array',
+          items: {
+            type: 'string',
+            format: 'binary',
+          },
+        },
+      },
+    },
+  })
   async uploadImage(@UploadedFiles() files: Array<Express.Multer.File>) {
     const { keyList, urlList } = this.imageService.uploadImage(files);
     const data = keyList.map(
