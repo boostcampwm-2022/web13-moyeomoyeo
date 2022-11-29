@@ -18,7 +18,7 @@ import { UserType } from '@typings/types';
  */
 
 const MyEditPage = () => {
-  const { data: myData } = useFetchMyInfo();
+  const { data: myProfile } = useFetchMyInfo();
 
   const [userDataInput, setUserDataInput] = useState<Omit<UserType, 'id'>>({
     userName: '',
@@ -29,18 +29,18 @@ const MyEditPage = () => {
   });
 
   useEffect(() => {
-    if (myData) {
-      const { id, ...rest } = myData;
+    if (myProfile) {
+      const { id, ...rest } = myProfile;
       setUserDataInput({ ...rest });
     }
-  }, [myData]);
+  }, [myProfile]);
 
   const handleUserDataChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUserDataInput((prev) => ({ ...prev, [name]: value }));
   };
 
-  if (!myData) return null;
+  if (!myProfile) return null;
 
   return (
     <PageLayout>
@@ -53,10 +53,10 @@ const MyEditPage = () => {
         }
       />
       <ProfileImageSection>
-        {!myData ? (
+        {!myProfile ? (
           <Skeleton height={120} circle />
         ) : (
-          <ProfileImage src={myData.profileImage} alt="profile-image" width={120} height={120} />
+          <ProfileImage src={myProfile.profileImage} alt="profile-image" width={120} height={120} />
         )}
       </ProfileImageSection>
       <InputsSections>
