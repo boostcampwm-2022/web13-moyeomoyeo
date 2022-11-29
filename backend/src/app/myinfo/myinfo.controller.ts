@@ -9,7 +9,7 @@ import { CurrentUser } from '@src/common/decorator/current-user.decorator';
 import { User } from '@app/user/entity/user.entity';
 import { ProfileModifyingRequest } from '@app/myinfo/dto/profile-modifying-request.dto';
 import { ApiErrorResponse } from '@src/common/decorator/api-error-response.decorator';
-import { UserNameDuplicateException } from './exception/username-duplicate.exception';
+import { UserNameDuplicateException } from '@app/myinfo/exception/username-duplicate.exception';
 
 @Controller('/my-info')
 @JwtAuth()
