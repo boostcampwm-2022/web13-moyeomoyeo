@@ -1,7 +1,7 @@
 name: Backend Dev CD
 run-name: ${{ github.actor }}가 실행함
 on:
-  pull_request:
+  push:
     branches:
       - develop
     paths:
@@ -76,7 +76,7 @@ jobs:
 
             cd web13-moyeomoyeo
 
-            git checkout -t origin/fix/123-backend-https-deploy
+            git checkout -t origin/develop
 
             sudo chmod +x ./backend/scripts/dev-deploy.sh
 
