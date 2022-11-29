@@ -87,6 +87,7 @@ export class GroupArticleController {
   }
 
   @Get('/:id')
+  @JwtAuth()
   @ApiSuccessResponse(HttpStatus.OK, GetGroupArticleDetailResponse)
   @ApiErrorResponse(GroupArticleNotFoundException)
   async getDetail(@Param('id', ParseIntPipe) id: number) {
