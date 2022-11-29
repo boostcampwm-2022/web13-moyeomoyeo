@@ -1,5 +1,4 @@
-import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
 import { useQueryClient } from '@tanstack/react-query';
 
@@ -8,8 +7,8 @@ import styled from '@emotion/styled';
 import { Checkbox, Select } from '@mantine/core';
 import { IconRefresh } from '@tabler/icons';
 
-import EmptyMessage from '@components/common/EmptyMessage';
-import GroupArticleCard from '@components/common/GroupArticleCard';
+import Test from '@components/Test';
+import ArticleList from '@components/article/ArticleList';
 import Header from '@components/common/Header';
 import RootTitle from '@components/common/Header/RootTitle';
 import NavigationTab from '@components/common/NavigationTab';
@@ -17,8 +16,7 @@ import PageLayout from '@components/common/PageLayout';
 import { Category, CategoryKr } from '@constants/category';
 import { Location, LocationKr } from '@constants/location';
 import { PAGE_TITLE } from '@constants/pageTitle';
-import useFetchGroupArticles from '@hooks/queries/useFetchGroupArticles';
-import useIntersect from '@hooks/useIntersect';
+import ApiErrorBoundary from '@error/ApiErrorBoundary';
 
 const Main = () => {
   const {
@@ -28,23 +26,6 @@ const Main = () => {
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
   const [progressChecked, setProgressChecked] = useState<boolean>(false);
-  const { data, fetchNextPage, hasNextPage, isFetching } = useFetchGroupArticles(
-    selectedCategory,
-    selectedLocation,
-    progressChecked
-  );
-
-  const ref = useIntersect((entry, observer) => {
-    observer.unobserve(entry.target);
-    if (hasNextPage && !isFetching) {
-      void fetchNextPage();
-    }
-  });
-
-  const articles = useMemo(
-    () => (data ? data.pages.flatMap(({ data }) => data.articles) : []),
-    [data]
-  );
 
   const refreshArticleList = () => {
     void queryClient.resetQueries(['articles']);
@@ -104,20 +85,13 @@ const Main = () => {
             <IconRefresh color={gray[6]} onClick={refreshArticleList} />
           </RefreshButton>
         </RefreshWrapper>
-        {articles.length ? (
-          <ArticleList>
-            {articles.map((article) => (
-              <Link key={article.id} href={`/article/${article.id}`}>
-                <div key={article.id}>
-                  <GroupArticleCard article={article} />
-                </div>
-              </Link>
-            ))}
-            <div ref={ref}></div>
-          </ArticleList>
-        ) : (
-          <EmptyMessage target="article" large />
-        )}
+        {/* TODO 테스트를 위해 작성, 추후 Test 제거 */}
+        <ApiErrorBoundary>
+          <Test />
+        </ApiErrorBoundary>
+        <ApiErrorBoundary>
+          <ArticleList />
+        </ApiErrorBoundary>
       </ContentWrapper>
     </PageLayout>
   );
@@ -164,10 +138,4 @@ const RefreshButton = styled.button`
   &:hover {
     cursor: pointer;
   }
-`;
-
-const ArticleList = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-gap: 1.3rem;
 `;

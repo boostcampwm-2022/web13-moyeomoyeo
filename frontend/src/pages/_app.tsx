@@ -4,12 +4,23 @@ import { useEffect, useState } from 'react';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { uuid } from 'uuidv4';
 
 import RouterTransition from '@components/common/RouterTransition';
+import ApiErrorBoundary from '@error/ApiErrorBoundary';
+import AuthErrorBoundary from '@error/AuthErrorBoundary';
+import ErrorBoundary from '@error/ErrorBoundary';
 import initMockApi from '@mocks/.';
 import CommonStyles from '@styles/CommonStyles';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      useErrorBoundary: true,
+      retry: false,
+    },
+  },
+});
 
 export default function App({ Component, pageProps }: AppProps) {
   const [shouldRender, setShouldRender] = useState<boolean>(false);
@@ -33,8 +44,14 @@ export default function App({ Component, pageProps }: AppProps) {
       <QueryClientProvider client={queryClient}>
         <ReactQueryDevtools initialIsOpen={false} />
         <CommonStyles>
-          <RouterTransition />
-          <Component {...pageProps} />
+          <ErrorBoundary key={uuid()}>
+            <AuthErrorBoundary>
+              <ApiErrorBoundary>
+                <RouterTransition />
+                <Component {...pageProps} />
+              </ApiErrorBoundary>
+            </AuthErrorBoundary>
+          </ErrorBoundary>
         </CommonStyles>
       </QueryClientProvider>
     </>
