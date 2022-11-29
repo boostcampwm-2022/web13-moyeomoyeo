@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString } from 'class-validator';
 
-export class NicknameUniqueRequest {
+export class UserNameUniqueRequest {
   @ApiProperty({
     example: 'pythonstrup',
     description: '유저 이름',

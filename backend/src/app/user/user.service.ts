@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UserRepository } from '@app/user/user.repository';
-import { UserNotFoundException } from './exception/user-not-found.exception';
+import { UserNotFoundException } from '@app/user/exception/user-not-found.exception';
 
 @Injectable()
 export class UserService {
