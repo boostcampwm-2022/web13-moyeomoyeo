@@ -18,7 +18,7 @@ import { UserType } from '@typings/types';
  */
 
 const MyEditPage = () => {
-  const { data: myData } = useFetchMyInfo(true);
+  const { data: myData } = useFetchMyInfo();
 
   const [userDataInput, setUserDataInput] = useState<Omit<UserType, 'id'>>({
     userName: '',

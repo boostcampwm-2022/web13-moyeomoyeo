@@ -19,7 +19,7 @@ const My = () => {
     colors: { red, cyan },
   } = useTheme();
 
-  const { data: myData, isLoading } = useFetchMyInfo(true);
+  const { data: myData, isLoading } = useFetchMyInfo();
 
   if (isLoading || !myData) return null;
 
