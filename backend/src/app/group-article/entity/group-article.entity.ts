@@ -59,7 +59,7 @@ export class GroupArticle extends Article {
       throw new NotAuthorException();
     }
 
-    this.group.stop();
+    this.group.cancel();
     this.deletedAt = new Date();
   }
 
@@ -77,7 +77,7 @@ export class GroupArticle extends Article {
     this.group.complete();
   }
 
-  stop(user: User) {
+  cancel(user: User) {
     if (!this.isAuthor(user)) {
       throw new NotAuthorException();
     }
@@ -88,7 +88,7 @@ export class GroupArticle extends Article {
       );
     }
 
-    this.group.stop();
+    this.group.cancel();
   }
 
   private isAuthor(user: User) {

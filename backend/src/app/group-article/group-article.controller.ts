@@ -75,6 +75,21 @@ export class GroupArticleController {
     await this.groupArticleService.complete(user, id);
   }
 
+  @Post('/:id/recruitment-cancel')
+  @JwtAuth()
+  @ApiSuccessResponse(HttpStatus.NO_CONTENT)
+  @ApiErrorResponse(
+    NotAuthorException,
+    GroupArticleNotFoundException,
+    NotProgressGroupException,
+  )
+  async cancel(
+    @CurrentUser() user: User,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    await this.groupArticleService.cancel(user, id);
+  }
+
   @Get('/categories')
   @ApiSuccessResponse(HttpStatus.OK, GroupCategoryResponse, { isArray: true })
   async getCategories() {

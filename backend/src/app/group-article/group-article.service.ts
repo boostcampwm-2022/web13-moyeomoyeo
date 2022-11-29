@@ -72,6 +72,23 @@ export class GroupArticleService {
     // TODO: 알림 추가 및 알림 발송
   }
 
+  async cancel(user: User, id: number) {
+    const groupArticle = await this.groupArticleRepository.findOneBy({
+      id,
+      deletedAt: null,
+    });
+
+    if (!groupArticle) {
+      throw new GroupArticleNotFoundException();
+    }
+
+    groupArticle.cancel(user);
+
+    await this.groupArticleRepository.save(groupArticle, { reload: false });
+
+    // TODO: 알림 추가 및 알림 발송
+  }
+
   async getDetailById(id: number) {
     const groupArticleDetail = await this.groupArticleRepository.getDetailById(
       id,
