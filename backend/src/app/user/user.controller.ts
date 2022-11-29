@@ -30,7 +30,7 @@ export class UserController {
   @ApiSuccessResponse(HttpStatus.OK, NicknameUniqueResponse)
   checkUsernameUnique(@Body() nicknameUniqueRequest: NicknameUniqueRequest) {
     const result = this.userService.checkUsernameUnique(
-      nicknameUniqueRequest.username,
+      nicknameUniqueRequest.userName,
     );
     const data = NicknameUniqueResponse.from(result);
     return ResponseEntity.OK_WITH_DATA(data);

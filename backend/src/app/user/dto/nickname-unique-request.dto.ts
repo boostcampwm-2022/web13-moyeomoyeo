@@ -8,5 +8,5 @@ export class NicknameUniqueRequest {
     required: true,
   })
   @IsString()
-  username: string;
+  userName: string;
 }

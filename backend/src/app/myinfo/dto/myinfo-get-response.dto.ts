@@ -11,10 +11,10 @@ export class MyInfoGetResponse {
 
   @ApiProperty({
     example: 'pythonstrup',
-    description: 'username',
+    description: 'userName',
     required: true,
   })
-  username: string;
+  userName: string;
 
   @ApiProperty({
     example:
@@ -48,7 +48,7 @@ export class MyInfoGetResponse {
   static from(user: User) {
     const response = new User();
     response.id = user.id;
-    response.username = user.username;
+    response.userName = user.userName;
     response.profileImage = user.profileImage;
     response.description = user.description;
     response.githubUrl = user.githubUrl;

@@ -6,8 +6,8 @@ import { UserNotFoundException } from './exception/user-not-found.exception';
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
-  checkUsernameUnique(username: string) {
-    return this.userRepository.findByUsername(username) ? false : true;
+  checkUsernameUnique(userName: string) {
+    return this.userRepository.findByUsername(userName) ? false : true;
   }
 
   async findUserById(id: number) {
