@@ -7,6 +7,7 @@ import { GithubProfile } from '@app/auth/type/github-profile';
 import { AuthService } from '@app/auth/auth.service';
 import { JwtTokenService } from '@common/module/jwt-token/jwt-token.service';
 import { GithubConfigService } from '@config/github/config.service';
+import { CookieConfigService } from '@config/cookie/config.service';
 
 @Controller('/auth')
 @ApiTags('Auth')
@@ -15,6 +16,7 @@ export class AuthController {
     private readonly authService: AuthService,
     private readonly jwtTokenService: JwtTokenService,
     private readonly githubConfigService: GithubConfigService,
+    private readonly cookieConfigService: CookieConfigService,
   ) {}
 
   @Get('/github/login')
@@ -45,10 +47,14 @@ export class AuthController {
     response.cookie('access_token', accessToken, {
       httpOnly: true,
       expires: new Date(accessTokenExpires * 1000),
+      secure: this.cookieConfigService.secure,
+      sameSite: this.cookieConfigService.sameSite,
     });
     response.cookie('refresh_token', refreshToken, {
       httpOnly: true,
       expires: new Date(refreshTokenExpires * 1000),
+      secure: this.cookieConfigService.secure,
+      sameSite: this.cookieConfigService.sameSite,
     });
 
     response.redirect(this.githubConfigService.redirectUrl);
