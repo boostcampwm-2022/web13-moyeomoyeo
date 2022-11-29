@@ -1,10 +1,9 @@
 import getTestMyData from '@apis/test/getTestMyData';
+import useGeneralQuery from '@hooks/useGeneralQuery';
 import { UserType } from '@typings/types';
 
-import useCustomQuery from '../useCustomQuery';
-
 const useFetchMyData = () => {
-  const { data, isLoading } = useCustomQuery<UserType>(['myinfo'], getTestMyData, {
+  const { data, isLoading } = useGeneralQuery<UserType>(['myinfo'], getTestMyData, {
     select: (data) => data.data,
   });
 

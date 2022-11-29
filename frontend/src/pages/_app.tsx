@@ -16,7 +16,6 @@ import CommonStyles from '@styles/CommonStyles';
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      useErrorBoundary: true,
       retry: false,
     },
   },

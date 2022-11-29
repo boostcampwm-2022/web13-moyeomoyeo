@@ -4,7 +4,7 @@ import { AxiosError, AxiosResponse } from 'axios';
 
 import AuthError from '../components/common/ErrorBoundary/AuthError';
 
-const useCustomQuery = <T>(
+const useAuthQuery = <T>(
   queryKey: string[],
   fetchFunc: () => Promise<AxiosResponse<T>>,
   options?: Omit<
@@ -28,4 +28,4 @@ const useCustomQuery = <T>(
   return { data, isLoading, isFetching };
 };
 
-export default useCustomQuery;
+export default useAuthQuery;
