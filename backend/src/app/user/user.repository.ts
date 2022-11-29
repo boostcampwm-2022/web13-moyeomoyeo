@@ -13,15 +13,15 @@ export class UserRepository extends Repository<User> {
   }
 
   findBySocial(socialId: string, socialType: string) {
-    return this.findOneBy({ socialId, socialType });
+    return this.findOneBy({ socialId, socialType, deletedAt: null });
   }
 
   findByUsername(userName: string) {
-    return this.findOneBy({ userName });
+    return this.findOneBy({ userName, deletedAt: null });
   }
 
   findById(id: number) {
-    return this.findOneBy({ id });
+    return this.findOneBy({ id, deletedAt: null });
   }
 
   updateUser({

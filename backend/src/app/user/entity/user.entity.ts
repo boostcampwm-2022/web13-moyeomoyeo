@@ -12,7 +12,7 @@ export class User {
   @PrimaryGeneratedColumn({ unsigned: true })
   id: number;
 
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ type: 'varchar', length: 100, unique: true })
   userName: string;
 
   @Column({ type: 'varchar', length: 400, default: '' })
@@ -40,7 +40,7 @@ export class User {
   updatedAt: Date;
 
   @Column({ type: 'timestamp', nullable: true })
-  deletedAt: Date;
+  deletedAt: Date | null;
 
   static signup({
     socialId,
