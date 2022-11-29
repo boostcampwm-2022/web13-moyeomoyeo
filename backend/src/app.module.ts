@@ -9,6 +9,7 @@ import { JwtTokenModule } from '@common/module/jwt-token/jwt-token.module';
 import { AuthModule } from '@app/auth/auth.module';
 import { ImageModule } from '@app/image/image.module';
 import { GroupArticleModule } from '@app/group-article/group-article.module';
+import { MyInfoModule } from '@app/myinfo/myinfo.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { GroupArticleModule } from '@app/group-article/group-article.module';
     AuthModule,
     ImageModule,
     GroupArticleModule,
+    MyInfoModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { GroupArticleRegisterResquest } from '@app/group-article/dto/group-article-register-request.dto';
 import { GroupArticle } from '@app/group-article/entity/group-article.entity';
-import { GroupCategoryNotFound } from '@app/group-article/exception/group-category-not-found';
+import { GroupCategoryNotFoundException } from '@src/app/group-article/exception/group-category-not-found.exception';
 import { GroupCategoryRepository } from '@app/group-article/repository/group-category.repository';
 import { GroupArticleRepository } from '@app/group-article/repository/group-article.repository';
 
@@ -19,7 +19,7 @@ export class GroupArticleService {
       groupArticleRegisterResquest.category,
     );
     if (!category) {
-      throw new GroupCategoryNotFound();
+      throw new GroupCategoryNotFoundException();
     }
 
     const groupArticle = GroupArticle.register({

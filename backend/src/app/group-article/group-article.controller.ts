@@ -6,7 +6,7 @@ import { JwtAuth } from '@src/common/decorator/jwt-auth.decorator';
 import { ResponseEntity } from '@src/common/response-entity';
 import { GroupArticleRegisterResquest } from '@app/group-article/dto/group-article-register-request.dto';
 import { GroupArticleRegisterResponse } from '@app/group-article/dto/group-article-register-response.dto';
-import { GroupCategoryNotFound } from '@app/group-article/exception/group-category-not-found';
+import { GroupCategoryNotFoundException } from '@app/group-article/exception/group-category-not-found.exception';
 import { GroupArticleService } from '@app/group-article/group-article.service';
 import { GroupCategoryRepository } from '@app/group-article/repository/group-category.repository';
 import { GroupCategoryResponse } from '@app/group-article/dto/get-cateogories-response.dto';
@@ -41,7 +41,7 @@ export class GroupArticleController {
   @Post()
   @JwtAuth()
   @ApiSuccessResponse(HttpStatus.CREATED, GroupArticleRegisterResponse)
-  @ApiErrorResponse(GroupCategoryNotFound)
+  @ApiErrorResponse(GroupCategoryNotFoundException)
   async registerBoard(
     @Body() groupArticleRegisterResquest: GroupArticleRegisterResquest,
   ) {
