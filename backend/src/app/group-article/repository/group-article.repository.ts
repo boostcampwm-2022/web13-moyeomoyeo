@@ -8,6 +8,8 @@ import { Scrap } from '@app/scrap/entity/scrap.entity';
 import { Comment } from '@app/comment/entity/comment.entity';
 import { SearchGroupArticlesRequest } from '@app/group-article/dto/search-group-articles-request.dto';
 import { IGroupArticleSearchResult } from '@app/group-article/dto/group-article-search-result.interface';
+import { User } from '@app/user/entity/user.entity';
+import { IGroupArticleDetail } from '@app/group-article/dto/group-article-detail.interface';
 
 @Injectable()
 export class GroupArticleRepository extends Repository<GroupArticle> {
@@ -83,5 +85,48 @@ export class GroupArticleRepository extends Repository<GroupArticle> {
       .getRawMany<IGroupArticleSearchResult>();
 
     return [result, count];
+  }
+
+  async getDetailById(id: number) {
+    return this.createQueryBuilder('groupArticle')
+      .select([
+        'groupArticle.id as id',
+        'groupArticle.title as title',
+        'groupArticle.contents as contents',
+        'user.id as userId',
+        'user.user_name as userName',
+        'user.profile_image as userProfileImage',
+        'group.maxCapacity as maxCapacity',
+        'group.thumbnail as thumbnail',
+        'group.status as status',
+        'group.location as location',
+        'groupCategory.id as groupCategoryId',
+        'groupCategory.name as groupCategoryName',
+        'COUNT(DISTINCT scrap.id) as scrapCount',
+        'COUNT(DISTINCT comment.id) as commentCount',
+        'groupArticle.createdAt as createdAt',
+      ])
+      .leftJoin(Group, 'group', 'groupArticle.id = group.article_id')
+      .leftJoin(
+        User,
+        'user',
+        'groupArticle.userId = user.id AND user.deletedAt IS NULL',
+      )
+      .leftJoin(
+        GroupCategory,
+        'groupCategory',
+        'groupCategory.id = group.category.id AND groupCategory.deletedAt IS NULL',
+      )
+
+      .leftJoin(
+        Comment,
+        'comment',
+        'groupArticle.id = comment.articleId AND comment.deletedAt IS NULL',
+      )
+      .leftJoin(Scrap, 'scrap', 'groupArticle.id = scrap.articleId')
+      .where('groupArticle.id = :id', { id })
+      .andWhere('groupArticle.deletedAt IS NULL')
+      .groupBy('groupArticle.id')
+      .getRawOne<IGroupArticleDetail>();
   }
 }
