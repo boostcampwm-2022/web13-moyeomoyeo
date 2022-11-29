@@ -25,7 +25,7 @@ export function ApiSuccessResponse(
   return applyDecorators(
     HttpCode(status),
     ApiResponse({
-      type: dataType && Temp,
+      type: HttpStatus.NO_CONTENT === status ? undefined : dataType && Temp,
       status,
       description: HttpStatus[status],
     }),
