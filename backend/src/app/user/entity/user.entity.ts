@@ -13,7 +13,7 @@ export class User {
   id: number;
 
   @Column({ type: 'varchar', length: 100 })
-  username: string;
+  userName: string;
 
   @Column({ type: 'varchar', length: 400, default: '' })
   profileImage: string;
@@ -61,7 +61,7 @@ export class User {
     user.blogUrl = blogUrl;
     user.socialType = socialType;
     user.profileImage = profileImage;
-    user.username = randomUUID();
+    user.userName = randomUUID();
     return user;
   }
 }

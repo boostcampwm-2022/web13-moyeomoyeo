@@ -5,10 +5,9 @@ import { PassportModule } from '@nestjs/passport';
 import { GithubConfigModule } from '@config/github/config.module';
 import { GithubStrategy } from '@app/auth/github.strategy';
 import { UserModule } from '@app/user/user.module';
-import { JwtTokenModule } from '@common/module/jwt-token/jwt-token.module';
 
 @Module({
-  imports: [UserModule, JwtTokenModule, PassportModule, GithubConfigModule],
+  imports: [UserModule, PassportModule, GithubConfigModule],
   controllers: [AuthController],
   providers: [AuthService, GithubStrategy],
 })

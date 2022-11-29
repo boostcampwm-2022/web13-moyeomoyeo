@@ -54,7 +54,6 @@ export class GroupArticleController {
   }
 
   @Get('/search')
-  @JwtAuth()
   @ApiSuccessResponse(HttpStatus.OK, SearchGroupArticleResponse)
   async search(@Query() query: SearchGroupArticlesRequest) {
     const result = await this.groupArticleRepository.search(query);

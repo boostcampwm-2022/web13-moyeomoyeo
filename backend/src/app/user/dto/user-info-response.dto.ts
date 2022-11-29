@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { User } from '@src/app/user/entity/user.entity';
+import { User } from '@app/user/entity/user.entity';
 
-export class MyInfoGetResponse {
+export class UserInfoResopnse {
   @ApiProperty({
     example: 1,
     description: 'user id',
