@@ -4,8 +4,7 @@ import axios, { AxiosError } from 'axios';
 import { ApiResponse, UserType } from '@typings/types';
 
 /**
- * 로그인 시 유저정보를 반환하며
- * redirect = true 인 경우 로그인 페이지로 리다이렉션 처리
+ * 로그인 한 유저의 유저정보를 반환
  */
 
 const useFetchMyInfo = () => {
