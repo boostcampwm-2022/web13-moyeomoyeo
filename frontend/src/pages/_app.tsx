@@ -7,9 +7,9 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { uuid } from 'uuidv4';
 
 import RouterTransition from '@components/common/RouterTransition';
-import ApiErrorBoundary from '@error/ApiErrorBoundary';
-import AuthErrorBoundary from '@error/AuthErrorBoundary';
-import ErrorBoundary from '@error/ErrorBoundary';
+import ApiErrorBoundary from '@components/error/ApiErrorBoundary';
+import AuthErrorBoundary from '@components/error/AuthErrorBoundary';
+import ErrorBoundary from '@components/error/ErrorBoundary';
 import initMockApi from '@mocks/.';
 import CommonStyles from '@styles/CommonStyles';
 
