@@ -9,7 +9,7 @@ import useFetchMyInfo from '@hooks/queries/useFetchMyInfo';
 /**
  * FloatingButton과
  * FloatingButton을 눌렀을 때 나오는 Item들
- * Item 별로 필요한 로직들을 정의한다.
+ * Item 별로 필요한 로직들을 정의한다
  */
 
 const FloatingUtilButton = () => {
