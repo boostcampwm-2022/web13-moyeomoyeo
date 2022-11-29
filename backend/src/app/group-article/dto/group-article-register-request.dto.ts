@@ -1,17 +1,18 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsString } from 'class-validator';
+import { IsEnum, IsNumber, IsString, Length, Min } from 'class-validator';
 import {
   CATEGORY,
   LOCATION,
 } from '@app/group-article/constants/group-article.constants';
 
-export class GroupArticleRegisterResquest {
+export class GroupArticleRegisterRequest {
   @ApiProperty({
     example: 'CS 스터디 모집',
     description: '모집게시글 제목',
     required: true,
   })
   @IsString()
+  @Length(1, 100)
   title: string;
 
   @ApiProperty({
@@ -46,6 +47,8 @@ export class GroupArticleRegisterResquest {
     description: '모임의 최대 인원을 몇 명으로 할 것인지 정할 수 있다.',
     required: true,
   })
+  @IsNumber()
+  @Min(2)
   maxCapacity: number;
 
   @ApiProperty({

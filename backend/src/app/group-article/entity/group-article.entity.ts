@@ -6,6 +6,7 @@ import {
   ARTICLE,
   LOCATION,
 } from '@app/group-article/constants/group-article.constants';
+import { User } from '@app/user/entity/user.entity';
 
 @ChildEntity(ARTICLE.GROUP)
 export class GroupArticle extends Article {
@@ -15,28 +16,32 @@ export class GroupArticle extends Article {
   })
   group: Group;
 
-  static register({
-    title,
-    contents,
-    thumbnail,
-    location,
-    chatUrl,
-    maxCapacity,
-    category,
-  }: {
-    title: string;
-    contents: string;
-    thumbnail: string;
-    location: LOCATION;
-    chatUrl: string;
-    maxCapacity: number;
-    category: GroupCategory;
-  }) {
+  static create(
+    user: User,
+    {
+      title,
+      contents,
+      thumbnail,
+      location,
+      chatUrl,
+      maxCapacity,
+      category,
+    }: {
+      title: string;
+      contents: string;
+      thumbnail: string;
+      location: LOCATION;
+      chatUrl: string;
+      maxCapacity: number;
+      category: GroupCategory;
+    },
+  ) {
     const article = new GroupArticle();
     article.title = title;
     article.contents = contents;
     article.type = ARTICLE.GROUP;
-    article.group = Group.register({
+    article.user = Promise.resolve(user);
+    article.group = Group.create({
       location,
       chatUrl,
       maxCapacity,
@@ -44,9 +49,5 @@ export class GroupArticle extends Article {
       thumbnail,
     });
     return article;
-  }
-
-  delete() {
-    this.deletedAt = new Date();
   }
 }

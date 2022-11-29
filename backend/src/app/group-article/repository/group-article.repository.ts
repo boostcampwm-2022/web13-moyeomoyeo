@@ -55,8 +55,7 @@ export class GroupArticleRepository extends Repository<GroupArticle> {
       )
       .leftJoin(Scrap, 'scrap', 'groupArticle.id = scrap.articleId')
       .where('groupArticle.deletedAt IS NULL')
-      .groupBy('groupArticle.id')
-      .orderBy('groupArticle.id', 'DESC');
+      .groupBy('groupArticle.id');
 
     if (searchRequest.location) {
       query.andWhere('group.location = :location', {
@@ -78,6 +77,7 @@ export class GroupArticleRepository extends Repository<GroupArticle> {
 
     const count = await query.clone().getCount();
     const result = await query
+      .orderBy('groupArticle.id', 'DESC')
       .limit(searchRequest.getLimit())
       .offset(searchRequest.getOffset())
       .getRawMany<IGroupArticleSearchResult>();
