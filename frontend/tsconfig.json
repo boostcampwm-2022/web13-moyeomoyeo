@@ -32,7 +32,6 @@
       "@public/*": ["public/*"],
       "@constants/*": ["src/constants/*"],
       "@utils/*": ["src/utils/*"],
-      "@error/*": ["src/error/*"]
     }
   },
   "include": ["custom.d.ts", "next-env.d.ts", "**/*.ts", "**/*.tsx", ".storybook/**/*.tsx"],

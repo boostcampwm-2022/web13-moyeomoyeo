@@ -6,10 +6,10 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { uuid } from 'uuidv4';
 
+import ApiErrorBoundary from '@components/common/ErrorBoundary/ApiErrorBoundary';
+import AuthErrorBoundary from '@components/common/ErrorBoundary/AuthErrorBoundary';
+import ErrorBoundary from '@components/common/ErrorBoundary/ErrorBoundary';
 import RouterTransition from '@components/common/RouterTransition';
-import ApiErrorBoundary from '@components/error/ApiErrorBoundary';
-import AuthErrorBoundary from '@components/error/AuthErrorBoundary';
-import ErrorBoundary from '@components/error/ErrorBoundary';
 import initMockApi from '@mocks/.';
 import CommonStyles from '@styles/CommonStyles';
 

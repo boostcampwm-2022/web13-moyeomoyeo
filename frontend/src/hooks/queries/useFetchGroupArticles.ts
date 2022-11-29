@@ -6,7 +6,7 @@ import { Category } from '@constants/category';
 import { Location } from '@constants/location';
 import { ArticleType } from '@typings/types';
 
-import AuthError from '../../components/error/AuthError';
+import AuthError from '../../components/common/ErrorBoundary/AuthError';
 
 interface ArticleResponseType {
   articles: ArticleType[];

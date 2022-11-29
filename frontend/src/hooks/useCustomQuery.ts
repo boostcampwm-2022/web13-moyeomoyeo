@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { UseQueryOptions } from '@tanstack/react-query/src/types';
 import { AxiosError, AxiosResponse } from 'axios';
 
-import AuthError from '../components/error/AuthError';
+import AuthError from '../components/common/ErrorBoundary/AuthError';
 
 const useCustomQuery = <T>(
   queryKey: string[],

@@ -9,11 +9,11 @@ import { IconRefresh } from '@tabler/icons';
 
 import Test from '@components/Test';
 import ArticleList from '@components/article/ArticleList';
+import ApiErrorBoundary from '@components/common/ErrorBoundary/ApiErrorBoundary';
 import Header from '@components/common/Header';
 import RootTitle from '@components/common/Header/RootTitle';
 import NavigationTab from '@components/common/NavigationTab';
 import PageLayout from '@components/common/PageLayout';
-import ApiErrorBoundary from '@components/error/ApiErrorBoundary';
 import { Category, CategoryKr } from '@constants/category';
 import { Location, LocationKr } from '@constants/location';
 import { PAGE_TITLE } from '@constants/pageTitle';
