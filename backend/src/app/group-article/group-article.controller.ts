@@ -4,7 +4,7 @@ import { ApiErrorResponse } from '@src/common/decorator/api-error-response.decor
 import { ApiSuccessResponse } from '@src/common/decorator/api-success-resposne.decorator';
 import { JwtAuth } from '@src/common/decorator/jwt-auth.decorator';
 import { ResponseEntity } from '@src/common/response-entity';
-import { GroupArticleRegisterResquest } from '@app/group-article/dto/group-article-register-request.dto';
+import { GroupArticleRegisterRequest } from '@app/group-article/dto/group-article-register-request.dto';
 import { GroupArticleRegisterResponse } from '@app/group-article/dto/group-article-register-response.dto';
 import { GroupCategoryNotFoundException } from '@app/group-article/exception/group-category-not-found.exception';
 import { GroupArticleService } from '@app/group-article/group-article.service';
@@ -15,6 +15,8 @@ import { SearchGroupArticlesRequest } from '@app/group-article/dto/search-group-
 import { SearchGroupArticleResponse } from '@app/group-article/dto/search-group-articles-response.dto';
 import { GroupArticleSearchResult } from '@app/group-article/dto/group-article-search-result.dto';
 import { ImageService } from '@app/image/image.service';
+import { CurrentUser } from '@decorator/current-user.decorator';
+import { User } from '@app/user/entity/user.entity';
 
 @Controller('group-articles')
 @ApiTags('Group-Article')
@@ -38,19 +40,22 @@ export class GroupArticleController {
     );
   }
 
-  @Post()
+  @Post('/')
   @JwtAuth()
   @ApiSuccessResponse(HttpStatus.CREATED, GroupArticleRegisterResponse)
   @ApiErrorResponse(GroupCategoryNotFoundException)
-  async registerBoard(
-    @Body() groupArticleRegisterResquest: GroupArticleRegisterResquest,
+  async createGroupArticle(
+    @CurrentUser() user: User,
+    @Body() groupArticleRegisterRequest: GroupArticleRegisterRequest,
   ) {
     const article = await this.groupArticleService.registerGroupArticle(
-      groupArticleRegisterResquest,
+      user,
+      groupArticleRegisterRequest,
     );
-    const data = GroupArticleRegisterResponse.from(article);
 
-    return ResponseEntity.CREATED_WITH_DATA(data);
+    return ResponseEntity.CREATED_WITH_DATA(
+      GroupArticleRegisterResponse.from(article),
+    );
   }
 
   @Get('/search')

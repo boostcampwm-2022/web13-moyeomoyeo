@@ -49,7 +49,7 @@ export class Group {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  static register({
+  static create({
     location,
     chatUrl,
     maxCapacity,
