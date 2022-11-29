@@ -27,13 +27,13 @@ HomeRootNotLogin.args = {
 export const HomeRootLogin = Template.bind({});
 HomeRootLogin.args = {
   leftNode: <Logo />,
-  rightNode: <UserLoginItem authorized />,
+  rightNode: <UserLoginItem />,
 };
 
 export const OtherRootLogin = Template.bind({});
 OtherRootLogin.args = {
   leftNode: <RootTitle title="모임게시판" subTitle="다양한 소모임을 위한 게시판" />,
-  rightNode: <UserLoginItem authorized />,
+  rightNode: <UserLoginItem />,
 };
 
 export const OtherRootNotLogin = Template.bind({});

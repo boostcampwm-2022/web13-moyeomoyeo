@@ -12,6 +12,7 @@ import EmptyMessage from '@components/common/EmptyMessage';
 import GroupArticleCard from '@components/common/GroupArticleCard';
 import Header from '@components/common/Header';
 import RootTitle from '@components/common/Header/RootTitle';
+import UserLoginItem from '@components/common/Header/UserLoginItem';
 import NavigationTab from '@components/common/NavigationTab';
 import PageLayout from '@components/common/PageLayout';
 import { Category, CategoryKr } from '@constants/category';
@@ -57,6 +58,7 @@ const Main = () => {
           leftNode={
             <RootTitle title={PAGE_TITLE.ARTICLE.title} subTitle={PAGE_TITLE.ARTICLE.subTitle} />
           }
+          rightNode={<UserLoginItem />}
         />
       }
       footer={<NavigationTab />}
