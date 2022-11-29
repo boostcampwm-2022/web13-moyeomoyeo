@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 import { useTheme } from '@emotion/react';
 import styled from '@emotion/styled';
 import { Button } from '@mantine/core';
@@ -34,19 +36,23 @@ const My = () => {
           </Button>
         </ProfileWrapper>
         <LinkButtonWrapper>
-          <LinkButton>
-            <WroteIcon>
-              <IconPencil width={14} height={14} color={red[7]} />
-            </WroteIcon>
-            <ButtonTitle>내가 작성한 모임</ButtonTitle>
-          </LinkButton>
+          <Link href="/my/participate">
+            <LinkButton>
+              <WroteIcon>
+                <IconPencil width={14} height={14} color={red[7]} />
+              </WroteIcon>
+              <ButtonTitle>내가 작성한 모임</ButtonTitle>
+            </LinkButton>
+          </Link>
           <Divider />
-          <LinkButton>
-            <ParticipatedIcon>
-              <IconFlag width={14} height={14} color={cyan[7]} />
-            </ParticipatedIcon>
-            <ButtonTitle>내가 참여한 모임 </ButtonTitle>
-          </LinkButton>
+          <Link href="/my/participate">
+            <LinkButton>
+              <ParticipatedIcon>
+                <IconFlag width={14} height={14} color={cyan[7]} />
+              </ParticipatedIcon>
+              <ButtonTitle>내가 참여한 모임 </ButtonTitle>
+            </LinkButton>
+          </Link>
         </LinkButtonWrapper>
       </ContentWrapper>
     </PageLayout>
