@@ -20,7 +20,13 @@ export const setSwagger = (app: INestApplication) => {
     .build();
 
   const document = SwaggerModule.createDocument(app, config, {
-    include: [AuthModule, ImageModule, GroupArticleModule, UserModule, MyInfoModule],
+    include: [
+      AuthModule,
+      ImageModule,
+      GroupArticleModule,
+      UserModule,
+      MyInfoModule,
+    ],
     extraModels: [ResponseEntity],
   });
 

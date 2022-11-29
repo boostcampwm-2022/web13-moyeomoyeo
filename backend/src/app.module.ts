@@ -12,7 +12,6 @@ import { GroupArticleModule } from '@app/group-article/group-article.module';
 import { UserModule } from '@app/user/user.module';
 import { MyInfoModule } from '@app/myinfo/myinfo.module';
 
-
 @Module({
   imports: [
     AppConfigModule,
