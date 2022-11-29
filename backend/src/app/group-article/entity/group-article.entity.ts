@@ -55,11 +55,11 @@ export class GroupArticle extends Article {
   }
 
   remove(user: User) {
-    if (this.userId !== user.id) {
+    if (!this.isAuthor(user)) {
       throw new NotAuthorException();
     }
 
-    this.group.status = GROUP_STATUS.FAIL;
+    this.group.stop();
     this.deletedAt = new Date();
   }
 
@@ -74,7 +74,7 @@ export class GroupArticle extends Article {
       );
     }
 
-    this.group.status = GROUP_STATUS.SUCCEED;
+    this.group.complete();
   }
 
   private isAuthor(user: User) {

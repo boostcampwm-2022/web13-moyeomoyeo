@@ -72,4 +72,12 @@ export class Group {
 
     return group;
   }
+
+  stop() {
+    this.status = GROUP_STATUS.FAIL;
+  }
+
+  complete() {
+    this.status = GROUP_STATUS.SUCCEED;
+  }
 }
