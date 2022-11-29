@@ -70,11 +70,25 @@ export class GroupArticle extends Article {
 
     if (this.group.status !== GROUP_STATUS.PROGRESS) {
       throw new NotProgressGroupException(
-        '모집중인 게시글만 모집완료 처리할 수 있습니다',
+        '모집중인 게시글만 모집완료할 수 있습니다',
       );
     }
 
     this.group.complete();
+  }
+
+  stop(user: User) {
+    if (!this.isAuthor(user)) {
+      throw new NotAuthorException();
+    }
+
+    if (this.group.status !== GROUP_STATUS.PROGRESS) {
+      throw new NotProgressGroupException(
+        '모집중인 게시글만 모집중단할 수 있습니다',
+      );
+    }
+
+    this.group.stop();
   }
 
   private isAuthor(user: User) {
