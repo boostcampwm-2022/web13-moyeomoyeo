@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsString } from 'class-validator';
 
 export class NicknameUniqueRequest {
   @ApiProperty({
@@ -6,5 +7,6 @@ export class NicknameUniqueRequest {
     description: '유저 이름',
     required: true,
   })
+  @IsString()
   username: string;
 }
