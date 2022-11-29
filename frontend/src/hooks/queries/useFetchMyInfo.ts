@@ -25,8 +25,8 @@ const useFetchMyInfo = (redirect = false) => {
 
   useEffect(() => {
     if (redirect && !isLoading && !data) {
-      void router.push('/login');
       alert('로그인이 필요합니다.');
+      void router.push('/login');
     }
   }, [redirect, data, isLoading]);
 

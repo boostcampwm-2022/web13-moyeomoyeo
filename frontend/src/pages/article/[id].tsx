@@ -18,13 +18,17 @@ import { dummyArticle, dummyParticipants } from '@constants/dummy';
 import { LocationKr } from '@constants/location';
 import { PAGE_TITLE } from '@constants/pageTitle';
 import { ParticipateButtonStatus } from '@constants/participateButton';
+import useFetchMyInfo from '@hooks/queries/useFetchMyInfo';
 import { getCommonBadgeColor, getStatusBadgeColor } from '@utils/colors';
 
 const ArticleDetail = () => {
   const {
     colors: { indigo, gray },
   } = useTheme();
+
   const [participantsModalOpen, setParticipantsModalOpen] = useState<boolean>(false);
+
+  useFetchMyInfo(true);
 
   const {
     authorName,

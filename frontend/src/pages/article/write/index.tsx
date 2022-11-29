@@ -15,6 +15,7 @@ import PageLayout from '@components/common/PageLayout';
 import TextInput from '@components/common/TextInput';
 import { Category, CategoryKr } from '@constants/category';
 import { Location, LocationKr } from '@constants/location';
+import useFetchMyInfo from '@hooks/queries/useFetchMyInfo';
 
 /**
  * Todo
@@ -31,6 +32,8 @@ const WritePage = () => {
   const [content, setContent] = useState('');
   const [chatLink, setChatLink] = useState('');
   const [uploadedImage, setUploadedImage] = useState<File | null>(null);
+
+  useFetchMyInfo(true);
 
   const possibleToSubmit =
     category &&
