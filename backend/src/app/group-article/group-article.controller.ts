@@ -1,4 +1,14 @@
-import { Body, Controller, Get, HttpStatus, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpStatus,
+  Param,
+  ParseIntPipe,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { ApiErrorResponse } from '@src/common/decorator/api-error-response.decorator';
 import { ApiSuccessResponse } from '@src/common/decorator/api-success-resposne.decorator';
@@ -17,6 +27,8 @@ import { GroupArticleSearchResult } from '@app/group-article/dto/group-article-s
 import { ImageService } from '@app/image/image.service';
 import { CurrentUser } from '@decorator/current-user.decorator';
 import { User } from '@app/user/entity/user.entity';
+import { NotAuthorException } from '@app/group-article/exception/not-author.exception';
+import { GroupArticleNotFoundException } from '@app/group-article/exception/group-article-not-found.exception';
 
 @Controller('group-articles')
 @ApiTags('Group-Article')
@@ -73,5 +85,16 @@ export class GroupArticleController {
         ),
       ),
     );
+  }
+
+  @Delete('/:id')
+  @JwtAuth()
+  @ApiSuccessResponse(HttpStatus.NO_CONTENT)
+  @ApiErrorResponse(NotAuthorException, GroupArticleNotFoundException)
+  async remove(
+    @CurrentUser() user: User,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    await this.groupArticleService.remove(user, id);
   }
 }
