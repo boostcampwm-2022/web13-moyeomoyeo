@@ -62,6 +62,7 @@ const UserWrapper = styled.div`
 const UserName = styled.span`
   font-size: 2rem;
   font-weight: 700;
+  word-break: break-all;
 `;
 
 const Description = styled.span`
