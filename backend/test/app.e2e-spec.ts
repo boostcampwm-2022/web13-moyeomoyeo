@@ -27,8 +27,8 @@ describe('AppController (e2e)', () => {
     await dataSource.destroy();
   });
 
-  describe('GET /v1/:id', () => {
-    const url = (id) => `/v1/${id}`;
+  describe('GET /v1/test/:id', () => {
+    const url = (id) => `/v1/test/${id}`;
 
     test('example test', async () => {
       // given
