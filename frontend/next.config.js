@@ -17,11 +17,10 @@ const nextConfig = {
     domains: ["avatars.githubusercontent.com"],
   },
   async rewrites() {
-    const apiUrl = process.env.NODE_ENV === 'development' ? process.env.DEV_API_URL : process.env.PROD_API_URL;
     return [
       {
         source: '/api/:path*',
-        destination: `${apiUrl}/:path*`
+        destination: `${process.env.API_URL}/:path*`
       }
     ]
   }

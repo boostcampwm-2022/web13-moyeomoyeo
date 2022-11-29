@@ -8,7 +8,7 @@ cd frontend
 
 touch .env
 
-echo $4 > .env
+echo -e $4 > .env
 
 # docker down
 docker compose down --rmi all --remove-orphans
