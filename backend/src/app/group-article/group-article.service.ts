@@ -5,6 +5,7 @@ import { GroupCategoryNotFoundException } from '@src/app/group-article/exception
 import { GroupCategoryRepository } from '@app/group-article/repository/group-category.repository';
 import { GroupArticleRepository } from '@app/group-article/repository/group-article.repository';
 import { User } from '@app/user/entity/user.entity';
+import { GroupArticleNotFoundException } from '@app/group-article/exception/group-article-not-found.exception';
 
 @Injectable()
 export class GroupArticleService {
@@ -38,5 +39,16 @@ export class GroupArticleService {
     await this.groupArticleRepository.save(groupArticle);
 
     return groupArticle;
+  }
+
+  async getDetailById(id: number) {
+    const groupArticleDetail = await this.groupArticleRepository.getDetailById(
+      id,
+    );
+    if (!groupArticleDetail) {
+      throw new GroupArticleNotFoundException();
+    }
+
+    return groupArticleDetail;
   }
 }

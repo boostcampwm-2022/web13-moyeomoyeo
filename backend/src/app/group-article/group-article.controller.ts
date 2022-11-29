@@ -1,4 +1,13 @@
-import { Body, Controller, Get, HttpStatus, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpStatus,
+  Param,
+  ParseIntPipe,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { ApiErrorResponse } from '@src/common/decorator/api-error-response.decorator';
 import { ApiSuccessResponse } from '@src/common/decorator/api-success-resposne.decorator';
@@ -17,6 +26,8 @@ import { GroupArticleSearchResult } from '@app/group-article/dto/group-article-s
 import { ImageService } from '@app/image/image.service';
 import { CurrentUser } from '@decorator/current-user.decorator';
 import { User } from '@app/user/entity/user.entity';
+import { GetGroupArticleDetailResponse } from '@app/group-article/dto/get-group-article-detail-response.dto';
+import { GroupArticleNotFoundException } from '@app/group-article/exception/group-article-not-found.exception';
 
 @Controller('group-articles')
 @ApiTags('Group-Article')
@@ -72,6 +83,17 @@ export class GroupArticleController {
           GroupArticleSearchResult.from(row, this.imageService),
         ),
       ),
+    );
+  }
+
+  @Get('/:id')
+  @ApiSuccessResponse(HttpStatus.OK, GetGroupArticleDetailResponse)
+  @ApiErrorResponse(GroupArticleNotFoundException)
+  async getDetail(@Param('id', ParseIntPipe) id: number) {
+    const groupArticleDetail = await this.groupArticleService.getDetailById(id);
+
+    return ResponseEntity.OK_WITH_DATA(
+      GetGroupArticleDetailResponse.from(groupArticleDetail, this.imageService),
     );
   }
 }

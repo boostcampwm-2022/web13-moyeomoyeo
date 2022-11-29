@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class IamgeResponse {
+export class ImageResponse {
   @ApiProperty({
     example: '1669276833875-64adca9c-94cd-4162-a53f-f75e951e39db',
     description: '이미지 key',

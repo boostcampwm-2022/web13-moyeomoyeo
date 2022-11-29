@@ -6,7 +6,8 @@ import { ApiProperty } from '@nestjs/swagger';
 import { GroupCategoryResponse } from '@app/group-article/dto/get-cateogories-response.dto';
 import { IGroupArticleSearchResult } from '@app/group-article/dto/group-article-search-result.interface';
 import { ImageService } from '@app/image/image.service';
-import { IamgeResponse } from '@common/dto/image-response.dto';
+import { ImageResponse } from '@common/dto/image-response.dto';
+import { Type } from 'class-transformer';
 
 export class GroupArticleSearchResult {
   @ApiProperty({ example: 1, description: '게시글 아이디' })
@@ -15,8 +16,8 @@ export class GroupArticleSearchResult {
   @ApiProperty({ example: 'test001', description: '게시글 제목' })
   title: string;
 
-  @ApiProperty({ type: IamgeResponse })
-  thumbnail: IamgeResponse;
+  @ApiProperty({ type: ImageResponse })
+  thumbnail: ImageResponse;
 
   @ApiProperty({
     example: GROUP_STATUS.PROGRESS,
@@ -34,12 +35,15 @@ export class GroupArticleSearchResult {
   maxCapacity: number;
 
   @ApiProperty({ example: 3, description: '현재 신청자 수' })
+  @Type(() => Number)
   currentCapacity: number;
 
   @ApiProperty({ example: 0, description: '스크랩 수' })
+  @Type(() => Number)
   scrapCount: number;
 
   @ApiProperty({ example: 1, description: '댓글 수' })
+  @Type(() => Number)
   commentCount: number;
 
   @ApiProperty({
