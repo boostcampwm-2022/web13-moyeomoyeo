@@ -1,3 +1,5 @@
+import { AxiosResponse } from 'axios';
+
 import { ArticleStatus } from '@constants/article';
 import { Category } from '@constants/category';
 import { Location } from '@constants/location';
@@ -68,7 +70,10 @@ interface UserType {
   blogUrl: string;
 }
 
+type ApiResponse<T> = AxiosResponse<{ data: T }>;
+
 export type {
+  ApiResponse,
   ArticlePreviewType,
   ArticleType,
   LocationType,
