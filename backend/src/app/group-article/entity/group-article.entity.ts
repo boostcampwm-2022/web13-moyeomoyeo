@@ -63,7 +63,11 @@ export class GroupArticle extends Article {
     this.deletedAt = new Date();
   }
 
-  complete() {
+  complete(user: User) {
+    if (!this.isAuthor(user)) {
+      throw new NotAuthorException();
+    }
+
     if (this.group.status !== GROUP_STATUS.PROGRESS) {
       throw new NotProgressGroupException(
         '모집중인 게시글만 모집완료 처리할 수 있습니다',
@@ -71,5 +75,9 @@ export class GroupArticle extends Article {
     }
 
     this.group.status = GROUP_STATUS.SUCCEED;
+  }
+
+  private isAuthor(user: User) {
+    return this.userId === user.id;
   }
 }

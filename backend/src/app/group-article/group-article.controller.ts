@@ -29,6 +29,7 @@ import { CurrentUser } from '@decorator/current-user.decorator';
 import { User } from '@app/user/entity/user.entity';
 import { NotAuthorException } from '@app/group-article/exception/not-author.exception';
 import { GroupArticleNotFoundException } from '@app/group-article/exception/group-article-not-found.exception';
+import { NotProgressGroupException } from '@app/group-article/exception/not-progress-group.exception';
 
 @Controller('group-articles')
 @ApiTags('Group-Article')
@@ -39,6 +40,21 @@ export class GroupArticleController {
     private readonly groupArticleRepository: GroupArticleRepository,
     private readonly imageService: ImageService,
   ) {}
+
+  @Post('/:id/recruitment-complete')
+  @JwtAuth()
+  @ApiSuccessResponse(HttpStatus.NO_CONTENT)
+  @ApiErrorResponse(
+    NotAuthorException,
+    GroupArticleNotFoundException,
+    NotProgressGroupException,
+  )
+  async complete(
+    @CurrentUser() user: User,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    await this.groupArticleService.complete(user, id);
+  }
 
   @Get('/categories')
   @ApiSuccessResponse(HttpStatus.OK, GroupCategoryResponse, { isArray: true })
