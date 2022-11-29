@@ -4,13 +4,14 @@ import { ResponseEntity } from '@common/response-entity';
 import { AuthModule } from '@app/auth/auth.module';
 import { ImageModule } from '@app/image/image.module';
 import { GroupArticleModule } from '@app/group-article/group-article.module';
-import { MyInfoModule } from './app/myinfo/myinfo.module';
+import { MyInfoModule } from '@app/myinfo/myinfo.module';
 
 export const setSwagger = (app: INestApplication) => {
   const config = new DocumentBuilder()
     .setTitle('MoyeoMoyeo REST API Specification')
     .setVersion('1.0.0')
     .addServer(`http://localhost`)
+    .addServer('http://api.moyeomoyeo.com')
     .addCookieAuth(
       'access_token',
       { type: 'apiKey', in: 'cookie' },

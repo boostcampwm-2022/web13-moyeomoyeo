@@ -13,9 +13,6 @@ export abstract class Article {
   @PrimaryGeneratedColumn({ unsigned: true })
   id: number;
 
-  @Column({ type: 'varchar', length: 300 })
-  thumbnail: string;
-
   @Column({ type: 'varchar', length: 100 })
   title: string;
 

@@ -2,7 +2,10 @@ import { ChildEntity, OneToOne } from 'typeorm';
 import { Article } from '@app/group-article/entity/article.entity';
 import { Group } from '@app/group-article/entity/group.entity';
 import { GroupCategory } from '@app/group-article/entity/group-category.entity';
-import { ARTICLE } from '@app/group-article/constants/group-article.constants';
+import {
+  ARTICLE,
+  LOCATION,
+} from '@app/group-article/constants/group-article.constants';
 
 @ChildEntity(ARTICLE.GROUP)
 export class GroupArticle extends Article {
@@ -24,7 +27,7 @@ export class GroupArticle extends Article {
     title: string;
     contents: string;
     thumbnail: string;
-    location: string;
+    location: LOCATION;
     chatUrl: string;
     maxCapacity: number;
     category: GroupCategory;
@@ -33,12 +36,12 @@ export class GroupArticle extends Article {
     article.title = title;
     article.contents = contents;
     article.type = ARTICLE.GROUP;
-    article.thumbnail = thumbnail;
     article.group = Group.register({
       location,
       chatUrl,
       maxCapacity,
       category,
+      thumbnail,
     });
     return article;
   }

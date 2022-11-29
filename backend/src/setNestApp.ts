@@ -13,6 +13,9 @@ import { AllExceptionFilter } from '@filter/all-exception.filter';
 export const setNestApp = (app: INestApplication) => {
   app.use(cookieParser());
 
+  // TODO: cors 설정을 nginx로 옮기거나 적절한 설정 필요
+  app.enableCors();
+
   app.enableVersioning({
     type: VersioningType.URI,
     defaultVersion: '1',
