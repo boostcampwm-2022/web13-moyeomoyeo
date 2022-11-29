@@ -41,6 +41,24 @@ export class GroupArticleController {
     private readonly imageService: ImageService,
   ) {}
 
+  @Post('/')
+  @JwtAuth()
+  @ApiSuccessResponse(HttpStatus.CREATED, GroupArticleRegisterResponse)
+  @ApiErrorResponse(GroupCategoryNotFoundException)
+  async createGroupArticle(
+    @CurrentUser() user: User,
+    @Body() groupArticleRegisterRequest: GroupArticleRegisterRequest,
+  ) {
+    const article = await this.groupArticleService.registerGroupArticle(
+      user,
+      groupArticleRegisterRequest,
+    );
+
+    return ResponseEntity.CREATED_WITH_DATA(
+      GroupArticleRegisterResponse.from(article),
+    );
+  }
+
   @Post('/:id/recruitment-complete')
   @JwtAuth()
   @ApiSuccessResponse(HttpStatus.NO_CONTENT)
@@ -65,24 +83,6 @@ export class GroupArticleController {
 
     return ResponseEntity.OK_WITH_DATA(
       categories.map((category) => GroupCategoryResponse.from(category)),
-    );
-  }
-
-  @Post('/')
-  @JwtAuth()
-  @ApiSuccessResponse(HttpStatus.CREATED, GroupArticleRegisterResponse)
-  @ApiErrorResponse(GroupCategoryNotFoundException)
-  async createGroupArticle(
-    @CurrentUser() user: User,
-    @Body() groupArticleRegisterRequest: GroupArticleRegisterRequest,
-  ) {
-    const article = await this.groupArticleService.registerGroupArticle(
-      user,
-      groupArticleRegisterRequest,
-    );
-
-    return ResponseEntity.CREATED_WITH_DATA(
-      GroupArticleRegisterResponse.from(article),
     );
   }
 
