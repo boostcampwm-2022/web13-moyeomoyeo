@@ -5,7 +5,7 @@ import { GroupApplication } from '@app/group-application/entity/group-applicatio
 import { GROUP_APPLICATION_STATUS } from '@app/group-article/constants/group-article.constants';
 import { DuplicateApplicationException } from '@src/app/group-application/exception/duplicate-application.exception';
 import { GroupNotFoundException } from '@app/group-application/exception/group-not-found.exception';
-import { CannotApplicateException } from './exception/cannot-applicate.exception';
+import { CannotApplicateException } from '@app/group-application/exception/cannot-applicate.exception';
 
 @Injectable()
 export class GroupApplicationService {
