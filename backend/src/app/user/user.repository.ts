@@ -23,4 +23,31 @@ export class UserRepository extends Repository<User> {
   findById(id: number) {
     return this.findOneBy({ id });
   }
+
+  updateUser({
+    id,
+    userName,
+    profileImage,
+    description,
+    githubUrl,
+    blogUrl,
+  }: {
+    id: number;
+    userName: string;
+    profileImage: string;
+    description: string;
+    githubUrl: string;
+    blogUrl: string;
+  }) {
+    return this.update(
+      { id },
+      {
+        userName,
+        profileImage,
+        description,
+        githubUrl,
+        blogUrl,
+      },
+    );
+  }
 }
