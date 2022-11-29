@@ -19,7 +19,9 @@ class AuthErrorBoundary extends Component<Props, State> {
   }
 
   static getDerivedStateFromError(error: Error) {
-    if (error instanceof AuthError) return { error };
+    if (error instanceof AuthError) {
+      return { error };
+    }
     throw error;
   }
 

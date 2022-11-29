@@ -20,7 +20,9 @@ class ApiErrorBoundary extends Component<Props, State> {
   }
 
   static getDerivedStateFromError(error: Error) {
-    if (error instanceof AxiosError && !(error instanceof AuthError)) return { error };
+    if (error instanceof AxiosError && !(error instanceof AuthError)) {
+      return { error };
+    }
     throw error;
   }
 
