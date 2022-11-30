@@ -46,7 +46,12 @@ export class GroupArticleService {
       category,
     });
 
-    await this.groupArticleRepository.save(groupArticle);
+    await this.dataSource.transaction(async (em) => {
+      await em.getRepository(GroupArticle).save(groupArticle);
+      await em
+        .getRepository(GroupApplication)
+        .save(GroupApplication.create(user, groupArticle.group));
+    });
 
     return groupArticle;
   }
