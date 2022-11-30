@@ -12,6 +12,7 @@ import { GroupArticleModule } from '@app/group-article/group-article.module';
 import { UserModule } from '@app/user/user.module';
 import { MyInfoModule } from '@app/myinfo/myinfo.module';
 import { CookieConfigModule } from '@config/cookie/config.module';
+import { GroupApplicationModule } from '@app/group-application/group-application.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { CookieConfigModule } from '@config/cookie/config.module';
     GroupArticleModule,
     UserModule,
     MyInfoModule,
+    GroupApplicationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
