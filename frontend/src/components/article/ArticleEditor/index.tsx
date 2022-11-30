@@ -29,7 +29,7 @@ const ArticleEditor = (props: Props) => {
         throw new Error('에디터 이미지 업로드 실패');
       }
     },
-    // 빈 칸으로 두지 않으면 에디터가 정상적으로 작동 안함
+    // 빈 칸으로 두지 않으면 에디터가 정상적으로 작동 안함!
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
