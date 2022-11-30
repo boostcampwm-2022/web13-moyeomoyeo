@@ -1,14 +1,13 @@
+import { Type } from 'class-transformer';
 import {
+  CATEGORY,
   GROUP_STATUS,
   LOCATION,
 } from '@app/group-article/constants/group-article.constants';
 import { IGroupArticleDetail } from '@app/group-article/dto/group-article-detail.interface';
-import { GroupCategoryResponse } from '@app/group-article/dto/get-cateogories-response.dto';
 import { ImageService } from '@app/image/image.service';
-import { ImageResponse } from '@common/dto/image-response.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { Author } from '@app/group-article/dto/author.dto';
-import { Type } from 'class-transformer';
 
 export class GetGroupArticleDetailResponse {
   @ApiProperty({ example: 1, description: '게시글 아이디' })
@@ -26,14 +25,18 @@ export class GetGroupArticleDetailResponse {
   @ApiProperty()
   author: Author;
 
-  @ApiProperty()
-  category: GroupCategoryResponse;
+  @ApiProperty({ example: CATEGORY.STUDY, description: '모집 카테고리' })
+  category: CATEGORY;
 
   @ApiProperty({ example: LOCATION.ONLINE, description: '모임 장소' })
   location: LOCATION;
 
-  @ApiProperty()
-  thumbnail: ImageResponse;
+  @ApiProperty({
+    example:
+      'https://kr.object.ncloudstorage.com/uploads/images/1669276833875-64adca9c-94cd-4162-a53f-f75e951e39db',
+    description: '게시글 썸네일',
+  })
+  thumbnail: string;
 
   @ApiProperty({
     example: GROUP_STATUS.PROGRESS,
@@ -68,14 +71,10 @@ export class GetGroupArticleDetailResponse {
       userName: groupArticleDetail.userName,
       profileImage: groupArticleDetail.userProfileImage,
     };
-    res.category = {
-      id: groupArticleDetail.groupCategoryId,
-      name: groupArticleDetail.groupCategoryName,
-    };
-    res.thumbnail = {
-      key: groupArticleDetail.thumbnail,
-      url: imageService.getStorageUrl([groupArticleDetail.thumbnail])[0],
-    };
+    res.category = CATEGORY[groupArticleDetail.groupCategoryName];
+    res.thumbnail = imageService.getStorageUrl([
+      groupArticleDetail.thumbnail,
+    ])[0];
     res.status = groupArticleDetail.status;
     res.location = groupArticleDetail.location;
     res.commentCount = groupArticleDetail.commentCount;

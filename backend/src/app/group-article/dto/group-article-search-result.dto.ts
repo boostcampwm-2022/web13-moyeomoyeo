@@ -1,13 +1,13 @@
 import {
+  CATEGORY,
   GROUP_STATUS,
   LOCATION,
 } from '@app/group-article/constants/group-article.constants';
 import { ApiProperty } from '@nestjs/swagger';
-import { GroupCategoryResponse } from '@app/group-article/dto/get-cateogories-response.dto';
 import { IGroupArticleSearchResult } from '@app/group-article/dto/group-article-search-result.interface';
 import { ImageService } from '@app/image/image.service';
-import { ImageResponse } from '@common/dto/image-response.dto';
 import { Type } from 'class-transformer';
+import { GroupCategory } from '@app/group-article/entity/group-category.entity';
 
 export class GroupArticleSearchResult {
   @ApiProperty({ example: 1, description: '게시글 아이디' })
@@ -16,8 +16,12 @@ export class GroupArticleSearchResult {
   @ApiProperty({ example: 'test001', description: '게시글 제목' })
   title: string;
 
-  @ApiProperty({ type: ImageResponse })
-  thumbnail: ImageResponse;
+  @ApiProperty({
+    example:
+      'https://kr.object.ncloudstorage.com/uploads/images/1669276833875-64adca9c-94cd-4162-a53f-f75e951e39db',
+    description: '게시글 썸네일',
+  })
+  thumbnail: string;
 
   @ApiProperty({
     example: GROUP_STATUS.PROGRESS,
@@ -28,8 +32,8 @@ export class GroupArticleSearchResult {
   @ApiProperty({ example: LOCATION.BUSAN, description: '모집 장소' })
   location: LOCATION;
 
-  @ApiProperty({ type: GroupCategoryResponse })
-  category: GroupCategoryResponse;
+  @ApiProperty({ example: CATEGORY.STUDY, description: '모집 카테고리' })
+  category: CATEGORY;
 
   @ApiProperty({ example: 10, description: '모집 최대 인원 수' })
   maxCapacity: number;
@@ -56,14 +60,8 @@ export class GroupArticleSearchResult {
     const res = new GroupArticleSearchResult();
     res.id = row.id;
     res.title = row.title;
-    res.thumbnail = {
-      key: row.thumbnail,
-      url: imageService.getStorageUrl([row.thumbnail])[0],
-    };
-    res.category = {
-      id: row.groupCategoryId,
-      name: row.groupCategoryName,
-    };
+    res.thumbnail = imageService.getStorageUrl([row.thumbnail])[0];
+    res.category = GroupCategory[row.groupCategoryName];
     res.location = row.location;
     res.status = row.status;
     res.maxCapacity = row.maxCapacity;
