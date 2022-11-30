@@ -13,6 +13,7 @@ import { DuplicateApplicationException } from '@src/app/group-application/except
 import { GroupNotFoundException } from '@app/group-application/exception/group-not-found.exception';
 import { CannotApplicateException } from '@src/app/group-application/exception/cannot-applicate.exception';
 import { CheckJoiningGroupResonse } from '@app/group-application/dto/check-joining-group-response.dto';
+import { ApplicationNotFoundException } from '@app/group-application/exception/application-not-found.exception';
 
 @Controller('group-applications')
 @JwtAuth()
@@ -56,5 +57,20 @@ export class GroupApplicationController {
     );
     const data = CheckJoiningGroupResonse.from(isJoined);
     return ResponseEntity.OK_WITH_DATA(data);
+  }
+
+  @Post('cancel')
+  @ApiSuccessResponse(HttpStatus.NO_CONTENT)
+  @ApiErrorResponse(
+    CannotApplicateException,
+    GroupNotFoundException,
+    ApplicationNotFoundException,
+  )
+  async cancelJoining(
+    @CurrentUser() user: User,
+    @Body() groupApplicationRequest: GroupApplicationRequest,
+  ) {
+    const groupArticleId = groupApplicationRequest.groupArticleId;
+    await this.groupApplicationService.cancelJoining(user, groupArticleId);
   }
 }
