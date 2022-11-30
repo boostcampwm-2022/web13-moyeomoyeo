@@ -15,7 +15,8 @@ export class GroupApplicationService {
   ) {}
 
   async attendGroup(userId: number, groupId: number) {
-    const article = await this.validateGroupId(groupId);
+    const group = await this.validateGroupId(groupId);
+    const article = await group.article;
     this.validateUserTarget(userId, article.userId);
     await this.validateRegister(userId, groupId);
 
@@ -28,7 +29,7 @@ export class GroupApplicationService {
     if (!group) {
       throw new GroupNotFoundException();
     }
-    return group.article;
+    return group;
   }
 
   validateUserTarget(currentUserId: number, userId: number) {
@@ -44,6 +45,7 @@ export class GroupApplicationService {
         groupId,
         GROUP_APPLICATION_STATUS.REGISTER,
       );
+
     if (application) {
       throw new DuplicateApplicationException();
     }
