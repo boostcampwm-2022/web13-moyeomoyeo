@@ -13,6 +13,11 @@ RUN npm install
 # 프로젝트의 모든 파일 복사
 COPY . .
 
+# 이미지 빌드시 환경 변수 주입 사용
+ARG FRONTEND_PRODUCTION_ENV
+RUN touch .env
+RUN echo -e ${FRONTEND_PRODUCTION_ENV} > .env
+
 # Build NextJS app
 RUN npm run build
 

@@ -39,6 +39,8 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: frontend
+          build-args: |
+            "FRONTEND_PRODUCTION_ENV=${{ secrets.FRONTEND_PRODUCTION_ENV }}"
           file: frontend/Dockerfile
           tags: |
             ${{ secrets.NCP_DOCKER_REGISTRY }}/moyeo-client:latest
