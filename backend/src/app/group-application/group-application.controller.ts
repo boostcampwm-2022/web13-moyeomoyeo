@@ -35,7 +35,7 @@ export class GroupApplicationController {
   ) {
     const groupArticleId = groupApplicationRequest.groupArticleId;
     const groupApplication = await this.groupApplicationService.attendGroup(
-      user.id,
+      user,
       groupArticleId,
     );
     const data = AttendGroupResponse.from(groupApplication.id);
@@ -44,13 +44,14 @@ export class GroupApplicationController {
 
   @Post('/status')
   @ApiSuccessResponse(HttpStatus.OK, CheckJoiningGroupResonse)
+  @ApiErrorResponse(GroupNotFoundException)
   async checkJoiningGroup(
     @CurrentUser() user: User,
     @Body() groupApplicationRequest: GroupApplicationRequest,
   ) {
     const groupArticleId = groupApplicationRequest.groupArticleId;
     const isJoined = await this.groupApplicationService.checkJoiningGroup(
-      user.id,
+      user,
       groupArticleId,
     );
     const data = CheckJoiningGroupResonse.from(isJoined);

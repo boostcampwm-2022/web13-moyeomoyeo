@@ -7,6 +7,8 @@ import { GroupNotFoundException } from '@app/group-application/exception/group-n
 import { CannotApplicateException } from '@app/group-application/exception/cannot-applicate.exception';
 import { GroupArticleRepository } from '@app/group-article/repository/group-article.repository';
 import { GroupArticle } from '@app/group-article/entity/group-article.entity';
+import { User } from '@app/user/entity/user.entity';
+import { Group } from '@app/group-article/entity/group.entity';
 
 @Injectable()
 export class GroupApplicationService {
@@ -15,64 +17,58 @@ export class GroupApplicationService {
     private readonly groupArticleRespository: GroupArticleRepository,
   ) {}
 
-  async attendGroup(userId: number, groupArticleId: number) {
-    const groupArticle = await this.validateGroupArticleId(groupArticleId);
-    this.validateUserTarget(userId, groupArticle.userId);
-    const groupId = groupArticle.group.id;
-    await this.validateRegister(userId, groupId);
-
-    const groupApplication = GroupApplication.create(userId, groupId);
-    return this.groupApplicationRepository.save(groupApplication);
-  }
-
-  async validateGroupArticleId(groupArticleId: number) {
+  async attendGroup(user: User, groupArticleId: number) {
     const groupArticle = await this.groupArticleRespository.findById(
       groupArticleId,
     );
+    await this.validateGroupArticleId(groupArticle);
+    this.validateUserTarget(user, groupArticle);
+    const group = groupArticle.group;
+    await this.validateRegister(user, group);
+
+    const groupApplication = GroupApplication.create(user, group);
+    return this.groupApplicationRepository.save(groupApplication);
+  }
+
+  async validateGroupArticleId(groupArticle: GroupArticle) {
     if (!groupArticle) {
       throw new GroupNotFoundException();
     }
     return groupArticle;
   }
 
-  validateUserTarget(currentUserId: number, userId: number) {
-    if (currentUserId === userId) {
+  validateUserTarget(currentUser: User, groupArticle: GroupArticle) {
+    if (groupArticle.isAuthor(currentUser)) {
       throw new CannotApplicateException();
     }
   }
 
-  async validateRegister(userId: number, groupId: number) {
-    if (this.checkApplication(userId, groupId)) {
+  async validateRegister(user: User, group: Group) {
+    const application =
+      await this.groupApplicationRepository.findByUserIdAndGroupIdAndStatus(
+        user.id,
+        group.id,
+        GROUP_APPLICATION_STATUS.REGISTER,
+      );
+
+    if (application) {
       throw new DuplicateApplicationException();
     }
   }
 
-  async checkApplication(userId: number, groupId: number) {
+  async checkJoiningGroup(user: User, groupArticleId: number) {
+    const groupArticle = await this.groupArticleRespository.findById(
+      groupArticleId,
+    );
+    await this.validateGroupArticleId(groupArticle);
+    const group = groupArticle.group;
     const application =
       await this.groupApplicationRepository.findByUserIdAndGroupIdAndStatus(
-        userId,
-        groupId,
+        user.id,
+        group.id,
         GROUP_APPLICATION_STATUS.REGISTER,
       );
 
-    return application !== null;
-  }
-
-  async checkJoiningGroup(userId: number, groupArticleId: number) {
-    const groupArticle = await this.validateGroupArticleId(groupArticleId);
-    const groupId = groupArticle.group.id;
-
-    return (
-      this.checkAuthor(userId, groupArticle) ||
-      (await this.checkApplication(userId, groupId))
-    );
-  }
-
-  checkAuthor(userId: number, groupArticle: GroupArticle) {
-    const author = groupArticle.userId;
-    if (userId === author) {
-      return true;
-    }
-    return false;
+    return groupArticle.isAuthor(user) || application !== null;
   }
 }

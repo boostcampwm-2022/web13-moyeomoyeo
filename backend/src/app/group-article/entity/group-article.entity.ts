@@ -77,7 +77,7 @@ export class GroupArticle extends Article {
     this.group.complete();
   }
 
-  private isAuthor(user: User) {
+  isAuthor(user: User) {
     return this.userId === user.id;
   }
 }

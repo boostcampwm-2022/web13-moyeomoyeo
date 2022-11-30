@@ -51,18 +51,18 @@ export class GroupApplication {
   @Column({ type: 'timestamp', nullable: true })
   deletedAt: Date | null;
 
-  static create(userId: number, groupId: number) {
+  static create(user: User, group: Group) {
     const groupApplication = new GroupApplication();
-    groupApplication.userId = userId;
-    groupApplication.groupId = groupId;
+    groupApplication.userId = user.id;
+    groupApplication.groupId = group.id;
     groupApplication.status = GROUP_APPLICATION_STATUS.REGISTER;
     return groupApplication;
   }
 
-  static cancel(userId: number, groupId: number) {
+  static cancel(user: User, group: Group) {
     const groupApplication = new GroupApplication();
-    groupApplication.userId = userId;
-    groupApplication.groupId = groupId;
+    groupApplication.userId = user.id;
+    groupApplication.groupId = group.id;
     groupApplication.status = null;
     return groupApplication;
   }
