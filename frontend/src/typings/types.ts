@@ -70,6 +70,11 @@ interface UserType {
   blogUrl: string;
 }
 
+interface ImageUploadType {
+  key: string;
+  url: string;
+}
+
 type ApiResponse<T> = AxiosResponse<{ data: T }>;
 
 export type {
@@ -81,4 +86,5 @@ export type {
   TestResponseType,
   CommentType,
   UserType,
+  ImageUploadType,
 };
