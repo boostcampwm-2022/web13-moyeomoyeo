@@ -1,4 +1,4 @@
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, IsNull, Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { GroupCategory } from '@app/group-article/entity/group-category.entity';
 
@@ -19,6 +19,7 @@ export class GroupCategoryRepository extends Repository<GroupCategory> {
       },
       where: {
         name: categoryName,
+        deletedAt: IsNull(),
       },
     });
   }
