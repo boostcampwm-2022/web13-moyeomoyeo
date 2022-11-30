@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { uuid } from 'uuidv4';
+import { v4 as uuid } from 'uuid';
 
 import ApiErrorBoundary from '@components/common/ErrorBoundary/ApiErrorBoundary';
 import AuthErrorBoundary from '@components/common/ErrorBoundary/AuthErrorBoundary';
