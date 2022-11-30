@@ -54,6 +54,30 @@ export class GroupArticle extends Article {
     return article;
   }
 
+  update(
+    user: User,
+    {
+      title,
+      contents,
+      thumbnail,
+      chatUrl,
+    }: {
+      title: string;
+      contents: string;
+      thumbnail: string;
+      chatUrl: string;
+    },
+  ) {
+    if (!this.isAuthor(user)) {
+      throw new NotAuthorException();
+    }
+
+    this.title = title;
+    this.contents = contents;
+    this.group.thumbnail = thumbnail;
+    this.group.chatUrl = chatUrl;
+  }
+
   remove(user: User) {
     if (!this.isAuthor(user)) {
       throw new NotAuthorException();
