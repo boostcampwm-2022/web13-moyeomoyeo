@@ -7,6 +7,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Put,
   Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
@@ -32,6 +33,7 @@ import { GroupArticleNotFoundException } from '@app/group-article/exception/grou
 import { NotAuthorException } from '@app/group-article/exception/not-author.exception';
 import { NotProgressGroupException } from '@app/group-article/exception/not-progress-group.exception';
 import { IsNull } from 'typeorm';
+import { UpdateGroupArticleRequest } from '@app/group-article/dto/update-group-article-request.dto';
 
 @Controller('group-articles')
 @ApiTags('Group-Article')
@@ -89,6 +91,18 @@ export class GroupArticleController {
     @Param('id', ParseIntPipe) id: number,
   ) {
     await this.groupArticleService.cancel(user, id);
+  }
+
+  @Put('/:id')
+  @JwtAuth()
+  @ApiSuccessResponse(HttpStatus.NO_CONTENT)
+  @ApiErrorResponse(NotAuthorException, GroupArticleNotFoundException)
+  async update(
+    @CurrentUser() user: User,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateGroupArticleRequest: UpdateGroupArticleRequest,
+  ) {
+    await this.groupArticleService.update(user, id, updateGroupArticleRequest);
   }
 
   @Get('/categories')

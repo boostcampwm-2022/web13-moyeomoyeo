@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { IsNull } from 'typeorm';
 import { GroupArticleRegisterRequest } from '@app/group-article/dto/group-article-register-request.dto';
 import { GroupArticle } from '@app/group-article/entity/group-article.entity';
 import { GroupCategoryNotFoundException } from '@src/app/group-article/exception/group-category-not-found.exception';
@@ -6,7 +7,7 @@ import { GroupCategoryRepository } from '@app/group-article/repository/group-cat
 import { GroupArticleRepository } from '@app/group-article/repository/group-article.repository';
 import { User } from '@app/user/entity/user.entity';
 import { GroupArticleNotFoundException } from '@app/group-article/exception/group-article-not-found.exception';
-import { IsNull } from 'typeorm';
+import { UpdateGroupArticleRequest } from '@app/group-article/dto/update-group-article-request.dto';
 
 @Injectable()
 export class GroupArticleService {
@@ -99,5 +100,29 @@ export class GroupArticleService {
     }
 
     return groupArticleDetail;
+  }
+
+  async update(
+    user: User,
+    id: number,
+    { title, contents, thumbnail, chatUrl }: UpdateGroupArticleRequest,
+  ) {
+    const groupArticle = await this.groupArticleRepository.findOneBy({
+      id,
+      deletedAt: IsNull(),
+    });
+
+    if (!groupArticle) {
+      throw new GroupArticleNotFoundException();
+    }
+
+    groupArticle.update(user, {
+      title,
+      contents,
+      thumbnail,
+      chatUrl,
+    });
+
+    await this.groupArticleRepository.save(groupArticle, { reload: false });
   }
 }
