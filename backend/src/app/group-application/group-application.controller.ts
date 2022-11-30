@@ -1,6 +1,6 @@
 import { Body, Controller, HttpStatus, Post } from '@nestjs/common';
 import { GroupApplicationService } from '@app/group-application/group-application.service';
-import { AttendGroupRequest } from '@app/group-application/dto/attend-group-request.dto';
+import { GroupApplicationRequest } from '@src/app/group-application/dto/group-application-request.dto';
 import { ApiSuccessResponse } from '@src/common/decorator/api-success-resposne.decorator';
 import { AttendGroupResponse } from '@app/group-application/dto/attend-group-response.dto';
 import { CurrentUser } from '@src/common/decorator/current-user.decorator';
@@ -12,6 +12,7 @@ import { ApiErrorResponse } from '@src/common/decorator/api-error-response.decor
 import { DuplicateApplicationException } from '@src/app/group-application/exception/duplicate-application.exception';
 import { GroupNotFoundException } from '@app/group-application/exception/group-not-found.exception';
 import { CannotApplicateException } from '@src/app/group-application/exception/cannot-applicate.exception';
+import { CheckJoiningGroupResonse } from '@app/group-application/dto/check-joining-group-response.dto';
 
 @Controller('group-applications')
 @JwtAuth()
@@ -30,14 +31,30 @@ export class GroupApplicationController {
   )
   async attendGroup(
     @CurrentUser() user: User,
-    @Body() attendGroupRequest: AttendGroupRequest,
+    @Body() groupApplicationRequest: GroupApplicationRequest,
   ) {
-    const groupArticleId = attendGroupRequest.groupArticleId;
+    const groupArticleId = groupApplicationRequest.groupArticleId;
     const groupApplication = await this.groupApplicationService.attendGroup(
-      user.id,
+      user,
       groupArticleId,
     );
     const data = AttendGroupResponse.from(groupApplication.id);
     return ResponseEntity.CREATED_WITH_DATA(data);
+  }
+
+  @Post('/status')
+  @ApiSuccessResponse(HttpStatus.OK, CheckJoiningGroupResonse)
+  @ApiErrorResponse(GroupNotFoundException)
+  async checkJoiningGroup(
+    @CurrentUser() user: User,
+    @Body() groupApplicationRequest: GroupApplicationRequest,
+  ) {
+    const groupArticleId = groupApplicationRequest.groupArticleId;
+    const isJoined = await this.groupApplicationService.checkJoiningGroup(
+      user,
+      groupArticleId,
+    );
+    const data = CheckJoiningGroupResonse.from(isJoined);
+    return ResponseEntity.OK_WITH_DATA(data);
   }
 }
