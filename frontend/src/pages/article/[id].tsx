@@ -33,9 +33,6 @@ const ArticleDetail = () => {
 
   const [participantsModalOpen, setParticipantsModalOpen] = useState<boolean>(false);
 
-  // TODO 로딩 처리
-  if (isLoading) return <div>로딩중</div>;
-
   const {
     authorName,
     title,
@@ -65,6 +62,7 @@ const ArticleDetail = () => {
           />
         }
       >
+        {/* TODO 로딩 처리 */}
         {isLoading ? (
           <div>로딩중</div>
         ) : (
