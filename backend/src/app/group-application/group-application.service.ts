@@ -6,7 +6,7 @@ import { DuplicateApplicationException } from '@src/app/group-application/except
 import { GroupNotFoundException } from '@app/group-application/exception/group-not-found.exception';
 import { CannotApplicateException } from '@app/group-application/exception/cannot-applicate.exception';
 import { GroupArticleRepository } from '@app/group-article/repository/group-article.repository';
-import { GroupArticle } from '../group-article/entity/group-article.entity';
+import { GroupArticle } from '@app/group-article/entity/group-article.entity';
 
 @Injectable()
 export class GroupApplicationService {
