@@ -46,8 +46,8 @@ export default function App({ Component, pageProps }: AppProps) {
           <ErrorBoundary key={uuid()}>
             <AuthErrorBoundary>
               <ApiErrorBoundary>
-                <Component {...pageProps} />
                 <LoginRedirect />
+                <Component {...pageProps} />
               </ApiErrorBoundary>
             </AuthErrorBoundary>
           </ErrorBoundary>
