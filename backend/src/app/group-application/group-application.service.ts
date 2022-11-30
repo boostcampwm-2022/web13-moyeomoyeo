@@ -9,6 +9,7 @@ import { GroupArticleRepository } from '@app/group-article/repository/group-arti
 import { GroupArticle } from '@app/group-article/entity/group-article.entity';
 import { User } from '@app/user/entity/user.entity';
 import { Group } from '@app/group-article/entity/group.entity';
+import { ApplicationNotFoundException } from '@app/group-application/exception/application-not-found.exception';
 
 @Injectable()
 export class GroupApplicationService {
@@ -17,58 +18,92 @@ export class GroupApplicationService {
     private readonly groupArticleRespository: GroupArticleRepository,
   ) {}
 
-  async attendGroup(user: User, groupArticleId: number) {
+  private async getAttribute(user: User, groupArticleId: number) {
     const groupArticle = await this.groupArticleRespository.findById(
       groupArticleId,
     );
-    await this.validateGroupArticleId(groupArticle);
-    this.validateUserTarget(user, groupArticle);
     const group = groupArticle.group;
-    await this.validateRegister(user, group);
+    const application = await this.findGroupApplication(user, group);
+
+    return {
+      groupArticle,
+      group,
+      application,
+    };
+  }
+
+  public async attendGroup(user: User, groupArticleId: number) {
+    const { groupArticle, group, application } = await this.getAttribute(
+      user,
+      groupArticleId,
+    );
+    await this.validateGroupArticle(groupArticle);
+    this.validateUserTarget(user, groupArticle);
+    await this.validateRegisterForJoining(application);
 
     const groupApplication = GroupApplication.create(user, group);
     return this.groupApplicationRepository.save(groupApplication);
   }
 
-  async validateGroupArticleId(groupArticle: GroupArticle) {
+  private async findGroupApplication(user: User, group: Group) {
+    return await this.groupApplicationRepository.findByUserIdAndGroupIdAndStatus(
+      user.id,
+      group.id,
+      GROUP_APPLICATION_STATUS.REGISTER,
+    );
+  }
+
+  private async validateGroupArticle(groupArticle: GroupArticle) {
     if (!groupArticle) {
       throw new GroupNotFoundException();
     }
     return groupArticle;
   }
 
-  validateUserTarget(currentUser: User, groupArticle: GroupArticle) {
+  private validateUserTarget(currentUser: User, groupArticle: GroupArticle) {
     if (groupArticle.isAuthor(currentUser)) {
       throw new CannotApplicateException();
     }
   }
 
-  async validateRegister(user: User, group: Group) {
-    const application =
-      await this.groupApplicationRepository.findByUserIdAndGroupIdAndStatus(
-        user.id,
-        group.id,
-        GROUP_APPLICATION_STATUS.REGISTER,
-      );
-
+  private async validateRegisterForJoining(application: GroupApplication) {
     if (application) {
       throw new DuplicateApplicationException();
     }
   }
 
-  async checkJoiningGroup(user: User, groupArticleId: number) {
-    const groupArticle = await this.groupArticleRespository.findById(
+  public async checkJoiningGroup(user: User, groupArticleId: number) {
+    const { groupArticle, application } = await this.getAttribute(
+      user,
       groupArticleId,
     );
-    await this.validateGroupArticleId(groupArticle);
-    const group = groupArticle.group;
-    const application =
-      await this.groupApplicationRepository.findByUserIdAndGroupIdAndStatus(
-        user.id,
-        group.id,
-        GROUP_APPLICATION_STATUS.REGISTER,
-      );
+
+    await this.validateGroupArticle(groupArticle);
 
     return groupArticle.isAuthor(user) || application !== null;
+  }
+
+  public async cancelJoining(user: User, groupArticleId: number) {
+    const { groupArticle, application } = await this.getAttribute(
+      user,
+      groupArticleId,
+    );
+
+    await this.validateGroupArticle(groupArticle);
+    this.validateUserTarget(user, groupArticle);
+    await this.validateRegisterForCanceling(application);
+
+    this.deleteApplication(application);
+  }
+
+  private async validateRegisterForCanceling(application: GroupApplication) {
+    if (!application) {
+      throw new ApplicationNotFoundException();
+    }
+  }
+
+  private deleteApplication(application: GroupApplication) {
+    application.cancel();
+    this.groupApplicationRepository.save(application);
   }
 }
