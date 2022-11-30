@@ -18,12 +18,14 @@ export class GroupApplicationService {
     private readonly groupArticleRespository: GroupArticleRepository,
   ) {}
 
-  private async getAttribute(user: User, groupArticleId: number) {
+  private async getGroupApplicationContext(user: User, groupArticleId: number) {
     const groupArticle = await this.groupArticleRespository.findById(
       groupArticleId,
     );
     const group = groupArticle.group;
     const application = await this.findGroupApplication(user, group);
+
+    await this.validateGroupArticle(groupArticle);
 
     return {
       groupArticle,
@@ -32,25 +34,23 @@ export class GroupApplicationService {
     };
   }
 
-  public async attendGroup(user: User, groupArticleId: number) {
-    const { groupArticle, group, application } = await this.getAttribute(
-      user,
-      groupArticleId,
+  private async findGroupApplication(user: User, group: Group) {
+    return this.groupApplicationRepository.findByUserIdAndGroupIdAndStatus(
+      user.id,
+      group.id,
+      GROUP_APPLICATION_STATUS.REGISTER,
     );
-    await this.validateGroupArticle(groupArticle);
+  }
+
+  public async joinGroup(user: User, groupArticleId: number) {
+    const { groupArticle, group, application } =
+      await this.getGroupApplicationContext(user, groupArticleId);
+
     this.validateUserTarget(user, groupArticle);
     await this.validateRegisterForJoining(application);
 
     const groupApplication = GroupApplication.create(user, group);
     return this.groupApplicationRepository.save(groupApplication);
-  }
-
-  private async findGroupApplication(user: User, group: Group) {
-    return await this.groupApplicationRepository.findByUserIdAndGroupIdAndStatus(
-      user.id,
-      group.id,
-      GROUP_APPLICATION_STATUS.REGISTER,
-    );
   }
 
   private async validateGroupArticle(groupArticle: GroupArticle) {
@@ -72,28 +72,25 @@ export class GroupApplicationService {
     }
   }
 
-  public async checkJoiningGroup(user: User, groupArticleId: number) {
-    const { groupArticle, application } = await this.getAttribute(
+  public async checkJoinedGroup(user: User, groupArticleId: number) {
+    const { groupArticle, application } = await this.getGroupApplicationContext(
       user,
       groupArticleId,
     );
-
-    await this.validateGroupArticle(groupArticle);
 
     return groupArticle.isAuthor(user) || application !== null;
   }
 
-  public async cancelJoining(user: User, groupArticleId: number) {
-    const { groupArticle, application } = await this.getAttribute(
+  public async cancelJoinedGroup(user: User, groupArticleId: number) {
+    const { groupArticle, application } = await this.getGroupApplicationContext(
       user,
       groupArticleId,
     );
 
-    await this.validateGroupArticle(groupArticle);
     this.validateUserTarget(user, groupArticle);
     await this.validateRegisterForCanceling(application);
 
-    this.deleteApplication(application);
+    await this.deleteApplication(application);
   }
 
   private async validateRegisterForCanceling(application: GroupApplication) {
@@ -102,8 +99,8 @@ export class GroupApplicationService {
     }
   }
 
-  private deleteApplication(application: GroupApplication) {
+  private async deleteApplication(application: GroupApplication) {
     application.cancel();
-    this.groupApplicationRepository.save(application);
+    await this.groupApplicationRepository.save(application);
   }
 }

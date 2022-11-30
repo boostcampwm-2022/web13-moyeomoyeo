@@ -30,12 +30,12 @@ export class GroupApplicationController {
     CannotApplicateException,
     GroupNotFoundException,
   )
-  async attendGroup(
+  async joinGroup(
     @CurrentUser() user: User,
     @Body() groupApplicationRequest: GroupApplicationRequest,
   ) {
     const groupArticleId = groupApplicationRequest.groupArticleId;
-    const groupApplication = await this.groupApplicationService.attendGroup(
+    const groupApplication = await this.groupApplicationService.joinGroup(
       user,
       groupArticleId,
     );
@@ -46,12 +46,12 @@ export class GroupApplicationController {
   @Post('/status')
   @ApiSuccessResponse(HttpStatus.OK, CheckJoiningGroupResonse)
   @ApiErrorResponse(GroupNotFoundException)
-  async checkJoiningGroup(
+  async checkJoinedGroup(
     @CurrentUser() user: User,
     @Body() groupApplicationRequest: GroupApplicationRequest,
   ) {
     const groupArticleId = groupApplicationRequest.groupArticleId;
-    const isJoined = await this.groupApplicationService.checkJoiningGroup(
+    const isJoined = await this.groupApplicationService.checkJoinedGroup(
       user,
       groupArticleId,
     );
@@ -66,11 +66,11 @@ export class GroupApplicationController {
     GroupNotFoundException,
     ApplicationNotFoundException,
   )
-  async cancelJoining(
+  async cancelJoinedGroup(
     @CurrentUser() user: User,
     @Body() groupApplicationRequest: GroupApplicationRequest,
   ) {
     const groupArticleId = groupApplicationRequest.groupArticleId;
-    await this.groupApplicationService.cancelJoining(user, groupArticleId);
+    await this.groupApplicationService.cancelJoinedGroup(user, groupArticleId);
   }
 }
