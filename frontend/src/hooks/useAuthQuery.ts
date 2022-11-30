@@ -24,7 +24,7 @@ const useAuthQuery = <
   );
 
   if (error && error instanceof AxiosError) {
-    if (error.response && error.response.status === 401) {
+    if (error.response.status === 401) {
       throw new AuthError();
     }
     throw error;
