@@ -54,4 +54,15 @@ export class GroupArticleService {
 
     await this.groupArticleRepository.save(groupArticle, { reload: false });
   }
+
+  async getDetailById(id: number) {
+    const groupArticleDetail = await this.groupArticleRepository.getDetailById(
+      id,
+    );
+    if (!groupArticleDetail) {
+      throw new GroupArticleNotFoundException();
+    }
+
+    return groupArticleDetail;
+  }
 }
