@@ -10,6 +10,7 @@ import ApiErrorBoundary from '@components/common/ErrorBoundary/ApiErrorBoundary'
 import AuthErrorBoundary from '@components/common/ErrorBoundary/AuthErrorBoundary';
 import ErrorBoundary from '@components/common/ErrorBoundary/ErrorBoundary';
 import LoginRedirect from '@components/common/LoginRedirect';
+import RouterTransition from '@components/common/RouterTransition';
 import initMockApi from '@mocks/.';
 import CommonStyles from '@styles/CommonStyles';
 
@@ -43,6 +44,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <QueryClientProvider client={queryClient}>
         <ReactQueryDevtools initialIsOpen={false} />
         <CommonStyles>
+          <RouterTransition />
           <ErrorBoundary key={uuid()}>
             <AuthErrorBoundary>
               <ApiErrorBoundary>
