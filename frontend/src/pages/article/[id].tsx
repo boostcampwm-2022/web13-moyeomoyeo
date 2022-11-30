@@ -33,20 +33,6 @@ const ArticleDetail = () => {
 
   const [participantsModalOpen, setParticipantsModalOpen] = useState<boolean>(false);
 
-  const {
-    authorName,
-    title,
-    status,
-    authorThumbnail,
-    createdAt,
-    category,
-    location,
-    content,
-    currentCapacity,
-    maxCapacity,
-    commentCount,
-  } = data;
-
   return (
     <>
       <PageLayout
@@ -70,27 +56,27 @@ const ArticleDetail = () => {
             <ContenxtWrapper>
               <DetailWrapper>
                 <ProfileWrapper>
-                  <Avatar radius="xl" size="lg" alt="avatar" src={authorThumbnail} />
+                  <Avatar radius="xl" size="lg" alt="avatar" src={data.author.profileImage} />
                   <ProfileTextWrapper>
-                    <Author>{authorName}</Author>
-                    <Time>{dateTimeFormat(createdAt)}</Time>
+                    <Author>{data.author.userName}</Author>
+                    <Time>{dateTimeFormat(data.createdAt)}</Time>
                   </ProfileTextWrapper>
                 </ProfileWrapper>
-                <Title>{title}</Title>
+                <Title>{data.title}</Title>
                 <TagWrapper>
                   <ArticleTag
-                    color={STATUS_COLOR[status]}
-                    content={ArticleStatusKr[status]}
+                    color={STATUS_COLOR[data.status]}
+                    content={ArticleStatusKr[data.status]}
                     size="lg"
                   />
                   <ArticleTag
-                    color={CATEGORY_COLOR[category]}
-                    content={CategoryKr[category]}
+                    color={CATEGORY_COLOR[data.category]}
+                    content={CategoryKr[data.category]}
                     size="lg"
                   />
                   <ArticleTag
-                    color={LOCATION_COLOR[location]}
-                    content={LocationKr[location]}
+                    color={LOCATION_COLOR[data.location]}
+                    content={LocationKr[data.location]}
                     size="lg"
                   />
                 </TagWrapper>
@@ -98,7 +84,7 @@ const ArticleDetail = () => {
                   <StatusWrapper>
                     <StatusText>모집 현황</StatusText>
                     <CountText>
-                      {currentCapacity}명 / {maxCapacity}명
+                      {data.currentCapacity}명 / {data.maxCapacity}명
                     </CountText>
                   </StatusWrapper>
                   <ParticipantButton onClick={() => setParticipantsModalOpen(true)}>
@@ -107,20 +93,20 @@ const ArticleDetail = () => {
                   </ParticipantButton>
                 </ParticipantWrapper>
                 <Progress
-                  value={(currentCapacity / maxCapacity) * 100}
+                  value={(data.currentCapacity / data.maxCapacity) * 100}
                   size="lg"
                   radius="lg"
                   color={indigo[7]}
                 />
                 <TypographyStylesProvider>
-                  <ContentBox dangerouslySetInnerHTML={{ __html: content }} />
+                  <ContentBox dangerouslySetInnerHTML={{ __html: data.content }} />
                 </TypographyStylesProvider>
                 {/* TODO 모집상태와 유저 참가 상태에 따라 렌더링 */}
                 <ParticipateButton
                   status={ParticipateButtonStatus.LINK}
                   chatRoomLink={'tetetetetet'}
                 />
-                <StatCounter variant="comment" count={commentCount} />
+                <StatCounter variant="comment" count={data.commentCount} />
               </DetailWrapper>
               <Divider />
               <CommentWrapper>

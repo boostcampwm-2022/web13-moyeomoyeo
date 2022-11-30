@@ -22,9 +22,7 @@ interface ArticleType {
   id: number;
   title: string;
   content: string;
-  authorId: number;
-  authorName: string;
-  authorThumbnail: string;
+  author: Partial<UserType>;
   location: Location;
   category: Category;
   commentCount: number;
