@@ -14,6 +14,7 @@ RUN npm install
 COPY . .
 
 # 이미지 빌드시 환경 변수 주입 사용
+RUN echo env checking
 ARG FRONTEND_PRODUCTION_ENV
 RUN touch .env.production
 RUN echo -e "${FRONTEND_PRODUCTION_ENV}" > .env.production
