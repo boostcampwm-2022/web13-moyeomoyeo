@@ -10,6 +10,8 @@ import {
 } from 'typeorm';
 import { Group } from '@app/group-article/entity/group.entity';
 import { User } from '@app/user/entity/user.entity';
+import { GROUP_APPLICATION_STATUS } from '@src/app/group-article/constants/group-article.constants';
+import { GroupApplicationStatusTransformer } from '@app/group-application/type/group-application-status.transformer';
 
 @Entity()
 @Unique('UNIQUE_USER_ID_GROUP_ID_STATUS', ['userId', 'groupId', 'status'])
@@ -32,12 +34,13 @@ export class GroupApplication {
   group: Promise<Group>;
 
   @Column({
-    type: 'tinyint',
-    precision: 1,
+    type: 'varchar',
+    length: 30,
     nullable: true,
-    comment: '삭제되었으면 NULL 아니면 1',
+    comment: 'enum형 - GROUP_APPLICATION_STATUS 또는 null',
+    transformer: new GroupApplicationStatusTransformer(),
   })
-  status: number | null;
+  status: GROUP_APPLICATION_STATUS;
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
@@ -47,4 +50,20 @@ export class GroupApplication {
 
   @Column({ type: 'timestamp', nullable: true })
   deletedAt: Date | null;
+
+  static create(user: User, group: Group) {
+    const groupApplication = new GroupApplication();
+    groupApplication.userId = user.id;
+    groupApplication.groupId = group.id;
+    groupApplication.status = GROUP_APPLICATION_STATUS.REGISTER;
+    return groupApplication;
+  }
+
+  static cancel(user: User, group: Group) {
+    const groupApplication = new GroupApplication();
+    groupApplication.userId = user.id;
+    groupApplication.groupId = group.id;
+    groupApplication.status = null;
+    return groupApplication;
+  }
 }

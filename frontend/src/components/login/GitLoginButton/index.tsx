@@ -6,7 +6,7 @@ const GitLoginButton = () => {
   const { white } = useTheme();
 
   const handleLoginButtonClick = async () => {
-    window.location.href = '/api/v1/auth/github/login';
+    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/v1/auth/github/login`;
   };
 
   return (

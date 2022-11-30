@@ -10,7 +10,10 @@ import { ApiResponse, UserType } from '@typings/types';
 const useFetchMyInfo = () => {
   const { data, isLoading, isError } = useQuery<ApiResponse<UserType>, AxiosError, UserType>(
     ['my'],
-    () => axios.get('/api/v1/my-info'),
+    () =>
+      axios.get(`${process.env.NEXT_PUBLIC_API_URL}/v1/my-info`, {
+        withCredentials: true,
+      }),
     {
       select: (res) => res.data.data,
       retry: false,
