@@ -11,6 +11,7 @@ import {
 import { Group } from '@app/group-article/entity/group.entity';
 import { User } from '@app/user/entity/user.entity';
 import { GROUP_APPLICATION_STATUS } from '@src/app/group-article/constants/group-article.constants';
+import { GroupApplicationStatusTransformer } from '@app/group-application/type/group-application-status.transformer';
 
 @Entity()
 @Unique('UNIQUE_USER_ID_GROUP_ID_STATUS', ['userId', 'groupId', 'status'])
@@ -37,8 +38,9 @@ export class GroupApplication {
     length: 30,
     nullable: true,
     comment: 'enum형 - GROUP_APPLICATION_STATUS 또는 null',
+    transformer: new GroupApplicationStatusTransformer(),
   })
-  status: GROUP_APPLICATION_STATUS | null;
+  status: GROUP_APPLICATION_STATUS;
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
