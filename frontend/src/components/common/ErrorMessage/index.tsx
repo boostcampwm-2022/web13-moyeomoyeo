@@ -5,7 +5,7 @@ import styled from '@emotion/styled';
 import { IconZoomExclamation } from '@tabler/icons';
 
 interface Props {
-  errorCode: number;
+  errorCode?: number;
   title?: string;
   description?: string;
   subDescription?: string;
