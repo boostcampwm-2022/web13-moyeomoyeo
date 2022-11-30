@@ -7,33 +7,40 @@ import { IconFlag, IconPencil } from '@tabler/icons';
 
 import Header from '@components/common/Header';
 import RootTitle from '@components/common/Header/RootTitle';
+import UserLoginItem from '@components/common/Header/UserLoginItem';
 import NavigationTab from '@components/common/NavigationTab';
 import PageLayout from '@components/common/PageLayout';
 import Profile from '@components/common/Profile';
-import { dummyUser } from '@constants/dummy';
 import { PAGE_TITLE } from '@constants/pageTitle';
+import useFetchMyInfo from '@hooks/queries/useFetchMyInfo';
 
 const My = () => {
   const {
     colors: { red, cyan },
   } = useTheme();
 
+  const { data: myData, isLoading } = useFetchMyInfo();
+
+  if (isLoading || !myData) return null;
+
   return (
     <PageLayout
-      // TODO 로그인 여부에 따라 rightNode 렌더링
       header={
         <Header
           leftNode={<RootTitle title={PAGE_TITLE.MY.title} subTitle={PAGE_TITLE.MY.subTitle} />}
+          rightNode={<UserLoginItem />}
         />
       }
       footer={<NavigationTab />}
     >
       <ContentWrapper>
         <ProfileWrapper>
-          <Profile user={dummyUser} />
-          <Button size="md" radius="md" color="indigo" fullWidth>
-            프로필 수정하기
-          </Button>
+          <Profile user={myData} />
+          <Link href="/my/edit">
+            <Button size="md" radius="md" color="indigo" fullWidth>
+              프로필 수정하기
+            </Button>
+          </Link>
         </ProfileWrapper>
         <LinkButtonWrapper>
           <Link href="/my/participate">

@@ -15,6 +15,14 @@ const nextConfig = {
   },
   images: {
     domains: ["avatars.githubusercontent.com"],
+  },
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: `${process.env.API_URL}/:path*`
+      }
+    ]
   }
 }
 

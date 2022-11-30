@@ -1,25 +1,40 @@
-import { Avatar } from '@mantine/core';
+import Link from 'next/link';
+
+import { Avatar, Menu, Text } from '@mantine/core';
 
 import LoginButton from '@components/common/Header/LoginButton';
+import useFetchMyInfo from '@hooks/queries/useFetchMyInfo';
 
 /**
- * 로그인 여부를 확인하여
- * 아바타를 렌더링하거나 로그인 버튼을 렌더링
+ * TODO
+ * 로그아웃 API 연동하기
  */
 
-const UserLoginItem = ({ authorized = false }: { authorized?: boolean }) => {
-  /**
-   * TODO
-   * query로 user 정보를 가져와서 로그인했는지 안했는지를 확인한다.
-   * query를 추가하면 props로 로그인 여부를 받는 건 제거한다.
-   */
-  return authorized ? (
-    <Avatar
-      radius="xl"
-      size="md"
-      alt="avatar"
-      src="https://avatars.githubusercontent.com/u/90585081?v=4"
-    />
+const UserLoginItem = () => {
+  const { data: myData, isLoading } = useFetchMyInfo();
+
+  if (isLoading) return null;
+
+  return myData ? (
+    <Menu position="bottom-end" transition="rotate-right" transitionDuration={200}>
+      <Menu.Target>
+        <Avatar radius="xl" size="md" alt="avatar" src={myData.profileImage} />
+      </Menu.Target>
+      <Menu.Dropdown>
+        <Link href="/my">
+          <Menu.Item p="md">
+            <Text fz="md" fw={500}>
+              내 프로필
+            </Text>
+          </Menu.Item>
+        </Link>
+        <Menu.Item p="md">
+          <Text fz="md" fw={500}>
+            로그아웃
+          </Text>
+        </Menu.Item>
+      </Menu.Dropdown>
+    </Menu>
   ) : (
     <LoginButton />
   );

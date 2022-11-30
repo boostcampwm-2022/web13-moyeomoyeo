@@ -16,7 +16,7 @@ const PageLayout = ({ header, footer, hasFloatingUtil, children }: Props) => {
       <HeaderWrapper>{header}</HeaderWrapper>
       <ContentWrapper>
         {children}
-        {hasFloatingUtil && <FloatingUtilButton authorized />}
+        {hasFloatingUtil && <FloatingUtilButton />}
       </ContentWrapper>
       <FooterWrapper>{footer}</FooterWrapper>
     </PageWrapper>

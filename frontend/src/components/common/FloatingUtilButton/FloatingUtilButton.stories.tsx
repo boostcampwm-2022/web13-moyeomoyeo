@@ -27,19 +27,14 @@ const SampleHeader = () => (
 
 const DefaultTemplate: ComponentStory<typeof FloatingUtilButton> = (args) => (
   <PageLayout header={<SampleHeader />} footer={<NavigationTab />}>
-    <FloatingUtilButton {...args} />
+    <FloatingUtilButton />
   </PageLayout>
 );
 
 export const Default = DefaultTemplate.bind({});
-Default.args = {
-  authorized: true,
-};
 
 export const Clicked = DefaultTemplate.bind({});
-Clicked.args = {
-  authorized: true,
-};
+
 Clicked.play = async ({ canvasElement }) => {
   const canvas = within(canvasElement);
   const buttons = await canvas.findAllByRole('button');

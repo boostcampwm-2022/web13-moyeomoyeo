@@ -9,7 +9,7 @@ import Header from '@components/common/Header';
 import DetailTitle from '@components/common/Header/DetailTitle';
 import PageLayout from '@components/common/PageLayout';
 import TextInput from '@components/common/TextInput';
-import useFetchMyData from '@hooks/queries/useFetchMyData';
+import useFetchMyInfo from '@hooks/queries/useFetchMyInfo';
 import { UserType } from '@typings/types';
 
 /**
@@ -18,7 +18,7 @@ import { UserType } from '@typings/types';
  */
 
 const MyEditPage = () => {
-  const { data: myData, isLoading } = useFetchMyData();
+  const { data: myProfile } = useFetchMyInfo();
 
   const [userDataInput, setUserDataInput] = useState<Omit<UserType, 'id'>>({
     userName: '',
@@ -29,16 +29,18 @@ const MyEditPage = () => {
   });
 
   useEffect(() => {
-    if (!isLoading) {
-      const { id, ...rest } = myData;
+    if (myProfile) {
+      const { id, ...rest } = myProfile;
       setUserDataInput({ ...rest });
     }
-  }, [isLoading, myData]);
+  }, [myProfile]);
 
   const handleUserDataChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUserDataInput((prev) => ({ ...prev, [name]: value }));
   };
+
+  if (!myProfile) return null;
 
   return (
     <PageLayout>
@@ -51,10 +53,10 @@ const MyEditPage = () => {
         }
       />
       <ProfileImageSection>
-        {isLoading ? (
+        {!myProfile ? (
           <Skeleton height={120} circle />
         ) : (
-          <ProfileImage src={myData.profileImage} alt="profile-image" width={120} height={120} />
+          <ProfileImage src={myProfile.profileImage} alt="profile-image" width={120} height={120} />
         )}
       </ProfileImageSection>
       <InputsSections>
