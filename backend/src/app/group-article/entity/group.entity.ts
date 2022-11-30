@@ -73,7 +73,7 @@ export class Group {
     return group;
   }
 
-  stop() {
+  cancel() {
     this.status = GROUP_STATUS.FAIL;
   }
 

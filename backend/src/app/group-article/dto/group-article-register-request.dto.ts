@@ -52,8 +52,7 @@ export class GroupArticleRegisterRequest {
   maxCapacity: number;
 
   @ApiProperty({
-    example:
-      'https://kr.object.ncloudstorage.com/moyeo-images/uploads/images/1669282011949-761671c7-cc43-4cee-bcb5-4bf3fea9478b.png',
+    example: '1669282011949-761671c7-cc43-4cee-bcb5-4bf3fea9478b.png',
     description: '썸네일 이미지가 저장되어있는 주소',
     required: true,
   })

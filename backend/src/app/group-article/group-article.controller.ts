@@ -31,6 +31,7 @@ import { GetGroupArticleDetailResponse } from '@app/group-article/dto/get-group-
 import { GroupArticleNotFoundException } from '@app/group-article/exception/group-article-not-found.exception';
 import { NotAuthorException } from '@app/group-article/exception/not-author.exception';
 import { NotProgressGroupException } from '@app/group-article/exception/not-progress-group.exception';
+import { IsNull } from 'typeorm';
 
 @Controller('group-articles')
 @ApiTags('Group-Article')
@@ -75,11 +76,26 @@ export class GroupArticleController {
     await this.groupArticleService.complete(user, id);
   }
 
+  @Post('/:id/recruitment-cancel')
+  @JwtAuth()
+  @ApiSuccessResponse(HttpStatus.NO_CONTENT)
+  @ApiErrorResponse(
+    NotAuthorException,
+    GroupArticleNotFoundException,
+    NotProgressGroupException,
+  )
+  async cancel(
+    @CurrentUser() user: User,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    await this.groupArticleService.cancel(user, id);
+  }
+
   @Get('/categories')
   @ApiSuccessResponse(HttpStatus.OK, GroupCategoryResponse, { isArray: true })
   async getCategories() {
     const categories = await this.groupCategoryRepository.find({
-      where: { deletedAt: null },
+      where: { deletedAt: IsNull() },
     });
 
     return ResponseEntity.OK_WITH_DATA(

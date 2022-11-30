@@ -6,6 +6,7 @@ import { GroupCategoryRepository } from '@app/group-article/repository/group-cat
 import { GroupArticleRepository } from '@app/group-article/repository/group-article.repository';
 import { User } from '@app/user/entity/user.entity';
 import { GroupArticleNotFoundException } from '@app/group-article/exception/group-article-not-found.exception';
+import { IsNull } from 'typeorm';
 
 @Injectable()
 export class GroupArticleService {
@@ -44,7 +45,7 @@ export class GroupArticleService {
   async remove(user: User, id: number) {
     const groupArticle = await this.groupArticleRepository.findOneBy({
       id,
-      deletedAt: null,
+      deletedAt: IsNull(),
     });
     if (!groupArticle) {
       throw new GroupArticleNotFoundException();
@@ -58,7 +59,7 @@ export class GroupArticleService {
   async complete(user: User, id: number) {
     const groupArticle = await this.groupArticleRepository.findOneBy({
       id,
-      deletedAt: null,
+      deletedAt: IsNull(),
     });
 
     if (!groupArticle) {
@@ -66,6 +67,23 @@ export class GroupArticleService {
     }
 
     groupArticle.complete(user);
+
+    await this.groupArticleRepository.save(groupArticle, { reload: false });
+
+    // TODO: 알림 추가 및 알림 발송
+  }
+
+  async cancel(user: User, id: number) {
+    const groupArticle = await this.groupArticleRepository.findOneBy({
+      id,
+      deletedAt: IsNull(),
+    });
+
+    if (!groupArticle) {
+      throw new GroupArticleNotFoundException();
+    }
+
+    groupArticle.cancel(user);
 
     await this.groupArticleRepository.save(groupArticle, { reload: false });
 
