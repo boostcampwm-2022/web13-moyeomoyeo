@@ -6,6 +6,7 @@ import { DuplicateApplicationException } from '@src/app/group-application/except
 import { GroupNotFoundException } from '@app/group-application/exception/group-not-found.exception';
 import { CannotApplicateException } from '@app/group-application/exception/cannot-applicate.exception';
 import { GroupArticleRepository } from '@app/group-article/repository/group-article.repository';
+import { GroupArticle } from '../group-article/entity/group-article.entity';
 
 @Injectable()
 export class GroupApplicationService {
@@ -14,17 +15,20 @@ export class GroupApplicationService {
     private readonly groupArticleRespository: GroupArticleRepository,
   ) {}
 
-  async attendGroup(userId: number, groupId: number) {
-    const groupArticle = await this.validateGroupArticleId(groupId);
+  async attendGroup(userId: number, groupArticleId: number) {
+    const groupArticle = await this.validateGroupArticleId(groupArticleId);
     this.validateUserTarget(userId, groupArticle.userId);
+    const groupId = groupArticle.group.id;
     await this.validateRegister(userId, groupId);
 
     const groupApplication = GroupApplication.create(userId, groupId);
     return this.groupApplicationRepository.save(groupApplication);
   }
 
-  async validateGroupArticleId(groupId: number) {
-    const groupArticle = await this.groupArticleRespository.findById(groupId);
+  async validateGroupArticleId(groupArticleId: number) {
+    const groupArticle = await this.groupArticleRespository.findById(
+      groupArticleId,
+    );
     if (!groupArticle) {
       throw new GroupNotFoundException();
     }
@@ -38,6 +42,12 @@ export class GroupApplicationService {
   }
 
   async validateRegister(userId: number, groupId: number) {
+    if (this.checkApplication(userId, groupId)) {
+      throw new DuplicateApplicationException();
+    }
+  }
+
+  async checkApplication(userId: number, groupId: number) {
     const application =
       await this.groupApplicationRepository.findByUserIdAndGroupIdAndStatus(
         userId,
@@ -45,8 +55,24 @@ export class GroupApplicationService {
         GROUP_APPLICATION_STATUS.REGISTER,
       );
 
-    if (application) {
-      throw new DuplicateApplicationException();
+    return application !== null;
+  }
+
+  async checkJoiningGroup(userId: number, groupArticleId: number) {
+    const groupArticle = await this.validateGroupArticleId(groupArticleId);
+    const groupId = groupArticle.group.id;
+
+    return (
+      (await this.checkAuthor(userId, groupArticle)) ||
+      (await this.checkApplication(userId, groupId))
+    );
+  }
+
+  async checkAuthor(userId: number, groupArticle: GroupArticle) {
+    const author = (await groupArticle.user).id;
+    if (userId === author) {
+      return true;
     }
+    return false;
   }
 }
