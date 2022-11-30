@@ -2,7 +2,7 @@ import { ImageUploadType } from '@typings/types';
 import { clientAxios } from '@utils/commonAxios';
 
 const useImageUpload = () => {
-  const handleUploadImage = async (file: File) => {
+  const uploadImageFile = async (file: File) => {
     try {
       const formData = new FormData();
       formData.append('files', file);
@@ -22,7 +22,7 @@ const useImageUpload = () => {
     }
   };
 
-  return { handleUploadImage };
+  return { uploadImageFile };
 };
 
 export default useImageUpload;

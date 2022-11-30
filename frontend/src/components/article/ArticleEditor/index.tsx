@@ -19,12 +19,12 @@ const RichTextEditor = dynamic(() => import('@mantine/rte'), {
 interface Props extends RichTextEditorProps {}
 
 const ArticleEditor = (props: Props) => {
-  const { handleUploadImage } = useImageUpload();
+  const { uploadImageFile } = useImageUpload();
 
   const handleEditorImageUpload = useCallback(
     async (file: File) => {
       try {
-        return (await handleUploadImage(file)).url;
+        return (await uploadImageFile(file)).url;
       } catch (err) {
         throw new Error('에디터 이미지 업로드 실패');
       }

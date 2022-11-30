@@ -44,7 +44,7 @@ const WritePage = () => {
     uploadedImage: null,
   });
   const { category, location, maxCapacity, title, contents, chatUrl, uploadedImage } = articleInput;
-  const { handleUploadImage } = useImageUpload();
+  const { uploadImageFile } = useImageUpload();
 
   const possibleToSubmit =
     category &&
@@ -90,7 +90,7 @@ const WritePage = () => {
 
   const handleChangeImage = async (imageFile: File) => {
     try {
-      const uploadedImage = await handleUploadImage(imageFile);
+      const uploadedImage = await uploadImageFile(imageFile);
       setArticleInput((prev) => ({ ...prev, uploadedImage }));
     } catch (err) {
       throw new Error((err as Error).message);
