@@ -13,6 +13,10 @@ RUN npm install
 # 프로젝트의 모든 파일 복사
 COPY . .
 
+# 이미지 빌드시 환경 변수 주입 사용
+RUN touch .env
+RUN echo -e "API_URL=https://api.moyeomoyeo.com" > .env
+
 # Build NextJS app
 RUN npm run build
 

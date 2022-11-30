@@ -28,8 +28,8 @@ jobs:
       
       - name: create environment variable file
         run: |
-          touch .env.production
-          echo -e ${{ secrets.FRONTEND_PRODUCTION_ENV }} > .env.production
+          touch .env
+          echo -e API_URL=https://api.moyeomoyeo.com > .env
 
       - name: dependency install
         run: npm install
@@ -52,8 +52,8 @@ jobs:
           
       - name: create environment variable file
         run: |
-          touch .env.production
-          echo -e ${{ secrets.FRONTEND_PRODUCTION_ENV }} > .env.production
+          touch .env
+          echo -e API_URL=https://api.moyeomoyeo.com > .env
 
       - name: depedency install
         run: npm install
@@ -93,8 +93,8 @@ jobs:
 
       - name: create environment variable file
         run: |
-          touch .env.production
-          echo -e ${{ secrets.FRONTEND_PRODUCTION_ENV }} > .env.production
+          touch .env
+          echo -e API_URL=https://api.moyeomoyeo.com > .env
 
       - name: dependency install
         run: |
