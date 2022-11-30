@@ -17,6 +17,7 @@ COPY . .
 ARG FRONTEND_PRODUCTION_ENV
 RUN touch .env.production
 RUN echo -e "${FRONTEND_PRODUCTION_ENV}" > .env.production
+RUN cat .env.production
 
 # Build NextJS app
 RUN npm run build
