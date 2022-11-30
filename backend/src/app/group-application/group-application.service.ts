@@ -63,13 +63,13 @@ export class GroupApplicationService {
     const groupId = groupArticle.group.id;
 
     return (
-      (await this.checkAuthor(userId, groupArticle)) ||
+      this.checkAuthor(userId, groupArticle) ||
       (await this.checkApplication(userId, groupId))
     );
   }
 
-  async checkAuthor(userId: number, groupArticle: GroupArticle) {
-    const author = (await groupArticle.user).id;
+  checkAuthor(userId: number, groupArticle: GroupArticle) {
+    const author = groupArticle.userId;
     if (userId === author) {
       return true;
     }
