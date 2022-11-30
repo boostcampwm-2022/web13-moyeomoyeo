@@ -29,7 +29,7 @@ jobs:
       - name: create environment variable file
         run: |
           touch .env
-          echo -e API_URL=https://api.moyeomoyeo.com > .env
+          echo -e API_URL=https://api.moyeomoyeo.com\\nNEXT_PUBLIC_API_URL=https://api.moyeomoyeo.com > .env
 
       - name: dependency install
         run: npm install
@@ -53,7 +53,7 @@ jobs:
       - name: create environment variable file
         run: |
           touch .env
-          echo -e API_URL=https://api.moyeomoyeo.com > .env
+          echo -e API_URL=https://api.moyeomoyeo.com\\nNEXT_PUBLIC_API_URL=https://api.moyeomoyeo.com > .env
 
       - name: depedency install
         run: npm install
@@ -94,7 +94,7 @@ jobs:
       - name: create environment variable file
         run: |
           touch .env
-          echo -e API_URL=https://api.moyeomoyeo.com > .env
+          echo -e API_URL=https://api.moyeomoyeo.com\\nNEXT_PUBLIC_API_URL=https://api.moyeomoyeo.com > .env
 
       - name: dependency install
         run: |
