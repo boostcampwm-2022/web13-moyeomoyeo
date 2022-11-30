@@ -22,15 +22,30 @@ import { Location, LocationKr } from '@constants/location';
  * - 이미지 업로드 API 연동
  */
 
+interface ArticleInput {
+  category: Category | null;
+  location: Location | null;
+  maxCapacity: number;
+  title: string;
+  content: string;
+  chatLink: string;
+  uploadedImage: File | null;
+}
+
 const WritePage = () => {
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
-  const [category, setCategory] = useState<Category | null>(null);
-  const [location, setLocation] = useState<Location | null>(null);
-  const [maxCapacity, setmaxCapacity] = useState<number>(5);
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [chatLink, setChatLink] = useState('');
-  const [uploadedImage, setUploadedImage] = useState<File | null>(null);
+  const [
+    { category, location, maxCapacity, title, content, chatLink, uploadedImage },
+    setArticleInput,
+  ] = useState<ArticleInput>({
+    category: null,
+    location: null,
+    maxCapacity: 5,
+    title: '',
+    content: '',
+    chatLink: '',
+    uploadedImage: null,
+  });
 
   const possibleToSubmit =
     category &&
@@ -83,10 +98,11 @@ const WritePage = () => {
                 value: key,
               }))}
               value={category}
-              onChange={(value) => setCategory(value as Category)}
+              onChange={(value) =>
+                setArticleInput((prev) => ({ ...prev, category: value as Category }))
+              }
               required
             />
-
             <DropDown
               label="장소"
               placeholder="장소 선택하기"
@@ -95,7 +111,9 @@ const WritePage = () => {
                 value: key,
               }))}
               value={location}
-              onChange={(value) => setLocation(value as Location)}
+              onChange={(location) =>
+                setArticleInput((prev) => ({ ...prev, location: location as Location }))
+              }
               required
             />
           </SelectSection>
@@ -116,7 +134,7 @@ const WritePage = () => {
               min={1}
               max={15}
               value={maxCapacity}
-              onChange={setmaxCapacity}
+              onChange={(maxCapacity) => setArticleInput((prev) => ({ ...prev, maxCapacity }))}
             />
           </PersonSection>
         </TermSection>
@@ -126,15 +144,18 @@ const WritePage = () => {
             placeholder="제목을 입력해주세요."
             required
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={(e) => setArticleInput((prev) => ({ ...prev, title: e.target.value }))}
           />
-          <ArticleEditor value={content} onChange={setContent} />
+          <ArticleEditor
+            value={content}
+            onChange={(content) => setArticleInput((prev) => ({ ...prev, content }))}
+          />
           <TextInput
             label="채팅방 링크"
             placeholder="채팅방 링크를 입력해주세요."
             required
             value={chatLink}
-            onChange={(e) => setChatLink(e.target.value)}
+            onChange={(e) => setArticleInput((prev) => ({ ...prev, chatLink: e.target.value }))}
           />
           <ImageSection>
             <FileInputLabel>
@@ -151,7 +172,7 @@ const WritePage = () => {
               required
               placeholder="이미지를 첨부해주세요 (최대 1장)"
               accept="image/*"
-              onChange={setUploadedImage}
+              onChange={(uploadedImage) => setArticleInput((prev) => ({ ...prev, uploadedImage }))}
               value={uploadedImage}
               icon={<IconUpload size={16} />}
             />
