@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { GroupArticleRegisterResquest } from '@app/group-article/dto/group-article-register-request.dto';
+import { GroupArticleRegisterRequest } from '@app/group-article/dto/group-article-register-request.dto';
 import { GroupArticle } from '@app/group-article/entity/group-article.entity';
 import { GroupCategoryNotFoundException } from '@src/app/group-article/exception/group-category-not-found.exception';
 import { GroupCategoryRepository } from '@app/group-article/repository/group-category.repository';
 import { GroupArticleRepository } from '@app/group-article/repository/group-article.repository';
+import { User } from '@app/user/entity/user.entity';
+import { GroupArticleNotFoundException } from '@app/group-article/exception/group-article-not-found.exception';
 
 @Injectable()
 export class GroupArticleService {
@@ -13,24 +15,71 @@ export class GroupArticleService {
   ) {}
 
   async registerGroupArticle(
-    groupArticleRegisterResquest: GroupArticleRegisterResquest,
+    user: User,
+    groupArticleRegisterRequest: GroupArticleRegisterRequest,
   ) {
     const category = await this.groupCategoryRepository.findByCategoryName(
-      groupArticleRegisterResquest.category,
+      groupArticleRegisterRequest.category,
     );
+
     if (!category) {
       throw new GroupCategoryNotFoundException();
     }
 
-    const groupArticle = GroupArticle.register({
-      title: groupArticleRegisterResquest.title,
-      contents: groupArticleRegisterResquest.contents,
-      thumbnail: groupArticleRegisterResquest.thumbnail,
-      location: groupArticleRegisterResquest.location,
-      maxCapacity: groupArticleRegisterResquest.maxCapacity,
-      chatUrl: groupArticleRegisterResquest.chatUrl,
-      category: category,
+    const groupArticle = GroupArticle.create(user, {
+      title: groupArticleRegisterRequest.title,
+      contents: groupArticleRegisterRequest.contents,
+      thumbnail: groupArticleRegisterRequest.thumbnail,
+      location: groupArticleRegisterRequest.location,
+      maxCapacity: groupArticleRegisterRequest.maxCapacity,
+      chatUrl: groupArticleRegisterRequest.chatUrl,
+      category,
     });
-    return this.groupArticleRepository.save(groupArticle);
+
+    await this.groupArticleRepository.save(groupArticle);
+
+    return groupArticle;
+  }
+
+  async remove(user: User, id: number) {
+    const groupArticle = await this.groupArticleRepository.findOneBy({
+      id,
+      deletedAt: null,
+    });
+    if (!groupArticle) {
+      throw new GroupArticleNotFoundException();
+    }
+
+    groupArticle.remove(user);
+
+    await this.groupArticleRepository.save(groupArticle, { reload: false });
+  }
+
+  async complete(user: User, id: number) {
+    const groupArticle = await this.groupArticleRepository.findOneBy({
+      id,
+      deletedAt: null,
+    });
+
+    if (!groupArticle) {
+      throw new GroupArticleNotFoundException();
+    }
+
+    groupArticle.complete(user);
+
+    await this.groupArticleRepository.save(groupArticle, { reload: false });
+
+    // TODO: 알림 추가 및 알림 발송
+  }
+
+  async getDetailById(id: number) {
+    const groupArticleDetail = await this.groupArticleRepository.getDetailById(
+      id,
+    );
+    if (!groupArticleDetail) {
+      throw new GroupArticleNotFoundException();
+    }
+
+    return groupArticleDetail;
   }
 }

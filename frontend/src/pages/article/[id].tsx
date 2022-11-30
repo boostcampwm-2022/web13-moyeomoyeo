@@ -24,6 +24,7 @@ const ArticleDetail = () => {
   const {
     colors: { indigo, gray },
   } = useTheme();
+
   const [participantsModalOpen, setParticipantsModalOpen] = useState<boolean>(false);
 
   const {

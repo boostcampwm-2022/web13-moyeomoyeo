@@ -7,11 +7,11 @@ import styled from '@emotion/styled';
 import { Checkbox, Select } from '@mantine/core';
 import { IconRefresh } from '@tabler/icons';
 
-import Test from '@components/Test';
 import ArticleList from '@components/article/ArticleList';
 import ApiErrorBoundary from '@components/common/ErrorBoundary/ApiErrorBoundary';
 import Header from '@components/common/Header';
 import RootTitle from '@components/common/Header/RootTitle';
+import UserLoginItem from '@components/common/Header/UserLoginItem';
 import NavigationTab from '@components/common/NavigationTab';
 import PageLayout from '@components/common/PageLayout';
 import { Category, CategoryKr } from '@constants/category';
@@ -38,6 +38,7 @@ const Main = () => {
           leftNode={
             <RootTitle title={PAGE_TITLE.ARTICLE.title} subTitle={PAGE_TITLE.ARTICLE.subTitle} />
           }
+          rightNode={<UserLoginItem />}
         />
       }
       footer={<NavigationTab />}
@@ -85,10 +86,6 @@ const Main = () => {
             <IconRefresh color={gray[6]} onClick={refreshArticleList} />
           </RefreshButton>
         </RefreshWrapper>
-        {/* TODO 테스트를 위해 작성, 추후 Test 제거 */}
-        <ApiErrorBoundary>
-          <Test />
-        </ApiErrorBoundary>
         <ApiErrorBoundary>
           <ArticleList />
         </ApiErrorBoundary>
@@ -115,6 +112,7 @@ const StyledSelect = styled(Select)`
 `;
 
 const ContentWrapper = styled.div`
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 1.2rem;

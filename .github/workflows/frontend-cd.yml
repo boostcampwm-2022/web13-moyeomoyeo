@@ -71,11 +71,12 @@ jobs:
 
             cd web13-moyeomoyeo
 
+
             git checkout -t origin/develop
 
             sudo chmod +x ./frontend/scripts/dev-deploy.sh
 
-            ./frontend/scripts/dev-deploy.sh ${{ secrets.NCP_ACCESS_KEY }} ${{ secrets.NCP_SECRET_KEY }} ${{ secrets.NCP_DOCKER_REGISTRY }} ${{ secrets.DOCKER_CLIENT_IMAGE }}
+            ./frontend/scripts/dev-deploy.sh ${{ secrets.NCP_ACCESS_KEY }} ${{ secrets.NCP_SECRET_KEY }} ${{ secrets.NCP_DOCKER_REGISTRY }} ${{ secrets.FRONTEND_PRODUCTION_ENV }}
 
   slack-notifications:
     needs: [Register-Docker-Image, CD]

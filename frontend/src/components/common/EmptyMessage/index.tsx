@@ -28,6 +28,7 @@ const EmptyMessage = ({ target, large }: Props) => {
 export default EmptyMessage;
 
 const MessageWrapper = styled.div`
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 1.6rem;

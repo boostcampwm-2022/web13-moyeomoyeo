@@ -13,10 +13,27 @@ export class UserRepository extends Repository<User> {
   }
 
   findBySocial(socialId: string, socialType: string) {
-    return this.findOneBy({ socialId, socialType });
+    return this.findOneBy({ socialId, socialType, deletedAt: null });
   }
 
-  async findById(id: number) {
-    return this.findOneBy({ id });
+  findByUsername(userName: string) {
+    return this.findOneBy({ userName, deletedAt: null });
+  }
+
+  findById(id: number) {
+    return this.findOneBy({ id, deletedAt: null });
+  }
+
+  updateUser(user: User) {
+    return this.update(
+      { id: user.id },
+      {
+        userName: user.userName,
+        profileImage: user.profileImage,
+        description: user.description,
+        githubUrl: user.githubUrl,
+        blogUrl: user.blogUrl,
+      },
+    );
   }
 }

@@ -25,7 +25,7 @@ RootPageLayout.args = {
   header: (
     <Header
       leftNode={<RootTitle title="페이지 대제목" subTitle="페이지 소제목" />}
-      rightNode={<UserLoginItem authorized />}
+      rightNode={<UserLoginItem />}
     />
   ),
 };

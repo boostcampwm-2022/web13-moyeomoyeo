@@ -49,7 +49,7 @@ export class Group {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  static register({
+  static create({
     location,
     chatUrl,
     maxCapacity,
@@ -71,5 +71,13 @@ export class Group {
     group.thumbnail = thumbnail;
 
     return group;
+  }
+
+  stop() {
+    this.status = GROUP_STATUS.FAIL;
+  }
+
+  complete() {
+    this.status = GROUP_STATUS.SUCCEED;
   }
 }

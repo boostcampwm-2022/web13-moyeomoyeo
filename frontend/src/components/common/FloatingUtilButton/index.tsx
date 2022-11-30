@@ -4,21 +4,16 @@ import { Menu, Text } from '@mantine/core';
 import { IconArrowAutofitUp, IconPencil } from '@tabler/icons';
 
 import FloatingButton from '@components/common/FloatingButton';
+import useFetchMyInfo from '@hooks/queries/useFetchMyInfo';
 
 /**
  * FloatingButton과
  * FloatingButton을 눌렀을 때 나오는 Item들
- * Item 별로 필요한 로직들을 정의한다.
+ * Item 별로 필요한 로직들을 정의한다
  */
-interface Props {
-  /**
-   * 유저 인증 여부를 넘겨준다.
-   * (userQuery 붙이면 지우자)
-   */
-  authorized?: boolean;
-}
 
-const FloatingUtilButton = ({ authorized = false }: Props) => {
+const FloatingUtilButton = () => {
+  const { data: myData } = useFetchMyInfo();
   return (
     <FloatingButton>
       <Menu.Item
@@ -30,7 +25,7 @@ const FloatingUtilButton = ({ authorized = false }: Props) => {
           상단으로 이동
         </Text>
       </Menu.Item>
-      {authorized && (
+      {myData && (
         <Link href="/article/write">
           <Menu.Item p="md" icon={<IconPencil color="black" size={20} />}>
             <Text fz="md" fw={500}>

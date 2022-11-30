@@ -1,10 +1,20 @@
-import { Body, Controller, Get, HttpStatus, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpStatus,
+  Param,
+  ParseIntPipe,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { ApiErrorResponse } from '@src/common/decorator/api-error-response.decorator';
 import { ApiSuccessResponse } from '@src/common/decorator/api-success-resposne.decorator';
 import { JwtAuth } from '@src/common/decorator/jwt-auth.decorator';
 import { ResponseEntity } from '@src/common/response-entity';
-import { GroupArticleRegisterResquest } from '@app/group-article/dto/group-article-register-request.dto';
+import { GroupArticleRegisterRequest } from '@app/group-article/dto/group-article-register-request.dto';
 import { GroupArticleRegisterResponse } from '@app/group-article/dto/group-article-register-response.dto';
 import { GroupCategoryNotFoundException } from '@app/group-article/exception/group-category-not-found.exception';
 import { GroupArticleService } from '@app/group-article/group-article.service';
@@ -15,6 +25,12 @@ import { SearchGroupArticlesRequest } from '@app/group-article/dto/search-group-
 import { SearchGroupArticleResponse } from '@app/group-article/dto/search-group-articles-response.dto';
 import { GroupArticleSearchResult } from '@app/group-article/dto/group-article-search-result.dto';
 import { ImageService } from '@app/image/image.service';
+import { CurrentUser } from '@decorator/current-user.decorator';
+import { User } from '@app/user/entity/user.entity';
+import { GetGroupArticleDetailResponse } from '@app/group-article/dto/get-group-article-detail-response.dto';
+import { GroupArticleNotFoundException } from '@app/group-article/exception/group-article-not-found.exception';
+import { NotAuthorException } from '@app/group-article/exception/not-author.exception';
+import { NotProgressGroupException } from '@app/group-article/exception/not-progress-group.exception';
 
 @Controller('group-articles')
 @ApiTags('Group-Article')
@@ -25,6 +41,39 @@ export class GroupArticleController {
     private readonly groupArticleRepository: GroupArticleRepository,
     private readonly imageService: ImageService,
   ) {}
+
+  @Post('/')
+  @JwtAuth()
+  @ApiSuccessResponse(HttpStatus.CREATED, GroupArticleRegisterResponse)
+  @ApiErrorResponse(GroupCategoryNotFoundException)
+  async createGroupArticle(
+    @CurrentUser() user: User,
+    @Body() groupArticleRegisterRequest: GroupArticleRegisterRequest,
+  ) {
+    const article = await this.groupArticleService.registerGroupArticle(
+      user,
+      groupArticleRegisterRequest,
+    );
+
+    return ResponseEntity.CREATED_WITH_DATA(
+      GroupArticleRegisterResponse.from(article),
+    );
+  }
+
+  @Post('/:id/recruitment-complete')
+  @JwtAuth()
+  @ApiSuccessResponse(HttpStatus.NO_CONTENT)
+  @ApiErrorResponse(
+    NotAuthorException,
+    GroupArticleNotFoundException,
+    NotProgressGroupException,
+  )
+  async complete(
+    @CurrentUser() user: User,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    await this.groupArticleService.complete(user, id);
+  }
 
   @Get('/categories')
   @ApiSuccessResponse(HttpStatus.OK, GroupCategoryResponse, { isArray: true })
@@ -38,23 +87,7 @@ export class GroupArticleController {
     );
   }
 
-  @Post()
-  @JwtAuth()
-  @ApiSuccessResponse(HttpStatus.CREATED, GroupArticleRegisterResponse)
-  @ApiErrorResponse(GroupCategoryNotFoundException)
-  async registerBoard(
-    @Body() groupArticleRegisterResquest: GroupArticleRegisterResquest,
-  ) {
-    const article = await this.groupArticleService.registerGroupArticle(
-      groupArticleRegisterResquest,
-    );
-    const data = GroupArticleRegisterResponse.from(article);
-
-    return ResponseEntity.CREATED_WITH_DATA(data);
-  }
-
   @Get('/search')
-  @JwtAuth()
   @ApiSuccessResponse(HttpStatus.OK, SearchGroupArticleResponse)
   async search(@Query() query: SearchGroupArticlesRequest) {
     const result = await this.groupArticleRepository.search(query);
@@ -69,5 +102,28 @@ export class GroupArticleController {
         ),
       ),
     );
+  }
+
+  @Get('/:id')
+  @JwtAuth()
+  @ApiSuccessResponse(HttpStatus.OK, GetGroupArticleDetailResponse)
+  @ApiErrorResponse(GroupArticleNotFoundException)
+  async getDetail(@Param('id', ParseIntPipe) id: number) {
+    const groupArticleDetail = await this.groupArticleService.getDetailById(id);
+
+    return ResponseEntity.OK_WITH_DATA(
+      GetGroupArticleDetailResponse.from(groupArticleDetail, this.imageService),
+    );
+  }
+
+  @Delete('/:id')
+  @JwtAuth()
+  @ApiSuccessResponse(HttpStatus.NO_CONTENT)
+  @ApiErrorResponse(NotAuthorException, GroupArticleNotFoundException)
+  async remove(
+    @CurrentUser() user: User,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    await this.groupArticleService.remove(user, id);
   }
 }
