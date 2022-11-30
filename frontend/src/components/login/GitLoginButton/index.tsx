@@ -5,8 +5,8 @@ import { IconBrandGithub } from '@tabler/icons';
 const GitLoginButton = () => {
   const { white } = useTheme();
 
-  const handleLoginButtonClick = async () => {
-    window.location.href = '/api/v1/auth/github/login';
+  const handleLoginButtonClick = () => {
+    window.location.href = `/api/v1/auth/github/login`;
   };
 
   return (

@@ -6,9 +6,9 @@ echo "docker has been logged in"
 
 cd frontend
 
-touch .env
+touch .env.production
 
-echo -e $4 > .env
+echo -e $4 > .env.production
 
 # docker down
 docker compose down --rmi all --remove-orphans

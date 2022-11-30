@@ -15,8 +15,9 @@ COPY . .
 
 # 이미지 빌드시 환경 변수 주입 사용
 ARG FRONTEND_PRODUCTION_ENV
-RUN touch .env
-RUN echo -e ${FRONTEND_PRODUCTION_ENV} > .env
+RUN echo ${FRONTEND_PRODUCTION_ENV}
+RUN touch .env.production
+RUN echo -e ${FRONTEND_PRODUCTION_ENV} > .env.production
 
 # Build NextJS app
 RUN npm run build
