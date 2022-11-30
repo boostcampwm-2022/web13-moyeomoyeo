@@ -73,7 +73,6 @@ jobs:
 
             cd web13-moyeomoyeo
 
-
             git checkout -t origin/develop
 
             sudo chmod +x ./frontend/scripts/dev-deploy.sh

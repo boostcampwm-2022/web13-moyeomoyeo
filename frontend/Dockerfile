@@ -14,11 +14,8 @@ RUN npm install
 COPY . .
 
 # 이미지 빌드시 환경 변수 주입 사용
-RUN echo env checking
-ARG FRONTEND_PRODUCTION_ENV
-RUN touch .env.production
-RUN echo -e "${FRONTEND_PRODUCTION_ENV}" > .env.production
-RUN cat .env.production
+RUN touch .env
+RUN echo -e "API_URL=https://api.moyeomoyeo.com" > .env
 
 # Build NextJS app
 RUN npm run build
