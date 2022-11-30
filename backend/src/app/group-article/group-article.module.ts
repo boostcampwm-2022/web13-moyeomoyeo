@@ -15,6 +15,6 @@ import { ImageModule } from '@app/image/image.module';
     GroupCategoryRepository,
     GroupArticleRepository,
   ],
-  exports: [GroupRepository],
+  exports: [GroupArticleRepository],
 })
 export class GroupArticleModule {}

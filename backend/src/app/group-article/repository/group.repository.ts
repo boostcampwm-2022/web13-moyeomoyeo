@@ -11,8 +11,4 @@ export class GroupRepository extends Repository<Group> {
       dataSource.createQueryRunner(),
     );
   }
-
-  findById(id: number) {
-    return this.findOneBy({ id });
-  }
 }

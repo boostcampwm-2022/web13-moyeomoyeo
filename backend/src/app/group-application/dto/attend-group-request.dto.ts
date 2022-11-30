@@ -8,5 +8,5 @@ export class AttendGroupRequest {
     required: true,
   })
   @IsNumber()
-  groupId: number;
+  groupArticleId: number;
 }

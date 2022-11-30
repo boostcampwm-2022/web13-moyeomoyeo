@@ -19,6 +19,10 @@ export class GroupArticleRepository extends Repository<GroupArticle> {
     );
   }
 
+  findById(id: number) {
+    return this.findOneBy({ id });
+  }
+
   async search(
     searchRequest: SearchGroupArticlesRequest,
   ): Promise<[IGroupArticleSearchResult[], number]> {

@@ -32,10 +32,10 @@ export class GroupApplicationController {
     @CurrentUser() user: User,
     @Body() attendGroupRequest: AttendGroupRequest,
   ) {
-    const groupId = attendGroupRequest.groupId;
+    const groupArticleId = attendGroupRequest.groupArticleId;
     const groupApplication = await this.groupApplicationService.attendGroup(
       user.id,
-      groupId,
+      groupArticleId,
     );
     const data = AttendGroupResponse.from(groupApplication.id);
     return ResponseEntity.CREATED_WITH_DATA(data);
