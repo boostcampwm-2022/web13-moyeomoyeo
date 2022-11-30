@@ -7,8 +7,8 @@ import { Location } from '@constants/location';
 interface ArticlePreviewType {
   id: number;
   title: string;
-  location: LocationType;
-  category: CategoryType;
+  location: Location;
+  category: Category;
   commentCount: number;
   scrapCount: number;
   thumbnail: string;
@@ -21,12 +21,12 @@ interface ArticlePreviewType {
 interface ArticleType {
   id: number;
   title: string;
-  contents: string;
+  content: string;
   authorId: number;
   authorName: string;
   authorThumbnail: string;
-  location: LocationType;
-  category: CategoryType;
+  location: Location;
+  category: Category;
   commentCount: number;
   scrapCount: number;
   thumbnail: string;

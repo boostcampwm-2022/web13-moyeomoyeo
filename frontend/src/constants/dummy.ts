@@ -35,7 +35,7 @@ const dummyArticle: ArticleType = {
     id: 1,
     name: Category.STUDY,
   },
-  contents: '<div>test</div>',
+  content: '<div>test</div>',
   authorId: 1,
   authorName: 'JHPark_GOD',
   authorThumbnail: 'https://avatars.githubusercontent.com/u/90585081?v=4',
