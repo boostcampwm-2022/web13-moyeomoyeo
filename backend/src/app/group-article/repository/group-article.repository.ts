@@ -22,7 +22,7 @@ export class GroupArticleRepository extends Repository<GroupArticle> {
   }
 
   findById(id: number) {
-    return this.findOneBy({ id });
+    return this.findOneBy({ id, deletedAt: null });
   }
 
   async search(
