@@ -1,24 +1,29 @@
-import { useQuery } from '@tanstack/react-query';
+import { QueryFunction, QueryKey, useQuery } from '@tanstack/react-query';
 import { UseQueryOptions } from '@tanstack/react-query/src/types';
-import { AxiosError, AxiosResponse } from 'axios';
+import { AxiosError } from 'axios';
 
-import AuthError from '../components/common/ErrorBoundary/AuthError';
+import AuthError from '@components/common/ErrorBoundary/AuthError';
 
-const useAuthQuery = <T>(
-  queryKey: string[],
-  fetchFunc: () => Promise<AxiosResponse<T>>,
+const useAuthQuery = <
+  TQueryFnData = unknown,
+  TError = AxiosError,
+  TData = TQueryFnData,
+  TQueryKey extends QueryKey = QueryKey
+>(
+  queryKey: TQueryKey,
+  queryFn: QueryFunction<TQueryFnData, TQueryKey>,
   options?: Omit<
-    UseQueryOptions<AxiosResponse<T>, AxiosError, T>,
-    'initialData' | 'queryFn' | 'queryKey'
+    UseQueryOptions<TQueryFnData, TError, TData, TQueryKey>,
+    'queryKey' | 'queryFn' | 'initialData'
   > & { initialData?: () => undefined }
 ) => {
-  const { data, isLoading, isFetching, error } = useQuery<AxiosResponse<T>, AxiosError, T>(
+  const { data, isLoading, isFetching, error } = useQuery<TQueryFnData, TError, TData, TQueryKey>(
     queryKey,
-    fetchFunc,
+    queryFn,
     options
   );
 
-  if (error) {
+  if (error && error instanceof AxiosError) {
     if (error.response && error.response.status === 401) {
       throw new AuthError();
     }
