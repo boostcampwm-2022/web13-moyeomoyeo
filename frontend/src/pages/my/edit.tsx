@@ -1,8 +1,12 @@
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { ChangeEvent, useEffect, useState } from 'react';
+
+import { QueryClient } from '@tanstack/react-query';
 
 import styled from '@emotion/styled';
 import { ActionIcon, FileInput, Skeleton } from '@mantine/core';
+import { showNotification } from '@mantine/notifications';
 import { IconCheck, IconUpload } from '@tabler/icons';
 
 import Header from '@components/common/Header';
@@ -10,7 +14,9 @@ import DetailTitle from '@components/common/Header/DetailTitle';
 import PageLayout from '@components/common/PageLayout';
 import TextInput from '@components/common/TextInput';
 import useFetchMyInfo from '@hooks/queries/useFetchMyInfo';
+import useImageUpload from '@hooks/useImageUpload';
 import { UserType } from '@typings/types';
+import { clientAxios } from '@utils/commonAxios';
 
 /**
  * TODO : 이미지 업로드 연동
@@ -19,6 +25,9 @@ import { UserType } from '@typings/types';
 
 const MyEditPage = () => {
   const { data: myProfile } = useFetchMyInfo();
+  const { uploadImageFile } = useImageUpload();
+  const router = useRouter();
+  const queryClient = new QueryClient();
 
   const [userDataInput, setUserDataInput] = useState<Omit<UserType, 'id'>>({
     userName: '',
@@ -28,6 +37,8 @@ const MyEditPage = () => {
     blogUrl: '',
   });
 
+  const { profileImage, userName, description, githubUrl, blogUrl } = userDataInput;
+
   useEffect(() => {
     if (myProfile) {
       const { id, ...rest } = myProfile;
@@ -35,9 +46,55 @@ const MyEditPage = () => {
     }
   }, [myProfile]);
 
+  const posibleToSubmit =
+    myProfile &&
+    profileImage.length > 0 &&
+    userName.length > 0 &&
+    userName.length <= 10 &&
+    description.length <= 20;
+
   const handleUserDataChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUserDataInput((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleChangeImage = async (imageFile: File) => {
+    try {
+      const { url: imageUrl } = await uploadImageFile(imageFile);
+      setUserDataInput((prev) => ({ ...prev, profileImage: imageUrl }));
+    } catch (err) {
+      // TODO : 에러 처리 어떻게 할꺼야!!
+      throw new Error((err as Error).message);
+    }
+  };
+
+  const handleClickProfileChangeBtn = async () => {
+    try {
+      await clientAxios.put('/v1/my-info', { ...userDataInput });
+      await queryClient.invalidateQueries(['my']);
+      // invalidate 처리가 잘 안된다..?
+      showNotification({
+        color: 'indigo',
+        title: '프로필 수정 완료!',
+        message: '멋지게 바뀐 프로필을 확인해보세요!',
+        icon: <IconCheck size={16} />,
+        autoClose: 5000,
+        styles: (theme) => ({
+          root: {
+            paddingTop: '1.6rem',
+            paddingBottom: '1.6rem',
+          },
+          title: {
+            fontSize: theme.fontSizes.lg,
+            fontWeight: 700,
+          },
+        }),
+      });
+      void router.push('/my');
+    } catch (err) {
+      // TODO : 에러 처리 어떻게 할꺼야!!
+      throw new Error('프로필 수정 실패');
+    }
   };
 
   if (!myProfile) return null;
@@ -47,7 +104,11 @@ const MyEditPage = () => {
       <Header
         leftNode={<DetailTitle title="프로필 수정" subTitle="자신의 프로필을 수정해보세요" />}
         rightNode={
-          <ActionIcon variant="transparent" color={'gray'} onClick={() => alert('게시글 등록!')}>
+          <ActionIcon
+            variant="transparent"
+            color={posibleToSubmit ? 'indigo' : 'gray'}
+            onClick={handleClickProfileChangeBtn}
+          >
             <IconCheck size={24} stroke={3} />
           </ActionIcon>
         }
@@ -56,7 +117,12 @@ const MyEditPage = () => {
         {!myProfile ? (
           <Skeleton height={120} circle />
         ) : (
-          <ProfileImage src={myProfile.profileImage} alt="profile-image" width={120} height={120} />
+          <ProfileImage
+            src={profileImage.length > 0 ? profileImage : myProfile.profileImage}
+            alt="profile-image"
+            width={120}
+            height={120}
+          />
         )}
       </ProfileImageSection>
       <InputsSections>
@@ -67,15 +133,16 @@ const MyEditPage = () => {
           accept="image/*"
           icon={<IconUpload size={16} />}
           styles={{ label: { paddingBottom: '0.4rem' } }}
+          onChange={handleChangeImage}
         />
         <TextInput
           required
           name="userName"
           label="닉네임 (필수, 최대 10자)"
           placeholder="닉네임을 입력하세요"
-          value={userDataInput.userName}
+          value={userName}
           onChange={handleUserDataChange}
-          error={userDataInput.userName.length <= 0 && '닉네임은 필수입니다'}
+          error={userName.length <= 0 && '닉네임은 필수입니다'}
           maxLength={10}
         />
         <TextInput
@@ -83,13 +150,13 @@ const MyEditPage = () => {
           disabled
           label="Github 링크"
           placeholder="Github 링크를 입력하세요"
-          value={userDataInput.githubUrl}
+          value={githubUrl}
         />
         <TextInput
           label="블로그 링크"
           name="blogUrl"
           placeholder="블로그 링크를 입력하세요"
-          value={userDataInput.blogUrl}
+          value={blogUrl}
           onChange={handleUserDataChange}
         />
         <TextInput
@@ -97,7 +164,7 @@ const MyEditPage = () => {
           name="description"
           placeholder="자신에 대해 한 줄로 소개해주세요"
           onChange={handleUserDataChange}
-          value={userDataInput.description}
+          value={description}
           maxLength={20}
         />
       </InputsSections>
