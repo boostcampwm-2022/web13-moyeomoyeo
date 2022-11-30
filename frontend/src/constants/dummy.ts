@@ -7,14 +7,8 @@ import { ArticlePreviewType, ArticleType, UserType } from '@typings/types';
 const dummyArticlePreview: ArticlePreviewType = {
   id: 1,
   title: '모집 테스트1',
-  location: {
-    id: 2,
-    name: Location.BUSAN,
-  },
-  category: {
-    id: 1,
-    name: Category.STUDY,
-  },
+  location: Location.GYEONGNAM,
+  category: Category.STUDY,
   commentCount: 31,
   scrapCount: 12,
   thumbnail: 'https://avatars.githubusercontent.com/u/90585081?v=4',
@@ -27,14 +21,8 @@ const dummyArticlePreview: ArticlePreviewType = {
 const dummyArticle: ArticleType = {
   id: 1,
   title: '모집 테스트1',
-  location: {
-    id: 2,
-    name: Location.BUSAN,
-  },
-  category: {
-    id: 1,
-    name: Category.STUDY,
-  },
+  location: Location.GYEONGNAM,
+  category: Category.STUDY,
   content: '<div>test</div>',
   authorId: 1,
   authorName: 'JHPark_GOD',

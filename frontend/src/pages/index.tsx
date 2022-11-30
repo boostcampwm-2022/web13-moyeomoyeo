@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import Link from 'next/link';
+import { useMemo, useState } from 'react';
 
 import { useQueryClient } from '@tanstack/react-query';
 
@@ -7,8 +8,9 @@ import styled from '@emotion/styled';
 import { Checkbox, Select } from '@mantine/core';
 import { IconRefresh } from '@tabler/icons';
 
-import ArticleList from '@components/article/ArticleList';
+import EmptyMessage from '@components/common/EmptyMessage';
 import ApiErrorBoundary from '@components/common/ErrorBoundary/ApiErrorBoundary';
+import GroupArticleCard from '@components/common/GroupArticleCard';
 import Header from '@components/common/Header';
 import RootTitle from '@components/common/Header/RootTitle';
 import UserLoginItem from '@components/common/Header/UserLoginItem';
@@ -17,6 +19,9 @@ import PageLayout from '@components/common/PageLayout';
 import { Category, CategoryKr } from '@constants/category';
 import { Location, LocationKr } from '@constants/location';
 import { PAGE_TITLE } from '@constants/pageTitle';
+import useFetchGroupArticles from '@hooks/queries/useFetchGroupArticles';
+import useIntersect from '@hooks/useIntersect';
+import { ArticleType } from '@typings/types';
 
 const Main = () => {
   const {
@@ -26,6 +31,24 @@ const Main = () => {
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
   const [progressChecked, setProgressChecked] = useState<boolean>(false);
+
+  const { data, fetchNextPage, hasNextPage, isFetching } = useFetchGroupArticles(
+    selectedCategory,
+    selectedLocation,
+    progressChecked
+  );
+  const ref = useIntersect((entry, observer) => {
+    observer.unobserve(entry.target);
+    if (hasNextPage && !isFetching) {
+      void fetchNextPage();
+    }
+  });
+
+  const articles: ArticleType[] = useMemo(
+    // @ts-expect-error
+    () => (data ? data.pages.flatMap(({ data }) => data.data.data) : []),
+    [data]
+  );
 
   const refreshArticleList = () => {
     void queryClient.resetQueries(['articles']);
@@ -87,7 +110,20 @@ const Main = () => {
           </RefreshButton>
         </RefreshWrapper>
         <ApiErrorBoundary>
-          <ArticleList />
+          {articles.length > 0 ? (
+            <ListWrapper>
+              {articles.map((article) => (
+                <Link key={article.id} href={`/article/${article.id}`}>
+                  <div key={article.id}>
+                    <GroupArticleCard article={article} />
+                  </div>
+                </Link>
+              ))}
+              <div ref={ref}></div>
+            </ListWrapper>
+          ) : (
+            <EmptyMessage target="article" large />
+          )}
         </ApiErrorBoundary>
       </ContentWrapper>
     </PageLayout>
@@ -136,4 +172,10 @@ const RefreshButton = styled.button`
   &:hover {
     cursor: pointer;
   }
+`;
+
+const ListWrapper = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 1.3rem;
 `;

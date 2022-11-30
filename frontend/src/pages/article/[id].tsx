@@ -21,6 +21,7 @@ import { LocationKr } from '@constants/location';
 import { PAGE_TITLE } from '@constants/pageTitle';
 import { ParticipateButtonStatus } from '@constants/participateButton';
 import useFetchArticle from '@hooks/queries/useFetchArticle';
+import dateTimeFormat from '@utils/dateTime';
 
 const ArticleDetail = () => {
   const {
@@ -74,7 +75,7 @@ const ArticleDetail = () => {
                   <Avatar radius="xl" size="lg" alt="avatar" src={authorThumbnail} />
                   <ProfileTextWrapper>
                     <Author>{authorName}</Author>
-                    <Time>{createdAt}</Time>
+                    <Time>{dateTimeFormat(createdAt)}</Time>
                   </ProfileTextWrapper>
                 </ProfileWrapper>
                 <Title>{title}</Title>

@@ -8,8 +8,9 @@ const getGroupArticles = async (
   currentPage: number,
   category: Category,
   location: Location,
-  status: ArticleStatus | null
+  filterProgress: boolean
 ) => {
+  const status = filterProgress ? ArticleStatus.PROGRESS : null;
   return axios.get(`${process.env.NEXT_PUBLIC_API_URL}/v1/group-articles/search`, {
     params: { category, location, status, currentPage, countPerPage: 5 },
     withCredentials: true,

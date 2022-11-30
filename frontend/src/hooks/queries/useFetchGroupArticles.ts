@@ -3,7 +3,6 @@ import { AxiosError, AxiosResponse } from 'axios';
 
 import getGroupArticles from '@apis/group-articles/getGroupArticles';
 import AuthError from '@components/common/ErrorBoundary/AuthError';
-import { ArticleStatus } from '@constants/article';
 import { Category } from '@constants/category';
 import { Location } from '@constants/location';
 import { ArticlePreviewType, ArticleType } from '@typings/types';
@@ -22,18 +21,22 @@ interface ArticleResponseType {
 const useFetchGroupArticles = (
   category: Category | null,
   location: Location | null,
-  status: ArticleStatus | null
+  filterProgress: boolean
 ) => {
   const { data, fetchNextPage, hasNextPage, isFetching, error } = useInfiniteQuery<
     AxiosResponse<ArticleResponseType>,
     AxiosError,
     ArticleType[]
-  >(['articles'], ({ pageParam = 1 }) => getGroupArticles(pageParam, category, location, status), {
-    getNextPageParam: (lastPage: AxiosResponse<ArticleResponseType>) =>
-      lastPage.data.data.totalPage === lastPage.data.data.currentPage
-        ? undefined
-        : lastPage.data.data.currentPage + 1,
-  });
+  >(
+    ['articles', category, location, filterProgress],
+    ({ pageParam = 1 }) => getGroupArticles(pageParam, category, location, filterProgress),
+    {
+      getNextPageParam: (lastPage: AxiosResponse<ArticleResponseType>) =>
+        lastPage.data.data.totalPage === lastPage.data.data.currentPage
+          ? undefined
+          : lastPage.data.data.currentPage + 1,
+    }
+  );
 
   if (error) {
     if (error.response && error.response.status === 401) {
