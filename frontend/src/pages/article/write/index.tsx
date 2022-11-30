@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import styled from '@emotion/styled';
 import { ActionIcon, FileInput, Slider, Text } from '@mantine/core';
@@ -56,11 +56,11 @@ const WritePage = () => {
     chatLink.length > 0 &&
     uploadedImage;
 
-  const handleSubmit = () => {
+  const handleSubmit = useCallback(() => {
     if (!possibleToSubmit) return;
     // TODO API 호출
     setConfirmModalOpen(true);
-  };
+  }, [possibleToSubmit]);
 
   return (
     <>

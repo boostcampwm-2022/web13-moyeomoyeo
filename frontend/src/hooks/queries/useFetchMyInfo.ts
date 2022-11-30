@@ -1,7 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import axios, { AxiosError } from 'axios';
+import { AxiosError } from 'axios';
 
 import { ApiResponse, UserType } from '@typings/types';
+import { clientAxios } from '@utils/commonAxios';
 
 /**
  * 로그인 한 유저의 유저정보를 반환
@@ -10,10 +11,7 @@ import { ApiResponse, UserType } from '@typings/types';
 const useFetchMyInfo = () => {
   const { data, isLoading, isError } = useQuery<ApiResponse<UserType>, AxiosError, UserType>(
     ['my'],
-    () =>
-      axios.get(`${process.env.NEXT_PUBLIC_API_URL}/v1/my-info`, {
-        withCredentials: true,
-      }),
+    () => clientAxios.get('/v1/my-info'),
     {
       select: (res) => res.data.data,
       retry: false,
