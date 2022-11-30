@@ -9,7 +9,6 @@ import { Checkbox, Select } from '@mantine/core';
 import { IconRefresh } from '@tabler/icons';
 
 import EmptyMessage from '@components/common/EmptyMessage';
-import ApiErrorBoundary from '@components/common/ErrorBoundary/ApiErrorBoundary';
 import GroupArticleCard from '@components/common/GroupArticleCard';
 import Header from '@components/common/Header';
 import RootTitle from '@components/common/Header/RootTitle';
@@ -109,22 +108,20 @@ const Main = () => {
             <IconRefresh color={gray[6]} onClick={refreshArticleList} />
           </RefreshButton>
         </RefreshWrapper>
-        <ApiErrorBoundary>
-          {articles.length > 0 ? (
-            <ListWrapper>
-              {articles.map((article) => (
-                <Link key={article.id} href={`/article/${article.id}`}>
-                  <div key={article.id}>
-                    <GroupArticleCard article={article} />
-                  </div>
-                </Link>
-              ))}
-              <div ref={ref}></div>
-            </ListWrapper>
-          ) : (
-            <EmptyMessage target="article" large />
-          )}
-        </ApiErrorBoundary>
+        {articles.length > 0 ? (
+          <ListWrapper>
+            {articles.map((article) => (
+              <Link key={article.id} href={`/article/${article.id}`}>
+                <div key={article.id}>
+                  <GroupArticleCard article={article} />
+                </div>
+              </Link>
+            ))}
+            <div ref={ref}></div>
+          </ListWrapper>
+        ) : (
+          <EmptyMessage target="article" large />
+        )}
       </ContentWrapper>
     </PageLayout>
   );
