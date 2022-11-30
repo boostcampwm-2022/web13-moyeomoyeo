@@ -71,4 +71,15 @@ export class GroupArticleService {
 
     // TODO: 알림 추가 및 알림 발송
   }
+
+  async getDetailById(id: number) {
+    const groupArticleDetail = await this.groupArticleRepository.getDetailById(
+      id,
+    );
+    if (!groupArticleDetail) {
+      throw new GroupArticleNotFoundException();
+    }
+
+    return groupArticleDetail;
+  }
 }

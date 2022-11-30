@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 import styled from '@emotion/styled';
 
 import Header from '@components/common/Header';
@@ -20,6 +22,9 @@ const Login = () => {
           </TextWrapper>
         </InfoWrapper>
         <GitLoginButton />
+        <Link href="/">
+          <BackHomeText>메인으로 돌아가기</BackHomeText>
+        </Link>
       </PageWrapper>
     </PageLayout>
   );
@@ -55,6 +60,15 @@ const SubTitle = styled.span`
   font-size: 1.2rem;
   font-weight: 400;
   color: ${({ theme }) => theme.colors.indigo[7]};
+`;
+
+const BackHomeText = styled.span`
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: ${({ theme }) => theme.colors.indigo[7]};
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 export default Login;

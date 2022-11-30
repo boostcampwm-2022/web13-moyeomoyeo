@@ -27,8 +27,9 @@ import { GroupArticleSearchResult } from '@app/group-article/dto/group-article-s
 import { ImageService } from '@app/image/image.service';
 import { CurrentUser } from '@decorator/current-user.decorator';
 import { User } from '@app/user/entity/user.entity';
-import { NotAuthorException } from '@app/group-article/exception/not-author.exception';
+import { GetGroupArticleDetailResponse } from '@app/group-article/dto/get-group-article-detail-response.dto';
 import { GroupArticleNotFoundException } from '@app/group-article/exception/group-article-not-found.exception';
+import { NotAuthorException } from '@app/group-article/exception/not-author.exception';
 import { NotProgressGroupException } from '@app/group-article/exception/not-progress-group.exception';
 
 @Controller('group-articles')
@@ -100,6 +101,18 @@ export class GroupArticleController {
           GroupArticleSearchResult.from(row, this.imageService),
         ),
       ),
+    );
+  }
+
+  @Get('/:id')
+  @JwtAuth()
+  @ApiSuccessResponse(HttpStatus.OK, GetGroupArticleDetailResponse)
+  @ApiErrorResponse(GroupArticleNotFoundException)
+  async getDetail(@Param('id', ParseIntPipe) id: number) {
+    const groupArticleDetail = await this.groupArticleService.getDetailById(id);
+
+    return ResponseEntity.OK_WITH_DATA(
+      GetGroupArticleDetailResponse.from(groupArticleDetail, this.imageService),
     );
   }
 
