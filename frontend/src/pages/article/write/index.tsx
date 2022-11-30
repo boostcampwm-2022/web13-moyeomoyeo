@@ -1,8 +1,10 @@
 import Head from 'next/head';
-import { useCallback, useState } from 'react';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
 
 import styled from '@emotion/styled';
 import { ActionIcon, FileInput, Slider, Text } from '@mantine/core';
+import { showNotification } from '@mantine/notifications';
 import { IconCheck, IconUpload, IconUser } from '@tabler/icons';
 
 import ArticleEditor from '@components/article/ArticleEditor';
@@ -15,52 +17,85 @@ import PageLayout from '@components/common/PageLayout';
 import TextInput from '@components/common/TextInput';
 import { Category, CategoryKr } from '@constants/category';
 import { Location, LocationKr } from '@constants/location';
-
-/**
- * Todo
- * - 게시글 등록 API 연동
- * - 이미지 업로드 API 연동
- */
+import useImageUpload from '@hooks/useImageUpload';
+import { ImageUploadType } from '@typings/types';
+import { clientAxios } from '@utils/commonAxios';
 
 interface ArticleInput {
   category: Category | null;
   location: Location | null;
   maxCapacity: number;
   title: string;
-  content: string;
-  chatLink: string;
-  uploadedImage: File | null;
+  contents: string;
+  chatUrl: string;
+  uploadedImage: ImageUploadType | null;
 }
 
 const WritePage = () => {
+  const router = useRouter();
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
-  const [
-    { category, location, maxCapacity, title, content, chatLink, uploadedImage },
-    setArticleInput,
-  ] = useState<ArticleInput>({
+  const [articleInput, setArticleInput] = useState<ArticleInput>({
     category: null,
     location: null,
     maxCapacity: 5,
     title: '',
-    content: '',
-    chatLink: '',
+    contents: '',
+    chatUrl: '',
     uploadedImage: null,
   });
+  const { category, location, maxCapacity, title, contents, chatUrl, uploadedImage } = articleInput;
+  const { handleUploadImage } = useImageUpload();
 
   const possibleToSubmit =
     category &&
     location &&
     maxCapacity &&
     title.length > 0 &&
-    content.length > 0 &&
-    chatLink.length > 0 &&
+    contents.length > 0 &&
+    chatUrl.length > 0 &&
     uploadedImage;
 
-  const handleSubmit = useCallback(() => {
+  const handleClickSubmitBtn = async () => {
     if (!possibleToSubmit) return;
-    // TODO API 호출
-    setConfirmModalOpen(true);
-  }, [possibleToSubmit]);
+    try {
+      await clientAxios.post('/v1/group-articles', {
+        ...articleInput,
+        thumbnail: uploadedImage.key,
+      });
+      // TODO : mutation 로직 추가?
+      // Modal, notification 중 고르기
+      showNotification({
+        color: 'indigo',
+        title: '게시글 등록 완료!',
+        message: '이제 모집 완료 되기를 기다려주세요!',
+        icon: <IconCheck size={16} />,
+        autoClose: 5000,
+        styles: (theme) => ({
+          root: {
+            paddingTop: '1.6rem',
+            paddingBottom: '1.6rem',
+          },
+          title: {
+            fontSize: theme.fontSizes.lg,
+            fontWeight: 700,
+          },
+        }),
+      });
+      void router.push('/');
+    } catch (err) {
+      // TODO 에러처리...
+      console.log(err);
+    }
+  };
+
+  const handleChangeImage = async (imageFile: File) => {
+    try {
+      const uploadedImage = await handleUploadImage(imageFile);
+      setArticleInput((prev) => ({ ...prev, uploadedImage }));
+    } catch (err) {
+      throw new Error((err as Error).message);
+    }
+  };
 
   return (
     <>
@@ -75,7 +110,7 @@ const WritePage = () => {
               <ActionIcon
                 variant="transparent"
                 color={possibleToSubmit ? 'indigo' : 'gray'}
-                onClick={handleSubmit}
+                onClick={handleClickSubmitBtn}
               >
                 <IconCheck size={24} stroke={3} />
               </ActionIcon>
@@ -147,15 +182,15 @@ const WritePage = () => {
             onChange={(e) => setArticleInput((prev) => ({ ...prev, title: e.target.value }))}
           />
           <ArticleEditor
-            value={content}
-            onChange={(content) => setArticleInput((prev) => ({ ...prev, content }))}
+            value={contents}
+            onChange={(contents) => setArticleInput((prev) => ({ ...prev, contents }))}
           />
           <TextInput
             label="채팅방 링크"
             placeholder="채팅방 링크를 입력해주세요."
             required
-            value={chatLink}
-            onChange={(e) => setArticleInput((prev) => ({ ...prev, chatLink: e.target.value }))}
+            value={chatUrl}
+            onChange={(e) => setArticleInput((prev) => ({ ...prev, chatUrl: e.target.value }))}
           />
           <ImageSection>
             <FileInputLabel>
@@ -166,14 +201,13 @@ const WritePage = () => {
                 *
               </Text>
             </FileInputLabel>
-            <ImageThumbnail src={uploadedImage && URL.createObjectURL(uploadedImage)} />
+            <ImageThumbnail src={uploadedImage?.url} />
             <FileInput
               size="md"
               required
               placeholder="이미지를 첨부해주세요 (최대 1장)"
               accept="image/*"
-              onChange={(uploadedImage) => setArticleInput((prev) => ({ ...prev, uploadedImage }))}
-              value={uploadedImage}
+              onChange={handleChangeImage}
               icon={<IconUpload size={16} />}
             />
           </ImageSection>
