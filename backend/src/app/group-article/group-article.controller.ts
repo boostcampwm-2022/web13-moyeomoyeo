@@ -30,6 +30,7 @@ import { User } from '@app/user/entity/user.entity';
 import { GetGroupArticleDetailResponse } from '@app/group-article/dto/get-group-article-detail-response.dto';
 import { GroupArticleNotFoundException } from '@app/group-article/exception/group-article-not-found.exception';
 import { NotAuthorException } from '@app/group-article/exception/not-author.exception';
+import { NotProgressGroupException } from '@app/group-article/exception/not-progress-group.exception';
 
 @Controller('group-articles')
 @ApiTags('Group-Article')
@@ -40,18 +41,6 @@ export class GroupArticleController {
     private readonly groupArticleRepository: GroupArticleRepository,
     private readonly imageService: ImageService,
   ) {}
-
-  @Get('/categories')
-  @ApiSuccessResponse(HttpStatus.OK, GroupCategoryResponse, { isArray: true })
-  async getCategories() {
-    const categories = await this.groupCategoryRepository.find({
-      where: { deletedAt: null },
-    });
-
-    return ResponseEntity.OK_WITH_DATA(
-      categories.map((category) => GroupCategoryResponse.from(category)),
-    );
-  }
 
   @Post('/')
   @JwtAuth()
@@ -68,6 +57,33 @@ export class GroupArticleController {
 
     return ResponseEntity.CREATED_WITH_DATA(
       GroupArticleRegisterResponse.from(article),
+    );
+  }
+
+  @Post('/:id/recruitment-complete')
+  @JwtAuth()
+  @ApiSuccessResponse(HttpStatus.NO_CONTENT)
+  @ApiErrorResponse(
+    NotAuthorException,
+    GroupArticleNotFoundException,
+    NotProgressGroupException,
+  )
+  async complete(
+    @CurrentUser() user: User,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    await this.groupArticleService.complete(user, id);
+  }
+
+  @Get('/categories')
+  @ApiSuccessResponse(HttpStatus.OK, GroupCategoryResponse, { isArray: true })
+  async getCategories() {
+    const categories = await this.groupCategoryRepository.find({
+      where: { deletedAt: null },
+    });
+
+    return ResponseEntity.OK_WITH_DATA(
+      categories.map((category) => GroupCategoryResponse.from(category)),
     );
   }
 

@@ -9,6 +9,7 @@ import {
 } from '@app/group-article/constants/group-article.constants';
 import { User } from '@app/user/entity/user.entity';
 import { NotAuthorException } from '@app/group-article/exception/not-author.exception';
+import { NotProgressGroupException } from '@app/group-article/exception/not-progress-group.exception';
 
 @ChildEntity(ARTICLE.GROUP)
 export class GroupArticle extends Article {
@@ -54,11 +55,29 @@ export class GroupArticle extends Article {
   }
 
   remove(user: User) {
-    if (this.userId !== user.id) {
+    if (!this.isAuthor(user)) {
       throw new NotAuthorException();
     }
 
-    this.group.status = GROUP_STATUS.FAIL;
+    this.group.stop();
     this.deletedAt = new Date();
+  }
+
+  complete(user: User) {
+    if (!this.isAuthor(user)) {
+      throw new NotAuthorException();
+    }
+
+    if (this.group.status !== GROUP_STATUS.PROGRESS) {
+      throw new NotProgressGroupException(
+        '모집중인 게시글만 모집완료 처리할 수 있습니다',
+      );
+    }
+
+    this.group.complete();
+  }
+
+  private isAuthor(user: User) {
+    return this.userId === user.id;
   }
 }
