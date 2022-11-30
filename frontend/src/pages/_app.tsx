@@ -4,16 +4,26 @@ import { useEffect, useState } from 'react';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { v4 as uuid } from 'uuid';
 
+import ApiErrorBoundary from '@components/common/ErrorBoundary/ApiErrorBoundary';
+import AuthErrorBoundary from '@components/common/ErrorBoundary/AuthErrorBoundary';
+import ErrorBoundary from '@components/common/ErrorBoundary/ErrorBoundary';
 import LoginRedirect from '@components/common/LoginRedirect';
 import RouterTransition from '@components/common/RouterTransition';
 import initMockApi from '@mocks/.';
 import CommonStyles from '@styles/CommonStyles';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+    },
+  },
+});
 
 export default function App({ Component, pageProps }: AppProps) {
-  const [shouldRender, setShouldRender] = useState<boolean>(true);
+  const [shouldRender, setShouldRender] = useState<boolean>(false);
 
   useEffect(() => {
     void (async () => {
@@ -34,9 +44,15 @@ export default function App({ Component, pageProps }: AppProps) {
       <QueryClientProvider client={queryClient}>
         <ReactQueryDevtools initialIsOpen={false} />
         <CommonStyles>
-          <RouterTransition />
-          <LoginRedirect />
-          <Component {...pageProps} />
+          <ErrorBoundary key={uuid()}>
+            <AuthErrorBoundary>
+              <ApiErrorBoundary>
+                <RouterTransition />
+                <Component {...pageProps} />
+                <LoginRedirect />
+              </ApiErrorBoundary>
+            </AuthErrorBoundary>
+          </ErrorBoundary>
         </CommonStyles>
       </QueryClientProvider>
     </>
