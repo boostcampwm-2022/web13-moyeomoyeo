@@ -5,7 +5,7 @@ import styled from '@emotion/styled';
 import { LoadingOverlay, Text } from '@mantine/core';
 import { RichTextEditorProps } from '@mantine/rte';
 
-import useImageUpload from '@hooks/useImageUpload';
+import uploadImage from '@utils/uploadImage';
 
 const RichTextEditor = dynamic(() => import('@mantine/rte'), {
   ssr: false,
@@ -19,12 +19,10 @@ const RichTextEditor = dynamic(() => import('@mantine/rte'), {
 interface Props extends RichTextEditorProps {}
 
 const ArticleEditor = (props: Props) => {
-  const { uploadImageFile } = useImageUpload();
-
   const handleEditorImageUpload = useCallback(
     async (file: File) => {
       try {
-        return (await uploadImageFile(file)).url;
+        return (await uploadImage(file)).url;
       } catch (err) {
         throw new Error('에디터 이미지 업로드 실패');
       }
