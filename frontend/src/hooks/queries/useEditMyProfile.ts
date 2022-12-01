@@ -7,7 +7,7 @@ import { clientAxios } from '@utils/commonAxios';
 const updateProfile = (userProfile: Omit<UserType, 'id'>) =>
   clientAxios.put('/v1/my-info', userProfile);
 
-const useUpdateProfile = () => {
+const useEditMyProfile = () => {
   const queryClient = useQueryClient();
   return useAuthMutation(updateProfile, {
     onSuccess: async () => {
@@ -16,4 +16,4 @@ const useUpdateProfile = () => {
   });
 };
 
-export default useUpdateProfile;
+export default useEditMyProfile;

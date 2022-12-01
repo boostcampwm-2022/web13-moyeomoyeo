@@ -11,8 +11,8 @@ import Header from '@components/common/Header';
 import DetailTitle from '@components/common/Header/DetailTitle';
 import PageLayout from '@components/common/PageLayout';
 import TextInput from '@components/common/TextInput';
+import useEditMyProfile from '@hooks/queries/useEditMyProfile';
 import useFetchMyInfo from '@hooks/queries/useFetchMyInfo';
-import useEditMyProfile from '@hooks/queries/useUpdateMyProfile';
 import useAsyncError from '@hooks/useAsyncError';
 import { UserType } from '@typings/types';
 import uploadImage from '@utils/uploadImage';
@@ -84,7 +84,6 @@ const MyEditPage = () => {
       });
       void router.push('/my');
     } catch (err) {
-      // TODO : 에러 처리 어떻게 할꺼야!!
       throwAsyncError('프로필 수정에 실패했습니다.');
     }
   };
