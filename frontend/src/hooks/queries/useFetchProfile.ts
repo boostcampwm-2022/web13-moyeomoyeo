@@ -21,7 +21,7 @@ const useFetchProfile = (id: number) => {
     AxiosResponse<ResponseType>,
     AxiosError,
     UserType
-  >(['article', id], () => getUserProfile(id), {
+  >(['profile', id], () => getUserProfile(id), {
     select: (res) => res.data.data,
   });
 
