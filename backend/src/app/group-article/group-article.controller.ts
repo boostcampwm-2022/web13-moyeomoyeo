@@ -168,7 +168,7 @@ export class GroupArticleController {
     );
   }
 
-  @Delete('/:id')
+  @Delete(':id')
   @JwtAuth()
   @ApiSuccessResponse(HttpStatus.NO_CONTENT)
   @ApiErrorResponse(NotAuthorException, GroupArticleNotFoundException)
