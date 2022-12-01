@@ -52,14 +52,13 @@ export class GroupApplicationController {
     return ResponseEntity.CREATED_WITH_DATA(data);
   }
 
-  @Post('/status')
+  @Get('/status')
   @ApiSuccessResponse(HttpStatus.OK, CheckJoiningGroupResonse)
   @ApiErrorResponse(GroupNotFoundException)
   async checkJoinedGroup(
     @CurrentUser() user: User,
-    @Body() groupApplicationRequest: GroupApplicationRequest,
+    @Query('groupArticleId', ParseIntPipe) groupArticleId: number,
   ) {
-    const groupArticleId = groupApplicationRequest.groupArticleId;
     const isJoined = await this.groupApplicationService.checkJoinedGroup(
       user,
       groupArticleId,
