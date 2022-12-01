@@ -12,6 +12,7 @@ import {
   NOTIFICATION_SETTING_STATUS,
   NOTIFICATION_SETTING_TYPE,
 } from '@app/notification/constants/notification.constants';
+import { NotAccessibleException } from '@app/notification/exception/not-accessible.exception';
 
 @Entity({ name: 'notification_setting' })
 export class NotificationSetting {
@@ -44,5 +45,13 @@ export class NotificationSetting {
     notificationSetting.type = type;
     notificationSetting.status = NOTIFICATION_SETTING_STATUS.ON;
     return notificationSetting;
+  }
+
+  setStatus(user: User, status: NOTIFICATION_SETTING_STATUS) {
+    if (this.userId !== user.id) {
+      throw new NotAccessibleException();
+    }
+
+    this.status = status;
   }
 }
