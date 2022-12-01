@@ -9,8 +9,9 @@ const LoginRedirect = () => {
   const router = useRouter();
 
   useEffect(() => {
-    const noRedirectPaths = ['/', '/login'];
-    if (!isLoading && !data && !noRedirectPaths.includes(router.pathname)) {
+    const authRequiredPaths = ['/my', '/notification', '/article', '/user'];
+
+    if (!isLoading && !data && authRequiredPaths.some((path) => router.pathname.includes(path))) {
       void router.push('/login');
     }
   }, [data, isLoading, router]);
