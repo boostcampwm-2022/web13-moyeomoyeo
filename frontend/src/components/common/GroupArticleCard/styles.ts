@@ -26,6 +26,12 @@ const DimmedBox = styled.div`
   justify-content: center;
 `;
 
+const ImageWrapper = styled.div`
+  width: 100%;
+  height: 20rem;
+  position: relative;
+`;
+
 const ClosedText = styled.div`
   color: ${({ theme }) => theme.white};
   font-size: 2rem;
@@ -58,4 +64,13 @@ const CapacityText = styled.span`
   color: ${({ theme }) => theme.colors.gray[6]};
 `;
 
-export { CardWrapper, DimmedBox, InfoWrapper, TagWrapper, TitleText, CapacityText, ClosedText };
+export {
+  CardWrapper,
+  DimmedBox,
+  ImageWrapper,
+  InfoWrapper,
+  TagWrapper,
+  TitleText,
+  CapacityText,
+  ClosedText,
+};

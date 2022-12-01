@@ -113,9 +113,9 @@ const Main = () => {
           <ListWrapper>
             {articles.map((article) => (
               <Link key={article.id} href={`/article/${article.id}`}>
-                <div key={article.id}>
+                <CardLink key={article.id}>
                   <GroupArticleCard article={article} />
-                </div>
+                </CardLink>
               </Link>
             ))}
             <div ref={ref}></div>
@@ -161,4 +161,8 @@ const ListWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-gap: 1.3rem;
+`;
+
+const CardLink = styled.div`
+  overflow: auto;
 `;
