@@ -2,8 +2,6 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { ChangeEvent, useEffect, useState } from 'react';
 
-import { QueryClient } from '@tanstack/react-query';
-
 import styled from '@emotion/styled';
 import { ActionIcon, FileInput, Skeleton } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
@@ -14,21 +12,16 @@ import DetailTitle from '@components/common/Header/DetailTitle';
 import PageLayout from '@components/common/PageLayout';
 import TextInput from '@components/common/TextInput';
 import useFetchMyInfo from '@hooks/queries/useFetchMyInfo';
+import useEditMyProfile from '@hooks/queries/useUpdateMyProfile';
 import useAsyncError from '@hooks/useAsyncError';
 import { UserType } from '@typings/types';
-import { clientAxios } from '@utils/commonAxios';
 import uploadImage from '@utils/uploadImage';
-
-/**
- * TODO : 이미지 업로드 연동
- * 게시글 수정 API 연동
- */
 
 const MyEditPage = () => {
   const { data: myProfile } = useFetchMyInfo();
+  const { mutate: updateMyProfile } = useEditMyProfile();
   const throwError = useAsyncError();
   const router = useRouter();
-  const queryClient = new QueryClient();
 
   const [userDataInput, setUserDataInput] = useState<Omit<UserType, 'id'>>({
     userName: '',
@@ -70,16 +63,14 @@ const MyEditPage = () => {
 
   const handleClickProfileChangeBtn = async () => {
     try {
-      await clientAxios.put('/v1/my-info', { ...userDataInput });
+      updateMyProfile(userDataInput);
 
-      await queryClient.invalidateQueries(['my'], { refetchType: 'all' });
-      // invalidate 처리가 잘 안된다..?
       showNotification({
         color: 'indigo',
         title: '프로필 수정 완료!',
         message: '멋지게 바뀐 프로필을 확인해보세요!',
         icon: <IconCheck size={16} />,
-        autoClose: false,
+        autoClose: 4000,
         styles: (theme) => ({
           root: {
             paddingTop: '1.6rem',
@@ -94,7 +85,7 @@ const MyEditPage = () => {
       void router.push('/my');
     } catch (err) {
       // TODO : 에러 처리 어떻게 할꺼야!!
-      throw new Error('프로필 수정 실패');
+      throwError('프로필 수정에 실패했습니다.');
     }
   };
 
