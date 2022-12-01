@@ -22,6 +22,8 @@ import { PAGE_TITLE } from '@constants/pageTitle';
 import { ParticipateButtonStatus } from '@constants/participateButton';
 import useFetchApplicationStatus from '@hooks/queries/useFetchApplicationStatus';
 import useFetchArticle from '@hooks/queries/useFetchArticle';
+import useFetchChatUrl from '@hooks/queries/useFetchChatUrl';
+import { ArticleType } from '@typings/types';
 import dateTimeFormat from '@utils/dateTime';
 
 const ArticleDetail = () => {
@@ -32,19 +34,12 @@ const ArticleDetail = () => {
   const articleId = Number(router.query.id);
   const { article, isLoading } = useFetchArticle(articleId);
   const { isJoined } = useFetchApplicationStatus(articleId);
+  const { url } = useFetchChatUrl(
+    articleId,
+    getButtonStatus(article, isJoined) === ParticipateButtonStatus.LINK
+  );
 
   const [participantsModalOpen, setParticipantsModalOpen] = useState<boolean>(false);
-
-  const getButtonStatus = () => {
-    switch (article.status) {
-      case ArticleStatus.PROGRESS:
-        return isJoined ? ParticipateButtonStatus.CANCEL : ParticipateButtonStatus.APPLY;
-      case ArticleStatus.SUCCEED:
-        return isJoined ? ParticipateButtonStatus.LINK : ParticipateButtonStatus.CLOSED;
-      case ArticleStatus.FAIL:
-        return ParticipateButtonStatus.CLOSED;
-    }
-  };
 
   return (
     <>
@@ -114,8 +109,7 @@ const ArticleDetail = () => {
                 <TypographyStylesProvider>
                   <ContentBox dangerouslySetInnerHTML={{ __html: article.content }} />
                 </TypographyStylesProvider>
-                {/* TODO 모집상태와 유저 참가 상태에 따라 렌더링 */}
-                <ParticipateButton status={getButtonStatus()} chatRoomLink={'tetetetetet'} />
+                <ParticipateButton status={getButtonStatus(article, isJoined)} chatRoomLink={url} />
                 <StatCounter variant="comment" count={article.commentCount} />
               </DetailWrapper>
               <Divider />
@@ -134,6 +128,21 @@ const ArticleDetail = () => {
       </PageLayout>
     </>
   );
+};
+
+const getButtonStatus = (article: ArticleType, isJoined: boolean) => {
+  if (!article && !isJoined) return ParticipateButtonStatus.CLOSED;
+
+  switch (article.status) {
+    case ArticleStatus.PROGRESS:
+      return isJoined ? ParticipateButtonStatus.CANCEL : ParticipateButtonStatus.APPLY;
+    case ArticleStatus.SUCCEED:
+      return isJoined ? ParticipateButtonStatus.LINK : ParticipateButtonStatus.CLOSED;
+    case ArticleStatus.FAIL:
+      return ParticipateButtonStatus.CLOSED;
+    default:
+      return ParticipateButtonStatus.CLOSED;
+  }
 };
 
 export default ArticleDetail;
