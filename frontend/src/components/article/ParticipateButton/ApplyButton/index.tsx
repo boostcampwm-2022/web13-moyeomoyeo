@@ -3,15 +3,26 @@ import { useState } from 'react';
 import { Button } from '@mantine/core';
 
 import AlertModal from '@components/common/AlertModal';
+import useApplyGroup from '@hooks/queries/useApplyGroup';
 
-const ApplyButton = () => {
+interface Props {
+  groupArticleId: number;
+}
+
+const ApplyButton = ({ groupArticleId }: Props) => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [resultMessage, setResultMessage] = useState<string>('');
 
-  // TODO API 호출 및 성공 여부에 따른 message
+  const { mutate: applyGroup } = useApplyGroup(groupArticleId);
+
+  // TODO toast 메시지로 변경
   const applyForRecruitment = () => {
-    setResultMessage('참가 신청이 완료되었습니다');
-    setModalOpen(true);
+    applyGroup(groupArticleId, {
+      onSuccess: () => {
+        setResultMessage('참가 신청이 완료되었습니다');
+        setModalOpen(true);
+      },
+    });
   };
 
   return (
