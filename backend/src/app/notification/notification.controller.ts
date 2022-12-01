@@ -47,7 +47,7 @@ export class NotificationController {
     );
   }
 
-  @Patch('settings/:id')
+  @Patch('settings/:id/status')
   @JwtAuth()
   @ApiSuccessResponse(HttpStatus.NO_CONTENT)
   @ApiErrorResponse(
