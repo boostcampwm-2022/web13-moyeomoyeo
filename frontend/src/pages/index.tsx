@@ -5,9 +5,10 @@ import { useQueryClient } from '@tanstack/react-query';
 
 import { useTheme } from '@emotion/react';
 import styled from '@emotion/styled';
-import { Checkbox, Select } from '@mantine/core';
+import { Checkbox } from '@mantine/core';
 import { IconRefresh } from '@tabler/icons';
 
+import DropDown from '@components/common/DropDown';
 import EmptyMessage from '@components/common/EmptyMessage';
 import GroupArticleCard from '@components/common/GroupArticleCard';
 import Header from '@components/common/Header';
@@ -68,7 +69,7 @@ const Main = () => {
     >
       <ContentWrapper>
         <FilterWrapper>
-          <StyledSelect
+          <DropDown
             label="카테고리"
             data={[
               { value: null, label: '전체' },
@@ -82,7 +83,7 @@ const Main = () => {
             size="md"
             maxDropdownHeight={200}
           />
-          <StyledSelect
+          <DropDown
             label="장소"
             data={[
               { value: null, label: '전체' },
@@ -128,21 +129,6 @@ const Main = () => {
 };
 
 export default Main;
-
-// TODO 공통 Dropdown 컴포넌트로 변경
-const StyledSelect = styled(Select)`
-  width: 100%;
-  & .mantine-Select-item {
-    padding: 1.2rem 1.6rem;
-    &[data-selected] {
-      &,
-      &:hover {
-        background-color: ${({ theme }) => theme.colors.indigo[0]};
-        color: ${({ theme }) => theme.colors.indigo[7]};
-      }
-    }
-  }
-`;
 
 const ContentWrapper = styled.div`
   flex: 1;
