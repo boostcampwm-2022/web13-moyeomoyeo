@@ -1,4 +1,12 @@
-import { Body, Controller, HttpStatus, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpStatus,
+  ParseIntPipe,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { GroupApplicationService } from '@app/group-application/group-application.service';
 import { GroupApplicationRequest } from '@src/app/group-application/dto/group-application-request.dto';
 import { ApiSuccessResponse } from '@src/common/decorator/api-success-resposne.decorator';
@@ -13,6 +21,7 @@ import { DuplicateApplicationException } from '@src/app/group-application/except
 import { GroupNotFoundException } from '@app/group-application/exception/group-not-found.exception';
 import { CannotApplicateException } from '@src/app/group-application/exception/cannot-applicate.exception';
 import { CheckJoiningGroupResonse } from '@app/group-application/dto/check-joining-group-response.dto';
+import { GetAllParticipantsResponse } from '@app/group-application/dto/get-all-participants-response.dto';
 
 @Controller('group-applications')
 @JwtAuth()
@@ -56,5 +65,13 @@ export class GroupApplicationController {
     );
     const data = CheckJoiningGroupResonse.from(isJoined);
     return ResponseEntity.OK_WITH_DATA(data);
+  }
+
+  @Get('participants')
+  @ApiSuccessResponse(HttpStatus.OK, GetAllParticipantsResponse)
+  async getAllParticipants(
+    @Query('groupArticleId', ParseIntPipe) groupArticleId: number,
+  ) {
+    return groupArticleId;
   }
 }
