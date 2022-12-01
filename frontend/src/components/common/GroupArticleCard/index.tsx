@@ -31,7 +31,13 @@ const GroupArticleCard = ({ article }: Props) => {
         </DimmedBox>
       )}
       <ImageWrapper>
-        <Image src={article.thumbnail} alt={'thumbnail-image'} layout="fill" objectFit="cover" />
+        <Image
+          src={article.thumbnail}
+          alt={'thumbnail-image'}
+          layout="fill"
+          objectFit="cover"
+          sizes="400px"
+        />
       </ImageWrapper>
       <InfoWrapper>
         <TagWrapper>
