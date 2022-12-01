@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 import { useTheme } from '@emotion/react';
@@ -14,108 +15,114 @@ import PageLayout from '@components/common/PageLayout';
 import StatCounter from '@components/common/StatCounter';
 import { ArticleStatusKr } from '@constants/article';
 import { CategoryKr } from '@constants/category';
-import { dummyArticle, dummyParticipants } from '@constants/dummy';
+import { CATEGORY_COLOR, LOCATION_COLOR, STATUS_COLOR } from '@constants/color';
+import { dummyParticipants } from '@constants/dummy';
 import { LocationKr } from '@constants/location';
 import { PAGE_TITLE } from '@constants/pageTitle';
 import { ParticipateButtonStatus } from '@constants/participateButton';
-import { getCommonBadgeColor, getStatusBadgeColor } from '@utils/colors';
+import useFetchArticle from '@hooks/queries/useFetchArticle';
+import dateTimeFormat from '@utils/dateTime';
 
 const ArticleDetail = () => {
   const {
     colors: { indigo, gray },
   } = useTheme();
+  const router = useRouter();
+  const articleId = Number(router.query.id);
+  const { data, isLoading } = useFetchArticle(articleId);
 
   const [participantsModalOpen, setParticipantsModalOpen] = useState<boolean>(false);
 
-  const {
-    authorName,
-    title,
-    status,
-    authorThumbnail,
-    createdAt,
-    category,
-    location,
-    contents,
-    currentCapacity,
-    maxCapacity,
-    commentCount,
-  } = dummyArticle;
-
   return (
-    <PageLayout
-      // TODO rightNode에 작성자 여부에 따라 메뉴버튼 렌더링 필요
-      header={
-        <Header
-          leftNode={
-            <DetailTitle title={PAGE_TITLE.ARTICLE.title} subTitle={PAGE_TITLE.ARTICLE.subTitle} />
-          }
-        />
-      }
-    >
-      <ContenxtWrapper>
-        <DetailWrapper>
-          <ProfileWrapper>
-            <Avatar radius="xl" size="lg" alt="avatar" src={authorThumbnail} />
-            <ProfileTextWrapper>
-              <Author>{authorName}</Author>
-              <Time>{createdAt}</Time>
-            </ProfileTextWrapper>
-          </ProfileWrapper>
-          <Title>{title}</Title>
-          <TagWrapper>
-            <ArticleTag
-              color={getStatusBadgeColor(status)}
-              content={ArticleStatusKr[status]}
-              size="lg"
-            />
-            <ArticleTag
-              color={getCommonBadgeColor(category.id)}
-              content={CategoryKr[category.name]}
-              size="lg"
-            />
-            <ArticleTag
-              color={getCommonBadgeColor(location.id)}
-              content={LocationKr[location.name]}
-              size="lg"
-            />
-          </TagWrapper>
-          <ParticipantWrapper>
-            <StatusWrapper>
-              <StatusText>모집 현황</StatusText>
-              <CountText>
-                {currentCapacity}명 / {maxCapacity}명
-              </CountText>
-            </StatusWrapper>
-            <ParticipantButton onClick={() => setParticipantsModalOpen(true)}>
-              <IconList width="16" height="16" color={gray[6]} />
-              <ViewText>신청자 확인</ViewText>
-            </ParticipantButton>
-          </ParticipantWrapper>
-          <Progress
-            value={(currentCapacity / maxCapacity) * 100}
-            size="lg"
-            radius="lg"
-            color={indigo[7]}
+    <>
+      <PageLayout
+        // TODO rightNode에 작성자 여부에 따라 메뉴버튼 렌더링 필요
+        header={
+          <Header
+            leftNode={
+              <DetailTitle
+                title={PAGE_TITLE.ARTICLE.title}
+                subTitle={PAGE_TITLE.ARTICLE.subTitle}
+              />
+            }
           />
-          <TypographyStylesProvider>
-            <ContentBox dangerouslySetInnerHTML={{ __html: contents }} />
-          </TypographyStylesProvider>
-          {/* TODO 모집상태와 유저 참가 상태에 따라 렌더링 */}
-          <ParticipateButton status={ParticipateButtonStatus.LINK} chatRoomLink={'tetetetetet'} />
-          <StatCounter variant="comment" count={commentCount} />
-        </DetailWrapper>
-        <Divider />
-        <CommentWrapper>
-          <div>댓글영역</div>
-        </CommentWrapper>
-      </ContenxtWrapper>
-      {/* TODO participants API 요청 */}
-      <ParticipantsModal
-        participants={dummyParticipants}
-        open={participantsModalOpen}
-        onClose={() => setParticipantsModalOpen(false)}
-      />
-    </PageLayout>
+        }
+      >
+        {/* TODO 로딩 처리 */}
+        {isLoading ? (
+          <div>로딩중</div>
+        ) : (
+          <>
+            <ContenxtWrapper>
+              <DetailWrapper>
+                <ProfileWrapper>
+                  <Avatar radius="xl" size="lg" alt="avatar" src={data.author.profileImage} />
+                  <ProfileTextWrapper>
+                    <Author>{data.author.userName}</Author>
+                    <Time>{dateTimeFormat(data.createdAt)}</Time>
+                  </ProfileTextWrapper>
+                </ProfileWrapper>
+                <Title>{data.title}</Title>
+                <TagWrapper>
+                  <ArticleTag
+                    color={STATUS_COLOR[data.status]}
+                    content={ArticleStatusKr[data.status]}
+                    size="lg"
+                  />
+                  <ArticleTag
+                    color={CATEGORY_COLOR[data.category]}
+                    content={CategoryKr[data.category]}
+                    size="lg"
+                  />
+                  <ArticleTag
+                    color={LOCATION_COLOR[data.location]}
+                    content={LocationKr[data.location]}
+                    size="lg"
+                  />
+                </TagWrapper>
+                <ParticipantWrapper>
+                  <StatusWrapper>
+                    <StatusText>모집 현황</StatusText>
+                    <CountText>
+                      {data.currentCapacity}명 / {data.maxCapacity}명
+                    </CountText>
+                  </StatusWrapper>
+                  <ParticipantButton onClick={() => setParticipantsModalOpen(true)}>
+                    <IconList width="16" height="16" color={gray[6]} />
+                    <ViewText>신청자 확인</ViewText>
+                  </ParticipantButton>
+                </ParticipantWrapper>
+                <Progress
+                  value={(data.currentCapacity / data.maxCapacity) * 100}
+                  size="lg"
+                  radius="lg"
+                  color={indigo[7]}
+                />
+                <TypographyStylesProvider>
+                  <ContentBox dangerouslySetInnerHTML={{ __html: data.content }} />
+                </TypographyStylesProvider>
+                {/* TODO 모집상태와 유저 참가 상태에 따라 렌더링 */}
+                <ParticipateButton
+                  status={ParticipateButtonStatus.LINK}
+                  chatRoomLink={'tetetetetet'}
+                />
+                <StatCounter variant="comment" count={data.commentCount} />
+              </DetailWrapper>
+              <Divider />
+              <CommentWrapper>
+                <div>댓글영역</div>
+              </CommentWrapper>
+            </ContenxtWrapper>
+            {/* TODO participants API 요청 */}
+            <ParticipantsModal
+              participants={dummyParticipants}
+              open={participantsModalOpen}
+              onClose={() => setParticipantsModalOpen(false)}
+            />
+          </>
+        )}
+      </PageLayout>
+    </>
   );
 };
 
