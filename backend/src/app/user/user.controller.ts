@@ -36,8 +36,10 @@ export class UserController {
   @Post('username/is-occupied')
   @JwtAuth()
   @ApiSuccessResponse(HttpStatus.OK, UserNameUniqueResponse)
-  checkUsernameUnique(@Body() userNameUniqueRequest: UserNameUniqueRequest) {
-    const result = this.userService.checkUsernameUnique(
+  async checkUsernameUnique(
+    @Body() userNameUniqueRequest: UserNameUniqueRequest,
+  ) {
+    const result = await this.userService.checkUsernameUnique(
       userNameUniqueRequest.userName,
     );
     const data = UserNameUniqueResponse.from(result);
