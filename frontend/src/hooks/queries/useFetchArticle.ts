@@ -19,7 +19,7 @@ const useFetchArticle = (id: number) => {
     }
   );
 
-  return { data, isLoading };
+  return { article: data, isLoading };
 };
 
 export default useFetchArticle;

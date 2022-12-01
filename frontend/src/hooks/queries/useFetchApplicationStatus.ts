@@ -5,7 +5,7 @@ import { ApiResponse } from '@typings/types';
 import { clientAxios } from '@utils/commonAxios';
 
 const useFetchApplicationStatus = (groupArticleId: number) => {
-  const { data, isLoading } = useAuthQuery<ApiResponse<{ isJoined: boolean }>, AxiosError, boolean>(
+  const { data } = useAuthQuery<ApiResponse<{ isJoined: boolean }>, AxiosError, boolean>(
     ['applicationStatus', groupArticleId],
     () => clientAxios.get(`/v1/group-applications/status/${groupArticleId}`),
     {
@@ -13,7 +13,7 @@ const useFetchApplicationStatus = (groupArticleId: number) => {
     }
   );
 
-  return { data, isLoading };
+  return { isJoined: data };
 };
 
 export default useFetchApplicationStatus;
