@@ -25,7 +25,6 @@ import { GroupArticleRepository } from '@app/group-article/repository/group-arti
 import { SearchGroupArticlesRequest } from '@app/group-article/dto/search-group-articles-request.dto';
 import { SearchGroupArticleResponse } from '@app/group-article/dto/search-group-articles-response.dto';
 import { GroupArticleSearchResult } from '@app/group-article/dto/group-article-search-result.dto';
-import { ImageService } from '@app/image/image.service';
 import { CurrentUser } from '@decorator/current-user.decorator';
 import { User } from '@app/user/entity/user.entity';
 import { GetGroupArticleDetailResponse } from '@app/group-article/dto/get-group-article-detail-response.dto';
@@ -45,7 +44,6 @@ export class GroupArticleController {
     private readonly groupArticleService: GroupArticleService,
     private readonly groupCategoryRepository: GroupCategoryRepository,
     private readonly groupArticleRepository: GroupArticleRepository,
-    private readonly imageService: ImageService,
   ) {}
 
   @Post('/')
@@ -143,7 +141,7 @@ export class GroupArticleController {
     const groupArticleDetail = await this.groupArticleService.getDetailById(id);
 
     return ResponseEntity.OK_WITH_DATA(
-      GetGroupArticleDetailResponse.from(groupArticleDetail, this.imageService),
+      GetGroupArticleDetailResponse.from(groupArticleDetail),
     );
   }
 
