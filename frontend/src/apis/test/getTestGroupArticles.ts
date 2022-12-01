@@ -10,7 +10,7 @@ const getTestGroupArticles = async (
   progress: boolean
 ) => {
   return axios.get(`https://testServer/group-articles`, {
-    params: { category, location, progress, nextId, limit: 5 },
+    params: { category, location, progress, nextId, limit: 15 },
   });
 };
 
