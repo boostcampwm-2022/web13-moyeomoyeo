@@ -23,6 +23,9 @@ export class GroupApplicationRepository extends Repository<GroupApplication> {
 
   findAllApplicationByGroup(groupId: number) {
     return this.find({
+      relations: {
+        user: true,
+      },
       where: {
         groupId,
         status: GROUP_APPLICATION_STATUS.REGISTER,
