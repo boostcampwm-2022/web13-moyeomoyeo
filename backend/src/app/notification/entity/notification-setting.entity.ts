@@ -8,6 +8,10 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { User } from '@app/user/entity/user.entity';
+import {
+  NOTIFICATION_SETTING_STATUS,
+  NOTIFICATION_SETTING_TYPE,
+} from '@app/notification/constants/notification.constants';
 
 @Entity({ name: 'notification_setting' })
 export class NotificationSetting {
@@ -22,14 +26,23 @@ export class NotificationSetting {
   user: Promise<User>;
 
   @Column({ type: 'varchar', length: 200 })
-  type: string;
+  type: NOTIFICATION_SETTING_TYPE;
 
   @Column({ type: 'tinyint', precision: 1 })
-  status: number;
+  status: NOTIFICATION_SETTING_STATUS;
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
 
   @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
+
+  static create(user: User, type: NOTIFICATION_SETTING_TYPE) {
+    const notificationSetting = new NotificationSetting();
+    notificationSetting.userId = user.id;
+    notificationSetting.user = Promise.resolve(user);
+    notificationSetting.type = type;
+    notificationSetting.status = NOTIFICATION_SETTING_STATUS.ON;
+    return notificationSetting;
+  }
 }
