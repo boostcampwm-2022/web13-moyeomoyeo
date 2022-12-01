@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { User } from '@src/app/user/entity/user.entity';
 
 export class UserInfo {
   @ApiProperty({
@@ -29,4 +30,13 @@ export class UserInfo {
     required: true,
   })
   profileImage: string;
+
+  static from(user: User) {
+    const response = new UserInfo();
+    response.id = user.id;
+    response.userName = user.userName;
+    response.description = user.description;
+    response.profileImage = user.profileImage;
+    return response;
+  }
 }
