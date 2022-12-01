@@ -17,9 +17,10 @@ import PageLayout from '@components/common/PageLayout';
 import TextInput from '@components/common/TextInput';
 import { Category, CategoryKr } from '@constants/category';
 import { Location, LocationKr } from '@constants/location';
-import useImageUpload from '@hooks/useImageUpload';
+import useAsyncError from '@hooks/useAsyncError';
 import { ImageUploadType } from '@typings/types';
 import { clientAxios } from '@utils/commonAxios';
+import uploadImage from '@utils/uploadImage';
 
 interface ArticleInput {
   category: Category | null;
@@ -33,6 +34,7 @@ interface ArticleInput {
 
 const WritePage = () => {
   const router = useRouter();
+  const throwError = useAsyncError();
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
   const [articleInput, setArticleInput] = useState<ArticleInput>({
     category: null,
@@ -44,7 +46,6 @@ const WritePage = () => {
     uploadedImage: null,
   });
   const { category, location, maxCapacity, title, contents, chatUrl, uploadedImage } = articleInput;
-  const { uploadImageFile } = useImageUpload();
 
   const possibleToSubmit =
     category &&
@@ -83,17 +84,16 @@ const WritePage = () => {
       });
       void router.push('/');
     } catch (err) {
-      // TODO 에러처리...
-      console.log(err);
+      throwError('게시글 등록에 실패했습니다.');
     }
   };
 
   const handleChangeImage = async (imageFile: File) => {
     try {
-      const uploadedImage = await uploadImageFile(imageFile);
+      const uploadedImage = await uploadImage(imageFile);
       setArticleInput((prev) => ({ ...prev, uploadedImage }));
     } catch (err) {
-      throw new Error((err as Error).message);
+      throwError('이미지 업로드에 실패했습니다.');
     }
   };
 

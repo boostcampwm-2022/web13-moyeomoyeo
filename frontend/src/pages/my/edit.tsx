@@ -14,9 +14,10 @@ import DetailTitle from '@components/common/Header/DetailTitle';
 import PageLayout from '@components/common/PageLayout';
 import TextInput from '@components/common/TextInput';
 import useFetchMyInfo from '@hooks/queries/useFetchMyInfo';
-import useImageUpload from '@hooks/useImageUpload';
+import useAsyncError from '@hooks/useAsyncError';
 import { UserType } from '@typings/types';
 import { clientAxios } from '@utils/commonAxios';
+import uploadImage from '@utils/uploadImage';
 
 /**
  * TODO : 이미지 업로드 연동
@@ -25,7 +26,7 @@ import { clientAxios } from '@utils/commonAxios';
 
 const MyEditPage = () => {
   const { data: myProfile } = useFetchMyInfo();
-  const { uploadImageFile } = useImageUpload();
+  const throwError = useAsyncError();
   const router = useRouter();
   const queryClient = new QueryClient();
 
@@ -60,25 +61,25 @@ const MyEditPage = () => {
 
   const handleChangeImage = async (imageFile: File) => {
     try {
-      const { url: imageUrl } = await uploadImageFile(imageFile);
+      const { url: imageUrl } = await uploadImage(imageFile);
       setUserDataInput((prev) => ({ ...prev, profileImage: imageUrl }));
     } catch (err) {
-      // TODO : 에러 처리 어떻게 할꺼야!!
-      throw new Error((err as Error).message);
+      throwError('이미지 업로드에 실패했습니다.');
     }
   };
 
   const handleClickProfileChangeBtn = async () => {
     try {
       await clientAxios.put('/v1/my-info', { ...userDataInput });
-      await queryClient.invalidateQueries(['my']);
+
+      await queryClient.invalidateQueries(['my'], { refetchType: 'all' });
       // invalidate 처리가 잘 안된다..?
       showNotification({
         color: 'indigo',
         title: '프로필 수정 완료!',
         message: '멋지게 바뀐 프로필을 확인해보세요!',
         icon: <IconCheck size={16} />,
-        autoClose: 5000,
+        autoClose: false,
         styles: (theme) => ({
           root: {
             paddingTop: '1.6rem',
