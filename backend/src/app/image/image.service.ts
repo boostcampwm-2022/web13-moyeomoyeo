@@ -13,8 +13,8 @@ export class ImageService {
     this.s3 = this.certificateS3();
   }
 
-  uploadImage(files: Array<Express.Multer.File>) {
-    const keyList = this.pushImageAndGetKey(files);
+  async uploadImage(files: Array<Express.Multer.File>) {
+    const keyList = await this.pushImageAndGetKey(files);
     const urlList = this.getStorageUrl(keyList);
     return { keyList, urlList };
   }
@@ -33,10 +33,10 @@ export class ImageService {
     return s3;
   }
 
-  pushImageAndGetKey(files: Express.Multer.File[]) {
+  async pushImageAndGetKey(files: Express.Multer.File[]) {
     const keyList = [];
 
-    files.forEach((file) => {
+    const uploadFiles = files.map(async (file) => {
       const extension = this.findImageExtension(file.originalname);
       if (extension.length === 0) return;
 
@@ -45,10 +45,11 @@ export class ImageService {
         `${new Date().getTime()}-${v4()}${extension}`,
       );
 
-      this.uploadImageToS3(file, key);
+      await this.uploadImageToS3(file, key);
       keyList.push(key);
     });
 
+    await Promise.all(uploadFiles);
     return keyList;
   }
 
@@ -58,19 +59,15 @@ export class ImageService {
     return result === null ? '' : result[0];
   }
 
-  uploadImageToS3(file: Express.Multer.File, key: string) {
-    return this.s3.upload(
-      {
+  async uploadImageToS3(file: Express.Multer.File, key: string) {
+    return await this.s3
+      .upload({
         Bucket: this.s3ConfigService.bucket,
         Key: key,
         Body: file.buffer,
         ACL: 'public-read',
-      },
-
-      (err) => {
-        if (err) this.logger.error(err);
-      },
-    );
+      })
+      .promise();
   }
 
   getStorageUrl(keyList: string[]) {
