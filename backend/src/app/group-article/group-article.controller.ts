@@ -63,7 +63,7 @@ export class GroupArticleController {
     );
   }
 
-  @Post('/:id/recruitment-complete')
+  @Post(':id/recruitment-complete')
   @JwtAuth()
   @ApiSuccessResponse(HttpStatus.NO_CONTENT)
   @ApiErrorResponse(
@@ -78,7 +78,7 @@ export class GroupArticleController {
     await this.groupArticleService.complete(user, id);
   }
 
-  @Post('/:id/recruitment-cancel')
+  @Post(':id/recruitment-cancel')
   @JwtAuth()
   @ApiSuccessResponse(HttpStatus.NO_CONTENT)
   @ApiErrorResponse(
@@ -93,7 +93,7 @@ export class GroupArticleController {
     await this.groupArticleService.cancel(user, id);
   }
 
-  @Put('/:id')
+  @Put(':id')
   @JwtAuth()
   @ApiSuccessResponse(HttpStatus.NO_CONTENT)
   @ApiErrorResponse(NotAuthorException, GroupArticleNotFoundException)
@@ -105,7 +105,7 @@ export class GroupArticleController {
     await this.groupArticleService.update(user, id, updateGroupArticleRequest);
   }
 
-  @Get('/categories')
+  @Get('categories')
   @ApiSuccessResponse(HttpStatus.OK, GroupCategoryResponse, { isArray: true })
   async getCategories() {
     const categories = await this.groupCategoryRepository.find({
@@ -117,7 +117,7 @@ export class GroupArticleController {
     );
   }
 
-  @Get('/search')
+  @Get('search')
   @ApiSuccessResponse(HttpStatus.OK, SearchGroupArticleResponse)
   async search(@Query() query: SearchGroupArticlesRequest) {
     const result = await this.groupArticleRepository.search(query);
@@ -134,7 +134,7 @@ export class GroupArticleController {
     );
   }
 
-  @Get('/:id')
+  @Get(':id')
   @JwtAuth()
   @ApiSuccessResponse(HttpStatus.OK, GetGroupArticleDetailResponse)
   @ApiErrorResponse(GroupArticleNotFoundException)
@@ -146,7 +146,7 @@ export class GroupArticleController {
     );
   }
 
-  @Delete('/:id')
+  @Delete(':id')
   @JwtAuth()
   @ApiSuccessResponse(HttpStatus.NO_CONTENT)
   @ApiErrorResponse(NotAuthorException, GroupArticleNotFoundException)
