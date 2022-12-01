@@ -4,7 +4,6 @@ import { useState } from 'react';
 
 import styled from '@emotion/styled';
 import { ActionIcon, FileInput, Slider, Text } from '@mantine/core';
-import { showNotification } from '@mantine/notifications';
 import { IconCheck, IconUpload, IconUser } from '@tabler/icons';
 
 import ArticleEditor from '@components/article/ArticleEditor';
@@ -17,9 +16,11 @@ import PageLayout from '@components/common/PageLayout';
 import TextInput from '@components/common/TextInput';
 import { Category, CategoryKr } from '@constants/category';
 import { Location, LocationKr } from '@constants/location';
-import useImageUpload from '@hooks/useImageUpload';
+import useAsyncError from '@hooks/useAsyncError';
 import { ImageUploadType } from '@typings/types';
 import { clientAxios } from '@utils/commonAxios';
+import { showToast } from '@utils/toast';
+import uploadImage from '@utils/uploadImage';
 
 interface ArticleInput {
   category: Category | null;
@@ -33,6 +34,7 @@ interface ArticleInput {
 
 const WritePage = () => {
   const router = useRouter();
+  const throwAsyncError = useAsyncError();
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
   const [articleInput, setArticleInput] = useState<ArticleInput>({
     category: null,
@@ -44,7 +46,6 @@ const WritePage = () => {
     uploadedImage: null,
   });
   const { category, location, maxCapacity, title, contents, chatUrl, uploadedImage } = articleInput;
-  const { uploadImageFile } = useImageUpload();
 
   const possibleToSubmit =
     category &&
@@ -64,37 +65,23 @@ const WritePage = () => {
         thumbnail: uploadedImage.key,
       });
       // TODO : mutation 로직 추가?
-      // Modal, notification 중 고르기
-      showNotification({
-        color: 'indigo',
+      showToast({
         title: '게시글 등록 완료!',
         message: '이제 모집 완료 되기를 기다려주세요!',
-        icon: <IconCheck size={16} />,
-        autoClose: 5000,
-        styles: (theme) => ({
-          root: {
-            paddingTop: '1.6rem',
-            paddingBottom: '1.6rem',
-          },
-          title: {
-            fontSize: theme.fontSizes.lg,
-            fontWeight: 700,
-          },
-        }),
       });
+
       void router.push('/');
     } catch (err) {
-      // TODO 에러처리...
-      console.log(err);
+      throwAsyncError('게시글 등록에 실패했습니다.');
     }
   };
 
   const handleChangeImage = async (imageFile: File) => {
     try {
-      const uploadedImage = await uploadImageFile(imageFile);
+      const uploadedImage = await uploadImage(imageFile);
       setArticleInput((prev) => ({ ...prev, uploadedImage }));
     } catch (err) {
-      throw new Error((err as Error).message);
+      throwAsyncError('이미지 업로드에 실패했습니다.');
     }
   };
 

@@ -73,7 +73,7 @@ interface ImageUploadType {
   url: string;
 }
 
-type ApiResponse<T> = AxiosResponse<{ data: T }>;
+type ApiResponse<T> = AxiosResponse<{ data: T; messasge: string; status: string }>;
 
 export type {
   ApiResponse,

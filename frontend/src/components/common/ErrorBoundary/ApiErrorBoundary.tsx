@@ -30,7 +30,12 @@ class ApiErrorBoundary extends Component<Props, State> {
     const { error } = this.state;
     const { children } = this.props;
     if (error) {
-      return <ApiErrors />;
+      return (
+        <>
+          {children}
+          <ApiErrors />
+        </>
+      );
     }
     return children;
   }

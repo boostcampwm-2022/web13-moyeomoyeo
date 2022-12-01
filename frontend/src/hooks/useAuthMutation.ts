@@ -14,7 +14,10 @@ const useAuthMutation = <
   mutationFunc: MutationFunction<TData, TVariables>,
   options?: Omit<UseMutationOptions<TData, TError, TVariables, TContext>, 'mutationFn'>
 ) => {
-  const { mutate, error } = useMutation<TData, TError, TVariables, TContext>(mutationFunc, options);
+  const { error, ...rest } = useMutation<TData, TError, TVariables, TContext>(
+    mutationFunc,
+    options
+  );
 
   if (error && error instanceof AxiosError) {
     if (error.response.status === 401) {
@@ -23,7 +26,7 @@ const useAuthMutation = <
     throw error;
   }
 
-  return { mutate };
+  return { ...rest };
 };
 
 export default useAuthMutation;

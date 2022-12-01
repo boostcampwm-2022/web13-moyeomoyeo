@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { ChangeEvent, useEffect, useState } from 'react';
 
 import styled from '@emotion/styled';
@@ -9,16 +10,18 @@ import Header from '@components/common/Header';
 import DetailTitle from '@components/common/Header/DetailTitle';
 import PageLayout from '@components/common/PageLayout';
 import TextInput from '@components/common/TextInput';
+import useEditMyProfile from '@hooks/queries/useEditMyProfile';
 import useFetchMyInfo from '@hooks/queries/useFetchMyInfo';
+import useAsyncError from '@hooks/useAsyncError';
 import { UserType } from '@typings/types';
-
-/**
- * TODO : 이미지 업로드 연동
- * 게시글 수정 API 연동
- */
+import { showToast } from '@utils/toast';
+import uploadImage from '@utils/uploadImage';
 
 const MyEditPage = () => {
   const { data: myProfile } = useFetchMyInfo();
+  const { mutate: updateMyProfile } = useEditMyProfile();
+  const throwAsyncError = useAsyncError();
+  const router = useRouter();
 
   const [userDataInput, setUserDataInput] = useState<Omit<UserType, 'id'>>({
     userName: '',
@@ -28,6 +31,8 @@ const MyEditPage = () => {
     blogUrl: '',
   });
 
+  const { profileImage, userName, description, githubUrl, blogUrl } = userDataInput;
+
   useEffect(() => {
     if (myProfile) {
       const { id, ...rest } = myProfile;
@@ -35,9 +40,39 @@ const MyEditPage = () => {
     }
   }, [myProfile]);
 
+  const posibleToSubmit =
+    myProfile &&
+    profileImage.length > 0 &&
+    userName.length > 0 &&
+    userName.length <= 10 &&
+    description.length <= 20;
+
   const handleUserDataChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUserDataInput((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleChangeImage = async (imageFile: File) => {
+    try {
+      const { url: imageUrl } = await uploadImage(imageFile);
+      setUserDataInput((prev) => ({ ...prev, profileImage: imageUrl }));
+    } catch (err) {
+      throwAsyncError('이미지 업로드에 실패했습니다.');
+    }
+  };
+
+  const handleClickProfileChangeBtn = async () => {
+    try {
+      updateMyProfile(userDataInput);
+
+      showToast({
+        title: '프로필 수정 완료!',
+        message: '멋지게 바뀐 프로필을 확인해보세요!',
+      });
+      void router.push('/my');
+    } catch (err) {
+      throwAsyncError('프로필 수정에 실패했습니다.');
+    }
   };
 
   if (!myProfile) return null;
@@ -47,7 +82,11 @@ const MyEditPage = () => {
       <Header
         leftNode={<DetailTitle title="프로필 수정" subTitle="자신의 프로필을 수정해보세요" />}
         rightNode={
-          <ActionIcon variant="transparent" color={'gray'} onClick={() => alert('게시글 등록!')}>
+          <ActionIcon
+            variant="transparent"
+            color={posibleToSubmit ? 'indigo' : 'gray'}
+            onClick={handleClickProfileChangeBtn}
+          >
             <IconCheck size={24} stroke={3} />
           </ActionIcon>
         }
@@ -56,7 +95,12 @@ const MyEditPage = () => {
         {!myProfile ? (
           <Skeleton height={120} circle />
         ) : (
-          <ProfileImage src={myProfile.profileImage} alt="profile-image" width={120} height={120} />
+          <ProfileImage
+            src={profileImage.length > 0 ? profileImage : myProfile.profileImage}
+            alt="profile-image"
+            width={120}
+            height={120}
+          />
         )}
       </ProfileImageSection>
       <InputsSections>
@@ -67,15 +111,16 @@ const MyEditPage = () => {
           accept="image/*"
           icon={<IconUpload size={16} />}
           styles={{ label: { paddingBottom: '0.4rem' } }}
+          onChange={handleChangeImage}
         />
         <TextInput
           required
           name="userName"
           label="닉네임 (필수, 최대 10자)"
           placeholder="닉네임을 입력하세요"
-          value={userDataInput.userName}
+          value={userName}
           onChange={handleUserDataChange}
-          error={userDataInput.userName.length <= 0 && '닉네임은 필수입니다'}
+          error={userName.length <= 0 && '닉네임은 필수입니다'}
           maxLength={10}
         />
         <TextInput
@@ -83,13 +128,13 @@ const MyEditPage = () => {
           disabled
           label="Github 링크"
           placeholder="Github 링크를 입력하세요"
-          value={userDataInput.githubUrl}
+          value={githubUrl}
         />
         <TextInput
           label="블로그 링크"
           name="blogUrl"
           placeholder="블로그 링크를 입력하세요"
-          value={userDataInput.blogUrl}
+          value={blogUrl}
           onChange={handleUserDataChange}
         />
         <TextInput
@@ -97,7 +142,7 @@ const MyEditPage = () => {
           name="description"
           placeholder="자신에 대해 한 줄로 소개해주세요"
           onChange={handleUserDataChange}
-          value={userDataInput.description}
+          value={description}
           maxLength={20}
         />
       </InputsSections>
