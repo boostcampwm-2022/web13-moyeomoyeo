@@ -1,4 +1,12 @@
-import { Body, Controller, HttpStatus, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpStatus,
+  ParseIntPipe,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { GroupApplicationService } from '@app/group-application/group-application.service';
 import { GroupApplicationRequest } from '@src/app/group-application/dto/group-application-request.dto';
 import { ApiSuccessResponse } from '@src/common/decorator/api-success-resposne.decorator';
@@ -43,14 +51,13 @@ export class GroupApplicationController {
     return ResponseEntity.CREATED_WITH_DATA(data);
   }
 
-  @Post('/status')
+  @Get('/')
   @ApiSuccessResponse(HttpStatus.OK, CheckJoiningGroupResonse)
   @ApiErrorResponse(GroupNotFoundException)
   async checkJoinedGroup(
     @CurrentUser() user: User,
-    @Body() groupApplicationRequest: GroupApplicationRequest,
+    @Query('groupArticleId', ParseIntPipe) groupArticleId: number,
   ) {
-    const groupArticleId = groupApplicationRequest.groupArticleId;
     const isJoined = await this.groupApplicationService.checkJoinedGroup(
       user,
       groupArticleId,
