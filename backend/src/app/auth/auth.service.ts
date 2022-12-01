@@ -1,10 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { UserRepository } from '@app/user/user.repository';
 import { User } from '@app/user/entity/user.entity';
+import { DataSource } from 'typeorm';
+import { NotificationSetting } from '@app/notification/entity/notification-setting.entity';
+import { NOTIFICATION_SETTING_TYPE } from '@app/notification/constants/notification.constants';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly dataSource: DataSource,
+  ) {}
 
   async socialLogin({
     id,
@@ -28,7 +34,18 @@ export class AuthService {
         blogUrl,
         socialType,
       });
-      await this.userRepository.save(newUser);
+
+      await this.dataSource.transaction(async (em) => {
+        await em.save(newUser);
+        await em.save([
+          NotificationSetting.create(newUser, NOTIFICATION_SETTING_TYPE.GROUP),
+          NotificationSetting.create(
+            newUser,
+            NOTIFICATION_SETTING_TYPE.COMMENT,
+          ),
+        ]);
+      });
+
       return newUser;
     }
     return user;
