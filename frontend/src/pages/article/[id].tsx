@@ -13,14 +13,18 @@ import Header from '@components/common/Header';
 import DetailTitle from '@components/common/Header/DetailTitle';
 import PageLayout from '@components/common/PageLayout';
 import StatCounter from '@components/common/StatCounter';
-import { ArticleStatusKr } from '@constants/article';
+import { ArticleStatus, ArticleStatusKr } from '@constants/article';
 import { CategoryKr } from '@constants/category';
 import { CATEGORY_COLOR, LOCATION_COLOR, STATUS_COLOR } from '@constants/color';
 import { dummyParticipants } from '@constants/dummy';
 import { LocationKr } from '@constants/location';
 import { PAGE_TITLE } from '@constants/pageTitle';
 import { ParticipateButtonStatus } from '@constants/participateButton';
+import useFetchApplicationStatus from '@hooks/queries/useFetchApplicationStatus';
 import useFetchArticle from '@hooks/queries/useFetchArticle';
+import useFetchChatUrl from '@hooks/queries/useFetchChatUrl';
+import useFetchMyInfo from '@hooks/queries/useFetchMyInfo';
+import { ArticleType } from '@typings/types';
 import dateTimeFormat from '@utils/dateTime';
 
 const ArticleDetail = () => {
@@ -29,7 +33,13 @@ const ArticleDetail = () => {
   } = useTheme();
   const router = useRouter();
   const articleId = Number(router.query.id);
-  const { data, isLoading } = useFetchArticle(articleId);
+  const { data: myInfo } = useFetchMyInfo();
+  const { article } = useFetchArticle(articleId);
+  const { isJoined } = useFetchApplicationStatus(articleId);
+  const { url } = useFetchChatUrl(
+    articleId,
+    getButtonStatus(article, isJoined) === ParticipateButtonStatus.LINK
+  );
 
   const [participantsModalOpen, setParticipantsModalOpen] = useState<boolean>(false);
 
@@ -49,34 +59,34 @@ const ArticleDetail = () => {
         }
       >
         {/* TODO 로딩 처리 */}
-        {isLoading ? (
+        {!article || isJoined === undefined || !myInfo ? (
           <div>로딩중</div>
         ) : (
           <>
             <ContenxtWrapper>
               <DetailWrapper>
                 <ProfileWrapper>
-                  <Avatar radius="xl" size="lg" alt="avatar" src={data.author.profileImage} />
+                  <Avatar radius="xl" size="lg" alt="avatar" src={article.author.profileImage} />
                   <ProfileTextWrapper>
-                    <Author>{data.author.userName}</Author>
-                    <Time>{dateTimeFormat(data.createdAt)}</Time>
+                    <Author>{article.author.userName}</Author>
+                    <Time>{dateTimeFormat(article.createdAt)}</Time>
                   </ProfileTextWrapper>
                 </ProfileWrapper>
-                <Title>{data.title}</Title>
+                <Title>{article.title}</Title>
                 <TagWrapper>
                   <ArticleTag
-                    color={STATUS_COLOR[data.status]}
-                    content={ArticleStatusKr[data.status]}
+                    color={STATUS_COLOR[article.status]}
+                    content={ArticleStatusKr[article.status]}
                     size="lg"
                   />
                   <ArticleTag
-                    color={CATEGORY_COLOR[data.category]}
-                    content={CategoryKr[data.category]}
+                    color={CATEGORY_COLOR[article.category]}
+                    content={CategoryKr[article.category]}
                     size="lg"
                   />
                   <ArticleTag
-                    color={LOCATION_COLOR[data.location]}
-                    content={LocationKr[data.location]}
+                    color={LOCATION_COLOR[article.location]}
+                    content={LocationKr[article.location]}
                     size="lg"
                   />
                 </TagWrapper>
@@ -84,7 +94,7 @@ const ArticleDetail = () => {
                   <StatusWrapper>
                     <StatusText>모집 현황</StatusText>
                     <CountText>
-                      {data.currentCapacity}명 / {data.maxCapacity}명
+                      {article.currentCapacity}명 / {article.maxCapacity}명
                     </CountText>
                   </StatusWrapper>
                   <ParticipantButton onClick={() => setParticipantsModalOpen(true)}>
@@ -93,20 +103,22 @@ const ArticleDetail = () => {
                   </ParticipantButton>
                 </ParticipantWrapper>
                 <Progress
-                  value={(data.currentCapacity / data.maxCapacity) * 100}
+                  value={(article.currentCapacity / article.maxCapacity) * 100}
                   size="lg"
                   radius="lg"
                   color={indigo[7]}
                 />
                 <TypographyStylesProvider>
-                  <ContentBox dangerouslySetInnerHTML={{ __html: data.content }} />
+                  <ContentBox dangerouslySetInnerHTML={{ __html: article.content }} />
                 </TypographyStylesProvider>
-                {/* TODO 모집상태와 유저 참가 상태에 따라 렌더링 */}
-                <ParticipateButton
-                  status={ParticipateButtonStatus.LINK}
-                  chatRoomLink={'tetetetetet'}
-                />
-                <StatCounter variant="comment" count={data.commentCount} />
+                {article.author.id !== myInfo.id && (
+                  <ParticipateButton
+                    status={getButtonStatus(article, isJoined)}
+                    groupArticleId={article.id}
+                    chatRoomLink={url}
+                  />
+                )}
+                <StatCounter variant="comment" count={article.commentCount} />
               </DetailWrapper>
               <Divider />
               <CommentWrapper>
@@ -127,6 +139,21 @@ const ArticleDetail = () => {
 };
 
 export default ArticleDetail;
+
+const getButtonStatus = (article: ArticleType, isJoined: boolean) => {
+  if (!article || isJoined === undefined) return ParticipateButtonStatus.CLOSED;
+
+  switch (article.status) {
+    case ArticleStatus.PROGRESS:
+      return isJoined ? ParticipateButtonStatus.CANCEL : ParticipateButtonStatus.APPLY;
+    case ArticleStatus.SUCCEED:
+      return isJoined ? ParticipateButtonStatus.LINK : ParticipateButtonStatus.CLOSED;
+    case ArticleStatus.FAIL:
+      return ParticipateButtonStatus.CLOSED;
+    default:
+      return ParticipateButtonStatus.CLOSED;
+  }
+};
 
 const ContenxtWrapper = styled.div`
   display: flex;

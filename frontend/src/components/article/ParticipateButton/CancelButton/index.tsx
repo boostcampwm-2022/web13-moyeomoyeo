@@ -1,29 +1,46 @@
-import { useState } from 'react';
-
 import { Button } from '@mantine/core';
+import { showNotification } from '@mantine/notifications';
+import { IconCheck } from '@tabler/icons';
 
-import AlertModal from '@components/common/AlertModal';
+import useCancelApplication from '@hooks/queries/useCancelApplication';
 
-const CancelButton = () => {
-  const [modalOpen, setModalOpen] = useState<boolean>(false);
+interface Props {
+  groupArticleId: number;
+}
 
-  const cancelApplication = () => {
-    // TODO API 호출
-    setModalOpen(true);
+const CancelButton = ({ groupArticleId }: Props) => {
+  const { mutate: cancelApplication } = useCancelApplication(groupArticleId);
+
+  const handleClickCancelButton = () => {
+    cancelApplication(groupArticleId, {
+      onSuccess: () => {
+        // TODO 공통 toast message 로직 적용
+        showNotification({
+          color: 'indigo',
+          title: '신청 취소 완료!',
+          message: '다른 모집 게시글도 확인해보세요.',
+          icon: <IconCheck size={16} />,
+          autoClose: 4000,
+          styles: (theme) => ({
+            root: {
+              paddingTop: '1.6rem',
+              paddingBottom: '1.6rem',
+            },
+            title: {
+              fontSize: theme.fontSizes.lg,
+              fontWeight: 700,
+            },
+          }),
+        });
+      },
+    });
   };
 
   return (
     <>
-      <Button onClick={cancelApplication} size="md" color="red" fullWidth>
+      <Button onClick={handleClickCancelButton} size="md" color="red" fullWidth>
         참가 취소
       </Button>
-      {modalOpen && (
-        <AlertModal
-          message="참가 신청이 취소되었습니다"
-          open={modalOpen}
-          onClose={() => setModalOpen(false)}
-        />
-      )}
     </>
   );
 };
