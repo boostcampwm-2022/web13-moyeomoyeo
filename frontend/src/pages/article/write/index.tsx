@@ -50,16 +50,17 @@ const WritePage = () => {
     category &&
     location &&
     maxCapacity &&
-    title.length > 0 &&
+    title.trim().length > 0 &&
     contents.length > 0 &&
-    chatUrl.length > 0 &&
+    chatUrl.trim().length > 0 &&
     uploadedImage;
 
   const handleClickSubmitBtn = async () => {
     if (!possibleToSubmit) return;
     try {
+      const { uploadedImage, ...rest } = articleInput;
       await clientAxios.post('/v1/group-articles', {
-        ...articleInput,
+        ...rest,
         thumbnail: uploadedImage.key,
       });
       // TODO : mutation 로직 추가?
@@ -147,7 +148,7 @@ const WritePage = () => {
               }))}
               value={location}
               onChange={(location) =>
-                setArticleInput((prev) => ({ ...prev, location: location.trim() as Location }))
+                setArticleInput((prev) => ({ ...prev, location: location as Location }))
               }
               required
             />
@@ -179,7 +180,7 @@ const WritePage = () => {
             placeholder="제목을 입력해주세요."
             required
             value={title}
-            onChange={(e) => setArticleInput((prev) => ({ ...prev, title: e.target.value.trim() }))}
+            onChange={(e) => setArticleInput((prev) => ({ ...prev, title: e.target.value }))}
           />
           <ArticleEditor
             value={contents}
@@ -190,9 +191,7 @@ const WritePage = () => {
             placeholder="채팅방 링크를 입력해주세요."
             required
             value={chatUrl}
-            onChange={(e) =>
-              setArticleInput((prev) => ({ ...prev, chatUrl: e.target.value.trim() }))
-            }
+            onChange={(e) => setArticleInput((prev) => ({ ...prev, chatUrl: e.target.value }))}
           />
           <ImageSection>
             <FileInputLabel>
