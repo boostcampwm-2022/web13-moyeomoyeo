@@ -1,8 +1,7 @@
-import { useState } from 'react';
-
 import { Button } from '@mantine/core';
+import { showNotification } from '@mantine/notifications';
+import { IconCheck } from '@tabler/icons';
 
-import AlertModal from '@components/common/AlertModal';
 import useApplyGroup from '@hooks/queries/useApplyGroup';
 
 interface Props {
@@ -10,17 +9,29 @@ interface Props {
 }
 
 const ApplyButton = ({ groupArticleId }: Props) => {
-  const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const [resultMessage, setResultMessage] = useState<string>('');
-
   const { mutate: applyGroup } = useApplyGroup(groupArticleId);
 
-  // TODO toast 메시지로 변경
   const applyForRecruitment = () => {
     applyGroup(groupArticleId, {
       onSuccess: () => {
-        setResultMessage('참가 신청이 완료되었습니다');
-        setModalOpen(true);
+        // TODO 공통 toast message 로직 적용
+        showNotification({
+          color: 'indigo',
+          title: '참가 신청 완료!',
+          message: '모집이 성공적으로 완료될 때까지 조금만 기다려주세요.',
+          icon: <IconCheck size={16} />,
+          autoClose: 4000,
+          styles: (theme) => ({
+            root: {
+              paddingTop: '1.6rem',
+              paddingBottom: '1.6rem',
+            },
+            title: {
+              fontSize: theme.fontSizes.lg,
+              fontWeight: 700,
+            },
+          }),
+        });
       },
     });
   };
@@ -30,9 +41,6 @@ const ApplyButton = ({ groupArticleId }: Props) => {
       <Button onClick={applyForRecruitment} size="md" color="indigo" fullWidth>
         참가하기
       </Button>
-      {modalOpen && (
-        <AlertModal message={resultMessage} open={modalOpen} onClose={() => setModalOpen(false)} />
-      )}
     </>
   );
 };
