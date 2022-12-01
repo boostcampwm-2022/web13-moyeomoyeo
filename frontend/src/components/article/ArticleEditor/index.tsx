@@ -1,8 +1,11 @@
 import dynamic from 'next/dynamic';
+import { useCallback } from 'react';
 
 import styled from '@emotion/styled';
 import { LoadingOverlay, Text } from '@mantine/core';
 import { RichTextEditorProps } from '@mantine/rte';
+
+import useImageUpload from '@hooks/useImageUpload';
 
 const RichTextEditor = dynamic(() => import('@mantine/rte'), {
   ssr: false,
@@ -16,6 +19,21 @@ const RichTextEditor = dynamic(() => import('@mantine/rte'), {
 interface Props extends RichTextEditorProps {}
 
 const ArticleEditor = (props: Props) => {
+  const { uploadImageFile } = useImageUpload();
+
+  const handleEditorImageUpload = useCallback(
+    async (file: File) => {
+      try {
+        return (await uploadImageFile(file)).url;
+      } catch (err) {
+        throw new Error('에디터 이미지 업로드 실패');
+      }
+    },
+    // 빈 칸으로 두지 않으면 에디터가 정상적으로 작동 안함!
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
+
   return (
     <ArticleEditorWrapper>
       <ArticleEditorLabel>
@@ -35,6 +53,7 @@ const ArticleEditor = (props: Props) => {
           ['unorderedList', 'orderedList'],
           ['blockquote', 'code', 'link', 'image'],
         ]}
+        onImageUpload={handleEditorImageUpload}
         {...props}
       />
     </ArticleEditorWrapper>

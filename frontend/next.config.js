@@ -14,7 +14,7 @@ const nextConfig = {
     return config;
   },
   images: {
-    domains: ["avatars.githubusercontent.com"],
+    domains: ["avatars.githubusercontent.com", "kr.object.ncloudstorage.com"],
   },
 }
 

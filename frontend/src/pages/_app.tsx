@@ -47,12 +47,12 @@ export default function App({ Component, pageProps }: AppProps) {
       <QueryClientProvider client={queryClient}>
         <ReactQueryDevtools initialIsOpen={false} />
         <CommonStyles>
+          <RouterTransition />
           <ErrorBoundary key={uuid()}>
             <AuthErrorBoundary>
               <ApiErrorBoundary>
-                <RouterTransition />
-                <Component {...pageProps} />
                 <LoginRedirect />
+                <Component {...pageProps} />
               </ApiErrorBoundary>
             </AuthErrorBoundary>
           </ErrorBoundary>
