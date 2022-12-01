@@ -1,13 +1,12 @@
+import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import {
   CATEGORY,
   GROUP_STATUS,
   LOCATION,
 } from '@app/group-article/constants/group-article.constants';
-import { ApiProperty } from '@nestjs/swagger';
 import { IGroupArticleSearchResult } from '@app/group-article/dto/group-article-search-result.interface';
 import { ImageService } from '@app/image/image.service';
-import { Type } from 'class-transformer';
-import { GroupCategory } from '@app/group-article/entity/group-category.entity';
 
 export class GroupArticleSearchResult {
   @ApiProperty({ example: 1, description: '게시글 아이디' })
@@ -33,7 +32,7 @@ export class GroupArticleSearchResult {
   location: LOCATION;
 
   @ApiProperty({ example: CATEGORY.STUDY, description: '모집 카테고리' })
-  category: CATEGORY;
+  category: string;
 
   @ApiProperty({ example: 10, description: '모집 최대 인원 수' })
   maxCapacity: number;
@@ -61,7 +60,7 @@ export class GroupArticleSearchResult {
     res.id = row.id;
     res.title = row.title;
     res.thumbnail = imageService.getStorageUrl([row.thumbnail])[0];
-    res.category = GroupCategory[row.groupCategoryName];
+    res.category = row.groupCategoryName;
     res.location = row.location;
     res.status = row.status;
     res.maxCapacity = row.maxCapacity;

@@ -26,7 +26,7 @@ export class GetGroupArticleDetailResponse {
   author: Author;
 
   @ApiProperty({ example: CATEGORY.STUDY, description: '모집 카테고리' })
-  category: CATEGORY;
+  category: string;
 
   @ApiProperty({ example: LOCATION.ONLINE, description: '모임 장소' })
   location: LOCATION;
@@ -71,7 +71,7 @@ export class GetGroupArticleDetailResponse {
       userName: groupArticleDetail.userName,
       profileImage: groupArticleDetail.userProfileImage,
     };
-    res.category = CATEGORY[groupArticleDetail.groupCategoryName];
+    res.category = groupArticleDetail.groupCategoryName;
     res.thumbnail = imageService.getStorageUrl([
       groupArticleDetail.thumbnail,
     ])[0];
