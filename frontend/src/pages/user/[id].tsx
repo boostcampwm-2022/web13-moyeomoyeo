@@ -1,24 +1,36 @@
+import { useRouter } from 'next/router';
+
 import styled from '@emotion/styled';
 
 import Header from '@components/common/Header';
 import DetailTitle from '@components/common/Header/DetailTitle';
 import PageLayout from '@components/common/PageLayout';
 import Profile from '@components/common/Profile';
-import { dummyUser } from '@constants/dummy';
 import { PAGE_TITLE } from '@constants/pageTitle';
+import useFetchProfile from '@hooks/queries/useFetchProfile';
 
 const UserProfile = () => {
+  const router = useRouter();
+  const articleId = Number(router.query.id);
+  const { profile, isFetching } = useFetchProfile(articleId);
+
   return (
     <PageLayout
       header={
         <Header
-          leftNode={<DetailTitle title={dummyUser.userName} subTitle={PAGE_TITLE.USER.subTitle} />}
+          leftNode={
+            <DetailTitle
+              title={profile?.userName ?? '유저 프로필'}
+              subTitle={PAGE_TITLE.USER.subTitle}
+            />
+          }
         />
       }
     >
       <ContentWrapper>
         <ProfileWrapper>
-          <Profile user={dummyUser} />
+          {/* TODO 로딩중 */}
+          {isFetching ? <div>로딩중</div> : <Profile user={profile} />}
         </ProfileWrapper>
       </ContentWrapper>
     </PageLayout>
