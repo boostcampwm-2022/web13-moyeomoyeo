@@ -4,7 +4,6 @@ import { useState } from 'react';
 
 import styled from '@emotion/styled';
 import { ActionIcon, FileInput, Slider, Text } from '@mantine/core';
-import { showNotification } from '@mantine/notifications';
 import { IconCheck, IconUpload, IconUser } from '@tabler/icons';
 
 import ArticleEditor from '@components/article/ArticleEditor';
@@ -20,6 +19,7 @@ import { Location, LocationKr } from '@constants/location';
 import useAsyncError from '@hooks/useAsyncError';
 import { ImageUploadType } from '@typings/types';
 import { clientAxios } from '@utils/commonAxios';
+import { showToast } from '@utils/toast';
 import uploadImage from '@utils/uploadImage';
 
 interface ArticleInput {
@@ -65,24 +65,11 @@ const WritePage = () => {
         thumbnail: uploadedImage.key,
       });
       // TODO : mutation 로직 추가?
-      // Modal, notification 중 고르기
-      showNotification({
-        color: 'indigo',
+      showToast({
         title: '게시글 등록 완료!',
         message: '이제 모집 완료 되기를 기다려주세요!',
-        icon: <IconCheck size={16} />,
-        autoClose: 5000,
-        styles: (theme) => ({
-          root: {
-            paddingTop: '1.6rem',
-            paddingBottom: '1.6rem',
-          },
-          title: {
-            fontSize: theme.fontSizes.lg,
-            fontWeight: 700,
-          },
-        }),
       });
+
       void router.push('/');
     } catch (err) {
       throwAsyncError('게시글 등록에 실패했습니다.');

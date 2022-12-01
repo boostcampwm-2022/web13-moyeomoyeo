@@ -4,7 +4,6 @@ import { ChangeEvent, useEffect, useState } from 'react';
 
 import styled from '@emotion/styled';
 import { ActionIcon, FileInput, Skeleton } from '@mantine/core';
-import { showNotification } from '@mantine/notifications';
 import { IconCheck, IconUpload } from '@tabler/icons';
 
 import Header from '@components/common/Header';
@@ -15,6 +14,7 @@ import useEditMyProfile from '@hooks/queries/useEditMyProfile';
 import useFetchMyInfo from '@hooks/queries/useFetchMyInfo';
 import useAsyncError from '@hooks/useAsyncError';
 import { UserType } from '@typings/types';
+import { showToast } from '@utils/toast';
 import uploadImage from '@utils/uploadImage';
 
 const MyEditPage = () => {
@@ -65,22 +65,9 @@ const MyEditPage = () => {
     try {
       updateMyProfile(userDataInput);
 
-      showNotification({
-        color: 'indigo',
+      showToast({
         title: '프로필 수정 완료!',
         message: '멋지게 바뀐 프로필을 확인해보세요!',
-        icon: <IconCheck size={16} />,
-        autoClose: 4000,
-        styles: (theme) => ({
-          root: {
-            paddingTop: '1.6rem',
-            paddingBottom: '1.6rem',
-          },
-          title: {
-            fontSize: theme.fontSizes.lg,
-            fontWeight: 700,
-          },
-        }),
       });
       void router.push('/my');
     } catch (err) {
