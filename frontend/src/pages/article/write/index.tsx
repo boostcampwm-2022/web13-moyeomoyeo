@@ -147,7 +147,7 @@ const WritePage = () => {
               }))}
               value={location}
               onChange={(location) =>
-                setArticleInput((prev) => ({ ...prev, location: location as Location }))
+                setArticleInput((prev) => ({ ...prev, location: location.trim() as Location }))
               }
               required
             />
@@ -179,7 +179,7 @@ const WritePage = () => {
             placeholder="제목을 입력해주세요."
             required
             value={title}
-            onChange={(e) => setArticleInput((prev) => ({ ...prev, title: e.target.value }))}
+            onChange={(e) => setArticleInput((prev) => ({ ...prev, title: e.target.value.trim() }))}
           />
           <ArticleEditor
             value={contents}
@@ -190,7 +190,9 @@ const WritePage = () => {
             placeholder="채팅방 링크를 입력해주세요."
             required
             value={chatUrl}
-            onChange={(e) => setArticleInput((prev) => ({ ...prev, chatUrl: e.target.value }))}
+            onChange={(e) =>
+              setArticleInput((prev) => ({ ...prev, chatUrl: e.target.value.trim() }))
+            }
           />
           <ImageSection>
             <FileInputLabel>
