@@ -7,9 +7,9 @@ import { getMyInfo } from './resolvers/getMyInfo';
 import { getTest } from './resolvers/test';
 
 export const handlers = [
-  rest.get('http://testServer/test', getTest),
-  rest.get('http://testServer/group-articles', getGroupArticles),
-  rest.get('http://testServer/group-articles/me', getGroupArticles),
-  rest.get('http://testServer/my-info', getMyInfo),
-  rest.post('http://testServer/post-test', postTest),
+  rest.get('https://testServer/test', getTest),
+  rest.get('https://testServer/group-articles', getGroupArticles),
+  rest.get('https://testServer/group-articles/me', getGroupArticles),
+  rest.get('https://testServer/my-info', getMyInfo),
+  rest.post('https://testServer/post-test', postTest),
 ];

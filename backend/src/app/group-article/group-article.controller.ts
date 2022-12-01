@@ -7,6 +7,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Put,
   Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
@@ -32,6 +33,10 @@ import { GroupArticleNotFoundException } from '@app/group-article/exception/grou
 import { NotAuthorException } from '@app/group-article/exception/not-author.exception';
 import { NotProgressGroupException } from '@app/group-article/exception/not-progress-group.exception';
 import { IsNull } from 'typeorm';
+import { UpdateGroupArticleRequest } from '@app/group-article/dto/update-group-article-request.dto';
+import { NotSuccessGroupException } from '@app/group-article/exception/not-success-group.exception';
+import { NotParticipantException } from '@app/group-article/exception/not-participant.exception';
+import { GetGroupChatUrlResponseDto } from '@app/group-article/dto/get-group-chat-url-response.dto';
 
 @Controller('group-articles')
 @ApiTags('Group-Article')
@@ -61,7 +66,7 @@ export class GroupArticleController {
     );
   }
 
-  @Post('/:id/recruitment-complete')
+  @Post(':id/recruitment-complete')
   @JwtAuth()
   @ApiSuccessResponse(HttpStatus.NO_CONTENT)
   @ApiErrorResponse(
@@ -76,7 +81,7 @@ export class GroupArticleController {
     await this.groupArticleService.complete(user, id);
   }
 
-  @Post('/:id/recruitment-cancel')
+  @Post(':id/recruitment-cancel')
   @JwtAuth()
   @ApiSuccessResponse(HttpStatus.NO_CONTENT)
   @ApiErrorResponse(
@@ -91,7 +96,19 @@ export class GroupArticleController {
     await this.groupArticleService.cancel(user, id);
   }
 
-  @Get('/categories')
+  @Put(':id')
+  @JwtAuth()
+  @ApiSuccessResponse(HttpStatus.NO_CONTENT)
+  @ApiErrorResponse(NotAuthorException, GroupArticleNotFoundException)
+  async update(
+    @CurrentUser() user: User,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateGroupArticleRequest: UpdateGroupArticleRequest,
+  ) {
+    await this.groupArticleService.update(user, id, updateGroupArticleRequest);
+  }
+
+  @Get('categories')
   @ApiSuccessResponse(HttpStatus.OK, GroupCategoryResponse, { isArray: true })
   async getCategories() {
     const categories = await this.groupCategoryRepository.find({
@@ -103,7 +120,7 @@ export class GroupArticleController {
     );
   }
 
-  @Get('/search')
+  @Get('search')
   @ApiSuccessResponse(HttpStatus.OK, SearchGroupArticleResponse)
   async search(@Query() query: SearchGroupArticlesRequest) {
     const result = await this.groupArticleRepository.search(query);
@@ -120,7 +137,7 @@ export class GroupArticleController {
     );
   }
 
-  @Get('/:id')
+  @Get(':id')
   @JwtAuth()
   @ApiSuccessResponse(HttpStatus.OK, GetGroupArticleDetailResponse)
   @ApiErrorResponse(GroupArticleNotFoundException)
@@ -132,7 +149,26 @@ export class GroupArticleController {
     );
   }
 
-  @Delete('/:id')
+  @Get(':id/chat-url')
+  @JwtAuth()
+  @ApiSuccessResponse(HttpStatus.OK, GetGroupChatUrlResponseDto)
+  @ApiErrorResponse(
+    GroupArticleNotFoundException,
+    NotSuccessGroupException,
+    NotParticipantException,
+  )
+  async getChatUrl(
+    @CurrentUser() user: User,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    const groupChatUrl = await this.groupArticleService.getChatUrl(user, id);
+
+    return ResponseEntity.OK_WITH_DATA(
+      GetGroupChatUrlResponseDto.from(groupChatUrl),
+    );
+  }
+
+  @Delete(':id')
   @JwtAuth()
   @ApiSuccessResponse(HttpStatus.NO_CONTENT)
   @ApiErrorResponse(NotAuthorException, GroupArticleNotFoundException)

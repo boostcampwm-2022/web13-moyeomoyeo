@@ -9,6 +9,9 @@ import { GroupArticleRepository } from '@app/group-article/repository/group-arti
 import { GroupArticle } from '@app/group-article/entity/group-article.entity';
 import { User } from '@app/user/entity/user.entity';
 import { Group } from '@app/group-article/entity/group.entity';
+import { ApplicationNotFoundException } from '@app/group-application/exception/application-not-found.exception';
+import { UserInfo } from '@app/group-application/dto/user-info.dto';
+import { ApplicationWithUserInfoResponse } from '@src/app/group-application/dto/application-with-user-info-response.dto';
 
 @Injectable()
 export class GroupApplicationService {
@@ -17,58 +20,118 @@ export class GroupApplicationService {
     private readonly groupArticleRespository: GroupArticleRepository,
   ) {}
 
-  async attendGroup(user: User, groupArticleId: number) {
+  private async getGroupApplicationContext(user: User, groupArticleId: number) {
     const groupArticle = await this.groupArticleRespository.findById(
       groupArticleId,
     );
-    await this.validateGroupArticleId(groupArticle);
-    this.validateUserTarget(user, groupArticle);
+    await this.validateGroupArticle(groupArticle);
+
     const group = groupArticle.group;
-    await this.validateRegister(user, group);
+    const application = await this.findGroupApplication(user, group);
+
+    return {
+      groupArticle,
+      group,
+      application,
+    };
+  }
+
+  private async findGroupApplication(user: User, group: Group) {
+    return this.groupApplicationRepository.findByUserIdAndGroupIdAndStatus(
+      user.id,
+      group.id,
+      GROUP_APPLICATION_STATUS.REGISTER,
+    );
+  }
+
+  public async joinGroup(user: User, groupArticleId: number) {
+    const { groupArticle, group, application } =
+      await this.getGroupApplicationContext(user, groupArticleId);
+
+    this.validateUserTarget(user, groupArticle);
+    await this.validateRegisterForJoining(application);
 
     const groupApplication = GroupApplication.create(user, group);
     return this.groupApplicationRepository.save(groupApplication);
   }
 
-  async validateGroupArticleId(groupArticle: GroupArticle) {
+  private async validateGroupArticle(groupArticle: GroupArticle) {
     if (!groupArticle) {
       throw new GroupNotFoundException();
     }
-    return groupArticle;
   }
 
-  validateUserTarget(currentUser: User, groupArticle: GroupArticle) {
+  private validateUserTarget(currentUser: User, groupArticle: GroupArticle) {
     if (groupArticle.isAuthor(currentUser)) {
       throw new CannotApplicateException();
     }
   }
 
-  async validateRegister(user: User, group: Group) {
-    const application =
-      await this.groupApplicationRepository.findByUserIdAndGroupIdAndStatus(
-        user.id,
-        group.id,
-        GROUP_APPLICATION_STATUS.REGISTER,
-      );
-
+  private async validateRegisterForJoining(application: GroupApplication) {
     if (application) {
       throw new DuplicateApplicationException();
     }
   }
 
-  async checkJoiningGroup(user: User, groupArticleId: number) {
-    const groupArticle = await this.groupArticleRespository.findById(
+  public async checkJoinedGroup(user: User, groupArticleId: number) {
+    const { groupArticle, application } = await this.getGroupApplicationContext(
+      user,
       groupArticleId,
     );
-    await this.validateGroupArticleId(groupArticle);
-    const group = groupArticle.group;
-    const application =
-      await this.groupApplicationRepository.findByUserIdAndGroupIdAndStatus(
-        user.id,
-        group.id,
-        GROUP_APPLICATION_STATUS.REGISTER,
-      );
 
     return groupArticle.isAuthor(user) || application !== null;
+  }
+
+  public async cancelJoinedGroup(user: User, groupArticleId: number) {
+    const { groupArticle, application } = await this.getGroupApplicationContext(
+      user,
+      groupArticleId,
+    );
+
+    this.validateUserTarget(user, groupArticle);
+    await this.validateRegisterForCanceling(application);
+
+    await this.deleteApplication(application);
+  }
+
+  private async validateRegisterForCanceling(application: GroupApplication) {
+    if (!application) {
+      throw new ApplicationNotFoundException();
+    }
+  }
+
+  private async deleteApplication(application: GroupApplication) {
+    application.cancel();
+    await this.groupApplicationRepository.save(application);
+  }
+
+  async getAllParticipants(user: User, groupArticleId: number) {
+    const { group } = await this.getGroupApplicationContext(
+      user,
+      groupArticleId,
+    );
+
+    return this.getApplicationWithUserInfo(group);
+  }
+
+  private async getApplicationWithUserInfo(group: Group) {
+    const allApplication =
+      await this.groupApplicationRepository.findAllApplicationByGroup(group.id);
+
+    const applicationWithUserInfoList = allApplication.map(
+      async (application) => {
+        const user = await application.user;
+        return ApplicationWithUserInfoResponse.from(
+          UserInfo.from(user),
+          application,
+        );
+      },
+    );
+
+    return await Promise.all(
+      applicationWithUserInfoList.map((applicationWithUserInfo) => {
+        return applicationWithUserInfo;
+      }),
+    );
   }
 }

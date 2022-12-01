@@ -11,14 +11,18 @@ import { ApiSuccessResponse } from '@src/common/decorator/api-success-resposne.d
 import { ResponseEntity } from '@src/common/response-entity';
 import { ImagesUploadResponse } from '@app/image/dto/images-upload-response.dto';
 import { ImageService } from '@app/image/image.service';
+import { ApiErrorResponse } from '@src/common/decorator/api-error-response.decorator';
+import { JwtAuth } from '@src/common/decorator/jwt-auth.decorator';
 
 @Controller('images')
 @ApiTags('Image')
+@JwtAuth()
 export class ImageController {
   constructor(private readonly imageService: ImageService) {}
 
   @Post('upload')
   @ApiSuccessResponse(HttpStatus.CREATED, ImagesUploadResponse)
+  @ApiErrorResponse()
   @UseInterceptors(FilesInterceptor('files'))
   @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -36,7 +40,7 @@ export class ImageController {
     },
   })
   async uploadImage(@UploadedFiles() files: Array<Express.Multer.File>) {
-    const { keyList, urlList } = this.imageService.uploadImage(files);
+    const { keyList, urlList } = await this.imageService.uploadImage(files);
     const data = keyList.map(
       (key, index) => new ImagesUploadResponse(key, urlList[index]),
     );

@@ -1,4 +1,12 @@
-import { Body, Controller, HttpStatus, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpStatus,
+  ParseIntPipe,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { GroupApplicationService } from '@app/group-application/group-application.service';
 import { GroupApplicationRequest } from '@src/app/group-application/dto/group-application-request.dto';
 import { ApiSuccessResponse } from '@src/common/decorator/api-success-resposne.decorator';
@@ -13,6 +21,8 @@ import { DuplicateApplicationException } from '@src/app/group-application/except
 import { GroupNotFoundException } from '@app/group-application/exception/group-not-found.exception';
 import { CannotApplicateException } from '@src/app/group-application/exception/cannot-applicate.exception';
 import { CheckJoiningGroupResonse } from '@app/group-application/dto/check-joining-group-response.dto';
+import { ApplicationNotFoundException } from '@app/group-application/exception/application-not-found.exception';
+import { ApplicationWithUserInfoResponse } from '@app/group-application/dto/application-with-user-info-response.dto';
 
 @Controller('group-applications')
 @JwtAuth()
@@ -29,12 +39,12 @@ export class GroupApplicationController {
     CannotApplicateException,
     GroupNotFoundException,
   )
-  async attendGroup(
+  async joinGroup(
     @CurrentUser() user: User,
     @Body() groupApplicationRequest: GroupApplicationRequest,
   ) {
     const groupArticleId = groupApplicationRequest.groupArticleId;
-    const groupApplication = await this.groupApplicationService.attendGroup(
+    const groupApplication = await this.groupApplicationService.joinGroup(
       user,
       groupArticleId,
     );
@@ -45,16 +55,47 @@ export class GroupApplicationController {
   @Post('/status')
   @ApiSuccessResponse(HttpStatus.OK, CheckJoiningGroupResonse)
   @ApiErrorResponse(GroupNotFoundException)
-  async checkJoiningGroup(
+  async checkJoinedGroup(
     @CurrentUser() user: User,
     @Body() groupApplicationRequest: GroupApplicationRequest,
   ) {
     const groupArticleId = groupApplicationRequest.groupArticleId;
-    const isJoined = await this.groupApplicationService.checkJoiningGroup(
+    const isJoined = await this.groupApplicationService.checkJoinedGroup(
       user,
       groupArticleId,
     );
     const data = CheckJoiningGroupResonse.from(isJoined);
     return ResponseEntity.OK_WITH_DATA(data);
+  }
+
+  @Get('participants')
+  @ApiSuccessResponse(HttpStatus.OK, ApplicationWithUserInfoResponse, {
+    isArray: true,
+  })
+  @ApiErrorResponse(GroupNotFoundException)
+  async getAllParticipants(
+    @CurrentUser() user: User,
+    @Query('groupArticleId', ParseIntPipe) groupArticleId: number,
+  ) {
+    const data = await this.groupApplicationService.getAllParticipants(
+      user,
+      groupArticleId,
+    );
+    return ResponseEntity.OK_WITH_DATA(data);
+  }
+
+  @Post('cancel')
+  @ApiSuccessResponse(HttpStatus.NO_CONTENT)
+  @ApiErrorResponse(
+    CannotApplicateException,
+    GroupNotFoundException,
+    ApplicationNotFoundException,
+  )
+  async cancelJoinedGroup(
+    @CurrentUser() user: User,
+    @Body() groupApplicationRequest: GroupApplicationRequest,
+  ) {
+    const groupArticleId = groupApplicationRequest.groupArticleId;
+    await this.groupApplicationService.cancelJoinedGroup(user, groupArticleId);
   }
 }

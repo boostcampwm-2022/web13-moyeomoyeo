@@ -13,9 +13,9 @@ import {
 import StatCounter from '@components/common/StatCounter';
 import { ArticleStatus, ArticleStatusKr } from '@constants/article';
 import { CategoryKr } from '@constants/category';
+import { CATEGORY_COLOR, LOCATION_COLOR, STATUS_COLOR } from '@constants/color';
 import { LocationKr } from '@constants/location';
 import { ArticlePreviewType } from '@typings/types';
-import { getCommonBadgeColor, getStatusBadgeColor } from '@utils/colors';
 
 interface Props {
   article: ArticlePreviewType;
@@ -33,16 +33,16 @@ const GroupArticleCard = ({ article }: Props) => {
       <InfoWrapper>
         <TagWrapper>
           <ArticleTag
-            color={getStatusBadgeColor(article.status)}
+            color={STATUS_COLOR[article.status]}
             content={ArticleStatusKr[article.status]}
           />
           <ArticleTag
-            color={getCommonBadgeColor(article.category.id)}
-            content={CategoryKr[article.category.name]}
+            color={CATEGORY_COLOR[article.category]}
+            content={CategoryKr[article.category]}
           />
           <ArticleTag
-            color={getCommonBadgeColor(article.location.id)}
-            content={LocationKr[article.location.name]}
+            color={LOCATION_COLOR[article.location]}
+            content={LocationKr[article.location]}
           />
         </TagWrapper>
         <TitleText>{article.title}</TitleText>

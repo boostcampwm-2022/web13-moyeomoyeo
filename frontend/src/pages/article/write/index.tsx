@@ -51,16 +51,17 @@ const WritePage = () => {
     category &&
     location &&
     maxCapacity &&
-    title.length > 0 &&
+    title.trim().length > 0 &&
     contents.length > 0 &&
-    chatUrl.length > 0 &&
+    chatUrl.trim().length > 0 &&
     uploadedImage;
 
   const handleClickSubmitBtn = async () => {
     if (!possibleToSubmit) return;
     try {
+      const { uploadedImage, ...rest } = articleInput;
       await clientAxios.post('/v1/group-articles', {
-        ...articleInput,
+        ...rest,
         thumbnail: uploadedImage.key,
       });
       // TODO : mutation 로직 추가?

@@ -59,11 +59,8 @@ export class GroupApplication {
     return groupApplication;
   }
 
-  static cancel(user: User, group: Group) {
-    const groupApplication = new GroupApplication();
-    groupApplication.userId = user.id;
-    groupApplication.groupId = group.id;
-    groupApplication.status = null;
-    return groupApplication;
+  cancel() {
+    this.status = GROUP_APPLICATION_STATUS.CANCEL;
+    this.deletedAt = new Date();
   }
 }
