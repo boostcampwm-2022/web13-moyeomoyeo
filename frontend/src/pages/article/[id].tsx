@@ -23,6 +23,7 @@ import { ParticipateButtonStatus } from '@constants/participateButton';
 import useFetchApplicationStatus from '@hooks/queries/useFetchApplicationStatus';
 import useFetchArticle from '@hooks/queries/useFetchArticle';
 import useFetchChatUrl from '@hooks/queries/useFetchChatUrl';
+import useFetchMyInfo from '@hooks/queries/useFetchMyInfo';
 import { ArticleType } from '@typings/types';
 import dateTimeFormat from '@utils/dateTime';
 
@@ -32,6 +33,7 @@ const ArticleDetail = () => {
   } = useTheme();
   const router = useRouter();
   const articleId = Number(router.query.id);
+  const { data: myInfo } = useFetchMyInfo();
   const { article, isLoading } = useFetchArticle(articleId);
   const { isJoined } = useFetchApplicationStatus(articleId);
   const { url } = useFetchChatUrl(
@@ -112,6 +114,7 @@ const ArticleDetail = () => {
                 <ParticipateButton
                   status={getButtonStatus(article, isJoined)}
                   groupArticleId={article.id}
+                  isMyArticle={myInfo.id === article.author.id}
                   chatRoomLink={url}
                 />
                 <StatCounter variant="comment" count={article.commentCount} />

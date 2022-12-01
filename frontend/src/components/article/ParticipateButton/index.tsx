@@ -8,10 +8,13 @@ import { ParticipateButtonStatus } from '@constants/participateButton';
 interface Props {
   status: ParticipateButtonStatus;
   groupArticleId: number;
+  isMyArticle: boolean;
   chatRoomLink?: string;
 }
 
-const ParticipateButton = ({ status, groupArticleId, chatRoomLink = '' }: Props) => {
+const ParticipateButton = ({ status, groupArticleId, isMyArticle, chatRoomLink = '' }: Props) => {
+  if (isMyArticle) return <ChatLinkButton chatLink={chatRoomLink} />;
+
   return (
     <>
       {status === ParticipateButtonStatus.APPLY && <ApplyButton groupArticleId={groupArticleId} />}
