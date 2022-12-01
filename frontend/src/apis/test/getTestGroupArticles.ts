@@ -9,7 +9,7 @@ const getTestGroupArticles = async (
   location: Location,
   progress: boolean
 ) => {
-  return axios.get(`http://testServer/group-articles`, {
+  return axios.get(`https://testServer/group-articles`, {
     params: { category, location, progress, nextId, limit: 5 },
   });
 };
