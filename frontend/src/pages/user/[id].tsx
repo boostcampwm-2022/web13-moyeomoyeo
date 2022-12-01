@@ -10,9 +10,10 @@ import { PAGE_TITLE } from '@constants/pageTitle';
 import useFetchProfile from '@hooks/queries/useFetchProfile';
 
 const UserProfile = () => {
-  const router = useRouter();
-  const articleId = Number(router.query.id);
-  const { profile, isFetching } = useFetchProfile(articleId);
+  const {
+    query: { id },
+  } = useRouter();
+  const { profile, isFetching } = useFetchProfile(Number(id));
 
   return (
     <PageLayout
