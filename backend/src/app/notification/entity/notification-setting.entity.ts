@@ -28,7 +28,7 @@ export class NotificationSetting {
   @Column({ type: 'varchar', length: 200 })
   type: NOTIFICATION_SETTING_TYPE;
 
-  @Column({ type: 'tinyint', precision: 1 })
+  @Column({ type: 'varchar', length: 10 })
   status: NOTIFICATION_SETTING_STATUS;
 
   @CreateDateColumn({ type: 'timestamp' })

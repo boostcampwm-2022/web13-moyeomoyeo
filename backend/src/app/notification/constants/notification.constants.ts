@@ -4,6 +4,6 @@ export enum NOTIFICATION_SETTING_TYPE {
 }
 
 export enum NOTIFICATION_SETTING_STATUS {
-  OFF,
-  ON,
+  ON = 'ON',
+  OFF = 'OFF',
 }
