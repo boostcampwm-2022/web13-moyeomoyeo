@@ -20,4 +20,13 @@ export class GroupApplicationRepository extends Repository<GroupApplication> {
   ) {
     return this.findOneBy({ userId, groupId, status });
   }
+
+  findAllApplicationByGroup(groupId: number) {
+    return this.find({
+      where: {
+        groupId,
+        status: GROUP_APPLICATION_STATUS.REGISTER,
+      },
+    });
+  }
 }
