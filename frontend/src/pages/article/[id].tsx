@@ -34,7 +34,7 @@ const ArticleDetail = () => {
   const router = useRouter();
   const articleId = Number(router.query.id);
   const { data: myInfo } = useFetchMyInfo();
-  const { article, isLoading } = useFetchArticle(articleId);
+  const { article } = useFetchArticle(articleId);
   const { isJoined } = useFetchApplicationStatus(articleId);
   const { url } = useFetchChatUrl(
     articleId,
@@ -59,7 +59,7 @@ const ArticleDetail = () => {
         }
       >
         {/* TODO 로딩 처리 */}
-        {isLoading ? (
+        {!article || isJoined === undefined || !myInfo ? (
           <div>로딩중</div>
         ) : (
           <>
@@ -111,12 +111,13 @@ const ArticleDetail = () => {
                 <TypographyStylesProvider>
                   <ContentBox dangerouslySetInnerHTML={{ __html: article.content }} />
                 </TypographyStylesProvider>
-                <ParticipateButton
-                  status={getButtonStatus(article, isJoined)}
-                  groupArticleId={article.id}
-                  isMyArticle={myInfo.id === article.author.id}
-                  chatRoomLink={url}
-                />
+                {article.author.id !== myInfo.id && (
+                  <ParticipateButton
+                    status={getButtonStatus(article, isJoined)}
+                    groupArticleId={article.id}
+                    chatRoomLink={url}
+                  />
+                )}
                 <StatCounter variant="comment" count={article.commentCount} />
               </DetailWrapper>
               <Divider />
@@ -137,8 +138,10 @@ const ArticleDetail = () => {
   );
 };
 
+export default ArticleDetail;
+
 const getButtonStatus = (article: ArticleType, isJoined: boolean) => {
-  if (!article && !isJoined) return ParticipateButtonStatus.CLOSED;
+  if (!article || isJoined === undefined) return ParticipateButtonStatus.CLOSED;
 
   switch (article.status) {
     case ArticleStatus.PROGRESS:
@@ -151,8 +154,6 @@ const getButtonStatus = (article: ArticleType, isJoined: boolean) => {
       return ParticipateButtonStatus.CLOSED;
   }
 };
-
-export default ArticleDetail;
 
 const ContenxtWrapper = styled.div`
   display: flex;
