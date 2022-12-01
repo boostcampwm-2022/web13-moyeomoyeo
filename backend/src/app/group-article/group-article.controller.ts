@@ -130,9 +130,7 @@ export class GroupArticleController {
         result[1],
         query.currentPage,
         query.countPerPage,
-        result[0].map((row) =>
-          GroupArticleSearchResult.from(row, this.imageService),
-        ),
+        result[0].map((row) => GroupArticleSearchResult.from(row)),
       ),
     );
   }
