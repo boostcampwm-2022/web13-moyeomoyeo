@@ -3,18 +3,29 @@ import { useState } from 'react';
 import { Button } from '@mantine/core';
 
 import AlertModal from '@components/common/AlertModal';
+import useApplyGroup from '@hooks/queries/useApplyGroup';
 
-const CancelButton = () => {
+interface Props {
+  groupArticleId: number;
+}
+
+const CancelButton = ({ groupArticleId }: Props) => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
 
-  const cancelApplication = () => {
-    // TODO API 호출
-    setModalOpen(true);
+  const { mutate: cancelApplication } = useApplyGroup(groupArticleId);
+
+  // TODO toast 메시지로 변경
+  const handleClickCancelButton = () => {
+    cancelApplication(groupArticleId, {
+      onSuccess: () => {
+        setModalOpen(true);
+      },
+    });
   };
 
   return (
     <>
-      <Button onClick={cancelApplication} size="md" color="red" fullWidth>
+      <Button onClick={handleClickCancelButton} size="md" color="red" fullWidth>
         참가 취소
       </Button>
       {modalOpen && (

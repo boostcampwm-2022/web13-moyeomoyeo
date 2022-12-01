@@ -109,7 +109,11 @@ const ArticleDetail = () => {
                 <TypographyStylesProvider>
                   <ContentBox dangerouslySetInnerHTML={{ __html: article.content }} />
                 </TypographyStylesProvider>
-                <ParticipateButton status={getButtonStatus(article, isJoined)} chatRoomLink={url} />
+                <ParticipateButton
+                  status={getButtonStatus(article, isJoined)}
+                  groupArticleId={article.id}
+                  chatRoomLink={url}
+                />
                 <StatCounter variant="comment" count={article.commentCount} />
               </DetailWrapper>
               <Divider />

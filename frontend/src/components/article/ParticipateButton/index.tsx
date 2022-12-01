@@ -7,14 +7,17 @@ import { ParticipateButtonStatus } from '@constants/participateButton';
 
 interface Props {
   status: ParticipateButtonStatus;
+  groupArticleId: number;
   chatRoomLink?: string;
 }
 
-const ParticipateButton = ({ status, chatRoomLink = '' }: Props) => {
+const ParticipateButton = ({ status, groupArticleId, chatRoomLink = '' }: Props) => {
   return (
     <>
-      {status === ParticipateButtonStatus.APPLY && <ApplyButton />}
-      {status === ParticipateButtonStatus.CANCEL && <CancelButton />}
+      {status === ParticipateButtonStatus.APPLY && <ApplyButton groupArticleId={groupArticleId} />}
+      {status === ParticipateButtonStatus.CANCEL && (
+        <CancelButton groupArticleId={groupArticleId} />
+      )}
       {status === ParticipateButtonStatus.CLOSED && (
         <Button size="md" disabled fullWidth>
           모집 마감
