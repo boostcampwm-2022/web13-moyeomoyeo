@@ -62,7 +62,7 @@ const WritePage = () => {
       const { uploadedImage, ...rest } = articleInput;
       await clientAxios.post('/v1/group-articles', {
         ...rest,
-        thumbnail: uploadedImage.key,
+        thumbnail: uploadedImage.url,
       });
       // TODO : mutation 로직 추가?
       showToast({
