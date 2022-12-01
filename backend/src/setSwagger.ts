@@ -7,6 +7,7 @@ import { GroupArticleModule } from '@app/group-article/group-article.module';
 import { UserModule } from '@app/user/user.module';
 import { MyInfoModule } from '@app/myinfo/myinfo.module';
 import { GroupApplicationModule } from '@app/group-application/group-application.module';
+import { NotificationModule } from '@app/notification/notification.module';
 
 export const setSwagger = (app: INestApplication) => {
   const config = new DocumentBuilder()
@@ -29,6 +30,7 @@ export const setSwagger = (app: INestApplication) => {
       UserModule,
       MyInfoModule,
       GroupApplicationModule,
+      NotificationModule,
     ],
     extraModels: [ResponseEntity],
   });
