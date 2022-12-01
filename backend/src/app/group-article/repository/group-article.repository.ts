@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, IsNull, Repository } from 'typeorm';
 import { GroupArticle } from '@app/group-article/entity/group-article.entity';
 import { Group } from '@app/group-article/entity/group.entity';
 import { GroupCategory } from '@app/group-article/entity/group-category.entity';
@@ -22,7 +22,7 @@ export class GroupArticleRepository extends Repository<GroupArticle> {
   }
 
   findById(id: number) {
-    return this.findOneBy({ id });
+    return this.findOneBy({ id, deletedAt: IsNull() });
   }
 
   async search(
