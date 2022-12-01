@@ -34,6 +34,9 @@ import { NotAuthorException } from '@app/group-article/exception/not-author.exce
 import { NotProgressGroupException } from '@app/group-article/exception/not-progress-group.exception';
 import { IsNull } from 'typeorm';
 import { UpdateGroupArticleRequest } from '@app/group-article/dto/update-group-article-request.dto';
+import { NotSuccessGroupException } from '@app/group-article/exception/not-success-group.exception';
+import { NotParticipantException } from '@app/group-article/exception/not-participant.exception';
+import { GetGroupChatUrlResponseDto } from '@app/group-article/dto/get-group-chat-url-response.dto';
 
 @Controller('group-articles')
 @ApiTags('Group-Article')
@@ -143,6 +146,25 @@ export class GroupArticleController {
 
     return ResponseEntity.OK_WITH_DATA(
       GetGroupArticleDetailResponse.from(groupArticleDetail, this.imageService),
+    );
+  }
+
+  @Get(':id/chat-url')
+  @JwtAuth()
+  @ApiSuccessResponse(HttpStatus.OK, GetGroupChatUrlResponseDto)
+  @ApiErrorResponse(
+    GroupArticleNotFoundException,
+    NotSuccessGroupException,
+    NotParticipantException,
+  )
+  async getChatUrl(
+    @CurrentUser() user: User,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    const groupChatUrl = await this.groupArticleService.getChatUrl(user, id);
+
+    return ResponseEntity.OK_WITH_DATA(
+      GetGroupChatUrlResponseDto.from(groupChatUrl),
     );
   }
 

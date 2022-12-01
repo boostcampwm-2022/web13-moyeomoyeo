@@ -1,5 +1,5 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
-import { DataSource } from 'typeorm';
+import { DataSource, IsNull } from 'typeorm';
 import { JwtTokenService } from '@common/module/jwt-token/jwt-token.service';
 import { TokenType } from '@common/module/jwt-token/type/token-type';
 import { User } from '@app/user/entity/user.entity';
@@ -18,28 +18,34 @@ export class JwtAuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const response = context.switchToHttp().getResponse();
 
+    const { access_token, refresh_token } = request.cookies;
+
     try {
-      const { access_token, refresh_token } = request.cookies;
+      if (!access_token) {
+        throw new Error('엑세스 토큰이 존재하지 않습니다');
+      }
 
-      if (!access_token) throw new Error('엑세스 토큰이 존재하지 않습니다');
+      const authTokenPayload = this.jwtTokenService.verifyAuthToken(
+        access_token,
+        TokenType.ACCESS,
+      );
 
+      const user = await this.dataSource
+        .getRepository(User)
+        .findOneBy({ id: authTokenPayload.userId, deletedAt: IsNull() });
+
+      if (!user) {
+        throw new Error('유저가 존재하지 않습니다');
+      }
+
+      request.user = user;
+
+      return true;
+    } catch (e) {
       try {
-        const authTokenPayload = this.jwtTokenService.verifyAuthToken(
-          access_token,
-          TokenType.ACCESS,
-        );
-
-        const user = await this.dataSource
-          .getRepository(User)
-          .findOneBy({ id: authTokenPayload.userId, deletedAt: null });
-
-        if (!user) throw new Error('유저가 존재하지 않습니다');
-
-        request.user = user;
-
-        return true;
-      } catch (e) {
-        if (!refresh_token) throw new Error('Not Found RefreshToken');
+        if (!refresh_token) {
+          throw new Error('Not Found RefreshToken');
+        }
 
         const authTokenPayload = this.jwtTokenService.verifyAuthToken(
           refresh_token,
@@ -48,9 +54,11 @@ export class JwtAuthGuard implements CanActivate {
 
         const user = await this.dataSource
           .getRepository(User)
-          .findOneBy({ id: authTokenPayload.userId, deletedAt: null });
+          .findOneBy({ id: authTokenPayload.userId, deletedAt: IsNull() });
 
-        if (!user) throw new Error('Not Found User');
+        if (!user) {
+          throw new Error('Not Found User');
+        }
 
         request.user = user;
 
@@ -65,11 +73,11 @@ export class JwtAuthGuard implements CanActivate {
         });
 
         return true;
+      } catch (e) {
+        response.clearCookie('access_token');
+        response.clearCookie('refresh_token');
+        throw new InvalidTokenException(e.message);
       }
-    } catch (e) {
-      response.clearCookie('access_token');
-      response.clearCookie('refresh_token');
-      throw new InvalidTokenException(e.message);
     }
   }
 }
