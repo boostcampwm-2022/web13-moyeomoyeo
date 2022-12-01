@@ -1,6 +1,6 @@
-import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 
+import useGeneralQuery from '@hooks/useGeneralQuery';
 import { ApiResponse, UserType } from '@typings/types';
 import { clientAxios } from '@utils/commonAxios';
 
@@ -9,7 +9,7 @@ import { clientAxios } from '@utils/commonAxios';
  */
 
 const useFetchMyInfo = () => {
-  const { data, isLoading, isError } = useQuery<ApiResponse<UserType>, AxiosError, UserType>(
+  const { data, isLoading } = useGeneralQuery<ApiResponse<UserType>, AxiosError, UserType>(
     ['my'],
     () => clientAxios.get('/v1/my-info'),
     {
@@ -19,7 +19,7 @@ const useFetchMyInfo = () => {
     }
   );
 
-  return { data, isLoading, isError };
+  return { data, isLoading };
 };
 
 export default useFetchMyInfo;
