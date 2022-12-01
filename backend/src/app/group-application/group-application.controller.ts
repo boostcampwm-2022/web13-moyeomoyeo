@@ -22,6 +22,7 @@ import { GroupNotFoundException } from '@app/group-application/exception/group-n
 import { CannotApplicateException } from '@src/app/group-application/exception/cannot-applicate.exception';
 import { CheckJoiningGroupResonse } from '@app/group-application/dto/check-joining-group-response.dto';
 import { GetAllParticipantsResponse } from '@app/group-application/dto/get-all-participants-response.dto';
+import { ApplicationNotFoundException } from '@app/group-application/exception/application-not-found.exception';
 
 @Controller('group-applications')
 @JwtAuth()
@@ -38,12 +39,12 @@ export class GroupApplicationController {
     CannotApplicateException,
     GroupNotFoundException,
   )
-  async attendGroup(
+  async joinGroup(
     @CurrentUser() user: User,
     @Body() groupApplicationRequest: GroupApplicationRequest,
   ) {
     const groupArticleId = groupApplicationRequest.groupArticleId;
-    const groupApplication = await this.groupApplicationService.attendGroup(
+    const groupApplication = await this.groupApplicationService.joinGroup(
       user,
       groupArticleId,
     );
@@ -54,12 +55,12 @@ export class GroupApplicationController {
   @Post('/status')
   @ApiSuccessResponse(HttpStatus.OK, CheckJoiningGroupResonse)
   @ApiErrorResponse(GroupNotFoundException)
-  async checkJoiningGroup(
+  async checkJoinedGroup(
     @CurrentUser() user: User,
     @Body() groupApplicationRequest: GroupApplicationRequest,
   ) {
     const groupArticleId = groupApplicationRequest.groupArticleId;
-    const isJoined = await this.groupApplicationService.checkJoiningGroup(
+    const isJoined = await this.groupApplicationService.checkJoinedGroup(
       user,
       groupArticleId,
     );
@@ -73,5 +74,20 @@ export class GroupApplicationController {
     @Query('groupArticleId', ParseIntPipe) groupArticleId: number,
   ) {
     return groupArticleId;
+  }
+
+  @Post('cancel')
+  @ApiSuccessResponse(HttpStatus.NO_CONTENT)
+  @ApiErrorResponse(
+    CannotApplicateException,
+    GroupNotFoundException,
+    ApplicationNotFoundException,
+  )
+  async cancelJoinedGroup(
+    @CurrentUser() user: User,
+    @Body() groupApplicationRequest: GroupApplicationRequest,
+  ) {
+    const groupArticleId = groupApplicationRequest.groupArticleId;
+    await this.groupApplicationService.cancelJoinedGroup(user, groupArticleId);
   }
 }
