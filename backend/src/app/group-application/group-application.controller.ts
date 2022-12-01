@@ -21,8 +21,8 @@ import { DuplicateApplicationException } from '@src/app/group-application/except
 import { GroupNotFoundException } from '@app/group-application/exception/group-not-found.exception';
 import { CannotApplicateException } from '@src/app/group-application/exception/cannot-applicate.exception';
 import { CheckJoiningGroupResonse } from '@app/group-application/dto/check-joining-group-response.dto';
-import { GetAllParticipantsResponse } from '@app/group-application/dto/get-all-participants-response.dto';
 import { ApplicationNotFoundException } from '@app/group-application/exception/application-not-found.exception';
+import { ApplicationWithUserInfoResponse } from '@app/group-application/dto/application-with-user-info-response.dto';
 
 @Controller('group-applications')
 @JwtAuth()
@@ -69,11 +69,19 @@ export class GroupApplicationController {
   }
 
   @Get('participants')
-  @ApiSuccessResponse(HttpStatus.OK, GetAllParticipantsResponse)
+  @ApiSuccessResponse(HttpStatus.OK, ApplicationWithUserInfoResponse, {
+    isArray: true,
+  })
+  @ApiErrorResponse(GroupNotFoundException)
   async getAllParticipants(
+    @CurrentUser() user: User,
     @Query('groupArticleId', ParseIntPipe) groupArticleId: number,
   ) {
-    return groupArticleId;
+    const data = await this.groupApplicationService.getAllParticipants(
+      user,
+      groupArticleId,
+    );
+    return ResponseEntity.OK_WITH_DATA(data);
   }
 
   @Post('cancel')
