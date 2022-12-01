@@ -1,4 +1,12 @@
-import { Body, Controller, HttpStatus, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpStatus,
+  ParseIntPipe,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { GroupApplicationService } from '@app/group-application/group-application.service';
 import { GroupApplicationRequest } from '@src/app/group-application/dto/group-application-request.dto';
 import { ApiSuccessResponse } from '@src/common/decorator/api-success-resposne.decorator';
@@ -14,6 +22,7 @@ import { GroupNotFoundException } from '@app/group-application/exception/group-n
 import { CannotApplicateException } from '@src/app/group-application/exception/cannot-applicate.exception';
 import { CheckJoiningGroupResonse } from '@app/group-application/dto/check-joining-group-response.dto';
 import { ApplicationNotFoundException } from '@app/group-application/exception/application-not-found.exception';
+import { ApplicationWithUserInfoResponse } from '@app/group-application/dto/application-with-user-info-response.dto';
 
 @Controller('group-applications')
 @JwtAuth()
@@ -56,6 +65,22 @@ export class GroupApplicationController {
       groupArticleId,
     );
     const data = CheckJoiningGroupResonse.from(isJoined);
+    return ResponseEntity.OK_WITH_DATA(data);
+  }
+
+  @Get('participants')
+  @ApiSuccessResponse(HttpStatus.OK, ApplicationWithUserInfoResponse, {
+    isArray: true,
+  })
+  @ApiErrorResponse(GroupNotFoundException)
+  async getAllParticipants(
+    @CurrentUser() user: User,
+    @Query('groupArticleId', ParseIntPipe) groupArticleId: number,
+  ) {
+    const data = await this.groupApplicationService.getAllParticipants(
+      user,
+      groupArticleId,
+    );
     return ResponseEntity.OK_WITH_DATA(data);
   }
 
