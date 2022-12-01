@@ -1,5 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsNumber, IsString, Length, Min } from 'class-validator';
+import {
+  IsEnum,
+  IsNumber,
+  IsString,
+  IsUrl,
+  Length,
+  Min,
+} from 'class-validator';
 import {
   CATEGORY,
   LOCATION,
@@ -52,11 +59,12 @@ export class GroupArticleRegisterRequest {
   maxCapacity: number;
 
   @ApiProperty({
-    example: '1669282011949-761671c7-cc43-4cee-bcb5-4bf3fea9478b.png',
-    description: '썸네일 이미지가 저장되어있는 주소',
+    example:
+      'https://kr.object.ncloudstorage.com/uploads/images/1669276833875-64adca9c-94cd-4162-a53f-f75e951e39db',
+    description: '썸네일 이미지가 저장되어있는 주소(url)',
     required: true,
   })
-  @IsString()
+  @IsUrl()
   thumbnail: string;
 
   @ApiProperty({
