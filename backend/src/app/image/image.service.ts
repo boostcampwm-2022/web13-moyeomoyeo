@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { S3ConfigService } from '@src/common/config/s3/config.service';
 import { Endpoint, S3 } from 'aws-sdk';
 import * as path from 'path';
@@ -6,7 +6,6 @@ import { v4 } from 'uuid';
 
 @Injectable()
 export class ImageService {
-  private readonly logger = new Logger(ImageService.name);
   private readonly s3: S3;
 
   constructor(private readonly s3ConfigService: S3ConfigService) {
@@ -72,11 +71,7 @@ export class ImageService {
 
   getStorageUrl(keyList: string[]) {
     return keyList.map((key) => {
-      return path.join(
-        this.s3ConfigService.endpoint,
-        this.s3ConfigService.bucket,
-        key,
-      );
+      return `${this.s3ConfigService.endpoint}/${this.s3ConfigService.bucket}/${key}`;
     });
   }
 }
