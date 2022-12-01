@@ -5,7 +5,6 @@ import {
   LOCATION,
 } from '@app/group-article/constants/group-article.constants';
 import { IGroupArticleDetail } from '@app/group-article/dto/group-article-detail.interface';
-import { ImageService } from '@app/image/image.service';
 import { ApiProperty } from '@nestjs/swagger';
 import { Author } from '@app/group-article/dto/author.dto';
 
@@ -58,10 +57,7 @@ export class GetGroupArticleDetailResponse {
   @ApiProperty({ example: new Date(), description: '게시글 작성일' })
   createdAt: Date;
 
-  static from(
-    groupArticleDetail: IGroupArticleDetail,
-    imageService: ImageService,
-  ) {
+  static from(groupArticleDetail: IGroupArticleDetail) {
     const res = new GetGroupArticleDetailResponse();
     res.id = groupArticleDetail.id;
     res.title = groupArticleDetail.title;
@@ -72,9 +68,7 @@ export class GetGroupArticleDetailResponse {
       profileImage: groupArticleDetail.userProfileImage,
     };
     res.category = groupArticleDetail.groupCategoryName;
-    res.thumbnail = imageService.getStorageUrl([
-      groupArticleDetail.thumbnail,
-    ])[0];
+    res.thumbnail = groupArticleDetail.thumbnail;
     res.status = groupArticleDetail.status;
     res.location = groupArticleDetail.location;
     res.commentCount = groupArticleDetail.commentCount;
