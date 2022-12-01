@@ -1,4 +1,4 @@
-import { Image } from '@mantine/core';
+import Image from 'next/image';
 
 import ArticleTag from '@components/common/ArticleTag';
 import {
@@ -6,6 +6,7 @@ import {
   CardWrapper,
   ClosedText,
   DimmedBox,
+  ImageWrapper,
   InfoWrapper,
   TagWrapper,
   TitleText,
@@ -29,7 +30,9 @@ const GroupArticleCard = ({ article }: Props) => {
           <ClosedText>모집 종료</ClosedText>
         </DimmedBox>
       )}
-      <Image src={article.thumbnail} alt={'thumbnail-image'} height={200} />
+      <ImageWrapper>
+        <Image src={article.thumbnail} alt={'thumbnail-image'} layout="fill" objectFit="cover" />
+      </ImageWrapper>
       <InfoWrapper>
         <TagWrapper>
           <ArticleTag
