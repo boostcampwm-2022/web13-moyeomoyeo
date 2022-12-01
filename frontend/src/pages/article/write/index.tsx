@@ -34,7 +34,7 @@ interface ArticleInput {
 
 const WritePage = () => {
   const router = useRouter();
-  const throwError = useAsyncError();
+  const throwAsyncError = useAsyncError();
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
   const [articleInput, setArticleInput] = useState<ArticleInput>({
     category: null,
@@ -85,7 +85,7 @@ const WritePage = () => {
       });
       void router.push('/');
     } catch (err) {
-      throwError('게시글 등록에 실패했습니다.');
+      throwAsyncError('게시글 등록에 실패했습니다.');
     }
   };
 
@@ -94,7 +94,7 @@ const WritePage = () => {
       const uploadedImage = await uploadImage(imageFile);
       setArticleInput((prev) => ({ ...prev, uploadedImage }));
     } catch (err) {
-      throwError('이미지 업로드에 실패했습니다.');
+      throwAsyncError('이미지 업로드에 실패했습니다.');
     }
   };
 

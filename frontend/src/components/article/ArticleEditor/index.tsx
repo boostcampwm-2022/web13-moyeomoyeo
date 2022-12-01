@@ -20,13 +20,13 @@ const RichTextEditor = dynamic(() => import('@mantine/rte'), {
 interface Props extends RichTextEditorProps {}
 
 const ArticleEditor = (props: Props) => {
-  const throwError = useAsyncError();
+  const throwAsyncError = useAsyncError();
   const handleEditorImageUpload = useCallback(
     async (file: File) => {
       try {
         return (await uploadImage(file)).url;
       } catch (err) {
-        throwError('에디터 이미지 업로드에 실패하였습니다.');
+        throwAsyncError('에디터 이미지 업로드에 실패하였습니다.');
       }
     },
     // 빈 칸으로 두지 않으면 에디터가 정상적으로 작동 안함!

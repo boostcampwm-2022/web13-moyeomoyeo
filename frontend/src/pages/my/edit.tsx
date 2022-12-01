@@ -20,7 +20,7 @@ import uploadImage from '@utils/uploadImage';
 const MyEditPage = () => {
   const { data: myProfile } = useFetchMyInfo();
   const { mutate: updateMyProfile } = useEditMyProfile();
-  const throwError = useAsyncError();
+  const throwAsyncError = useAsyncError();
   const router = useRouter();
 
   const [userDataInput, setUserDataInput] = useState<Omit<UserType, 'id'>>({
@@ -57,7 +57,7 @@ const MyEditPage = () => {
       const { url: imageUrl } = await uploadImage(imageFile);
       setUserDataInput((prev) => ({ ...prev, profileImage: imageUrl }));
     } catch (err) {
-      throwError('이미지 업로드에 실패했습니다.');
+      throwAsyncError('이미지 업로드에 실패했습니다.');
     }
   };
 
@@ -85,7 +85,7 @@ const MyEditPage = () => {
       void router.push('/my');
     } catch (err) {
       // TODO : 에러 처리 어떻게 할꺼야!!
-      throwError('프로필 수정에 실패했습니다.');
+      throwAsyncError('프로필 수정에 실패했습니다.');
     }
   };
 
