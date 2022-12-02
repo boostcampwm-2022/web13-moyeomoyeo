@@ -6,10 +6,14 @@ import { GroupCategory } from '@app/group-article/entity/group-category.entity';
 import { GroupApplication } from '@app/group-application/entity/group-application.entity';
 import { Scrap } from '@app/scrap/entity/scrap.entity';
 import { Comment } from '@app/comment/entity/comment.entity';
-import { SearchGroupArticlesRequest } from '@app/group-article/dto/search-group-articles-request.dto';
 import { IGroupArticleSearchResult } from '@app/group-article/dto/group-article-search-result.interface';
 import { User } from '@app/user/entity/user.entity';
 import { IGroupArticleDetail } from '@app/group-article/dto/group-article-detail.interface';
+import {
+  CATEGORY,
+  GROUP_STATUS,
+  LOCATION,
+} from '@app/group-article/constants/group-article.constants';
 
 @Injectable()
 export class GroupArticleRepository extends Repository<GroupArticle> {
@@ -25,9 +29,19 @@ export class GroupArticleRepository extends Repository<GroupArticle> {
     return this.findOneBy({ id, deletedAt: IsNull() });
   }
 
-  async search(
-    searchRequest: SearchGroupArticlesRequest,
-  ): Promise<[IGroupArticleSearchResult[], number]> {
+  async search({
+    limit,
+    offset,
+    category,
+    status,
+    location,
+  }: {
+    limit: number;
+    offset: number;
+    category?: CATEGORY;
+    status?: GROUP_STATUS;
+    location?: LOCATION;
+  }): Promise<[IGroupArticleSearchResult[], number]> {
     const query = this.createQueryBuilder('groupArticle')
       .select([
         'groupArticle.id as id',
@@ -63,29 +77,25 @@ export class GroupArticleRepository extends Repository<GroupArticle> {
       .where('groupArticle.deletedAt IS NULL')
       .groupBy('groupArticle.id');
 
-    if (searchRequest.location) {
-      query.andWhere('group.location = :location', {
-        location: searchRequest.location,
-      });
+    if (location) {
+      query.andWhere('group.location = :location', { location });
     }
 
-    if (searchRequest.category) {
+    if (category) {
       query.andWhere('groupCategory.name = :categoryName', {
-        categoryName: searchRequest.category,
+        categoryName: category,
       });
     }
 
-    if (searchRequest.status) {
-      query.andWhere('group.status = :status', {
-        status: searchRequest.status,
-      });
+    if (status) {
+      query.andWhere('group.status = :status', { status });
     }
 
     const count = await query.clone().getCount();
     const result = await query
       .orderBy('groupArticle.id', 'DESC')
-      .limit(searchRequest.getLimit())
-      .offset(searchRequest.getOffset())
+      .limit(limit)
+      .offset(offset)
       .getRawMany<IGroupArticleSearchResult>();
 
     return [result, count];

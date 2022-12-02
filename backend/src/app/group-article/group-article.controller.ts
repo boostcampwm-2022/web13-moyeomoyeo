@@ -121,7 +121,13 @@ export class GroupArticleController {
   @Get('search')
   @ApiSuccessResponse(HttpStatus.OK, SearchGroupArticleResponse)
   async search(@Query() query: SearchGroupArticlesRequest) {
-    const result = await this.groupArticleRepository.search(query);
+    const result = await this.groupArticleRepository.search({
+      limit: query.getLimit(),
+      offset: query.getOffset(),
+      location: query.location,
+      category: query.category,
+      status: query.status,
+    });
 
     return ResponseEntity.OK_WITH_DATA(
       new SearchGroupArticleResponse(
