@@ -10,7 +10,7 @@
   <a href="https://brawny-zydeco-6b6.notion.site/56ca79567a6340bc9f926c55f97a5cbb?v=1b1e1ddf75514904a1acdfda218db835">회고록</a>
 </div>
 
-
+<br></br>
 
 뱃지 들어갈 자리
 
@@ -44,8 +44,9 @@
 # 📚 기술 스택
 
 <div align="center">
-  <img src="https://user-images.githubusercontent.com/90585081/202945968-456d32e8-dffd-442e-87d5-ec57c2e5df52.png"/>
+  <img src="https://user-images.githubusercontent.com/38908080/205450796-dcf1b0e3-6f70-4edb-8359-9c0023d0da08.png"/>
 </div>
+
 
 <br></br>
 
