@@ -12,7 +12,13 @@
 
 <br></br>
 
-뱃지 들어갈 자리
+<div align="center">
+  <img src="https://img.shields.io/badge/Node-16.18.1-339933?logo=node.js">
+  <img src="https://img.shields.io/badge/Typescript-4.8.4-0984e3?logo=typescript">
+  <img src="https://img.shields.io/badge/React-17.0.2-00a8ff?logo=react">
+  <img src="https://img.shields.io/badge/NextJS-12.3.3-353b48?logo=next.js">
+  <img src="https://img.shields.io/badge/NestJS-9.0.0-eb4d4b?logo=nestjs">
+</div>
 
 
 # ✨ 프로젝트 소개
