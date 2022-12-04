@@ -1,4 +1,5 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AppConfigModule } from '@config/app/config.module';
@@ -17,6 +18,7 @@ import { NotificationModule } from '@app/notification/notification.module';
 
 @Module({
   imports: [
+    EventEmitterModule.forRoot(),
     AppConfigModule,
     CookieConfigModule,
     DatabaseModule,
