@@ -36,12 +36,14 @@ export class GroupArticleRepository extends Repository<GroupArticle> {
     category,
     status,
     location,
+    user,
   }: {
     limit: number;
     offset: number;
     category?: CATEGORY;
     status?: GROUP_STATUS;
     location?: LOCATION;
+    user?: User;
   }): Promise<[IGroupArticleSearchResult[], number]> {
     const query = this.createQueryBuilder('groupArticle')
       .select([
@@ -90,6 +92,10 @@ export class GroupArticleRepository extends Repository<GroupArticle> {
 
     if (status) {
       query.andWhere('group.status = :status', { status });
+    }
+
+    if (user) {
+      query.andWhere('groupArticle.userId = :userId', { userId: user.id });
     }
 
     const count = await query.clone().getCount();
@@ -143,60 +149,5 @@ export class GroupArticleRepository extends Repository<GroupArticle> {
       .andWhere('groupArticle.deletedAt IS NULL')
       .groupBy('groupArticle.id')
       .getRawOne<IGroupArticleDetail>();
-  }
-
-  async getsByUser({
-    limit,
-    offset,
-    user,
-  }: {
-    limit: number;
-    offset: number;
-    user: User;
-  }): Promise<[IGroupArticleSearchResult[], number]> {
-    const query = this.createQueryBuilder('groupArticle')
-      .select([
-        'groupArticle.id as id',
-        'groupArticle.title as title',
-        'groupArticle.createdAt as createdAt',
-        'group.maxCapacity as maxCapacity',
-        'group.thumbnail as thumbnail',
-        'group.status as status',
-        'group.location as location',
-        'groupCategory.id as groupCategoryId',
-        'groupCategory.name as groupCategoryName',
-        'COUNT(DISTINCT groupApplication.id) as currentCapacity',
-        'COUNT(DISTINCT scrap.id) as scrapCount',
-        'COUNT(DISTINCT comment.id) as commentCount',
-      ])
-      .leftJoin(Group, 'group', 'groupArticle.id = group.article_id')
-      .leftJoin(
-        GroupCategory,
-        'groupCategory',
-        'groupCategory.id = group.category.id AND groupCategory.deletedAt IS NULL',
-      )
-      .leftJoin(
-        GroupApplication,
-        'groupApplication',
-        'group.id = groupApplication.groupId AND groupApplication.deletedAt IS NULL',
-      )
-      .leftJoin(
-        Comment,
-        'comment',
-        'groupArticle.id = comment.articleId AND comment.deletedAt IS NULL',
-      )
-      .leftJoin(Scrap, 'scrap', 'groupArticle.id = scrap.articleId')
-      .where('groupArticle.deletedAt IS NULL')
-      .andWhere('groupArticle.userId = :userId', { userId: user.id })
-      .groupBy('groupArticle.id');
-
-    const count = await query.clone().getCount();
-    const result = await query
-      .orderBy('groupArticle.id', 'DESC')
-      .limit(limit)
-      .offset(offset)
-      .getRawMany<IGroupArticleSearchResult>();
-
-    return [result, count];
   }
 }

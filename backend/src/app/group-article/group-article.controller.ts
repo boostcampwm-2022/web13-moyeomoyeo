@@ -36,6 +36,7 @@ import { UpdateGroupArticleRequest } from '@app/group-article/dto/update-group-a
 import { NotSuccessGroupException } from '@app/group-article/exception/not-success-group.exception';
 import { NotParticipantException } from '@app/group-article/exception/not-participant.exception';
 import { GetGroupChatUrlResponseDto } from '@app/group-article/dto/get-group-chat-url-response.dto';
+import { PageRequest } from '@common/util/page-request';
 
 @Controller('group-articles')
 @ApiTags('Group-Article')
@@ -127,6 +128,29 @@ export class GroupArticleController {
       location: query.location,
       category: query.category,
       status: query.status,
+    });
+
+    return ResponseEntity.OK_WITH_DATA(
+      new SearchGroupArticleResponse(
+        result[1],
+        query.currentPage,
+        query.countPerPage,
+        result[0].map((row) => GroupArticleSearchResult.from(row)),
+      ),
+    );
+  }
+
+  @Get('me')
+  @JwtAuth()
+  @ApiSuccessResponse(HttpStatus.OK, SearchGroupArticleResponse)
+  async getMyGroupArticles(
+    @CurrentUser() user: User,
+    @Query() query: PageRequest,
+  ) {
+    const result = await this.groupArticleRepository.search({
+      limit: query.getLimit(),
+      offset: query.getOffset(),
+      user,
     });
 
     return ResponseEntity.OK_WITH_DATA(
