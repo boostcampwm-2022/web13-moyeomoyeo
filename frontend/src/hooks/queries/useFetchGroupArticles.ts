@@ -1,11 +1,11 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
 import { AxiosError, AxiosResponse } from 'axios';
 
-import getGroupArticles from '@apis/group-articles/getGroupArticles';
-import AuthError from '@components/common/ErrorBoundary/AuthError';
+import { ArticleStatus } from '@constants/article';
 import { Category } from '@constants/category';
 import { Location } from '@constants/location';
+import useAuthInfiniteQuery from '@hooks/useAuthInfiniteQuery';
 import { ArticlePreviewType, ArticleType } from '@typings/types';
+import { clientAxios } from '@utils/commonAxios';
 
 interface ArticleResponseType {
   status: string;
@@ -18,12 +18,25 @@ interface ArticleResponseType {
   };
 }
 
+const getGroupArticles = async (
+  currentPage: number,
+  category: Category,
+  location: Location,
+  filterProgress: boolean
+) => {
+  const status = filterProgress ? ArticleStatus.PROGRESS : null;
+  return clientAxios('/v1/group-articles/search', {
+    params: { category, location, status, currentPage, countPerPage: 5 },
+    withCredentials: true,
+  });
+};
+
 const useFetchGroupArticles = (
   category: Category | null,
   location: Location | null,
   filterProgress: boolean
 ) => {
-  const { data, fetchNextPage, hasNextPage, isFetching, error } = useInfiniteQuery<
+  const queryResult = useAuthInfiniteQuery<
     AxiosResponse<ArticleResponseType>,
     AxiosError,
     ArticleType[]
@@ -38,13 +51,7 @@ const useFetchGroupArticles = (
     }
   );
 
-  if (error) {
-    if (error.response && error.response.status === 401) {
-      throw new AuthError();
-    }
-    throw error;
-  }
-  return { data, fetchNextPage, hasNextPage, isFetching };
+  return { ...queryResult };
 };
 
 export default useFetchGroupArticles;
