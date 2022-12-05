@@ -5,12 +5,16 @@ import styled from '@emotion/styled';
 import { Menu, Text } from '@mantine/core';
 import { IconDotsVertical } from '@tabler/icons';
 
+import useDeleteArticle from '@hooks/queries/useDeleteArticle';
+
 interface Props {
   isInProgress: boolean;
 }
 
 const MenuButton = ({ isInProgress }: Props) => {
-  const { id } = useRouter().query;
+  const router = useRouter();
+  const articleId = Number(router.query.id);
+  const { mutate: deleteArticle } = useDeleteArticle();
 
   return (
     <Menu position="bottom-end">
@@ -21,13 +25,21 @@ const MenuButton = ({ isInProgress }: Props) => {
       </Menu.Target>
       <MenuDropdown>
         <Menu.Item p="md">
-          {/* eslint-disable-next-line @typescript-eslint/restrict-template-expressions */}
-          <Link href={`/article/edit/${id}`}>
+          <Link href={`/article/edit/${articleId}`}>
             <Text fz="md">게시글 수정</Text>
           </Link>
         </Menu.Item>
         <Menu.Item p="md">
-          <Text fz="md">게시글 삭제</Text>
+          <Text
+            fz="md"
+            onClick={() => {
+              deleteArticle(articleId, {
+                onSuccess: () => router.back(),
+              });
+            }}
+          >
+            게시글 삭제
+          </Text>
         </Menu.Item>
         <Menu.Item p="md">
           <Text fz="md">URL 복사하기</Text>
