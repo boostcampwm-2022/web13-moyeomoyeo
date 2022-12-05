@@ -5,6 +5,7 @@ import { User } from '@app/user/entity/user.entity';
 import { Comment } from '@app/comment/entity/comment.entity';
 import { GroupArticleRepository } from '@app/group-article/repository/group-article.repository';
 import { GroupNotFoundException } from '@app/comment/exception/group-not-found.exception';
+import { GroupArticleCommentGetResponse } from './dto/group-article-comment-get-response';
 
 @Injectable()
 export class CommentService {
@@ -29,5 +30,22 @@ export class CommentService {
     if (!groupArticle) {
       throw new GroupNotFoundException();
     }
+  }
+
+  async getComment(articleId: number) {
+    this.validateArticle(articleId);
+    const allCommentList = await this.commentRepository.selectAllComments(
+      articleId,
+    );
+
+    const commentWithUserList = allCommentList.map(async (comment) => {
+      const user = await comment.user;
+      return GroupArticleCommentGetResponse.from(comment, user);
+    });
+    return Promise.all(
+      commentWithUserList.map((commentWithUser) => {
+        return commentWithUser;
+      }),
+    );
   }
 }
