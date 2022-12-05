@@ -4,11 +4,13 @@ import { AxiosError } from 'axios';
 
 import AlertModal from '@components/common/AlertModal';
 import AuthError from '@components/common/ErrorBoundary/AuthError';
+import GetError from '@components/common/ErrorBoundary/GetError';
+import RequestError from '@components/common/ErrorBoundary/RequestError';
 
 interface Props extends PropsWithChildren {}
 
 interface State {
-  error: Error;
+  error: AxiosError;
 }
 
 class ApiErrorBoundary extends Component<Props, State> {
@@ -29,27 +31,26 @@ class ApiErrorBoundary extends Component<Props, State> {
   render() {
     const { error } = this.state;
     const { children } = this.props;
-    if (error) {
+
+    if (!error) return children;
+
+    if (error instanceof GetError) {
+      return <ApiErrorModal message={error.message} />;
+    }
+    if (error instanceof RequestError) {
       return (
         <>
           {children}
-          <ApiErrors />
+          <ApiErrorModal message={error.message} />
         </>
       );
     }
-    return children;
   }
 }
 
 export default ApiErrorBoundary;
 
-const ApiErrors = () => {
+const ApiErrorModal = ({ message }: { message: string }) => {
   const [open, setOpen] = useState<boolean>(true);
-  return (
-    <AlertModal
-      open={open}
-      onClose={() => setOpen(false)}
-      message="요청 도중 오류가 발생했습니다. 다시 시도해주세요."
-    />
-  );
+  return <AlertModal open={open} onClose={() => setOpen(false)} message={message} />;
 };

@@ -2,6 +2,8 @@ import { QueryFunction, QueryKey, useQuery } from '@tanstack/react-query';
 import { UseQueryOptions } from '@tanstack/react-query/src/types';
 import { AxiosError } from 'axios';
 
+import GetError from '@components/common/ErrorBoundary/GetError';
+
 const useGeneralQuery = <
   TQueryFnData = unknown,
   TError = AxiosError,
@@ -23,7 +25,7 @@ const useGeneralQuery = <
 
   if (error && error instanceof AxiosError) {
     if (error.response.status !== 401) {
-      throw error;
+      throw new GetError(error.response.data.message);
     }
   }
 
