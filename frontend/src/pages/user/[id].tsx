@@ -11,7 +11,7 @@ import useFetchProfile from '@hooks/queries/useFetchProfile';
 
 const UserProfile = () => {
   const {
-    query: { id },
+    query: { id, isReady },
   } = useRouter();
   const { profile, isFetching } = useFetchProfile(Number(id));
 
@@ -31,7 +31,7 @@ const UserProfile = () => {
       <ContentWrapper>
         <ProfileWrapper>
           {/* TODO 로딩중 */}
-          {isFetching ? <div>로딩중</div> : <Profile user={profile} />}
+          {!isReady || isFetching ? <div>로딩중</div> : <Profile user={profile} />}
         </ProfileWrapper>
       </ContentWrapper>
     </PageLayout>

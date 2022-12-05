@@ -11,6 +11,7 @@ import ParticipateButton from '@components/article/ParticipateButton';
 import ArticleTag from '@components/common/ArticleTag';
 import Header from '@components/common/Header';
 import DetailTitle from '@components/common/Header/DetailTitle';
+import UserLoginItem from '@components/common/Header/UserLoginItem';
 import PageLayout from '@components/common/PageLayout';
 import StatCounter from '@components/common/StatCounter';
 import { ArticleStatus, ArticleStatusKr } from '@constants/article';
@@ -31,8 +32,8 @@ const ArticleDetail = () => {
   const {
     colors: { indigo, gray },
   } = useTheme();
-  const router = useRouter();
-  const articleId = Number(router.query.id);
+  const { query } = useRouter();
+  const articleId = Number(query.id);
   const { data: myInfo } = useFetchMyInfo();
   const { article } = useFetchArticle(articleId);
   const { isJoined } = useFetchApplicationStatus(articleId);
@@ -55,6 +56,7 @@ const ArticleDetail = () => {
                 subTitle={PAGE_TITLE.ARTICLE.subTitle}
               />
             }
+            rightNode={<UserLoginItem />}
           />
         }
       >
