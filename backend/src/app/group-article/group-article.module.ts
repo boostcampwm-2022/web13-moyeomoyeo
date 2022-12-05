@@ -5,6 +5,7 @@ import { GroupCategoryRepository } from '@app/group-article/repository/group-cat
 import { GroupRepository } from '@app/group-article/repository/group.repository';
 import { GroupArticleRepository } from '@app/group-article/repository/group-article.repository';
 import { MyGroupArticleController } from '@app/group-article/my-group-article.controller';
+import { MyGroupArticleService } from '@app/group-article/my-group-article.service';
 
 @Module({
   controllers: [GroupArticleController, MyGroupArticleController],
@@ -13,6 +14,7 @@ import { MyGroupArticleController } from '@app/group-article/my-group-article.co
     GroupRepository,
     GroupCategoryRepository,
     GroupArticleRepository,
+    MyGroupArticleService,
   ],
   exports: [GroupArticleRepository],
 })
