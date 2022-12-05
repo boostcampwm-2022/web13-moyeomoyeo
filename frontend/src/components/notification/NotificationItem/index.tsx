@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { useState } from 'react';
 
 import styled from '@emotion/styled';
@@ -24,6 +25,9 @@ const NotificationItem = ({ notification }: Props) => {
   const handleClickCloseButton = () => {
     setModalOpen(true);
   };
+  /**
+   * TODO : 알림 데이터에서 들어온 링크를 사용
+   */
 
   return (
     <NotificationWrapper>
@@ -32,21 +36,25 @@ const NotificationItem = ({ notification }: Props) => {
         open={modalOpen}
         onClose={() => setModalOpen(false)}
       />
-      <IconWrapper>
-        <NotificationIcon variant={type} />
-      </IconWrapper>
-      <TitleWrapper>
-        <Text
-          size="md"
-          weight={700}
-          sx={{ whiteSpace: 'nowrap', overflowX: 'hidden', textOverflow: 'ellipsis' }}
-        >
-          {title}
-        </Text>
-        <Text size="sm" color="gray" weight={500}>
-          {subTitle}
-        </Text>
-      </TitleWrapper>
+      <Link href="/article/21">
+        <ContentSection>
+          <IconWrapper>
+            <NotificationIcon variant={type} />
+          </IconWrapper>
+          <TitleWrapper>
+            <Text
+              size="md"
+              weight={700}
+              sx={{ whiteSpace: 'nowrap', overflowX: 'hidden', textOverflow: 'ellipsis' }}
+            >
+              {title}
+            </Text>
+            <Text size="sm" color="gray" weight={500}>
+              {subTitle}
+            </Text>
+          </TitleWrapper>
+        </ContentSection>
+      </Link>
       <AsideSection>
         <ActionIcon variant="transparent" color="gray.6" size="sm" onClick={handleClickCloseButton}>
           <IconX size={20} />
@@ -64,12 +72,20 @@ export default NotificationItem;
 const NotificationWrapper = styled.div`
   display: grid;
   align-items: center;
-  grid-template-columns: 2.8rem 1fr 5rem;
+  grid-template-columns: 1fr 5rem;
   gap: 1.6rem;
   padding: 1.6rem;
   width: 100%;
   border: 1px solid ${({ theme }) => theme.colors.gray[2]};
   border-radius: 0.8rem;
+`;
+
+const ContentSection = styled.div`
+  cursor: pointer;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 2.8rem 1fr;
+  gap: 1.6rem;
 `;
 
 const IconWrapper = styled.div`
