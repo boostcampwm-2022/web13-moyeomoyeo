@@ -17,11 +17,11 @@ import { ApplicationWithUserInfoResponse } from '@src/app/group-application/dto/
 export class GroupApplicationService {
   constructor(
     private readonly groupApplicationRepository: GroupApplicationRepository,
-    private readonly groupArticleRespository: GroupArticleRepository,
+    private readonly groupArticleRepository: GroupArticleRepository,
   ) {}
 
   private async getGroupApplicationContext(user: User, groupArticleId: number) {
-    const groupArticle = await this.groupArticleRespository.findById(
+    const groupArticle = await this.groupArticleRepository.findById(
       groupArticleId,
     );
     await this.validateGroupArticle(groupArticle);
