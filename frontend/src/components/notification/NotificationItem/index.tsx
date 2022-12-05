@@ -91,6 +91,8 @@ const ContentSection = styled.div`
 const IconWrapper = styled.div`
   height: 100%;
   margin-right: 1.6rem;
+  display: flex;
+  align-items: center;
 `;
 
 const TitleWrapper = styled.div`
