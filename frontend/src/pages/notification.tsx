@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 
+import EmptyMessage from '@components/common/EmptyMessage';
 import Header from '@components/common/Header';
 import RootTitle from '@components/common/Header/RootTitle';
 import UserLoginItem from '@components/common/Header/UserLoginItem';
@@ -54,9 +55,13 @@ const Notification = () => {
       footer={<NavigationTab />}
     >
       <PageWrapper>
-        {notifications.map((notification) => (
-          <NotificationItem key={notification.id} notification={notification} />
-        ))}
+        {notifications.length > 0 ? (
+          notifications.map((notification) => (
+            <NotificationItem key={notification.id} notification={notification} />
+          ))
+        ) : (
+          <EmptyMessage target="notification" large />
+        )}
       </PageWrapper>
     </PageLayout>
   );
