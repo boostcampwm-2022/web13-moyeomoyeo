@@ -1,8 +1,7 @@
-import axios from 'axios';
-
 import { ArticleStatus } from '@constants/article';
 import { Category } from '@constants/category';
 import { Location } from '@constants/location';
+import { clientAxios } from '@utils/commonAxios';
 
 const getGroupArticles = async (
   currentPage: number,
@@ -11,7 +10,7 @@ const getGroupArticles = async (
   filterProgress: boolean
 ) => {
   const status = filterProgress ? ArticleStatus.PROGRESS : null;
-  return axios.get(`${process.env.NEXT_PUBLIC_API_URL}/v1/group-articles/search`, {
+  return clientAxios('/v1/group-articles/search', {
     params: { category, location, status, currentPage, countPerPage: 5 },
     withCredentials: true,
   });

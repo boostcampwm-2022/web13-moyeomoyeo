@@ -1,10 +1,7 @@
-import axios from 'axios';
+import { clientAxios } from '@utils/commonAxios';
 
 const getSpecificArticle = async (id: number) => {
-  return axios.get(`${process.env.NEXT_PUBLIC_API_URL}/v1/group-articles/${id}`, {
-    params: { id },
-    withCredentials: true,
-  });
+  return clientAxios.get(`/v1/group-articles/${id}`);
 };
 
 export default getSpecificArticle;
