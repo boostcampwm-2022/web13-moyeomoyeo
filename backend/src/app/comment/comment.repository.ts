@@ -12,7 +12,15 @@ export class CommnetRepository extends Repository<Comment> {
     );
   }
 
-  selectAllComments(articleId: number) {
+  selectAllComments({
+    limit,
+    offset,
+    articleId,
+  }: {
+    limit: number;
+    offset: number;
+    articleId: number;
+  }) {
     return this.find({
       relations: {
         user: true,
@@ -21,6 +29,8 @@ export class CommnetRepository extends Repository<Comment> {
         articleId,
         deletedAt: IsNull(),
       },
+      take: limit,
+      skip: offset,
     });
   }
 }
