@@ -32,11 +32,21 @@ export class CommentService {
     }
   }
 
-  async getComment(articleId: number) {
+  async getComment({
+    limit,
+    offset,
+    articleId,
+  }: {
+    limit: number;
+    offset: number;
+    articleId: number;
+  }) {
     this.validateArticle(articleId);
-    const allCommentList = await this.commentRepository.selectAllComments(
+    const allCommentList = await this.commentRepository.selectAllComments({
       articleId,
-    );
+      limit,
+      offset,
+    });
 
     const commentWithUserList = allCommentList.map(async (comment) => {
       const user = await comment.user;
