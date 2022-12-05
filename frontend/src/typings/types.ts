@@ -3,6 +3,7 @@ import { AxiosResponse } from 'axios';
 import { ArticleStatus } from '@constants/article';
 import { Category } from '@constants/category';
 import { Location } from '@constants/location';
+import { Notification } from '@constants/notification';
 
 interface ArticlePreviewType {
   id: number;
@@ -75,7 +76,7 @@ interface ImageUploadType {
 
 interface NotificationType {
   id: number;
-  type: 'ADD_COMMENT' | 'GROUP_SUCCESS' | 'GROUP_FAIL';
+  type: Notification;
   title: string;
   subTitle: string;
   createdAt: string;
