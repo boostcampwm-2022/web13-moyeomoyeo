@@ -5,7 +5,7 @@ import { User } from '@app/user/entity/user.entity';
 import { Comment } from '@app/comment/entity/comment.entity';
 import { GroupArticleRepository } from '@app/group-article/repository/group-article.repository';
 import { GroupNotFoundException } from '@app/comment/exception/group-not-found.exception';
-import { GroupArticleCommentGetResponse } from './dto/group-article-comment-get-response';
+import { GroupArticleCommentGetResponse } from '@app/comment/dto/group-article-comment-get-response';
 
 @Injectable()
 export class CommentService {
