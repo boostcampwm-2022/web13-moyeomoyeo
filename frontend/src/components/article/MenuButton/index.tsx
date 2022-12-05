@@ -1,11 +1,14 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
 import styled from '@emotion/styled';
 import { Menu, Text } from '@mantine/core';
 import { IconDotsVertical } from '@tabler/icons';
 
 import useDeleteArticle from '@hooks/queries/useDeleteArticle';
+import useClipboard from '@hooks/useClipboard';
+import { showToast } from '@utils/toast';
 
 interface Props {
   isInProgress: boolean;
@@ -15,6 +18,14 @@ const MenuButton = ({ isInProgress }: Props) => {
   const router = useRouter();
   const articleId = Number(router.query.id);
   const { mutate: deleteArticle } = useDeleteArticle();
+  const { isCopied, setIsCopied, doCopy } = useClipboard();
+
+  useEffect(() => {
+    if (isCopied) {
+      showToast({ title: 'URL 복사 완료', message: '친구에게 공유해보세요' });
+      setIsCopied(false);
+    }
+  }, [isCopied, setIsCopied]);
 
   return (
     <Menu position="bottom-end">
@@ -34,14 +45,17 @@ const MenuButton = ({ isInProgress }: Props) => {
             fz="md"
             onClick={() => {
               deleteArticle(articleId, {
-                onSuccess: () => router.back(),
+                onSuccess: () => {
+                  showToast({ title: '게시글 삭제 완료!', message: '다른 게시글도 올려보세요.' });
+                  router.back();
+                },
               });
             }}
           >
             게시글 삭제
           </Text>
         </Menu.Item>
-        <Menu.Item p="md">
+        <Menu.Item p="md" onClick={() => doCopy(window.location.href)}>
           <Text fz="md">URL 복사하기</Text>
         </Menu.Item>
         {isInProgress && (
