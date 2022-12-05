@@ -6,6 +6,7 @@ import styled from '@emotion/styled';
 import { Menu, Text } from '@mantine/core';
 import { IconDotsVertical } from '@tabler/icons';
 
+import useCancelRecruitment from '@hooks/queries/useCancelRecruitment';
 import useDeleteArticle from '@hooks/queries/useDeleteArticle';
 import useClipboard from '@hooks/useClipboard';
 import { showToast } from '@utils/toast';
@@ -18,6 +19,7 @@ const MenuButton = ({ isInProgress }: Props) => {
   const router = useRouter();
   const articleId = Number(router.query.id);
   const { mutate: deleteArticle } = useDeleteArticle();
+  const { mutate: cancelRecruitment } = useCancelRecruitment();
   const { isCopied, setIsCopied, doCopy } = useClipboard();
 
   useEffect(() => {
@@ -60,7 +62,7 @@ const MenuButton = ({ isInProgress }: Props) => {
         </Menu.Item>
         {isInProgress && (
           <>
-            <Menu.Item p="md">
+            <Menu.Item p="md" onClick={() => cancelRecruitment(articleId)}>
               <Text fz="md">모집 중단으로 변경</Text>
             </Menu.Item>
             <Menu.Item p="md">
