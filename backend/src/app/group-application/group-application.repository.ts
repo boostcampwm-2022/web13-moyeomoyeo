@@ -21,7 +21,7 @@ export class GroupApplicationRepository extends Repository<GroupApplication> {
     return this.findOneBy({ userId, groupId, status });
   }
 
-  findAllApplicationByGroup(groupId: number) {
+  findAllApplicationByGroupWithUser(groupId: number) {
     return this.find({
       relations: {
         user: true,
