@@ -4,6 +4,9 @@ import {
   Entity,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { NOTIFICATION_TYPE } from '@app/notification/constants/notification.constants';
+import { GroupSucceedContents } from '@app/notification/entity/notification-contents';
+import { GroupArticle } from '@app/group-article/entity/group-article.entity';
 
 @Entity()
 export class Notification {
@@ -11,11 +14,22 @@ export class Notification {
   id: number;
 
   @Column({ type: 'varchar', length: 200 })
-  type: string;
+  type: NOTIFICATION_TYPE;
 
   @Column({ type: 'json' })
-  contents: any;
+  contents: GroupSucceedContents;
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
+
+  static createGroupSucceedNotification(groupArticle: GroupArticle) {
+    const notification = new Notification();
+    notification.type = NOTIFICATION_TYPE.GROUP_SUCCEED;
+    notification.contents = {
+      title: '모임이 성사되었어요',
+      subTitle: groupArticle.title,
+      groupArticleId: groupArticle.id,
+    };
+    return notification;
+  }
 }

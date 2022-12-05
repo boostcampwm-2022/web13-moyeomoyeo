@@ -8,5 +8,6 @@ import { GroupArticleModule } from '@app/group-article/group-article.module';
   imports: [GroupArticleModule],
   controllers: [GroupApplicationController],
   providers: [GroupApplicationService, GroupApplicationRepository],
+  exports: [GroupApplicationRepository],
 })
 export class GroupApplicationModule {}
