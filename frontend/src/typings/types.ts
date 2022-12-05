@@ -73,6 +73,14 @@ interface ImageUploadType {
   url: string;
 }
 
+interface NotificationType {
+  id: number;
+  type: 'ADD_COMMENT' | 'GROUP_SUCCESS' | 'GROUP_FAIL';
+  title: string;
+  subTitle: string;
+  createdAt: string;
+}
+
 type ApiResponse<T> = AxiosResponse<{ data: T; messasge: string; status: string }>;
 
 export type {
@@ -85,4 +93,5 @@ export type {
   CommentType,
   UserType,
   ImageUploadType,
+  NotificationType,
 };
