@@ -34,6 +34,13 @@ interface ArticleType {
   createdAt: string;
 }
 
+interface ArticleInputType {
+  title: string;
+  content: string;
+  chatUrl: string;
+  thumbnail: string | null;
+}
+
 interface LocationType {
   id: number;
   name: Location;
@@ -79,6 +86,7 @@ export type {
   ApiResponse,
   ArticlePreviewType,
   ArticleType,
+  ArticleInputType,
   LocationType,
   CategoryType,
   TestResponseType,
