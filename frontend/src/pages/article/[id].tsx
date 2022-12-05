@@ -6,6 +6,7 @@ import styled from '@emotion/styled';
 import { Avatar, Progress, TypographyStylesProvider } from '@mantine/core';
 import { IconList } from '@tabler/icons';
 
+import MenuButton from '@components/article/MenuButton';
 import ParticipantsModal from '@components/article/ParticipantsModal';
 import ParticipateButton from '@components/article/ParticipateButton';
 import ArticleTag from '@components/common/ArticleTag';
@@ -46,7 +47,6 @@ const ArticleDetail = () => {
   return (
     <>
       <PageLayout
-        // TODO rightNode에 작성자 여부에 따라 메뉴버튼 렌더링 필요
         header={
           <Header
             leftNode={
@@ -54,6 +54,13 @@ const ArticleDetail = () => {
                 title={PAGE_TITLE.ARTICLE.title}
                 subTitle={PAGE_TITLE.ARTICLE.subTitle}
               />
+            }
+            rightNode={
+              article &&
+              myInfo &&
+              article.author.id === myInfo.id && (
+                <MenuButton isInProgress={article.status === ArticleStatus.PROGRESS} />
+              )
             }
           />
         }
