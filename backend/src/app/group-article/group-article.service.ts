@@ -17,6 +17,7 @@ import {
 import { NotParticipantException } from '@app/group-article/exception/not-participant.exception';
 import { NotSuccessGroupException } from '@app/group-article/exception/not-success-group.exception';
 import { GroupSucceedEvent } from '@app/notification/event/group-succeed.event';
+import { GroupFailedEvent } from '@app/notification/event/group-failed.event';
 
 @Injectable()
 export class GroupArticleService {
@@ -85,7 +86,6 @@ export class GroupArticleService {
 
     await this.groupArticleRepository.save(groupArticle, { reload: false });
 
-    // TODO: 알림 추가 및 알림 발송
     this.eventEmitter.emit(
       'group.succeed',
       new GroupSucceedEvent(groupArticle),
@@ -106,7 +106,7 @@ export class GroupArticleService {
 
     await this.groupArticleRepository.save(groupArticle, { reload: false });
 
-    // TODO: 알림 추가 및 알림 발송
+    this.eventEmitter.emit('group.failed', new GroupFailedEvent(groupArticle));
   }
 
   async getDetailById(id: number) {

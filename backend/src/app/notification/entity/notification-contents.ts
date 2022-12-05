@@ -6,3 +6,7 @@ export interface NotificationContents {
 export interface GroupSucceedContents extends NotificationContents {
   groupArticleId: number;
 }
+
+export interface GroupFailedContents extends NotificationContents {
+  groupArticleId: number;
+}
