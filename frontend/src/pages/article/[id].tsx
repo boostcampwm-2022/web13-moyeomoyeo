@@ -8,9 +8,11 @@ import { IconList } from '@tabler/icons';
 
 import ParticipantsModal from '@components/article/ParticipantsModal';
 import ParticipateButton from '@components/article/ParticipateButton';
+import ArticleLoading from '@components/common/ArticleLoading';
 import ArticleTag from '@components/common/ArticleTag';
 import Header from '@components/common/Header';
 import DetailTitle from '@components/common/Header/DetailTitle';
+import UserLoginItem from '@components/common/Header/UserLoginItem';
 import PageLayout from '@components/common/PageLayout';
 import StatCounter from '@components/common/StatCounter';
 import { ArticleStatus, ArticleStatusKr } from '@constants/article';
@@ -31,8 +33,8 @@ const ArticleDetail = () => {
   const {
     colors: { indigo, gray },
   } = useTheme();
-  const router = useRouter();
-  const articleId = Number(router.query.id);
+  const { query } = useRouter();
+  const articleId = Number(query.id);
   const { data: myInfo } = useFetchMyInfo();
   const { article } = useFetchArticle(articleId);
   const { isJoined } = useFetchApplicationStatus(articleId);
@@ -46,7 +48,6 @@ const ArticleDetail = () => {
   return (
     <>
       <PageLayout
-        // TODO rightNode에 작성자 여부에 따라 메뉴버튼 렌더링 필요
         header={
           <Header
             leftNode={
@@ -55,84 +56,86 @@ const ArticleDetail = () => {
                 subTitle={PAGE_TITLE.ARTICLE.subTitle}
               />
             }
+            rightNode={<UserLoginItem />}
           />
         }
       >
-        {/* TODO 로딩 처리 */}
-        {!article || isJoined === undefined || !myInfo ? (
-          <div>로딩중</div>
-        ) : (
-          <>
-            <ContenxtWrapper>
-              <DetailWrapper>
-                <ProfileWrapper>
-                  <Avatar radius="xl" size="lg" alt="avatar" src={article.author.profileImage} />
-                  <ProfileTextWrapper>
-                    <Author>{article.author.userName}</Author>
-                    <Time>{dateTimeFormat(article.createdAt)}</Time>
-                  </ProfileTextWrapper>
-                </ProfileWrapper>
-                <Title>{article.title}</Title>
-                <TagWrapper>
-                  <ArticleTag
-                    color={STATUS_COLOR[article.status]}
-                    content={ArticleStatusKr[article.status]}
+        <>
+          <ContentWrapper>
+            {!article || isJoined === undefined || !myInfo ? (
+              <ArticleLoading />
+            ) : (
+              <>
+                <DetailWrapper>
+                  <ProfileWrapper>
+                    <Avatar radius="xl" size="lg" alt="avatar" src={article.author.profileImage} />
+                    <ProfileTextWrapper>
+                      <Author>{article.author.userName}</Author>
+                      <Time>{dateTimeFormat(article.createdAt)}</Time>
+                    </ProfileTextWrapper>
+                  </ProfileWrapper>
+                  <Title>{article.title}</Title>
+                  <TagWrapper>
+                    <ArticleTag
+                      color={STATUS_COLOR[article.status]}
+                      content={ArticleStatusKr[article.status]}
+                      size="lg"
+                    />
+                    <ArticleTag
+                      color={CATEGORY_COLOR[article.category]}
+                      content={CategoryKr[article.category]}
+                      size="lg"
+                    />
+                    <ArticleTag
+                      color={LOCATION_COLOR[article.location]}
+                      content={LocationKr[article.location]}
+                      size="lg"
+                    />
+                  </TagWrapper>
+                  <ParticipantWrapper>
+                    <StatusWrapper>
+                      <StatusText>모집 현황</StatusText>
+                      <CountText>
+                        {article.currentCapacity}명 / {article.maxCapacity}명
+                      </CountText>
+                    </StatusWrapper>
+                    <ParticipantButton onClick={() => setParticipantsModalOpen(true)}>
+                      <IconList width="16" height="16" color={gray[6]} />
+                      <ViewText>신청자 확인</ViewText>
+                    </ParticipantButton>
+                  </ParticipantWrapper>
+                  <Progress
+                    value={(article.currentCapacity / article.maxCapacity) * 100}
                     size="lg"
+                    radius="lg"
+                    color={indigo[7]}
                   />
-                  <ArticleTag
-                    color={CATEGORY_COLOR[article.category]}
-                    content={CategoryKr[article.category]}
-                    size="lg"
-                  />
-                  <ArticleTag
-                    color={LOCATION_COLOR[article.location]}
-                    content={LocationKr[article.location]}
-                    size="lg"
-                  />
-                </TagWrapper>
-                <ParticipantWrapper>
-                  <StatusWrapper>
-                    <StatusText>모집 현황</StatusText>
-                    <CountText>
-                      {article.currentCapacity}명 / {article.maxCapacity}명
-                    </CountText>
-                  </StatusWrapper>
-                  <ParticipantButton onClick={() => setParticipantsModalOpen(true)}>
-                    <IconList width="16" height="16" color={gray[6]} />
-                    <ViewText>신청자 확인</ViewText>
-                  </ParticipantButton>
-                </ParticipantWrapper>
-                <Progress
-                  value={(article.currentCapacity / article.maxCapacity) * 100}
-                  size="lg"
-                  radius="lg"
-                  color={indigo[7]}
-                />
-                <TypographyStylesProvider>
-                  <ContentBox dangerouslySetInnerHTML={{ __html: article.content }} />
-                </TypographyStylesProvider>
-                {article.author.id !== myInfo.id && (
-                  <ParticipateButton
-                    status={getButtonStatus(article, isJoined)}
-                    groupArticleId={article.id}
-                    chatRoomLink={url}
-                  />
-                )}
-                <StatCounter variant="comment" count={article.commentCount} />
-              </DetailWrapper>
-              <Divider />
-              <CommentWrapper>
-                <div>댓글영역</div>
-              </CommentWrapper>
-            </ContenxtWrapper>
-            {/* TODO participants API 요청 */}
-            <ParticipantsModal
-              participants={dummyParticipants}
-              open={participantsModalOpen}
-              onClose={() => setParticipantsModalOpen(false)}
-            />
-          </>
-        )}
+                  <TypographyStylesProvider>
+                    <ContentBox dangerouslySetInnerHTML={{ __html: article.content }} />
+                  </TypographyStylesProvider>
+                  {article.author.id !== myInfo.id && (
+                    <ParticipateButton
+                      status={getButtonStatus(article, isJoined)}
+                      groupArticleId={article.id}
+                      chatRoomLink={url}
+                    />
+                  )}
+                  <StatCounter variant="comment" count={article.commentCount} />
+                </DetailWrapper>
+                <Divider />
+                <CommentWrapper>
+                  <div>댓글영역</div>
+                </CommentWrapper>
+              </>
+            )}
+          </ContentWrapper>
+          {/* TODO participants API 요청 */}
+          <ParticipantsModal
+            participants={dummyParticipants}
+            open={participantsModalOpen}
+            onClose={() => setParticipantsModalOpen(false)}
+          />
+        </>
       </PageLayout>
     </>
   );
@@ -155,7 +158,7 @@ const getButtonStatus = (article: ArticleType, isJoined: boolean) => {
   }
 };
 
-const ContenxtWrapper = styled.div`
+const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   padding: 1.6rem;
