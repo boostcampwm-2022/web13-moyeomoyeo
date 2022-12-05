@@ -7,13 +7,13 @@ import { ActionIcon, Slider, Text } from '@mantine/core';
 import { IconCheck } from '@tabler/icons';
 
 import ArticlePostInput from '@components/article/ArticlePostInput';
-import AlertModal from '@components/common/AlertModal';
 import DropDown from '@components/common/DropDown';
 import Header from '@components/common/Header';
 import DetailTitle from '@components/common/Header/DetailTitle';
 import PageLayout from '@components/common/PageLayout';
 import { CategoryKr } from '@constants/category';
 import { LocationKr } from '@constants/location';
+import { PAGE_TITLE } from '@constants/pageTitle';
 import useEditMyArticle from '@hooks/queries/useEditMyArticle';
 import useFetchArticle from '@hooks/queries/useFetchArticle';
 import { ArticlePostType } from '@typings/types';
@@ -21,13 +21,12 @@ import { showToast } from '@utils/toast';
 
 const ArticleEdit = () => {
   const router = useRouter();
-  const articleId = Number(router.query);
+  const articleId = Number(router.query.id);
 
   const { article } = useFetchArticle(articleId);
   // TODO url 받아와서 fill, 수정 기능 붙이기
   // const { url } = useFetchChatUrl(articleId, true);
   const { mutate: editArticle } = useEditMyArticle();
-  const [confirmModalOpen, setConfirmModalOpen] = useState(false);
   const [articleInput, setArticleInput] = useState<ArticlePostType>({
     title: '',
     contents: '',
@@ -80,7 +79,12 @@ const ArticleEdit = () => {
       <PageLayout
         header={
           <Header
-            leftNode={<DetailTitle title="모집게시판" subTitle="다양한 소모임을 위한 게시판" />}
+            leftNode={
+              <DetailTitle
+                title={PAGE_TITLE.ARTICLE.title}
+                subTitle={PAGE_TITLE.ARTICLE.subTitle}
+              />
+            }
             rightNode={
               <ActionIcon
                 variant="transparent"
@@ -93,11 +97,7 @@ const ArticleEdit = () => {
           />
         }
       >
-        <AlertModal
-          message="게시글 등록이 완료되었습니다."
-          open={confirmModalOpen}
-          onClose={() => setConfirmModalOpen(false)}
-        />
+        {/* TODO 로딩처리 */}
         {article === undefined ? (
           <div>로딩중</div>
         ) : (
