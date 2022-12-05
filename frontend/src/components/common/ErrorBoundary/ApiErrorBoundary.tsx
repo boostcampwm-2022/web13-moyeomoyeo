@@ -3,9 +3,9 @@ import { Component, PropsWithChildren, useState } from 'react';
 import { AxiosError } from 'axios';
 
 import AlertModal from '@components/common/AlertModal';
-import AuthError from '@components/common/ErrorBoundary/AuthError';
-import GetError from '@components/common/ErrorBoundary/GetError';
-import RequestError from '@components/common/ErrorBoundary/RequestError';
+import AuthError from '@utils/errors/AuthError';
+import GetError from '@utils/errors/GetError';
+import RequestError from '@utils/errors/RequestError';
 
 interface Props extends PropsWithChildren {}
 

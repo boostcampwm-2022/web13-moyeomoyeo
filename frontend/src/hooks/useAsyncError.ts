@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 
-import RequestError from '@components/common/ErrorBoundary/RequestError';
+import RequestError from '@utils/errors/RequestError';
 
 const useAsyncError = () => {
   const [, setError] = useState();

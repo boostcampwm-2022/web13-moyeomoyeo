@@ -2,8 +2,8 @@ import { QueryFunction, QueryKey, useQuery } from '@tanstack/react-query';
 import { UseQueryOptions } from '@tanstack/react-query/src/types';
 import { AxiosError } from 'axios';
 
-import AuthError from '@components/common/ErrorBoundary/AuthError';
-import GetError from '@components/common/ErrorBoundary/GetError';
+import AuthError from '@utils/errors/AuthError';
+import GetError from '@utils/errors/GetError';
 
 const useAuthQuery = <
   TQueryFnData = unknown,

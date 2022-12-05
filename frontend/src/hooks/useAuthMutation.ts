@@ -3,8 +3,8 @@ import { useMutation } from '@tanstack/react-query';
 import { UseMutationOptions } from '@tanstack/react-query/src/types';
 import { AxiosError } from 'axios';
 
-import AuthError from '@components/common/ErrorBoundary/AuthError';
-import RequestError from '@components/common/ErrorBoundary/RequestError';
+import AuthError from '@utils/errors/AuthError';
+import RequestError from '@utils/errors/RequestError';
 
 const useAuthMutation = <
   TData = unknown,

@@ -2,10 +2,10 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { AxiosError, AxiosResponse } from 'axios';
 
 import getGroupArticles from '@apis/group-articles/getGroupArticles';
-import AuthError from '@components/common/ErrorBoundary/AuthError';
 import { Category } from '@constants/category';
 import { Location } from '@constants/location';
 import { ArticlePreviewType, ArticleType } from '@typings/types';
+import AuthError from '@utils/errors/AuthError';
 
 interface ArticleResponseType {
   status: string;

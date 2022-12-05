@@ -2,7 +2,7 @@ import { QueryFunction, QueryKey, useQuery } from '@tanstack/react-query';
 import { UseQueryOptions } from '@tanstack/react-query/src/types';
 import { AxiosError } from 'axios';
 
-import GetError from '@components/common/ErrorBoundary/GetError';
+import GetError from '@utils/errors/GetError';
 
 const useGeneralQuery = <
   TQueryFnData = unknown,
