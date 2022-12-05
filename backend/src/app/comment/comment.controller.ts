@@ -1,4 +1,12 @@
-import { Body, Controller, HttpStatus, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpStatus,
+  ParseIntPipe,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { CommentService } from '@app/comment/comment.service';
 import { JwtAuth } from '@src/common/decorator/jwt-auth.decorator';
 import { ApiSuccessResponse } from '@src/common/decorator/api-success-resposne.decorator';
@@ -10,6 +18,7 @@ import { ResponseEntity } from '@src/common/response-entity';
 import { ApiTags } from '@nestjs/swagger';
 import { ApiErrorResponse } from '@src/common/decorator/api-error-response.decorator';
 import { GroupNotFoundException } from '@app/comment/exception/group-not-found.exception';
+import { GroupArticleCommentGetResponse } from '@app/comment/dto/group-article-comment-get-response';
 
 @Controller('comments')
 @ApiTags('Comment')
@@ -30,5 +39,15 @@ export class CommentController {
     );
     const data = CommentWritingResponse.from(comment);
     return ResponseEntity.CREATED_WITH_DATA(data);
+  }
+
+  @Get('/')
+  @ApiSuccessResponse(HttpStatus.OK, GroupArticleCommentGetResponse, {
+    isArray: true,
+  })
+  @ApiErrorResponse(GroupNotFoundException)
+  async getComment(@Query('articleId', ParseIntPipe) articleId: number) {
+    const data = await this.commentService.getComment(articleId);
+    return ResponseEntity.OK_WITH_DATA(data);
   }
 }
