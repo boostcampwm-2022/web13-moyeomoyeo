@@ -3,49 +3,45 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
 import styled from '@emotion/styled';
-import { ActionIcon, FileInput, Slider, Text } from '@mantine/core';
-import { IconCheck, IconUpload } from '@tabler/icons';
+import { ActionIcon, Slider, Text } from '@mantine/core';
+import { IconCheck } from '@tabler/icons';
 
-import ArticleEditor from '@components/article/ArticleEditor';
-import ImageThumbnail from '@components/article/ImageThumbnail';
+import ArticlePostInput from '@components/article/ArticlePostInput';
 import AlertModal from '@components/common/AlertModal';
 import DropDown from '@components/common/DropDown';
 import Header from '@components/common/Header';
 import DetailTitle from '@components/common/Header/DetailTitle';
 import PageLayout from '@components/common/PageLayout';
-import TextInput from '@components/common/TextInput';
 import { CategoryKr } from '@constants/category';
 import { LocationKr } from '@constants/location';
 import useEditMyArticle from '@hooks/queries/useEditMyArticle';
 import useFetchArticle from '@hooks/queries/useFetchArticle';
-import useAsyncError from '@hooks/useAsyncError';
-import { ArticleInputType } from '@typings/types';
+import { ArticlePostType } from '@typings/types';
 import { showToast } from '@utils/toast';
-import uploadImage from '@utils/uploadImage';
 
 const ArticleEdit = () => {
   const router = useRouter();
-  const throwAsyncError = useAsyncError();
+  const articleId = Number(router.query);
 
-  const { article } = useFetchArticle(Number(router.query.id));
+  const { article } = useFetchArticle(articleId);
   // TODO url 받아와서 fill, 수정 기능 붙이기
-  // const { url } = useFetchChatUrl(Number(router.query.id), true);
+  // const { url } = useFetchChatUrl(articleId, true);
   const { mutate: editArticle } = useEditMyArticle();
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
-  const [articleInput, setArticleInput] = useState<ArticleInputType>({
+  const [articleInput, setArticleInput] = useState<ArticlePostType>({
     title: '',
-    content: '',
+    contents: '',
     chatUrl: '',
     thumbnail: '',
   });
-  const { title, content, chatUrl, thumbnail } = articleInput;
+  const { title, contents, chatUrl, thumbnail } = articleInput;
 
   useEffect(() => {
     if (article) {
-      const { title, content, thumbnail } = article;
+      const { title, content: contents, thumbnail } = article;
       setArticleInput({
         title,
-        content,
+        contents,
         // TODO 수정 필요
         chatUrl: 'test',
         thumbnail,
@@ -56,14 +52,14 @@ const ArticleEdit = () => {
   const possibleToSubmit =
     article &&
     title.trim().length > 0 &&
-    content.length > 0 &&
+    contents.length > 0 &&
     chatUrl.trim().length > 0 &&
     thumbnail;
 
   const handleClickSubmitBtn = async () => {
     if (!possibleToSubmit) return;
     editArticle(
-      { articleId: Number(router.query.id), articleInput },
+      { articleId, articleInput },
       {
         onSuccess: () => {
           showToast({
@@ -74,15 +70,6 @@ const ArticleEdit = () => {
         },
       }
     );
-  };
-
-  const handleChangeImage = async (imageFile: File) => {
-    try {
-      const uploadedImage = await uploadImage(imageFile);
-      setArticleInput((prev) => ({ ...prev, thumbnail: uploadedImage.url }));
-    } catch (err) {
-      throwAsyncError('이미지 업로드에 실패했습니다.');
-    }
   };
 
   return (
@@ -150,45 +137,12 @@ const ArticleEdit = () => {
                 <Slider min={1} max={15} value={article.maxCapacity} disabled />
               </PersonSection>
             </TermSection>
-            <PostSection>
-              <TextInput
-                label="제목"
-                placeholder="제목을 입력해주세요."
-                required
-                value={title}
-                onChange={(e) => setArticleInput((prev) => ({ ...prev, title: e.target.value }))}
-              />
-              <ArticleEditor
-                value={content}
-                onChange={(contents) => setArticleInput((prev) => ({ ...prev, content: contents }))}
-              />
-              <TextInput
-                label="채팅방 링크"
-                placeholder="채팅방 링크를 입력해주세요."
-                required
-                value={chatUrl}
-                onChange={(e) => setArticleInput((prev) => ({ ...prev, chatUrl: e.target.value }))}
-              />
-              <ImageSection>
-                <FileInputLabel>
-                  <Text size="md" fw={500}>
-                    썸네일 이미지
-                  </Text>
-                  <Text c="red" size="md">
-                    *
-                  </Text>
-                </FileInputLabel>
-                <ImageThumbnail src={thumbnail} />
-                <FileInput
-                  size="md"
-                  required
-                  placeholder="이미지를 첨부해주세요 (최대 1장)"
-                  accept="image/*"
-                  onChange={handleChangeImage}
-                  icon={<IconUpload size={16} />}
-                />
-              </ImageSection>
-            </PostSection>
+            <ArticlePostInput
+              values={articleInput}
+              onChange={(target: keyof ArticlePostType, value: string) => {
+                setArticleInput((prev) => ({ ...prev, [target]: value }));
+              }}
+            />
           </>
         )}
       </PageLayout>
@@ -221,26 +175,6 @@ const PersonSectionHeader = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
-`;
-
-const PostSection = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 1.6rem;
-  padding: 1.6rem;
-`;
-
-const ImageSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-`;
-
-const FileInputLabel = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
 `;
 
 export default ArticleEdit;

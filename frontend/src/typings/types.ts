@@ -34,21 +34,11 @@ interface ArticleType {
   createdAt: string;
 }
 
-interface ArticleInputType {
+interface ArticlePostType {
   title: string;
-  content: string;
+  contents: string;
   chatUrl: string;
   thumbnail: string | null;
-}
-
-interface LocationType {
-  id: number;
-  name: Location;
-}
-
-interface CategoryType {
-  id: number;
-  name: Category;
 }
 
 interface CommentType {
@@ -86,9 +76,7 @@ export type {
   ApiResponse,
   ArticlePreviewType,
   ArticleType,
-  ArticleInputType,
-  LocationType,
-  CategoryType,
+  ArticlePostType,
   TestResponseType,
   CommentType,
   UserType,

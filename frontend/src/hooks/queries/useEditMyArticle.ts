@@ -1,5 +1,5 @@
 import useAuthMutation from '@hooks/useAuthMutation';
-import { ArticleInputType } from '@typings/types';
+import { ArticlePostType } from '@typings/types';
 import { clientAxios } from '@utils/commonAxios';
 
 const updateArticle = ({
@@ -7,12 +7,12 @@ const updateArticle = ({
   articleInput,
 }: {
   articleId: number;
-  articleInput: ArticleInputType;
+  articleInput: ArticlePostType;
 }) => {
-  const { title, content, thumbnail, chatUrl } = articleInput;
+  const { title, contents, thumbnail, chatUrl } = articleInput;
   return clientAxios.put(`/v1/group-articles/${articleId}`, {
     title,
-    contents: content,
+    contents,
     thumbnail,
     chatUrl,
   });
