@@ -42,14 +42,14 @@ const MyWriteArticlesPage = () => {
 
   return (
     <PageLayout header={<Header leftNode={<DetailTitle title={title} subTitle={subTitle} />} />}>
-      <PageContentWrapper>
+      <ContentWrapper>
         {articles.length ? (
           <ArticleList>
             {articles.map((article) => (
               <Link key={article.id} href={`/article/${article.id}`}>
-                <div>
+                <CardLink>
                   <GroupArticleCard article={article} />
-                </div>
+                </CardLink>
               </Link>
             ))}
             <div ref={ref}></div>
@@ -57,22 +57,26 @@ const MyWriteArticlesPage = () => {
         ) : (
           <EmptyMessage target="article" large />
         )}
-      </PageContentWrapper>
+      </ContentWrapper>
     </PageLayout>
   );
 };
 
-const PageContentWrapper = styled.div`
-  padding: 1.6rem;
+const ContentWrapper = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
+  padding: 1.6rem;
 `;
 
 const ArticleList = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-gap: 1.3rem;
+`;
+
+const CardLink = styled.div`
+  overflow: auto;
 `;
 
 export default MyWriteArticlesPage;
