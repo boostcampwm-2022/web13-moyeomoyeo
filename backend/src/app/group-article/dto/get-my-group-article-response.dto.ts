@@ -17,7 +17,7 @@ export class GetMyGroupArticleResponse {
     example: `안녕하세요. 서울 지역 CS 스터디원들을 모집합니다!\\n<img width="1440" alt="서울 지역 CS 모집 사진자료" src="https://kr.object.ncloudstorage.com/moyeo-images/uploads/images/1669282011949-761671c7-cc43-4cee-bcb5-4bf3fea9478b.png">`,
     description: '게시글 제목',
   })
-  content: string;
+  contents: string;
 
   @ApiProperty({ example: CATEGORY.STUDY, description: '모집 카테고리' })
   category: string;
@@ -54,8 +54,7 @@ export class GetMyGroupArticleResponse {
     const res = new GetMyGroupArticleResponse();
     res.id = groupArticle.id;
     res.title = groupArticle.title;
-    res.content = groupArticle.contents;
-
+    res.contents = groupArticle.contents;
     res.category = groupArticle.group.category.name;
     res.thumbnail = groupArticle.group.thumbnail;
     res.status = groupArticle.group.status;
