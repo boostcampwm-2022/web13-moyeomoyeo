@@ -19,20 +19,9 @@ interface ArticlePreviewType {
   createdAt: string;
 }
 
-interface ArticleType {
-  id: number;
-  title: string;
-  content: string;
+interface ArticleType extends ArticlePreviewType {
+  contents: string;
   author: Partial<UserType>;
-  location: Location;
-  category: Category;
-  commentCount: number;
-  scrapCount: number;
-  thumbnail: string;
-  maxCapacity: number;
-  currentCapacity: number;
-  status: ArticleStatus;
-  createdAt: string;
 }
 
 interface LocationType {

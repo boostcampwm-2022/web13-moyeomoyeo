@@ -23,7 +23,7 @@ const dummyArticle: ArticleType = {
   title: '모집 테스트1',
   location: Location.GYEONGNAM,
   category: Category.STUDY,
-  content: '<div>test</div>',
+  contents: '<div>test</div>',
   author: {
     id: 1,
     userName: 'JHPark_GOD',
