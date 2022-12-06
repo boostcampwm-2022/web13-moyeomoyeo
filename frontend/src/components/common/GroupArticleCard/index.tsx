@@ -31,7 +31,7 @@ const GroupArticleCard = ({ article }: Props) => {
       )}
       <ImageWrapper>
         <Image
-          src={article.thumbnail}
+          src={article.thumbnail.originUrl}
           alt={'thumbnail-image'}
           layout="fill"
           objectFit="cover"

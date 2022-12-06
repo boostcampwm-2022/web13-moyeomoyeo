@@ -5,6 +5,11 @@ import { Category } from '@constants/category';
 import { Location } from '@constants/location';
 import { Notification } from '@constants/notification';
 
+interface ArticleThumbnail {
+  originUrl: string;
+  blurUrl: string;
+}
+
 interface ArticlePreviewType {
   id: number;
   title: string;
@@ -12,7 +17,7 @@ interface ArticlePreviewType {
   category: Category;
   commentCount: number;
   scrapCount: number;
-  thumbnail: string;
+  thumbnail: ArticleThumbnail;
   maxCapacity: number;
   currentCapacity: number;
   status: ArticleStatus;
