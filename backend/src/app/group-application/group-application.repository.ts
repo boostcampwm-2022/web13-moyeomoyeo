@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, IsNull, Repository } from 'typeorm';
 import { GroupApplication } from '@app/group-application/entity/group-application.entity';
 import { GROUP_APPLICATION_STATUS } from '@app/group-article/constants/group-article.constants';
+import { GroupArticle } from '@app/group-article/entity/group-article.entity';
 
 @Injectable()
 export class GroupApplicationRepository extends Repository<GroupApplication> {
@@ -21,7 +22,7 @@ export class GroupApplicationRepository extends Repository<GroupApplication> {
     return this.findOneBy({ userId, groupId, status });
   }
 
-  findAllApplicationByGroup(groupId: number) {
+  findAllApplicationByGroupWithUser(groupId: number) {
     return this.find({
       relations: {
         user: true,
@@ -30,6 +31,14 @@ export class GroupApplicationRepository extends Repository<GroupApplication> {
         groupId,
         status: GROUP_APPLICATION_STATUS.REGISTER,
       },
+    });
+  }
+
+  findGroupApplications(groupArticle: GroupArticle) {
+    return this.findBy({
+      groupId: groupArticle.group.id,
+      status: GROUP_APPLICATION_STATUS.REGISTER,
+      deletedAt: IsNull(),
     });
   }
 }

@@ -3,13 +3,14 @@ import styled from '@emotion/styled';
 import { IconMoodEmpty } from '@tabler/icons';
 
 interface Props {
-  target: 'article' | 'participant';
+  target: 'article' | 'participant' | 'notification';
   large?: boolean;
 }
 
 const targetKr = {
   article: '모임이',
   participant: '신청자가',
+  notification: '알림이',
 };
 
 const EmptyMessage = ({ target, large }: Props) => {

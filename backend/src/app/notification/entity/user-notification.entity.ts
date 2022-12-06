@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
@@ -11,6 +12,9 @@ import { User } from '@app/user/entity/user.entity';
 import { Notification } from '@app/notification/entity/notification.entity';
 
 @Entity({ name: 'user_notification' })
+@Index('UNIQUE_user_id_notification_id', ['userId', 'notificationId'], {
+  unique: true,
+})
 export class UserNotification {
   @PrimaryGeneratedColumn({ unsigned: true })
   id: number;
@@ -37,4 +41,13 @@ export class UserNotification {
 
   @Column({ type: 'timestamp', nullable: true })
   deletedAt: Date | null;
+
+  static create(user: User, notification: Notification) {
+    const userNotification = new UserNotification();
+    userNotification.userId = user.id;
+    userNotification.user = Promise.resolve(user);
+    userNotification.notification = Promise.resolve(notification);
+    userNotification.notificationId = notification.id;
+    return userNotification;
+  }
 }

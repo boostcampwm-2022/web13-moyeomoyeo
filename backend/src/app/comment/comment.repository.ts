@@ -1,4 +1,4 @@
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, IsNull, Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { Comment } from '@app/comment/entity/comment.entity';
 
@@ -10,5 +10,9 @@ export class CommnetRepository extends Repository<Comment> {
       dataSource.createEntityManager(),
       dataSource.createQueryRunner(),
     );
+  }
+
+  findById(id: number) {
+    return this.findOneBy({ id, deletedAt: IsNull() });
   }
 }
