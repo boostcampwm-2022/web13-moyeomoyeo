@@ -90,12 +90,12 @@ export class GroupApplicationService {
     );
 
     this.validateUserTarget(user, groupArticle);
-    this.validateRegisterForCanceling(application);
+    this.validateRegisterForCanceling(user, application);
 
     await this.deleteApplication(application);
   }
 
-  private async validateRegisterForCanceling(
+  private validateRegisterForCanceling(
     user: User,
     application: GroupApplication,
   ) {
