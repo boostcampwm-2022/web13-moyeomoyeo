@@ -1,4 +1,4 @@
-import { Body, Controller, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Post, Query } from '@nestjs/common';
 import { GroupApplicationService } from '@app/group-application/group-application.service';
 import { GroupApplicationRequest } from '@src/app/group-application/dto/group-application-request.dto';
 import { ApiSuccessResponse } from '@src/common/decorator/api-success-resposne.decorator';
@@ -14,6 +14,8 @@ import { GroupNotFoundException } from '@app/group-application/exception/group-n
 import { CannotApplicateException } from '@src/app/group-application/exception/cannot-applicate.exception';
 import { CheckJoiningGroupResonse } from '@app/group-application/dto/check-joining-group-response.dto';
 import { ApplicationNotFoundException } from '@app/group-application/exception/application-not-found.exception';
+import { MyGroupResponse } from '@app/group-application/dto/my-group-response.dto';
+import { MyGroupRequest } from '@app/group-application/dto/my-group-request.dto';
 
 @Controller('group-applications')
 @JwtAuth()
@@ -72,5 +74,22 @@ export class GroupApplicationController {
   ) {
     const groupArticleId = groupApplicationRequest.groupArticleId;
     await this.groupApplicationService.cancelJoinedGroup(user, groupArticleId);
+  }
+
+  @Get('me')
+  @ApiSuccessResponse(HttpStatus.OK, MyGroupResponse)
+  async findMyGroup(@CurrentUser() user: User, @Query() query: MyGroupRequest) {
+    const { result, count } = await this.groupApplicationService.findMyGroup({
+      user,
+      limit: query.getLimit(),
+      offset: query.getOffset(),
+    });
+    const data = new MyGroupResponse(
+      count,
+      query.currentPage,
+      query.countPerPage,
+      result,
+    );
+    return ResponseEntity.OK_WITH_DATA(data);
   }
 }
