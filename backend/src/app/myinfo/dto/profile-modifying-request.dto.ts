@@ -38,8 +38,7 @@ export class ProfileModifyingRequest {
   @ApiProperty({
     example: 'https://myvelop.tistory.com/',
     description: '블로그 주소',
-    required: true,
   })
-  @IsUrl()
+  @IsString()
   blogUrl: string;
 }

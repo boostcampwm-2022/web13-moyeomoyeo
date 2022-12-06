@@ -3,6 +3,7 @@ import { AxiosResponse } from 'axios';
 import { ArticleStatus } from '@constants/article';
 import { Category } from '@constants/category';
 import { Location } from '@constants/location';
+import { Notification } from '@constants/notification';
 
 interface ArticlePreviewType {
   id: number;
@@ -18,20 +19,9 @@ interface ArticlePreviewType {
   createdAt: string;
 }
 
-interface ArticleType {
-  id: number;
-  title: string;
-  content: string;
+interface ArticleType extends ArticlePreviewType {
+  contents: string;
   author: Partial<UserType>;
-  location: Location;
-  category: Category;
-  commentCount: number;
-  scrapCount: number;
-  thumbnail: string;
-  maxCapacity: number;
-  currentCapacity: number;
-  status: ArticleStatus;
-  createdAt: string;
 }
 
 interface LocationType {
@@ -73,6 +63,14 @@ interface ImageUploadType {
   url: string;
 }
 
+interface NotificationType {
+  id: number;
+  type: Notification;
+  title: string;
+  subTitle: string;
+  createdAt: string;
+}
+
 type ApiResponse<T> = AxiosResponse<{ data: T; messasge: string; status: string }>;
 
 export type {
@@ -85,4 +83,5 @@ export type {
   CommentType,
   UserType,
   ImageUploadType,
+  NotificationType,
 };

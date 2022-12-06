@@ -116,7 +116,9 @@ export class GroupApplicationService {
 
   private async getApplicationWithUserInfo(group: Group) {
     const allApplication =
-      await this.groupApplicationRepository.findAllApplicationByGroup(group.id);
+      await this.groupApplicationRepository.findAllApplicationByGroupWithUser(
+        group.id,
+      );
 
     const applicationWithUserInfoList = allApplication.map(
       async (application) => {
