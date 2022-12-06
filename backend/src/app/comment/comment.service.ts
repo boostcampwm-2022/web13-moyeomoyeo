@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { CommnetRepository } from '@app/comment/comment.repository';
+import { CommentRepository } from '@app/comment/comment.repository';
 import { CommentWritingRequest } from '@app/comment/dto/comment-writing-request.dto';
 import { User } from '@app/user/entity/user.entity';
 import { Comment } from '@app/comment/entity/comment.entity';
 import { GroupArticleRepository } from '@app/group-article/repository/group-article.repository';
 import { GroupNotFoundException } from '@app/comment/exception/group-not-found.exception';
-import { GroupArticleCommentGetResponse } from '@app/comment/dto/group-article-comment-get-response';
+import { CommentResponse } from '@app/comment/dto/comment-response.dto';
 
 @Injectable()
 export class CommentService {
   constructor(
-    private readonly commentRepository: CommnetRepository,
+    private readonly commentRepository: CommentRepository,
     private readonly groupArticleRepository: GroupArticleRepository,
   ) {}
 
@@ -48,10 +48,17 @@ export class CommentService {
       offset,
     });
 
+    const count = await this.commentRepository.getTotalCount(articleId);
+    const commentResponse = await this.bindCommentResponse(allCommentList);
+    return { count, commentResponse };
+  }
+
+  bindCommentResponse(allCommentList: Comment[]) {
     const commentWithUserList = allCommentList.map(async (comment) => {
       const user = await comment.user;
-      return GroupArticleCommentGetResponse.from(comment, user);
+      return CommentResponse.from(comment, user);
     });
+
     return Promise.all(
       commentWithUserList.map((commentWithUser) => {
         return commentWithUser;

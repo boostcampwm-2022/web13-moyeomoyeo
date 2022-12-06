@@ -10,14 +10,18 @@ import { ResponseEntity } from '@src/common/response-entity';
 import { ApiTags } from '@nestjs/swagger';
 import { ApiErrorResponse } from '@src/common/decorator/api-error-response.decorator';
 import { GroupNotFoundException } from '@app/comment/exception/group-not-found.exception';
-import { GroupArticleCommentGetResponse } from '@app/comment/dto/group-article-comment-get-response';
+import { GroupArticleCommentGetResponse } from '@src/app/comment/dto/group-article-comment-get-response.dto';
 import { GetAllCommentQueryRequest } from '@app/comment/dto/get-all-comment-query-request.dto';
+import { CommentRepository } from '@app/comment/comment.repository';
 
 @Controller('comments')
 @ApiTags('Comment')
 @JwtAuth()
 export class CommentController {
-  constructor(private readonly commentService: CommentService) {}
+  constructor(
+    private readonly commentService: CommentService,
+    private readonly commentRepository: CommentRepository,
+  ) {}
 
   @Post('/')
   @ApiSuccessResponse(HttpStatus.CREATED, CommentWritingResponse)
@@ -40,11 +44,18 @@ export class CommentController {
   })
   @ApiErrorResponse(GroupNotFoundException)
   async getComment(@Query() query: GetAllCommentQueryRequest) {
-    const data = await this.commentService.getComment({
+    const { count, commentResponse } = await this.commentService.getComment({
       limit: query.getLimit(),
       offset: query.getOffset(),
       articleId: query.articleId,
     });
+
+    const data = new GroupArticleCommentGetResponse(
+      count,
+      query.currentPage,
+      query.countPerPage,
+      commentResponse,
+    );
     return ResponseEntity.OK_WITH_DATA(data);
   }
 }
