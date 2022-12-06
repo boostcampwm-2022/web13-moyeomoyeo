@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { DataSource, IsNull } from 'typeorm';
 import { GroupArticleRegisterRequest } from '@app/group-article/dto/group-article-register-request.dto';
 import { GroupArticle } from '@app/group-article/entity/group-article.entity';
@@ -15,6 +16,8 @@ import {
 } from '@app/group-article/constants/group-article.constants';
 import { NotParticipantException } from '@app/group-article/exception/not-participant.exception';
 import { NotSuccessGroupException } from '@app/group-article/exception/not-success-group.exception';
+import { GroupSucceedEvent } from '@app/notification/event/group-succeed.event';
+import { GroupFailedEvent } from '@app/notification/event/group-failed.event';
 
 @Injectable()
 export class GroupArticleService {
@@ -22,6 +25,7 @@ export class GroupArticleService {
     private readonly groupArticleRepository: GroupArticleRepository,
     private readonly groupCategoryRepository: GroupCategoryRepository,
     private readonly dataSource: DataSource,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   async registerGroupArticle(
@@ -47,10 +51,8 @@ export class GroupArticleService {
     });
 
     await this.dataSource.transaction(async (em) => {
-      await em.getRepository(GroupArticle).save(groupArticle);
-      await em
-        .getRepository(GroupApplication)
-        .save(GroupApplication.create(user, groupArticle.group));
+      await em.save(groupArticle);
+      await em.save(GroupApplication.create(user, groupArticle.group));
     });
 
     return groupArticle;
@@ -84,7 +86,10 @@ export class GroupArticleService {
 
     await this.groupArticleRepository.save(groupArticle, { reload: false });
 
-    // TODO: 알림 추가 및 알림 발송
+    this.eventEmitter.emit(
+      'group.succeed',
+      new GroupSucceedEvent(groupArticle),
+    );
   }
 
   async cancel(user: User, id: number) {
@@ -101,7 +106,7 @@ export class GroupArticleService {
 
     await this.groupArticleRepository.save(groupArticle, { reload: false });
 
-    // TODO: 알림 추가 및 알림 발송
+    this.eventEmitter.emit('group.failed', new GroupFailedEvent(groupArticle));
   }
 
   async getDetailById(id: number) {
@@ -152,6 +157,7 @@ export class GroupArticleService {
     if (groupArticle.group.status !== GROUP_STATUS.SUCCEED) {
       throw new NotSuccessGroupException();
     }
+
     const groupApplication = await this.dataSource
       .getRepository(GroupApplication)
       .findOneBy({
