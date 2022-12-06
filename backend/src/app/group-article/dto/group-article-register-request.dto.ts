@@ -5,6 +5,7 @@ import {
   IsString,
   IsUrl,
   Length,
+  Max,
   Min,
 } from 'class-validator';
 import {
@@ -56,6 +57,7 @@ export class GroupArticleRegisterRequest {
   })
   @IsNumber()
   @Min(2)
+  @Max(15)
   maxCapacity: number;
 
   @ApiProperty({
