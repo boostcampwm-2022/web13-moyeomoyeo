@@ -19,7 +19,7 @@ interface ArticlePreviewType {
 }
 
 interface ArticleType extends ArticlePreviewType {
-  content: string;
+  contents: string;
   author: Partial<UserType>;
 }
 
