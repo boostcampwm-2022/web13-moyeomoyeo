@@ -1,4 +1,14 @@
-import { Body, Controller, Get, HttpStatus, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Delete,
+  HttpStatus,
+  Param,
+  ParseIntPipe,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { CommentService } from '@app/comment/comment.service';
 import { JwtAuth } from '@src/common/decorator/jwt-auth.decorator';
 import { ApiSuccessResponse } from '@src/common/decorator/api-success-resposne.decorator';
@@ -13,6 +23,8 @@ import { GroupNotFoundException } from '@app/comment/exception/group-not-found.e
 import { GroupArticleCommentGetResponse } from '@src/app/comment/dto/group-article-comment-get-response.dto';
 import { GetAllCommentQueryRequest } from '@app/comment/dto/get-all-comment-query-request.dto';
 import { CommentRepository } from '@app/comment/comment.repository';
+import { CommentNotFoundException } from '@app/comment/exception/comment-not-found.exception';
+import { NotAuthorException } from '@app/comment/exception/not-author.exception';
 
 @Controller('comments')
 @ApiTags('Comment')
@@ -26,7 +38,7 @@ export class CommentController {
   @Post('/')
   @ApiSuccessResponse(HttpStatus.CREATED, CommentWritingResponse)
   @ApiErrorResponse(GroupNotFoundException)
-  async writeCommnet(
+  async writeComment(
     @CurrentUser() user: User,
     @Body() commentWritingRequest: CommentWritingRequest,
   ) {
@@ -39,9 +51,7 @@ export class CommentController {
   }
 
   @Get('/')
-  @ApiSuccessResponse(HttpStatus.OK, GroupArticleCommentGetResponse, {
-    isArray: true,
-  })
+  @ApiSuccessResponse(HttpStatus.OK, GroupArticleCommentGetResponse)
   @ApiErrorResponse(GroupNotFoundException)
   async getComment(@Query() query: GetAllCommentQueryRequest) {
     const { count, commentResponse } = await this.commentService.getComment({
@@ -57,5 +67,15 @@ export class CommentController {
       commentResponse,
     );
     return ResponseEntity.OK_WITH_DATA(data);
+  }
+
+  @Delete(':id')
+  @ApiSuccessResponse(HttpStatus.NO_CONTENT)
+  @ApiErrorResponse(CommentNotFoundException, NotAuthorException)
+  async deleteComment(
+    @CurrentUser() user: User,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    await this.commentService.deleteComment(user, id);
   }
 }

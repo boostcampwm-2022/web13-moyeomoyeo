@@ -1,14 +1,12 @@
-import { Type } from 'class-transformer';
+import { ApiProperty } from '@nestjs/swagger';
 import {
   CATEGORY,
   GROUP_STATUS,
   LOCATION,
 } from '@app/group-article/constants/group-article.constants';
-import { IGroupArticleDetail } from '@app/group-article/dto/group-article-detail.interface';
-import { ApiProperty } from '@nestjs/swagger';
-import { Author } from '@app/group-article/dto/author.dto';
+import { GroupArticle } from '@app/group-article/entity/group-article.entity';
 
-export class GetGroupArticleDetailResponse {
+export class GetMyGroupArticleResponse {
   @ApiProperty({ example: 1, description: '게시글 아이디' })
   id: number;
 
@@ -20,9 +18,6 @@ export class GetGroupArticleDetailResponse {
     description: '게시글 제목',
   })
   contents: string;
-
-  @ApiProperty()
-  author: Author;
 
   @ApiProperty({ example: CATEGORY.STUDY, description: '모집 카테고리' })
   category: string;
@@ -43,38 +38,30 @@ export class GetGroupArticleDetailResponse {
   })
   status: GROUP_STATUS;
 
-  @ApiProperty({ example: 10, description: '댓글 수' })
-  @Type(() => Number)
-  commentCount: number;
-
-  @ApiProperty({ example: 12, description: '스크랩 수' })
-  @Type(() => Number)
-  scrapCount: number;
-
   @ApiProperty({ example: 10, description: '최대 모집 인원' })
   maxCapacity: number;
+
+  @ApiProperty({
+    example: 'https://open.kakao.com/오픈채팅방path',
+    description: '카카오톡과 기타 채팅서비스의 주소를 담아놓을 수 있다.',
+  })
+  url: string;
 
   @ApiProperty({ example: new Date(), description: '게시글 작성일' })
   createdAt: Date;
 
-  static from(groupArticleDetail: IGroupArticleDetail) {
-    const res = new GetGroupArticleDetailResponse();
-    res.id = groupArticleDetail.id;
-    res.title = groupArticleDetail.title;
-    res.contents = groupArticleDetail.contents;
-    res.author = {
-      id: groupArticleDetail.userId,
-      userName: groupArticleDetail.userName,
-      profileImage: groupArticleDetail.userProfileImage,
-    };
-    res.category = groupArticleDetail.groupCategoryName;
-    res.thumbnail = groupArticleDetail.thumbnail;
-    res.status = groupArticleDetail.status;
-    res.location = groupArticleDetail.location;
-    res.commentCount = groupArticleDetail.commentCount;
-    res.scrapCount = groupArticleDetail.scrapCount;
-    res.maxCapacity = groupArticleDetail.maxCapacity;
-    res.createdAt = groupArticleDetail.createdAt;
+  static from(groupArticle: GroupArticle) {
+    const res = new GetMyGroupArticleResponse();
+    res.id = groupArticle.id;
+    res.title = groupArticle.title;
+    res.contents = groupArticle.contents;
+    res.category = groupArticle.group.category.name;
+    res.thumbnail = groupArticle.group.thumbnail;
+    res.status = groupArticle.group.status;
+    res.location = groupArticle.group.location;
+    res.maxCapacity = groupArticle.group.maxCapacity;
+    res.url = groupArticle.group.chatUrl;
+    res.createdAt = groupArticle.group.createdAt;
     return res;
   }
 }

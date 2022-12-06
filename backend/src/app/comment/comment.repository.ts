@@ -40,4 +40,8 @@ export class CommentRepository extends Repository<Comment> {
       skip: offset,
     });
   }
+
+  findById(id: number) {
+    return this.findOneBy({ id, deletedAt: IsNull() });
+  }
 }

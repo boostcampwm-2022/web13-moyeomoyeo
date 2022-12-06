@@ -3,6 +3,7 @@ import { AxiosResponse } from 'axios';
 import { ArticleStatus } from '@constants/article';
 import { Category } from '@constants/category';
 import { Location } from '@constants/location';
+import { Notification } from '@constants/notification';
 
 interface ArticlePreviewType {
   id: number;
@@ -73,6 +74,14 @@ interface ImageUploadType {
   url: string;
 }
 
+interface NotificationType {
+  id: number;
+  type: Notification;
+  title: string;
+  subTitle: string;
+  createdAt: string;
+}
+
 type ApiResponse<T> = AxiosResponse<{ data: T; messasge: string; status: string }>;
 
 export type {
@@ -85,4 +94,5 @@ export type {
   CommentType,
   UserType,
   ImageUploadType,
+  NotificationType,
 };
