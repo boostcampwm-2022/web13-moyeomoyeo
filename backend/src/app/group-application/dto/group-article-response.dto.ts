@@ -4,6 +4,7 @@ import {
   GROUP_STATUS,
   LOCATION,
 } from '@src/app/group-article/constants/group-article.constants';
+import { IMyGroupResult } from '@app/group-application/dto/my-group-result.interface';
 
 export class GroupArticleResponse {
   @ApiProperty({
@@ -11,7 +12,7 @@ export class GroupArticleResponse {
     description: '모임게시판 아이디',
     required: true,
   })
-  id: number;
+  groupArticleId: number;
 
   @ApiProperty({
     example: 'CS 스터디 모임',
@@ -82,5 +83,20 @@ export class GroupArticleResponse {
     description: '모임게시판 생성 날짜',
     required: true,
   })
-  createdAt: string;
+  createdAt: Date;
+
+  static from(myGroup: IMyGroupResult) {
+    const response = new GroupArticleResponse();
+    response.groupArticleId = myGroup.groupArticleId;
+    response.title = myGroup.title;
+    response.location = myGroup.location;
+    response.category = myGroup.category;
+    response.commentCount = myGroup.commentCount;
+    response.scrapCount = myGroup.scrapCount;
+    response.thumbnail = myGroup.thumbnail;
+    response.maxCapacity = myGroup.maxCapacity;
+    response.currentCapacity = myGroup.currentCapacity;
+    response.status = myGroup.status;
+    response.createdAt = myGroup.createdAt;
+  }
 }
