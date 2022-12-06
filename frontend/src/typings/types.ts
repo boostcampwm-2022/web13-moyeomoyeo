@@ -29,15 +29,13 @@ interface ArticleType extends ArticlePreviewType {
   author: Partial<UserType>;
 }
 
-interface LocationType {
-  id: number;
-  name: Location;
+interface MyArticleType
+  extends Omit<ArticleType, 'commentCount' | 'scrapCount' | 'currentCapacity' | 'author'> {
+  chatUrl: string;
 }
 
-interface CategoryType {
-  id: number;
-  name: Category;
-}
+interface ArticlePostInputType
+  extends Pick<MyArticleType, 'title' | 'contents' | 'thumbnail' | 'chatUrl'> {}
 
 interface CommentType {
   id: number;
@@ -68,6 +66,8 @@ interface ImageUploadType {
   url: string;
 }
 
+type ApiResponse<T> = AxiosResponse<{ data: T; message: string; status: string }>;
+
 interface NotificationType {
   id: number;
   type: Notification;
@@ -76,14 +76,12 @@ interface NotificationType {
   createdAt: string;
 }
 
-type ApiResponse<T> = AxiosResponse<{ data: T; messasge: string; status: string }>;
-
 export type {
   ApiResponse,
   ArticlePreviewType,
   ArticleType,
-  LocationType,
-  CategoryType,
+  MyArticleType,
+  ArticlePostInputType,
   TestResponseType,
   CommentType,
   UserType,

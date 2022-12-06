@@ -8,6 +8,8 @@ import { UserNotification } from '@app/notification/entity/user-notification.ent
 import { GroupApplicationRepository } from '@app/group-application/group-application.repository';
 import { GroupFailedEvent } from '@app/notification/event/group-failed.event';
 import { NotificationSettingRepository } from '@app/notification/repository/notification-setting.repository';
+import { CommentAddedEvent } from '@app/notification/event/comment-added.event';
+import { CommentRepository } from '@app/comment/comment.repository';
 
 @Injectable()
 export class NotificationListener {
@@ -17,6 +19,7 @@ export class NotificationListener {
     private readonly dataSource: DataSource,
     private readonly groupApplicationRepository: GroupApplicationRepository,
     private readonly notificationSettingRepository: NotificationSettingRepository,
+    private readonly commentRepository: CommentRepository,
   ) {}
 
   @OnEvent('group.succeed')
@@ -73,6 +76,38 @@ export class NotificationListener {
 
       const notification =
         Notification.createGroupFailedNotification(groupArticle);
+
+      await this.dataSource.transaction(async (em) => {
+        await em.save(notification);
+        await em.save(
+          targetUsers.map((user) =>
+            UserNotification.create(user, notification),
+          ),
+        );
+      });
+    } catch (e) {
+      this.logger.error(e);
+    }
+  }
+
+  @OnEvent('comment.added')
+  async handleCommentAddedEvent(event: CommentAddedEvent) {
+    const { groupArticle, comment } = event;
+    try {
+      const commentList = this.commentRepository.findByArticleId(
+        groupArticle.id,
+      );
+
+      const targetUsers =
+        await this.notificationSettingRepository.findTargetUsers({
+          type: NOTIFICATION_SETTING_TYPE.COMMENT,
+          userIds: (await commentList).map((comment) => comment.userId),
+        });
+
+      const notification = Notification.createCommentAddedNotification(
+        groupArticle,
+        comment,
+      );
 
       await this.dataSource.transaction(async (em) => {
         await em.save(notification);

@@ -3,49 +3,46 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 import styled from '@emotion/styled';
-import { ActionIcon, FileInput, Slider, Text } from '@mantine/core';
-import { IconCheck, IconUpload, IconUser } from '@tabler/icons';
+import { ActionIcon, Slider, Text } from '@mantine/core';
+import { IconCheck, IconUser } from '@tabler/icons';
 
-import ArticleEditor from '@components/article/ArticleEditor';
-import ImageThumbnail from '@components/article/ImageThumbnail';
+import ArticlePostInput from '@components/article/ArticlePostInput';
 import AlertModal from '@components/common/AlertModal';
 import DropDown from '@components/common/DropDown';
 import Header from '@components/common/Header';
 import DetailTitle from '@components/common/Header/DetailTitle';
 import PageLayout from '@components/common/PageLayout';
-import TextInput from '@components/common/TextInput';
 import { Category, CategoryKr } from '@constants/category';
 import { Location, LocationKr } from '@constants/location';
 import useAsyncError from '@hooks/useAsyncError';
-import { ImageUploadType } from '@typings/types';
+import { ArticlePostInputType } from '@typings/types';
 import { clientAxios } from '@utils/commonAxios';
 import { showToast } from '@utils/toast';
-import uploadImage from '@utils/uploadImage';
 
-interface ArticleInput {
+interface ArticleInputType {
   category: Category | null;
   location: Location | null;
   maxCapacity: number;
   title: string;
   contents: string;
   chatUrl: string;
-  uploadedImage: ImageUploadType | null;
+  thumbnail: string | null;
 }
 
 const WritePage = () => {
   const router = useRouter();
   const throwAsyncError = useAsyncError();
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
-  const [articleInput, setArticleInput] = useState<ArticleInput>({
+  const [articleInput, setArticleInput] = useState<ArticleInputType>({
     category: null,
     location: null,
     maxCapacity: 5,
     title: '',
     contents: '',
     chatUrl: '',
-    uploadedImage: null,
+    thumbnail: null,
   });
-  const { category, location, maxCapacity, title, contents, chatUrl, uploadedImage } = articleInput;
+  const { category, location, maxCapacity, title, contents, chatUrl, thumbnail } = articleInput;
 
   const possibleToSubmit =
     category &&
@@ -54,16 +51,12 @@ const WritePage = () => {
     title.trim().length > 0 &&
     contents.length > 0 &&
     chatUrl.trim().length > 0 &&
-    uploadedImage;
+    thumbnail;
 
   const handleClickSubmitBtn = async () => {
     if (!possibleToSubmit) return;
     try {
-      const { uploadedImage, ...rest } = articleInput;
-      await clientAxios.post('/v1/group-articles', {
-        ...rest,
-        thumbnail: uploadedImage.url,
-      });
+      await clientAxios.post('/v1/group-articles', articleInput);
       showToast({
         title: '게시글 등록 완료!',
         message: '이제 모집 완료 되기를 기다려주세요!',
@@ -72,15 +65,6 @@ const WritePage = () => {
       void router.push('/');
     } catch (err) {
       throwAsyncError('게시글 등록에 실패했습니다.');
-    }
-  };
-
-  const handleChangeImage = async (imageFile: File) => {
-    try {
-      const uploadedImage = await uploadImage(imageFile);
-      setArticleInput((prev) => ({ ...prev, uploadedImage }));
-    } catch (err) {
-      throwAsyncError('이미지 업로드에 실패했습니다.');
     }
   };
 
@@ -160,45 +144,17 @@ const WritePage = () => {
             />
           </PersonSection>
         </TermSection>
-        <PostSection>
-          <TextInput
-            label="제목"
-            placeholder="제목을 입력해주세요."
-            required
-            value={title}
-            onChange={(e) => setArticleInput((prev) => ({ ...prev, title: e.target.value }))}
-          />
-          <ArticleEditor
-            value={contents}
-            onChange={(contents) => setArticleInput((prev) => ({ ...prev, contents }))}
-          />
-          <TextInput
-            label="채팅방 링크"
-            placeholder="채팅방 링크를 입력해주세요."
-            required
-            value={chatUrl}
-            onChange={(e) => setArticleInput((prev) => ({ ...prev, chatUrl: e.target.value }))}
-          />
-          <ImageSection>
-            <FileInputLabel>
-              <Text size="md" fw={500}>
-                썸네일 이미지
-              </Text>
-              <Text c="red" size="md">
-                *
-              </Text>
-            </FileInputLabel>
-            <ImageThumbnail src={uploadedImage?.url} />
-            <FileInput
-              size="md"
-              required
-              placeholder="이미지를 첨부해주세요 (최대 1장)"
-              accept="image/*"
-              onChange={handleChangeImage}
-              icon={<IconUpload size={16} />}
-            />
-          </ImageSection>
-        </PostSection>
+        <ArticlePostInput
+          values={{
+            title,
+            thumbnail,
+            chatUrl,
+            contents,
+          }}
+          onChange={(target: keyof ArticlePostInputType, value: string) => {
+            setArticleInput((prev) => ({ ...prev, [target]: value }));
+          }}
+        />
       </PageLayout>
     </>
   );
@@ -229,25 +185,6 @@ const PersonSectionHeader = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
-`;
-
-const PostSection = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 1.6rem;
-  padding: 1.6rem;
-`;
-
-const ImageSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-`;
-const FileInputLabel = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
 `;
 
 export default WritePage;
