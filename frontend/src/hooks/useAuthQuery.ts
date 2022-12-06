@@ -4,7 +4,8 @@ import { QueryFunction, QueryKey, useQuery } from '@tanstack/react-query';
 import { UseQueryOptions } from '@tanstack/react-query/src/types';
 import { AxiosError } from 'axios';
 
-import AuthError from '@components/common/ErrorBoundary/AuthError';
+import AuthError from '@utils/errors/AuthError';
+import GetError from '@utils/errors/GetError';
 
 const useAuthQuery = <
   TQueryFnData = unknown,
@@ -30,7 +31,7 @@ const useAuthQuery = <
     if (error.response.status === 401) {
       throw new AuthError();
     }
-    throw error;
+    throw new GetError(error.response.data.message);
   }
 
   return { data, isLoading, isFetching };

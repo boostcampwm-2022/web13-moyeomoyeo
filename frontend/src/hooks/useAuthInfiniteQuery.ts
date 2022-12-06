@@ -6,7 +6,7 @@ import {
 } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 
-import AuthError from '@components/common/ErrorBoundary/AuthError';
+import AuthError from '@utils/errors/AuthError';
 
 const useAuthInfiniteQuery = <
   TQueryFnData = unknown,
