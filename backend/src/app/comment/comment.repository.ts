@@ -44,4 +44,8 @@ export class CommentRepository extends Repository<Comment> {
   findById(id: number) {
     return this.findOneBy({ id, deletedAt: IsNull() });
   }
+
+  findByArticleId(groupArticleId: number) {
+    return this.findBy({ articleId: groupArticleId, deletedAt: IsNull() });
+  }
 }

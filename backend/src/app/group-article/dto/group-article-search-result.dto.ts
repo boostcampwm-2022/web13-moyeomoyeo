@@ -6,6 +6,7 @@ import {
   LOCATION,
 } from '@app/group-article/constants/group-article.constants';
 import { IGroupArticleSearchResult } from '@app/group-article/dto/group-article-search-result.interface';
+import { ImageWithBlurResponse } from '@common/dto/image-with-blur-response.dto';
 
 export class GroupArticleSearchResult {
   @ApiProperty({ example: 1, description: '게시글 아이디' })
@@ -14,12 +15,8 @@ export class GroupArticleSearchResult {
   @ApiProperty({ example: 'test001', description: '게시글 제목' })
   title: string;
 
-  @ApiProperty({
-    example:
-      'https://kr.object.ncloudstorage.com/uploads/images/1669276833875-64adca9c-94cd-4162-a53f-f75e951e39db',
-    description: '게시글 썸네일',
-  })
-  thumbnail: string;
+  @ApiProperty({})
+  thumbnail: ImageWithBlurResponse;
 
   @ApiProperty({
     example: GROUP_STATUS.PROGRESS,
@@ -54,11 +51,11 @@ export class GroupArticleSearchResult {
   })
   createdAt: Date;
 
-  static from(row: IGroupArticleSearchResult) {
+  static async from(row: IGroupArticleSearchResult) {
     const res = new GroupArticleSearchResult();
     res.id = row.id;
     res.title = row.title;
-    res.thumbnail = row.thumbnail;
+    res.thumbnail = await ImageWithBlurResponse.from(row.thumbnail);
     res.category = row.groupCategoryName;
     res.location = row.location;
     res.status = row.status;

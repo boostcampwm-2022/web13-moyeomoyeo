@@ -8,5 +8,6 @@ import { GroupArticleModule } from '@app/group-article/group-article.module';
   imports: [GroupArticleModule],
   controllers: [CommentController],
   providers: [CommentService, CommentRepository],
+  exports: [CommentRepository],
 })
 export class CommentModule {}

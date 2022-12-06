@@ -6,10 +6,12 @@ import {
 } from 'typeorm';
 import { NOTIFICATION_TYPE } from '@app/notification/constants/notification.constants';
 import {
+  CommnetAddedContents,
   GroupFailedContents,
   GroupSucceedContents,
 } from '@app/notification/entity/notification-contents';
 import { GroupArticle } from '@app/group-article/entity/group-article.entity';
+import { Comment } from '@src/app/comment/entity/comment.entity';
 
 @Entity()
 export class Notification {
@@ -20,7 +22,7 @@ export class Notification {
   type: NOTIFICATION_TYPE;
 
   @Column({ type: 'json' })
-  contents: GroupSucceedContents | GroupFailedContents;
+  contents: GroupSucceedContents | GroupFailedContents | CommnetAddedContents;
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
@@ -42,6 +44,20 @@ export class Notification {
     notification.contents = {
       title: '모임이 무산되었어요',
       subTitle: groupArticle.title,
+      groupArticleId: groupArticle.id,
+    };
+    return notification;
+  }
+
+  static createCommentAddedNotification(
+    groupArticle: GroupArticle,
+    comment: Comment,
+  ) {
+    const notification = new Notification();
+    notification.type = NOTIFICATION_TYPE.COMMENT_ADDED;
+    notification.contents = {
+      title: groupArticle.title,
+      subTitle: comment.contents,
       groupArticleId: groupArticle.id,
     };
     return notification;

@@ -10,3 +10,7 @@ export interface GroupSucceedContents extends NotificationContents {
 export interface GroupFailedContents extends NotificationContents {
   groupArticleId: number;
 }
+
+export interface CommnetAddedContents extends NotificationContents {
+  groupArticleId: number;
+}
