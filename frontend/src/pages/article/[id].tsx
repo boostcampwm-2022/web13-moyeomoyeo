@@ -6,13 +6,13 @@ import styled from '@emotion/styled';
 import { Avatar, Progress, TypographyStylesProvider } from '@mantine/core';
 import { IconList } from '@tabler/icons';
 
+import MenuButton from '@components/article/MenuButton';
 import ParticipantsModal from '@components/article/ParticipantsModal';
 import ParticipateButton from '@components/article/ParticipateButton';
 import ArticleLoading from '@components/common/ArticleLoading';
 import ArticleTag from '@components/common/ArticleTag';
 import Header from '@components/common/Header';
 import DetailTitle from '@components/common/Header/DetailTitle';
-import UserLoginItem from '@components/common/Header/UserLoginItem';
 import PageLayout from '@components/common/PageLayout';
 import StatCounter from '@components/common/StatCounter';
 import { ArticleStatus, ArticleStatusKr } from '@constants/article';
@@ -33,8 +33,8 @@ const ArticleDetail = () => {
   const {
     colors: { indigo, gray },
   } = useTheme();
-  const { query } = useRouter();
-  const articleId = Number(query.id);
+  const router = useRouter();
+  const articleId = Number(router.query.id);
   const { data: myInfo } = useFetchMyInfo();
   const { article } = useFetchArticle(articleId);
   const { isJoined } = useFetchApplicationStatus(articleId);
@@ -56,12 +56,19 @@ const ArticleDetail = () => {
                 subTitle={PAGE_TITLE.ARTICLE.subTitle}
               />
             }
-            rightNode={<UserLoginItem />}
+            rightNode={
+              article &&
+              myInfo &&
+              article.author.id === myInfo.id && (
+                <MenuButton isArticleInProgress={article.status === ArticleStatus.PROGRESS} />
+              )
+            }
           />
         }
       >
         <>
           <ContentWrapper>
+            {/* TODO 로딩 처리 */}
             {!article || isJoined === undefined || !myInfo ? (
               <ArticleLoading />
             ) : (
@@ -137,6 +144,7 @@ const ArticleDetail = () => {
           />
         </>
       </PageLayout>
+      r
     </>
   );
 };

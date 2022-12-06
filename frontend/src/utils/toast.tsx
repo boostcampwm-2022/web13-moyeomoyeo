@@ -12,7 +12,7 @@ const showToast = ({ title, message }: ToastProps) =>
     message,
     color: 'indigo',
     icon: <IconCheck size={16} />,
-    autoClose: 4000,
+    autoClose: 2000,
     styles: (theme) => ({
       root: {
         paddingTop: '1.6rem',

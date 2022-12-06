@@ -40,7 +40,7 @@ const MyEditPage = () => {
     }
   }, [myProfile]);
 
-  const posibleToSubmit =
+  const possibleToSubmit =
     myProfile &&
     profileImage.length > 0 &&
     userName.length > 0 &&
@@ -62,17 +62,15 @@ const MyEditPage = () => {
   };
 
   const handleClickProfileChangeBtn = async () => {
-    try {
-      updateMyProfile(userDataInput);
-
-      showToast({
-        title: '프로필 수정 완료!',
-        message: '멋지게 바뀐 프로필을 확인해보세요!',
-      });
-      void router.push('/my');
-    } catch (err) {
-      throwAsyncError('프로필 수정에 실패했습니다.');
-    }
+    updateMyProfile(userDataInput, {
+      onSuccess: () => {
+        showToast({
+          title: '프로필 수정 완료!',
+          message: '멋지게 바뀐 프로필을 확인해보세요!',
+        });
+        void router.push('/my');
+      },
+    });
   };
 
   if (!myProfile) return null;
@@ -84,7 +82,7 @@ const MyEditPage = () => {
         rightNode={
           <ActionIcon
             variant="transparent"
-            color={posibleToSubmit ? 'indigo' : 'gray'}
+            color={possibleToSubmit ? 'indigo' : 'gray'}
             onClick={handleClickProfileChangeBtn}
           >
             <IconCheck size={24} stroke={3} />
