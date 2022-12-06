@@ -32,17 +32,17 @@ export class GroupApplicationRepository extends Repository<GroupApplication> {
   }
 
   async findMyGroup({
-    id,
+    userId,
     limit,
     offset,
   }: {
-    id: number;
+    userId: number;
     limit: number;
     offset: number;
   }) {
     const groupApplications = await this.find({
       where: {
-        userId: id,
+        userId,
         deletedAt: IsNull(),
       },
       take: limit,

@@ -115,7 +115,7 @@ export class GroupApplicationService {
     offset: number;
   }) {
     const result = await this.groupApplicationRepository.findMyGroup({
-      id: user.id,
+      userId: user.id,
       limit,
       offset,
     });
