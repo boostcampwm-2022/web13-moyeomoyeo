@@ -1,7 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, IsNull, Repository } from 'typeorm';
 import { GroupApplication } from '@app/group-application/entity/group-application.entity';
 import { GROUP_APPLICATION_STATUS } from '@app/group-article/constants/group-article.constants';
+import { Group } from '@app/group-article/entity/group.entity';
+import { GroupCategory } from '@app/group-article/entity/group-category.entity';
+import { Scrap } from '@app/scrap/entity/scrap.entity';
+import { Comment } from '@app/comment/entity/comment.entity';
+import { GroupArticle } from '@app/group-article/entity/group-article.entity';
+import { IMyGroupResult } from '@app/group-application/dto/my-group-result.interface';
 
 @Injectable()
 export class GroupApplicationRepository extends Repository<GroupApplication> {
@@ -19,5 +25,68 @@ export class GroupApplicationRepository extends Repository<GroupApplication> {
     status: GROUP_APPLICATION_STATUS,
   ) {
     return this.findOneBy({ userId, groupId, status });
+  }
+
+  findMyGroupCount(userId: number) {
+    return this.countBy({ userId, deletedAt: IsNull() });
+  }
+
+  async findMyGroup({
+    id,
+    limit,
+    offset,
+  }: {
+    id: number;
+    limit: number;
+    offset: number;
+  }) {
+    const groupApplications = await this.find({
+      where: {
+        userId: id,
+        deletedAt: IsNull(),
+      },
+      take: limit,
+      skip: offset,
+    });
+
+    return this.createQueryBuilder('groupApplication')
+      .select([
+        'groupArticle.id as groupArticleId',
+        'groupArticle.title as title',
+        'group.location as location',
+        'groupCategory.name as category',
+        'COUNT(DISTINCT comment.id) as commentCount',
+        'COUNT(DISTINCT scrap.id) as scrapCount',
+        'group.thumbnail as thumbnail',
+        'group.maxCapacity as maxCapacity',
+        'COUNT(DISTINCT groupApplication.id) as currentCapacity',
+        'group.status as status',
+        'groupArticle.createdAt as createdAt',
+      ])
+      .leftJoin(Group, 'group', 'groupApplication.group_id = group.id')
+      .leftJoin(
+        GroupCategory,
+        'groupCategory',
+        'groupCategory.id = group.category.id AND groupCategory.deletedAt IS NULL',
+      )
+      .leftJoin(
+        GroupArticle,
+        'groupArticle',
+        'groupArticle.id = group.article_id',
+      )
+      .leftJoin(
+        Comment,
+        'comment',
+        'groupArticle.id = comment.articleId AND comment.deletedAt IS NULL',
+      )
+      .leftJoin(Scrap, 'scrap', 'groupArticle.id = scrap.articleId')
+      .where('groupArticle.deletedAt IS NULL')
+      .andWhere('group.id IN (:...ids)', {
+        ids: groupApplications.map(
+          (groupApplication) => groupApplication.groupId,
+        ),
+      })
+      .groupBy('group.id')
+      .getRawMany<IMyGroupResult>();
   }
 }
