@@ -3,13 +3,20 @@ import { Injectable } from '@nestjs/common';
 import { Comment } from '@app/comment/entity/comment.entity';
 
 @Injectable()
-export class CommnetRepository extends Repository<Comment> {
+export class CommentRepository extends Repository<Comment> {
   constructor(private readonly dataSource: DataSource) {
     super(
       Comment,
       dataSource.createEntityManager(),
       dataSource.createQueryRunner(),
     );
+  }
+
+  getTotalCount(articleId: number) {
+    return this.countBy({
+      articleId,
+      deletedAt: IsNull(),
+    });
   }
 
   selectAllComments({
