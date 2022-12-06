@@ -1,7 +1,8 @@
 import Link from 'next/link';
 
-import { Avatar, Menu, Text } from '@mantine/core';
+import { Menu, Text } from '@mantine/core';
 
+import Avatar from '@components/common/Avatar';
 import LoginButton from '@components/common/Header/LoginButton';
 import useFetchMyInfo from '@hooks/queries/useFetchMyInfo';
 
@@ -18,7 +19,7 @@ const UserLoginItem = () => {
   return myData ? (
     <Menu position="bottom-end" transition="rotate-right" transitionDuration={200}>
       <Menu.Target>
-        <Avatar radius="xl" size="md" alt="avatar" src={myData.profileImage} />
+        <Avatar size="md" alt={myData.userName} src={myData.profileImage} />
       </Menu.Target>
       <Menu.Dropdown>
         <Link href="/my">

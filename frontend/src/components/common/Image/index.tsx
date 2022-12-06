@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 interface Props extends ImageProps {
   defaultImgUrl?: string;
+  className?: string;
 }
 
 const defaultImgPath = '/default.jpg';

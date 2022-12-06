@@ -1,8 +1,8 @@
 import { useTheme } from '@emotion/react';
 import styled from '@emotion/styled';
-import { Avatar, AvatarProps } from '@mantine/core';
 import { IconBrandGithub, IconLink } from '@tabler/icons';
 
+import Avatar from '@components/common/Avatar';
 import { UserType } from '@typings/types';
 
 interface Props {
@@ -18,7 +18,7 @@ const Profile = ({ user }: Props) => {
 
   return (
     <ProfileWrapper>
-      <StyledAvatar alt="avatar" src={profileImage} />
+      <Avatar alt={user.userName} src={profileImage} size="xl" />
       <UserWrapper>
         <UserName>{userName}</UserName>
         <Description>{description}</Description>
@@ -44,12 +44,6 @@ const ProfileWrapper = styled.div`
   gap: 1.6rem;
   align-items: center;
   width: 100%;
-`;
-
-const StyledAvatar = styled(Avatar)<AvatarProps>`
-  width: 8.4rem;
-  height: 8.4rem;
-  border-radius: 4.2rem;
 `;
 
 const UserWrapper = styled.div`

@@ -3,13 +3,14 @@ import { useState } from 'react';
 
 import { useTheme } from '@emotion/react';
 import styled from '@emotion/styled';
-import { Avatar, Progress, TypographyStylesProvider } from '@mantine/core';
+import { Progress, TypographyStylesProvider } from '@mantine/core';
 import { IconList } from '@tabler/icons';
 
 import ParticipantsModal from '@components/article/ParticipantsModal';
 import ParticipateButton from '@components/article/ParticipateButton';
 import ArticleLoading from '@components/common/ArticleLoading';
 import ArticleTag from '@components/common/ArticleTag';
+import Avatar from '@components/common/Avatar';
 import Header from '@components/common/Header';
 import DetailTitle from '@components/common/Header/DetailTitle';
 import UserLoginItem from '@components/common/Header/UserLoginItem';
@@ -68,7 +69,11 @@ const ArticleDetail = () => {
               <>
                 <DetailWrapper>
                   <ProfileWrapper>
-                    <Avatar radius="xl" size="lg" alt="avatar" src={article.author.profileImage} />
+                    <Avatar
+                      src={article.author.profileImage}
+                      alt={article.author.userName}
+                      size="lg"
+                    />
                     <ProfileTextWrapper>
                       <Author>{article.author.userName}</Author>
                       <Time>{dateTimeFormat(article.createdAt)}</Time>
