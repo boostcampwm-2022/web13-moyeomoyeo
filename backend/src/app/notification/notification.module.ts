@@ -4,6 +4,7 @@ import { NotificationSettingRepository } from '@app/notification/repository/noti
 import { NotificationService } from '@app/notification/notification.service';
 import { NotificationListener } from '@app/notification/notification.listener';
 import { GroupApplicationModule } from '@app/group-application/group-application.module';
+import { UserNotificationRepository } from '@app/notification/repository/user-notification.repository';
 
 @Module({
   imports: [GroupApplicationModule],
@@ -11,6 +12,7 @@ import { GroupApplicationModule } from '@app/group-application/group-application
   providers: [
     NotificationService,
     NotificationSettingRepository,
+    UserNotificationRepository,
     NotificationListener,
   ],
 })
