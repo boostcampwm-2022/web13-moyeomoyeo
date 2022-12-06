@@ -61,11 +61,7 @@ export class CommentService {
       return CommentResponse.from(comment, user);
     });
 
-    return Promise.all(
-      commentWithUserList.map((commentWithUser) => {
-        return commentWithUser;
-      }),
-    );
+    return Promise.all(commentWithUserList);
   }
 
   async deleteComment(user: User, id: number) {

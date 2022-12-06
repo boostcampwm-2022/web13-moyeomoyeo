@@ -32,7 +32,7 @@ export class CommentResponse {
     example: '제 생일입니다!',
     description: '댓글 내용',
   })
-  contetns: string;
+  contents: string;
 
   @ApiProperty({
     example: '2022/12/07',
@@ -46,7 +46,7 @@ export class CommentResponse {
     response.authorId = user.id;
     response.authorName = user.userName;
     response.authorProfileImage = user.profileImage;
-    response.contetns = comment.contents;
+    response.contents = comment.contents;
     response.createdAt = String(comment.createdAt);
     return response;
   }
