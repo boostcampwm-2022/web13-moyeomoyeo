@@ -4,7 +4,7 @@ import { NotificationSettingRepository } from '@app/notification/repository/noti
 import { NotificationService } from '@app/notification/notification.service';
 import { NotificationListener } from '@app/notification/notification.listener';
 import { GroupApplicationModule } from '@app/group-application/group-application.module';
-import { CommentModule } from '../comment/comment.module';
+import { CommentModule } from '@app/comment/comment.module';
 
 @Module({
   imports: [GroupApplicationModule, CommentModule],
