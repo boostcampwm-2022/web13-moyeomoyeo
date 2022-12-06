@@ -45,7 +45,7 @@ export class GetMyGroupArticleResponse {
     example: 'https://open.kakao.com/오픈채팅방path',
     description: '카카오톡과 기타 채팅서비스의 주소를 담아놓을 수 있다.',
   })
-  url: string;
+  chatUrl: string;
 
   @ApiProperty({ example: new Date(), description: '게시글 작성일' })
   createdAt: Date;
@@ -60,7 +60,7 @@ export class GetMyGroupArticleResponse {
     res.status = groupArticle.group.status;
     res.location = groupArticle.group.location;
     res.maxCapacity = groupArticle.group.maxCapacity;
-    res.url = groupArticle.group.chatUrl;
+    res.chatUrl = groupArticle.group.chatUrl;
     res.createdAt = groupArticle.group.createdAt;
     return res;
   }
