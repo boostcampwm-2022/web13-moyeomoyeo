@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 
 import { MantineProvider } from '@mantine/core';
+import { NotificationsProvider } from '@mantine/notifications';
 
 import CustomFonts from '@styles/CustomFont';
 import GlobalStyles from '@styles/GlobalStyles';
@@ -14,7 +15,7 @@ const CommonStyles = ({ children }: Props) => (
   <MantineProvider withGlobalStyles withNormalizeCSS theme={theme}>
     <CustomFonts />
     <GlobalStyles />
-    {children}
+    <NotificationsProvider>{children}</NotificationsProvider>
   </MantineProvider>
 );
 

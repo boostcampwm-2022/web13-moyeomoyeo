@@ -1,4 +1,5 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AppConfigModule } from '@config/app/config.module';
@@ -13,9 +14,12 @@ import { UserModule } from '@app/user/user.module';
 import { MyInfoModule } from '@app/myinfo/myinfo.module';
 import { CookieConfigModule } from '@config/cookie/config.module';
 import { GroupApplicationModule } from '@app/group-application/group-application.module';
+import { NotificationModule } from '@app/notification/notification.module';
+import { CommentModule } from '@app/comment/comment.module';
 
 @Module({
   imports: [
+    EventEmitterModule.forRoot(),
     AppConfigModule,
     CookieConfigModule,
     DatabaseModule,
@@ -26,6 +30,8 @@ import { GroupApplicationModule } from '@app/group-application/group-application
     UserModule,
     MyInfoModule,
     GroupApplicationModule,
+    NotificationModule,
+    CommentModule,
   ],
   controllers: [AppController],
   providers: [AppService],

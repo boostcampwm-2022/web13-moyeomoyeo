@@ -40,4 +40,17 @@ export class Comment {
 
   @Column({ type: 'timestamp', nullable: true })
   deletedAt: Date | null;
+
+  static from(user: User, articleId: number, contents: string) {
+    const comment = new Comment();
+    comment.userId = user.id;
+    comment.articleId = articleId;
+    comment.contents = contents;
+
+    return comment;
+  }
+
+  delete() {
+    this.deletedAt = new Date();
+  }
 }

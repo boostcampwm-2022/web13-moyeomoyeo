@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 import styled from '@emotion/styled';
@@ -15,36 +16,73 @@ import PageLayout from '@components/common/PageLayout';
 import TextInput from '@components/common/TextInput';
 import { Category, CategoryKr } from '@constants/category';
 import { Location, LocationKr } from '@constants/location';
+import useAsyncError from '@hooks/useAsyncError';
+import { ImageUploadType } from '@typings/types';
+import { clientAxios } from '@utils/commonAxios';
+import { showToast } from '@utils/toast';
+import uploadImage from '@utils/uploadImage';
 
-/**
- * Todo
- * - 게시글 등록 API 연동
- * - 이미지 업로드 API 연동
- */
+interface ArticleInput {
+  category: Category | null;
+  location: Location | null;
+  maxCapacity: number;
+  title: string;
+  contents: string;
+  chatUrl: string;
+  uploadedImage: ImageUploadType | null;
+}
 
 const WritePage = () => {
+  const router = useRouter();
+  const throwAsyncError = useAsyncError();
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
-  const [category, setCategory] = useState<Category | null>(null);
-  const [location, setLocation] = useState<Location | null>(null);
-  const [maxCapacity, setmaxCapacity] = useState<number>(5);
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [chatLink, setChatLink] = useState('');
-  const [uploadedImage, setUploadedImage] = useState<File | null>(null);
+  const [articleInput, setArticleInput] = useState<ArticleInput>({
+    category: null,
+    location: null,
+    maxCapacity: 5,
+    title: '',
+    contents: '',
+    chatUrl: '',
+    uploadedImage: null,
+  });
+  const { category, location, maxCapacity, title, contents, chatUrl, uploadedImage } = articleInput;
 
   const possibleToSubmit =
     category &&
     location &&
     maxCapacity &&
-    title.length > 0 &&
-    content.length > 0 &&
-    chatLink.length > 0 &&
+    title.trim().length > 0 &&
+    contents.length > 0 &&
+    chatUrl.trim().length > 0 &&
     uploadedImage;
 
-  const handleSubmit = () => {
+  const handleClickSubmitBtn = async () => {
     if (!possibleToSubmit) return;
-    // TODO API 호출
-    setConfirmModalOpen(true);
+    try {
+      const { uploadedImage, ...rest } = articleInput;
+      await clientAxios.post('/v1/group-articles', {
+        ...rest,
+        thumbnail: uploadedImage.url,
+      });
+      // TODO : mutation 로직 추가?
+      showToast({
+        title: '게시글 등록 완료!',
+        message: '이제 모집 완료 되기를 기다려주세요!',
+      });
+
+      void router.push('/');
+    } catch (err) {
+      throwAsyncError('게시글 등록에 실패했습니다.');
+    }
+  };
+
+  const handleChangeImage = async (imageFile: File) => {
+    try {
+      const uploadedImage = await uploadImage(imageFile);
+      setArticleInput((prev) => ({ ...prev, uploadedImage }));
+    } catch (err) {
+      throwAsyncError('이미지 업로드에 실패했습니다.');
+    }
   };
 
   return (
@@ -60,7 +98,7 @@ const WritePage = () => {
               <ActionIcon
                 variant="transparent"
                 color={possibleToSubmit ? 'indigo' : 'gray'}
-                onClick={handleSubmit}
+                onClick={handleClickSubmitBtn}
               >
                 <IconCheck size={24} stroke={3} />
               </ActionIcon>
@@ -83,10 +121,11 @@ const WritePage = () => {
                 value: key,
               }))}
               value={category}
-              onChange={(value) => setCategory(value as Category)}
+              onChange={(value) =>
+                setArticleInput((prev) => ({ ...prev, category: value as Category }))
+              }
               required
             />
-
             <DropDown
               label="장소"
               placeholder="장소 선택하기"
@@ -95,7 +134,9 @@ const WritePage = () => {
                 value: key,
               }))}
               value={location}
-              onChange={(value) => setLocation(value as Location)}
+              onChange={(location) =>
+                setArticleInput((prev) => ({ ...prev, location: location as Location }))
+              }
               required
             />
           </SelectSection>
@@ -116,7 +157,7 @@ const WritePage = () => {
               min={1}
               max={15}
               value={maxCapacity}
-              onChange={setmaxCapacity}
+              onChange={(maxCapacity) => setArticleInput((prev) => ({ ...prev, maxCapacity }))}
             />
           </PersonSection>
         </TermSection>
@@ -126,15 +167,18 @@ const WritePage = () => {
             placeholder="제목을 입력해주세요."
             required
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={(e) => setArticleInput((prev) => ({ ...prev, title: e.target.value }))}
           />
-          <ArticleEditor value={content} onChange={setContent} />
+          <ArticleEditor
+            value={contents}
+            onChange={(contents) => setArticleInput((prev) => ({ ...prev, contents }))}
+          />
           <TextInput
             label="채팅방 링크"
             placeholder="채팅방 링크를 입력해주세요."
             required
-            value={chatLink}
-            onChange={(e) => setChatLink(e.target.value)}
+            value={chatUrl}
+            onChange={(e) => setArticleInput((prev) => ({ ...prev, chatUrl: e.target.value }))}
           />
           <ImageSection>
             <FileInputLabel>
@@ -145,14 +189,13 @@ const WritePage = () => {
                 *
               </Text>
             </FileInputLabel>
-            <ImageThumbnail src={uploadedImage && URL.createObjectURL(uploadedImage)} />
+            <ImageThumbnail src={uploadedImage?.url} />
             <FileInput
               size="md"
               required
               placeholder="이미지를 첨부해주세요 (최대 1장)"
               accept="image/*"
-              onChange={setUploadedImage}
-              value={uploadedImage}
+              onChange={handleChangeImage}
               icon={<IconUpload size={16} />}
             />
           </ImageSection>

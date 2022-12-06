@@ -1,8 +1,7 @@
 import { Component, PropsWithChildren, useState } from 'react';
 
 import RedirectHomeModal from '@components/common/RedirectHomeModal';
-
-import AuthError from './AuthError';
+import AuthError from '@utils/errors/AuthError';
 
 interface Props extends PropsWithChildren {}
 

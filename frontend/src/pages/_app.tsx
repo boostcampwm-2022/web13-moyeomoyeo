@@ -14,6 +14,8 @@ import RouterTransition from '@components/common/RouterTransition';
 import initMockApi from '@mocks/.';
 import CommonStyles from '@styles/CommonStyles';
 
+const isDevelopment = process.env.NODE_ENV === 'development';
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -23,14 +25,15 @@ const queryClient = new QueryClient({
 });
 
 export default function App({ Component, pageProps }: AppProps) {
-  const [shouldRender, setShouldRender] = useState<boolean>(false);
+  const [shouldRender, setShouldRender] = useState<boolean>(!isDevelopment);
 
   useEffect(() => {
-    void (async () => {
-      // TODO development일때만 실행
-      await initMockApi();
-      setShouldRender(true);
-    })();
+    if (isDevelopment) {
+      void (async () => {
+        await initMockApi();
+        setShouldRender(true);
+      })();
+    }
   }, []);
 
   if (!shouldRender) return null;
@@ -44,12 +47,12 @@ export default function App({ Component, pageProps }: AppProps) {
       <QueryClientProvider client={queryClient}>
         <ReactQueryDevtools initialIsOpen={false} />
         <CommonStyles>
+          <RouterTransition />
           <ErrorBoundary key={uuid()}>
             <AuthErrorBoundary>
               <ApiErrorBoundary>
-                <RouterTransition />
-                <Component {...pageProps} />
                 <LoginRedirect />
+                <Component {...pageProps} />
               </ApiErrorBoundary>
             </AuthErrorBoundary>
           </ErrorBoundary>

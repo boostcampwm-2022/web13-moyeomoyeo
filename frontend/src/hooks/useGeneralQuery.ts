@@ -1,6 +1,10 @@
+import { useRouter } from 'next/router';
+
 import { QueryFunction, QueryKey, useQuery } from '@tanstack/react-query';
 import { UseQueryOptions } from '@tanstack/react-query/src/types';
 import { AxiosError } from 'axios';
+
+import GetError from '@utils/errors/GetError';
 
 const useGeneralQuery = <
   TQueryFnData = unknown,
@@ -15,15 +19,16 @@ const useGeneralQuery = <
     'queryKey' | 'queryFn' | 'initialData'
   > & { initialData?: () => undefined }
 ) => {
+  const { isReady } = useRouter();
   const { data, isLoading, isFetching, error } = useQuery<TQueryFnData, TError, TData, TQueryKey>(
     queryKey,
     queryFn,
-    options
+    { ...options, enabled: isReady && options.enabled }
   );
 
   if (error && error instanceof AxiosError) {
     if (error.response.status !== 401) {
-      throw error;
+      throw new GetError(error.response.data.message);
     }
   }
 

@@ -1,40 +1,54 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
-import { AxiosError, AxiosResponse } from 'axios';
+import { AxiosError } from 'axios';
 
-import getTestGroupArticles from '@apis/test/getTestGroupArticles';
+import { ArticleStatus } from '@constants/article';
 import { Category } from '@constants/category';
 import { Location } from '@constants/location';
-import { ArticleType } from '@typings/types';
+import useAuthInfiniteQuery from '@hooks/useAuthInfiniteQuery';
+import { ArticlePreviewType } from '@typings/types';
+import { clientAxios } from '@utils/commonAxios';
 
-import AuthError from '../../components/common/ErrorBoundary/AuthError';
-
+interface ArticlePagingData {
+  totalPage: number;
+  currentPage: number;
+  countPerPage: number;
+  data: ArticlePreviewType[];
+}
 interface ArticleResponseType {
-  articles: ArticleType[];
-  isLast: boolean;
-  currentId: number;
+  status: string;
+  message: string;
+  data: ArticlePagingData;
 }
 
-const useFetchGroupArticles = (category: Category, location: Location, progress: boolean) => {
-  const { data, fetchNextPage, hasNextPage, isFetching, error } = useInfiniteQuery<
-    Promise<AxiosResponse<ArticleResponseType>>,
-    AxiosError
-  >(
-    ['articles'],
-    ({ pageParam = 0 }) => getTestGroupArticles(pageParam, category, location, progress),
+const getGroupArticles = async (
+  currentPage: number,
+  category: Category,
+  location: Location,
+  filterProgress: boolean
+) => {
+  const status = filterProgress ? ArticleStatus.PROGRESS : null;
+  const {
+    data: { data },
+  } = await clientAxios<ArticleResponseType>('/v1/group-articles/search', {
+    params: { category, location, status, currentPage, countPerPage: 5 },
+  });
+  return data;
+};
+
+const useFetchGroupArticles = (
+  category: Category | null,
+  location: Location | null,
+  filterProgress: boolean
+) => {
+  const queryResult = useAuthInfiniteQuery<ArticlePagingData, AxiosError, ArticlePagingData>(
+    ['articles', category, location, filterProgress],
+    ({ pageParam = 1 }) => getGroupArticles(pageParam, category, location, filterProgress),
     {
-      // @ts-expect-error
-      getNextPageParam: (lastPage: AxiosResponse<ArticleResponseType>) =>
-        lastPage.data.isLast ? undefined : lastPage.data.currentId + 1,
+      getNextPageParam: (lastPage) =>
+        lastPage.totalPage === lastPage.currentPage ? undefined : lastPage.currentPage + 1,
     }
   );
 
-  if (error) {
-    if (error.response && error.response.status === 401) {
-      throw new AuthError();
-    }
-    throw error;
-  }
-  return { data, fetchNextPage, hasNextPage, isFetching };
+  return { ...queryResult };
 };
 
 export default useFetchGroupArticles;

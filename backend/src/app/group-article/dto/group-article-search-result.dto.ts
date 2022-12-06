@@ -6,7 +6,6 @@ import {
   LOCATION,
 } from '@app/group-article/constants/group-article.constants';
 import { IGroupArticleSearchResult } from '@app/group-article/dto/group-article-search-result.interface';
-import { ImageService } from '@app/image/image.service';
 
 export class GroupArticleSearchResult {
   @ApiProperty({ example: 1, description: '게시글 아이디' })
@@ -55,11 +54,11 @@ export class GroupArticleSearchResult {
   })
   createdAt: Date;
 
-  static from(row: IGroupArticleSearchResult, imageService: ImageService) {
+  static from(row: IGroupArticleSearchResult) {
     const res = new GroupArticleSearchResult();
     res.id = row.id;
     res.title = row.title;
-    res.thumbnail = imageService.getStorageUrl([row.thumbnail])[0];
+    res.thumbnail = row.thumbnail;
     res.category = row.groupCategoryName;
     res.location = row.location;
     res.status = row.status;

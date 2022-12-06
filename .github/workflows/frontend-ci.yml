@@ -180,11 +180,12 @@ jobs:
             core.setOutput('comments', comments)
 
       - name: comment PR
-        uses: unsplash/comment-on-pr@v1.3.0
+        uses: thollander/actions-comment-pull-request@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          msg: ${{ steps.format_lighthouse_score.outputs.comments }}
+          message: ${{ steps.format_lighthouse_score.outputs.comments }}
+          reactions: rocket
 
   slack-notifications:
     needs: [checking, lhci, storybook]

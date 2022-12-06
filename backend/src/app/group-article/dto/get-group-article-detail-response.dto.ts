@@ -5,7 +5,6 @@ import {
   LOCATION,
 } from '@app/group-article/constants/group-article.constants';
 import { IGroupArticleDetail } from '@app/group-article/dto/group-article-detail.interface';
-import { ImageService } from '@app/image/image.service';
 import { ApiProperty } from '@nestjs/swagger';
 import { Author } from '@app/group-article/dto/author.dto';
 
@@ -20,7 +19,7 @@ export class GetGroupArticleDetailResponse {
     example: `안녕하세요. 서울 지역 CS 스터디원들을 모집합니다!\\n<img width="1440" alt="서울 지역 CS 모집 사진자료" src="https://kr.object.ncloudstorage.com/moyeo-images/uploads/images/1669282011949-761671c7-cc43-4cee-bcb5-4bf3fea9478b.png">`,
     description: '게시글 제목',
   })
-  content: string;
+  contents: string;
 
   @ApiProperty()
   author: Author;
@@ -58,23 +57,18 @@ export class GetGroupArticleDetailResponse {
   @ApiProperty({ example: new Date(), description: '게시글 작성일' })
   createdAt: Date;
 
-  static from(
-    groupArticleDetail: IGroupArticleDetail,
-    imageService: ImageService,
-  ) {
+  static from(groupArticleDetail: IGroupArticleDetail) {
     const res = new GetGroupArticleDetailResponse();
     res.id = groupArticleDetail.id;
     res.title = groupArticleDetail.title;
-    res.content = groupArticleDetail.contents;
+    res.contents = groupArticleDetail.contents;
     res.author = {
       id: groupArticleDetail.userId,
       userName: groupArticleDetail.userName,
       profileImage: groupArticleDetail.userProfileImage,
     };
     res.category = groupArticleDetail.groupCategoryName;
-    res.thumbnail = imageService.getStorageUrl([
-      groupArticleDetail.thumbnail,
-    ])[0];
+    res.thumbnail = groupArticleDetail.thumbnail;
     res.status = groupArticleDetail.status;
     res.location = groupArticleDetail.location;
     res.commentCount = groupArticleDetail.commentCount;

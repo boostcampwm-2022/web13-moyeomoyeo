@@ -9,12 +9,10 @@ import { AppConfigService } from '@config/app/config.service';
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
   constructor(
     private readonly mysqlConfigService: MysqlConfigService,
-    private readonly appConfigServce: AppConfigService,
+    private readonly appConfigService: AppConfigService,
   ) {}
 
-  createTypeOrmOptions(
-    connectionName?: string,
-  ): Promise<TypeOrmModuleOptions> | TypeOrmModuleOptions {
+  createTypeOrmOptions(): Promise<TypeOrmModuleOptions> | TypeOrmModuleOptions {
     const entityPath = path.resolve(
       __dirname,
       '../../../../**/*.entity.{js,ts}',
@@ -22,18 +20,20 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
 
     return {
       type: 'mysql',
-      name: connectionName,
       host: this.mysqlConfigService.hostname,
       username: this.mysqlConfigService.username,
       password: this.mysqlConfigService.password,
       database: this.mysqlConfigService.database,
       port: this.mysqlConfigService.port,
-      synchronize: !this.appConfigServce.isPrduction(),
-      logging: this.appConfigServce.isDevelopment() ? 'all' : ['error', 'warn'],
+      synchronize: !this.appConfigService.isPrduction(),
+      logging: this.appConfigService.isDevelopment()
+        ? 'all'
+        : ['error', 'warn'],
       entities: [entityPath],
-      dropSchema: this.appConfigServce.isTest(),
+      dropSchema: this.appConfigService.isTest(),
       namingStrategy: new SnakeNamingStrategy(),
       timezone: 'Z',
+      poolSize: 50,
     };
   }
 }

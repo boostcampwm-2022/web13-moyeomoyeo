@@ -1,14 +1,16 @@
-import { useState } from 'react';
+import Link from 'next/link';
+import { useMemo, useState } from 'react';
 
 import { useQueryClient } from '@tanstack/react-query';
 
 import { useTheme } from '@emotion/react';
 import styled from '@emotion/styled';
-import { Checkbox, Select } from '@mantine/core';
+import { Checkbox } from '@mantine/core';
 import { IconRefresh } from '@tabler/icons';
 
-import ArticleList from '@components/article/ArticleList';
-import ApiErrorBoundary from '@components/common/ErrorBoundary/ApiErrorBoundary';
+import DropDown from '@components/common/DropDown';
+import EmptyMessage from '@components/common/EmptyMessage';
+import GroupArticleCard from '@components/common/GroupArticleCard';
 import Header from '@components/common/Header';
 import RootTitle from '@components/common/Header/RootTitle';
 import UserLoginItem from '@components/common/Header/UserLoginItem';
@@ -17,6 +19,8 @@ import PageLayout from '@components/common/PageLayout';
 import { Category, CategoryKr } from '@constants/category';
 import { Location, LocationKr } from '@constants/location';
 import { PAGE_TITLE } from '@constants/pageTitle';
+import useFetchGroupArticles from '@hooks/queries/useFetchGroupArticles';
+import useIntersect from '@hooks/useIntersect';
 
 const Main = () => {
   const {
@@ -26,6 +30,20 @@ const Main = () => {
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
   const [progressChecked, setProgressChecked] = useState<boolean>(false);
+
+  const { data, fetchNextPage, hasNextPage, isFetching } = useFetchGroupArticles(
+    selectedCategory,
+    selectedLocation,
+    progressChecked
+  );
+  const ref = useIntersect((entry, observer) => {
+    observer.unobserve(entry.target);
+    if (hasNextPage && !isFetching) {
+      void fetchNextPage();
+    }
+  });
+
+  const articles = useMemo(() => (data ? data.pages.flatMap(({ data }) => data) : []), [data]);
 
   const refreshArticleList = () => {
     void queryClient.resetQueries(['articles']);
@@ -46,7 +64,7 @@ const Main = () => {
     >
       <ContentWrapper>
         <FilterWrapper>
-          <StyledSelect
+          <DropDown
             label="카테고리"
             data={[
               { value: null, label: '전체' },
@@ -60,7 +78,7 @@ const Main = () => {
             size="md"
             maxDropdownHeight={200}
           />
-          <StyledSelect
+          <DropDown
             label="장소"
             data={[
               { value: null, label: '전체' },
@@ -86,30 +104,26 @@ const Main = () => {
             <IconRefresh color={gray[6]} onClick={refreshArticleList} />
           </RefreshButton>
         </RefreshWrapper>
-        <ApiErrorBoundary>
-          <ArticleList />
-        </ApiErrorBoundary>
+        {articles.length > 0 ? (
+          <ListWrapper>
+            {articles.map((article) => (
+              <Link key={article.id} href={`/article/${article.id}`}>
+                <CardLink key={article.id}>
+                  <GroupArticleCard article={article} />
+                </CardLink>
+              </Link>
+            ))}
+            <div ref={ref}></div>
+          </ListWrapper>
+        ) : (
+          <EmptyMessage target="article" large />
+        )}
       </ContentWrapper>
     </PageLayout>
   );
 };
 
 export default Main;
-
-// TODO 공통 Dropdown 컴포넌트로 변경
-const StyledSelect = styled(Select)`
-  width: 100%;
-  & .mantine-Select-item {
-    padding: 1.2rem 1.6rem;
-    &[data-selected] {
-      &,
-      &:hover {
-        background-color: ${({ theme }) => theme.colors.indigo[0]};
-        color: ${({ theme }) => theme.colors.indigo[7]};
-      }
-    }
-  }
-`;
 
 const ContentWrapper = styled.div`
   flex: 1;
@@ -136,4 +150,14 @@ const RefreshButton = styled.button`
   &:hover {
     cursor: pointer;
   }
+`;
+
+const ListWrapper = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 1.3rem;
+`;
+
+const CardLink = styled.div`
+  overflow: auto;
 `;

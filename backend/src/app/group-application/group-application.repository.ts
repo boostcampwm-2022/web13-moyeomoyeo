@@ -89,4 +89,24 @@ export class GroupApplicationRepository extends Repository<GroupApplication> {
       .groupBy('group.id')
       .getRawMany<IMyGroupResult>();
   }
+
+  findAllApplicationByGroupWithUser(groupId: number) {
+    return this.find({
+      relations: {
+        user: true,
+      },
+      where: {
+        groupId,
+        status: GROUP_APPLICATION_STATUS.REGISTER,
+      },
+    });
+  }
+
+  findGroupApplications(groupArticle: GroupArticle) {
+    return this.findBy({
+      groupId: groupArticle.group.id,
+      status: GROUP_APPLICATION_STATUS.REGISTER,
+      deletedAt: IsNull(),
+    });
+  }
 }

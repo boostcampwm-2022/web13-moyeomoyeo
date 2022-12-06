@@ -10,22 +10,24 @@ import { GroupArticle } from '@app/group-article/entity/group-article.entity';
 import { User } from '@app/user/entity/user.entity';
 import { Group } from '@app/group-article/entity/group.entity';
 import { ApplicationNotFoundException } from '@app/group-application/exception/application-not-found.exception';
+import { UserInfo } from '@app/group-application/dto/user-info.dto';
+import { ApplicationWithUserInfoResponse } from '@src/app/group-application/dto/application-with-user-info-response.dto';
 
 @Injectable()
 export class GroupApplicationService {
   constructor(
     private readonly groupApplicationRepository: GroupApplicationRepository,
-    private readonly groupArticleRespository: GroupArticleRepository,
+    private readonly groupArticleRepository: GroupArticleRepository,
   ) {}
 
   private async getGroupApplicationContext(user: User, groupArticleId: number) {
-    const groupArticle = await this.groupArticleRespository.findById(
+    const groupArticle = await this.groupArticleRepository.findById(
       groupArticleId,
     );
+    await this.validateGroupArticle(groupArticle);
+
     const group = groupArticle.group;
     const application = await this.findGroupApplication(user, group);
-
-    await this.validateGroupArticle(groupArticle);
 
     return {
       groupArticle,
@@ -57,7 +59,6 @@ export class GroupApplicationService {
     if (!groupArticle) {
       throw new GroupNotFoundException();
     }
-    return groupArticle;
   }
 
   private validateUserTarget(currentUser: User, groupArticle: GroupArticle) {
@@ -122,5 +123,33 @@ export class GroupApplicationService {
       user.id,
     );
     return { result, count };
+  }
+
+  async getAllParticipants(user: User, groupArticleId: number) {
+    const { group } = await this.getGroupApplicationContext(
+      user,
+      groupArticleId,
+    );
+
+    return this.getApplicationWithUserInfo(group);
+  }
+
+  private async getApplicationWithUserInfo(group: Group) {
+    const allApplication =
+      await this.groupApplicationRepository.findAllApplicationByGroupWithUser(
+        group.id,
+      );
+
+    const applicationWithUserInfoList = allApplication.map(
+      async (application) => {
+        const user = await application.user;
+        return ApplicationWithUserInfoResponse.from(
+          UserInfo.from(user),
+          application,
+        );
+      },
+    );
+
+    return Promise.all(applicationWithUserInfoList);
   }
 }

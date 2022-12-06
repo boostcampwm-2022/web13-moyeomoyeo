@@ -1,4 +1,12 @@
-import { Body, Controller, Get, HttpStatus, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpStatus,
+  ParseIntPipe,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { GroupApplicationService } from '@app/group-application/group-application.service';
 import { GroupApplicationRequest } from '@src/app/group-application/dto/group-application-request.dto';
 import { ApiSuccessResponse } from '@src/common/decorator/api-success-resposne.decorator';
@@ -16,6 +24,7 @@ import { CheckJoiningGroupResonse } from '@app/group-application/dto/check-joini
 import { ApplicationNotFoundException } from '@app/group-application/exception/application-not-found.exception';
 import { MyGroupResponse } from '@app/group-application/dto/my-group-response.dto';
 import { MyGroupRequest } from '@app/group-application/dto/my-group-request.dto';
+import { ApplicationWithUserInfoResponse } from '@app/group-application/dto/application-with-user-info-response.dto';
 
 @Controller('group-applications')
 @JwtAuth()
@@ -45,19 +54,34 @@ export class GroupApplicationController {
     return ResponseEntity.CREATED_WITH_DATA(data);
   }
 
-  @Post('/status')
+  @Get('/status')
   @ApiSuccessResponse(HttpStatus.OK, CheckJoiningGroupResonse)
   @ApiErrorResponse(GroupNotFoundException)
   async checkJoinedGroup(
     @CurrentUser() user: User,
-    @Body() groupApplicationRequest: GroupApplicationRequest,
+    @Query('groupArticleId', ParseIntPipe) groupArticleId: number,
   ) {
-    const groupArticleId = groupApplicationRequest.groupArticleId;
     const isJoined = await this.groupApplicationService.checkJoinedGroup(
       user,
       groupArticleId,
     );
     const data = CheckJoiningGroupResonse.from(isJoined);
+    return ResponseEntity.OK_WITH_DATA(data);
+  }
+
+  @Get('participants')
+  @ApiSuccessResponse(HttpStatus.OK, ApplicationWithUserInfoResponse, {
+    isArray: true,
+  })
+  @ApiErrorResponse(GroupNotFoundException)
+  async getAllParticipants(
+    @CurrentUser() user: User,
+    @Query('groupArticleId', ParseIntPipe) groupArticleId: number,
+  ) {
+    const data = await this.groupApplicationService.getAllParticipants(
+      user,
+      groupArticleId,
+    );
     return ResponseEntity.OK_WITH_DATA(data);
   }
 

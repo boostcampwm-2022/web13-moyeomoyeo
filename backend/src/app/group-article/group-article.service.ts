@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { IsNull } from 'typeorm';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { DataSource, IsNull } from 'typeorm';
 import { GroupArticleRegisterRequest } from '@app/group-article/dto/group-article-register-request.dto';
 import { GroupArticle } from '@app/group-article/entity/group-article.entity';
 import { GroupCategoryNotFoundException } from '@src/app/group-article/exception/group-category-not-found.exception';
@@ -8,12 +9,23 @@ import { GroupArticleRepository } from '@app/group-article/repository/group-arti
 import { User } from '@app/user/entity/user.entity';
 import { GroupArticleNotFoundException } from '@app/group-article/exception/group-article-not-found.exception';
 import { UpdateGroupArticleRequest } from '@app/group-article/dto/update-group-article-request.dto';
+import { GroupApplication } from '@app/group-application/entity/group-application.entity';
+import {
+  GROUP_APPLICATION_STATUS,
+  GROUP_STATUS,
+} from '@app/group-article/constants/group-article.constants';
+import { NotParticipantException } from '@app/group-article/exception/not-participant.exception';
+import { NotSuccessGroupException } from '@app/group-article/exception/not-success-group.exception';
+import { GroupSucceedEvent } from '@app/notification/event/group-succeed.event';
+import { GroupFailedEvent } from '@app/notification/event/group-failed.event';
 
 @Injectable()
 export class GroupArticleService {
   constructor(
     private readonly groupArticleRepository: GroupArticleRepository,
     private readonly groupCategoryRepository: GroupCategoryRepository,
+    private readonly dataSource: DataSource,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   async registerGroupArticle(
@@ -38,7 +50,10 @@ export class GroupArticleService {
       category,
     });
 
-    await this.groupArticleRepository.save(groupArticle);
+    await this.dataSource.transaction(async (em) => {
+      await em.save(groupArticle);
+      await em.save(GroupApplication.create(user, groupArticle.group));
+    });
 
     return groupArticle;
   }
@@ -71,7 +86,10 @@ export class GroupArticleService {
 
     await this.groupArticleRepository.save(groupArticle, { reload: false });
 
-    // TODO: 알림 추가 및 알림 발송
+    this.eventEmitter.emit(
+      'group.succeed',
+      new GroupSucceedEvent(groupArticle),
+    );
   }
 
   async cancel(user: User, id: number) {
@@ -88,7 +106,7 @@ export class GroupArticleService {
 
     await this.groupArticleRepository.save(groupArticle, { reload: false });
 
-    // TODO: 알림 추가 및 알림 발송
+    this.eventEmitter.emit('group.failed', new GroupFailedEvent(groupArticle));
   }
 
   async getDetailById(id: number) {
@@ -124,5 +142,34 @@ export class GroupArticleService {
     });
 
     await this.groupArticleRepository.save(groupArticle, { reload: false });
+  }
+
+  async getChatUrl(user: User, id: number) {
+    const groupArticle = await this.groupArticleRepository.findOneBy({
+      id,
+      deletedAt: IsNull(),
+    });
+
+    if (!groupArticle) {
+      throw new GroupArticleNotFoundException();
+    }
+
+    if (groupArticle.group.status !== GROUP_STATUS.SUCCEED) {
+      throw new NotSuccessGroupException();
+    }
+
+    const groupApplication = await this.dataSource
+      .getRepository(GroupApplication)
+      .findOneBy({
+        userId: user.id,
+        groupId: groupArticle.group.id,
+        status: GROUP_APPLICATION_STATUS.REGISTER,
+      });
+
+    if (!groupApplication) {
+      throw new NotParticipantException();
+    }
+
+    return groupArticle.group.chatUrl;
   }
 }

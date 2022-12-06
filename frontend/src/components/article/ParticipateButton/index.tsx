@@ -7,22 +7,25 @@ import { ParticipateButtonStatus } from '@constants/participateButton';
 
 interface Props {
   status: ParticipateButtonStatus;
+  groupArticleId: number;
   chatRoomLink?: string;
 }
 
-const ParticipateButton = ({ status, chatRoomLink = '' }: Props) => {
-  return (
-    <>
-      {status === ParticipateButtonStatus.APPLY && <ApplyButton />}
-      {status === ParticipateButtonStatus.CANCEL && <CancelButton />}
-      {status === ParticipateButtonStatus.CLOSED && (
+const ParticipateButton = ({ status, groupArticleId, chatRoomLink = '' }: Props) => {
+  switch (status) {
+    case ParticipateButtonStatus.APPLY:
+      return <ApplyButton groupArticleId={groupArticleId} />;
+    case ParticipateButtonStatus.CANCEL:
+      return <CancelButton groupArticleId={groupArticleId} />;
+    case ParticipateButtonStatus.CLOSED:
+      return (
         <Button size="md" disabled fullWidth>
           모집 마감
         </Button>
-      )}
-      {status === ParticipateButtonStatus.LINK && <ChatLinkButton chatLink={chatRoomLink} />}
-    </>
-  );
+      );
+    case ParticipateButtonStatus.LINK:
+      return <ChatLinkButton chatLink={chatRoomLink} />;
+  }
 };
 
 export default ParticipateButton;

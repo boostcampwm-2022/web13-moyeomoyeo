@@ -25,7 +25,6 @@ import { GroupArticleRepository } from '@app/group-article/repository/group-arti
 import { SearchGroupArticlesRequest } from '@app/group-article/dto/search-group-articles-request.dto';
 import { SearchGroupArticleResponse } from '@app/group-article/dto/search-group-articles-response.dto';
 import { GroupArticleSearchResult } from '@app/group-article/dto/group-article-search-result.dto';
-import { ImageService } from '@app/image/image.service';
 import { CurrentUser } from '@decorator/current-user.decorator';
 import { User } from '@app/user/entity/user.entity';
 import { GetGroupArticleDetailResponse } from '@app/group-article/dto/get-group-article-detail-response.dto';
@@ -34,6 +33,10 @@ import { NotAuthorException } from '@app/group-article/exception/not-author.exce
 import { NotProgressGroupException } from '@app/group-article/exception/not-progress-group.exception';
 import { IsNull } from 'typeorm';
 import { UpdateGroupArticleRequest } from '@app/group-article/dto/update-group-article-request.dto';
+import { NotSuccessGroupException } from '@app/group-article/exception/not-success-group.exception';
+import { NotParticipantException } from '@app/group-article/exception/not-participant.exception';
+import { GetGroupChatUrlResponseDto } from '@app/group-article/dto/get-group-chat-url-response.dto';
+import { PageRequest } from '@common/util/page-request';
 
 @Controller('group-articles')
 @ApiTags('Group-Article')
@@ -42,7 +45,6 @@ export class GroupArticleController {
     private readonly groupArticleService: GroupArticleService,
     private readonly groupCategoryRepository: GroupCategoryRepository,
     private readonly groupArticleRepository: GroupArticleRepository,
-    private readonly imageService: ImageService,
   ) {}
 
   @Post('/')
@@ -120,16 +122,43 @@ export class GroupArticleController {
   @Get('search')
   @ApiSuccessResponse(HttpStatus.OK, SearchGroupArticleResponse)
   async search(@Query() query: SearchGroupArticlesRequest) {
-    const result = await this.groupArticleRepository.search(query);
+    const result = await this.groupArticleRepository.search({
+      limit: query.getLimit(),
+      offset: query.getOffset(),
+      location: query.location,
+      category: query.category,
+      status: query.status,
+    });
 
     return ResponseEntity.OK_WITH_DATA(
       new SearchGroupArticleResponse(
         result[1],
         query.currentPage,
         query.countPerPage,
-        result[0].map((row) =>
-          GroupArticleSearchResult.from(row, this.imageService),
-        ),
+        result[0].map((row) => GroupArticleSearchResult.from(row)),
+      ),
+    );
+  }
+
+  @Get('me')
+  @JwtAuth()
+  @ApiSuccessResponse(HttpStatus.OK, SearchGroupArticleResponse)
+  async getMyGroupArticles(
+    @CurrentUser() user: User,
+    @Query() query: PageRequest,
+  ) {
+    const result = await this.groupArticleRepository.search({
+      limit: query.getLimit(),
+      offset: query.getOffset(),
+      user,
+    });
+
+    return ResponseEntity.OK_WITH_DATA(
+      new SearchGroupArticleResponse(
+        result[1],
+        query.currentPage,
+        query.countPerPage,
+        result[0].map((row) => GroupArticleSearchResult.from(row)),
       ),
     );
   }
@@ -142,7 +171,26 @@ export class GroupArticleController {
     const groupArticleDetail = await this.groupArticleService.getDetailById(id);
 
     return ResponseEntity.OK_WITH_DATA(
-      GetGroupArticleDetailResponse.from(groupArticleDetail, this.imageService),
+      GetGroupArticleDetailResponse.from(groupArticleDetail),
+    );
+  }
+
+  @Get(':id/chat-url')
+  @JwtAuth()
+  @ApiSuccessResponse(HttpStatus.OK, GetGroupChatUrlResponseDto)
+  @ApiErrorResponse(
+    GroupArticleNotFoundException,
+    NotSuccessGroupException,
+    NotParticipantException,
+  )
+  async getChatUrl(
+    @CurrentUser() user: User,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    const groupChatUrl = await this.groupArticleService.getChatUrl(user, id);
+
+    return ResponseEntity.OK_WITH_DATA(
+      GetGroupChatUrlResponseDto.from(groupChatUrl),
     );
   }
 
