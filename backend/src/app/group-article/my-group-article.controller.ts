@@ -48,7 +48,9 @@ export class MyGroupArticleController {
         result[1],
         query.currentPage,
         query.countPerPage,
-        result[0].map((row) => GroupArticleSearchResult.from(row)),
+        await Promise.all(
+          result[0].map((row) => GroupArticleSearchResult.from(row)),
+        ),
       ),
     );
   }
