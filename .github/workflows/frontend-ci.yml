@@ -184,7 +184,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          msg: ${{ steps.format_lighthouse_score.outputs.comments }}
+          message: ${{ steps.format_lighthouse_score.outputs.comments }}
+          reactions: rocket
 
   slack-notifications:
     needs: [checking, lhci, storybook]
