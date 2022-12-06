@@ -24,25 +24,13 @@ interface ArticleType extends ArticlePreviewType {
   author: Partial<UserType>;
 }
 
-interface MyArticleType {
-  id: number;
-  title: string;
-  contents: string;
-  location: Location;
-  category: Category;
-  thumbnail: string;
-  maxCapacity: number;
-  status: ArticleStatus;
-  createdAt: string;
+interface MyArticleType
+  extends Omit<ArticleType, 'commentCount' | 'scrapCount' | 'currentCapacity' | 'author'> {
   chatUrl: string;
 }
 
-interface ArticlePostInputType {
-  title: string;
-  contents: string;
-  thumbnail: string;
-  chatUrl: string;
-}
+interface ArticlePostInputType
+  extends Pick<MyArticleType, 'title' | 'contents' | 'thumbnail' | 'chatUrl'> {}
 
 interface CommentType {
   id: number;
