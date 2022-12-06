@@ -98,5 +98,6 @@ export class GroupArticleResponse {
     response.currentCapacity = Number(myGroup.currentCapacity);
     response.status = myGroup.status;
     response.createdAt = myGroup.createdAt;
+    return response;
   }
 }

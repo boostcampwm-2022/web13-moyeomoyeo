@@ -13,6 +13,7 @@ import { ApplicationNotFoundException } from '@app/group-application/exception/a
 import { UserInfo } from '@app/group-application/dto/user-info.dto';
 import { ApplicationWithUserInfoResponse } from '@app/group-application/dto/application-with-user-info-response.dto';
 import { NotAuthorException } from '@app/group-application/exception/not-author.exception';
+import { GroupArticleResponse } from '@app/group-application/dto/group-article-response.dto';
 
 @Injectable()
 export class GroupApplicationService {
@@ -127,10 +128,11 @@ export class GroupApplicationService {
       limit,
       offset,
     });
+    const response = result.map((value) => GroupArticleResponse.from(value));
     const count = await this.groupApplicationRepository.findMyGroupCount(
       user.id,
     );
-    return { result, count };
+    return { response, count };
   }
 
   async getAllParticipants(user: User, groupArticleId: number) {
