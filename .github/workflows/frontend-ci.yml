@@ -180,7 +180,7 @@ jobs:
             core.setOutput('comments', comments)
 
       - name: comment PR
-        uses: unsplash/comment-on-pr@v1.3.0
+        uses: thollander/actions-comment-pull-request@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
