@@ -57,7 +57,6 @@ const WritePage = () => {
     if (!possibleToSubmit) return;
     try {
       await clientAxios.post('/v1/group-articles', articleInput);
-      // TODO : mutation 로직 추가?
       showToast({
         title: '게시글 등록 완료!',
         message: '이제 모집 완료 되기를 기다려주세요!',

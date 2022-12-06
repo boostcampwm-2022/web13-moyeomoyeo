@@ -1,5 +1,3 @@
-import Image from 'next/image';
-
 import ArticleTag from '@components/common/ArticleTag';
 import {
   CapacityText,
@@ -11,6 +9,7 @@ import {
   TagWrapper,
   TitleText,
 } from '@components/common/GroupArticleCard/styles';
+import Image from '@components/common/Image';
 import StatCounter from '@components/common/StatCounter';
 import { ArticleStatus, ArticleStatusKr } from '@constants/article';
 import { CategoryKr } from '@constants/category';
@@ -32,7 +31,7 @@ const GroupArticleCard = ({ article }: Props) => {
       )}
       <ImageWrapper>
         <Image
-          src={article.thumbnail}
+          src={article.thumbnail.originUrl}
           alt={'thumbnail-image'}
           layout="fill"
           objectFit="cover"

@@ -20,7 +20,7 @@ interface ArticleResponseType {
 const getMyWriteArticles = async (currentPage: number) => {
   const {
     data: { data },
-  } = await clientAxios.get<ArticleResponseType>('/v1/group-articles/me', {
+  } = await clientAxios.get<ArticleResponseType>('/v1/my-group-articles', {
     params: { currentPage, countPerPage: 6 },
   });
   return data;

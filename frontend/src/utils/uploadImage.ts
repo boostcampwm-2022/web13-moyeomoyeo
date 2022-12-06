@@ -1,9 +1,23 @@
+import imageCompression from 'browser-image-compression';
+
 import { ImageUploadType } from '@typings/types';
 import { clientAxios } from '@utils/commonAxios';
 
+const compressImage = async (file: File) => {
+  const options = {
+    maxSizeMB: 1,
+    maxWidthOrHeight: 1920,
+    useWebWorker: true,
+  };
+  const compressedBlob = await imageCompression(file, options);
+  return new File([compressedBlob], file.name);
+};
+
 const uploadImage = async (file: File) => {
   const formData = new FormData();
-  formData.append('files', file);
+  const compressedImage = await compressImage(file);
+  formData.append('files', compressedImage);
+
   const {
     data: {
       data: { 0: imageData },

@@ -5,6 +5,11 @@ import { Category } from '@constants/category';
 import { Location } from '@constants/location';
 import { Notification } from '@constants/notification';
 
+interface ArticleThumbnail {
+  originUrl: string;
+  blurUrl: string;
+}
+
 interface ArticlePreviewType {
   id: number;
   title: string;
@@ -12,7 +17,7 @@ interface ArticlePreviewType {
   category: Category;
   commentCount: number;
   scrapCount: number;
-  thumbnail: string;
+  thumbnail: ArticleThumbnail;
   maxCapacity: number;
   currentCapacity: number;
   status: ArticleStatus;
@@ -25,12 +30,17 @@ interface ArticleType extends ArticlePreviewType {
 }
 
 interface MyArticleType
-  extends Omit<ArticleType, 'commentCount' | 'scrapCount' | 'currentCapacity' | 'author'> {
+  extends Omit<
+    ArticleType,
+    'commentCount' | 'scrapCount' | 'currentCapacity' | 'author' | 'thumbnail'
+  > {
   chatUrl: string;
+  thumbnail: string;
 }
 
-interface ArticlePostInputType
-  extends Pick<MyArticleType, 'title' | 'contents' | 'thumbnail' | 'chatUrl'> {}
+interface ArticlePostInputType extends Pick<MyArticleType, 'title' | 'contents' | 'chatUrl'> {
+  thumbnail: string;
+}
 
 interface CommentType {
   id: number;

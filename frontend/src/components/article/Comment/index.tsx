@@ -1,5 +1,6 @@
-import { Avatar, Text } from '@mantine/core';
+import { Text } from '@mantine/core';
 
+import Avatar from '@components/common/Avatar';
 import { CommentType as CommentItem } from '@typings/types';
 import dateTimeFormat from '@utils/dateTime';
 
@@ -37,7 +38,7 @@ const Comment = ({ comment = mockComment }: Props) => {
     <CommentWrapper>
       <CommentHeader>
         <CommentAuthor>
-          <Avatar size="sm" src={comment.authorProfileImage} alt={comment.authorName} radius="xl" />
+          <Avatar size="sm" src={comment.authorProfileImage} alt={comment.authorName} />
           <Text fz="md" fw={500}>
             {comment.authorName}
           </Text>

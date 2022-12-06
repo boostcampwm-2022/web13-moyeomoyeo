@@ -11,7 +11,10 @@ const dummyArticlePreview: ArticlePreviewType = {
   category: Category.STUDY,
   commentCount: 31,
   scrapCount: 12,
-  thumbnail: 'https://avatars.githubusercontent.com/u/90585081?v=4',
+  thumbnail: {
+    originUrl: 'https://avatars.githubusercontent.com/u/90585081?v=4',
+    blurUrl: 'https://avatars.githubusercontent.com/u/90585081?v=4',
+  },
   maxCapacity: 5,
   currentCapacity: 3,
   status: ArticleStatus.PROGRESS,
@@ -31,7 +34,10 @@ const dummyArticle: ArticleType = {
   },
   commentCount: 31,
   scrapCount: 12,
-  thumbnail: 'https://avatars.githubusercontent.com/u/90585081?v=4',
+  thumbnail: {
+    originUrl: 'https://avatars.githubusercontent.com/u/90585081?v=4',
+    blurUrl: 'https://avatars.githubusercontent.com/u/90585081?v=4',
+  },
   maxCapacity: 5,
   currentCapacity: 3,
   status: ArticleStatus.PROGRESS,

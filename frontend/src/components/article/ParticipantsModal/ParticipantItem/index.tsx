@@ -1,8 +1,8 @@
 import { useTheme } from '@emotion/react';
 import styled from '@emotion/styled';
-import { Avatar } from '@mantine/core';
 import { IconExternalLink } from '@tabler/icons';
 
+import Avatar from '@components/common/Avatar';
 import { UserType } from '@typings/types';
 
 interface Props {
@@ -18,7 +18,7 @@ const ParticipantItem = ({ participant }: Props) => {
   return (
     <ItemWrapper>
       <ProfileWrapper>
-        <Avatar radius="xl" size="md" alt="avatar" src={profileImage} />
+        <Avatar size="md" alt={participant.userName} src={profileImage} />
         <ProfileTextWrapper>
           <Name>{userName}</Name>
           <IntroduceText>{description}</IntroduceText>
