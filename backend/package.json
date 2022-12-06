@@ -44,6 +44,7 @@
     "mysql2": "^2.3.3",
     "passport": "^0.6.0",
     "passport-github": "^1.1.0",
+    "plaiceholder": "^2.5.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
