@@ -21,7 +21,7 @@ export interface IMyGroupResult {
 
   maxCapacity: number;
 
-  currentCapacity: number;
+  currentCapacity: string;
 
   status: GROUP_STATUS;
 

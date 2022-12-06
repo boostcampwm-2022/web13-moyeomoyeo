@@ -95,7 +95,7 @@ export class GroupArticleResponse {
     response.scrapCount = myGroup.scrapCount;
     response.thumbnail = myGroup.thumbnail;
     response.maxCapacity = myGroup.maxCapacity;
-    response.currentCapacity = myGroup.currentCapacity;
+    response.currentCapacity = Number(myGroup.currentCapacity);
     response.status = myGroup.status;
     response.createdAt = myGroup.createdAt;
   }
