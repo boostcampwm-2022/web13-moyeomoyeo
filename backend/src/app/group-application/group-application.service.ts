@@ -25,7 +25,7 @@ export class GroupApplicationService {
     const groupArticle = await this.groupArticleRepository.findById(
       groupArticleId,
     );
-    await this.validateGroupArticle(groupArticle);
+    this.validateGroupArticle(groupArticle);
 
     const group = groupArticle.group;
     const application = await this.findGroupApplication(user, group);
@@ -37,7 +37,7 @@ export class GroupApplicationService {
     };
   }
 
-  private async findGroupApplication(user: User, group: Group) {
+  private findGroupApplication(user: User, group: Group) {
     return this.groupApplicationRepository.findByUserIdAndGroupIdAndStatus(
       user.id,
       group.id,
@@ -56,7 +56,7 @@ export class GroupApplicationService {
     return this.groupApplicationRepository.save(groupApplication);
   }
 
-  private async validateGroupArticle(groupArticle: GroupArticle) {
+  private validateGroupArticle(groupArticle: GroupArticle) {
     if (!groupArticle) {
       throw new GroupNotFoundException();
     }
