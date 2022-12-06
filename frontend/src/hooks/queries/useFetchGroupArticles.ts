@@ -1,50 +1,54 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
-import { AxiosError, AxiosResponse } from 'axios';
+import { AxiosError } from 'axios';
 
-import getGroupArticles from '@apis/group-articles/getGroupArticles';
-import AuthError from '@components/common/ErrorBoundary/AuthError';
+import { ArticleStatus } from '@constants/article';
 import { Category } from '@constants/category';
 import { Location } from '@constants/location';
-import { ArticlePreviewType, ArticleType } from '@typings/types';
+import useAuthInfiniteQuery from '@hooks/useAuthInfiniteQuery';
+import { ArticlePreviewType } from '@typings/types';
+import { clientAxios } from '@utils/commonAxios';
 
+interface ArticlePagingData {
+  totalPage: number;
+  currentPage: number;
+  countPerPage: number;
+  data: ArticlePreviewType[];
+}
 interface ArticleResponseType {
   status: string;
   message: string;
-  data: {
-    totalPage: number;
-    currentPage: number;
-    countPerPage: number;
-    data: ArticlePreviewType[];
-  };
+  data: ArticlePagingData;
 }
+
+const getGroupArticles = async (
+  currentPage: number,
+  category: Category,
+  location: Location,
+  filterProgress: boolean
+) => {
+  const status = filterProgress ? ArticleStatus.PROGRESS : null;
+  const {
+    data: { data },
+  } = await clientAxios<ArticleResponseType>('/v1/group-articles/search', {
+    params: { category, location, status, currentPage, countPerPage: 5 },
+  });
+  return data;
+};
 
 const useFetchGroupArticles = (
   category: Category | null,
   location: Location | null,
   filterProgress: boolean
 ) => {
-  const { data, fetchNextPage, hasNextPage, isFetching, error } = useInfiniteQuery<
-    AxiosResponse<ArticleResponseType>,
-    AxiosError,
-    ArticleType[]
-  >(
+  const queryResult = useAuthInfiniteQuery<ArticlePagingData, AxiosError, ArticlePagingData>(
     ['articles', category, location, filterProgress],
     ({ pageParam = 1 }) => getGroupArticles(pageParam, category, location, filterProgress),
     {
-      getNextPageParam: (lastPage: AxiosResponse<ArticleResponseType>) =>
-        lastPage.data.data.totalPage === lastPage.data.data.currentPage
-          ? undefined
-          : lastPage.data.data.currentPage + 1,
+      getNextPageParam: (lastPage) =>
+        lastPage.totalPage === lastPage.currentPage ? undefined : lastPage.currentPage + 1,
     }
   );
 
-  if (error) {
-    if (error.response && error.response.status === 401) {
-      throw new AuthError();
-    }
-    throw error;
-  }
-  return { data, fetchNextPage, hasNextPage, isFetching };
+  return { ...queryResult };
 };
 
 export default useFetchGroupArticles;

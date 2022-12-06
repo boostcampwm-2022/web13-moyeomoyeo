@@ -1,13 +1,13 @@
 import { useCallback, useState } from 'react';
 
-import { AxiosError } from 'axios';
+import RequestError from '@utils/errors/RequestError';
 
 const useAsyncError = () => {
   const [, setError] = useState();
   return useCallback(
     (msg: string) => {
       setError(() => {
-        throw new AxiosError(msg);
+        throw new RequestError(msg);
       });
     },
     [setError]

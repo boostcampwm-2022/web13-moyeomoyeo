@@ -19,7 +19,7 @@ export class GetGroupArticleDetailResponse {
     example: `안녕하세요. 서울 지역 CS 스터디원들을 모집합니다!\\n<img width="1440" alt="서울 지역 CS 모집 사진자료" src="https://kr.object.ncloudstorage.com/moyeo-images/uploads/images/1669282011949-761671c7-cc43-4cee-bcb5-4bf3fea9478b.png">`,
     description: '게시글 제목',
   })
-  content: string;
+  contents: string;
 
   @ApiProperty()
   author: Author;
@@ -61,7 +61,7 @@ export class GetGroupArticleDetailResponse {
     const res = new GetGroupArticleDetailResponse();
     res.id = groupArticleDetail.id;
     res.title = groupArticleDetail.title;
-    res.content = groupArticleDetail.contents;
+    res.contents = groupArticleDetail.contents;
     res.author = {
       id: groupArticleDetail.userId,
       userName: groupArticleDetail.userName,

@@ -43,7 +43,7 @@ const My = () => {
           </Link>
         </ProfileWrapper>
         <LinkButtonWrapper>
-          <Link href="/my/participate">
+          <Link href="/my/write">
             <LinkButton>
               <WroteIcon>
                 <IconPencil width={14} height={14} color={red[7]} />

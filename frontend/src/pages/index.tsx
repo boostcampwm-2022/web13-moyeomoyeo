@@ -21,7 +21,6 @@ import { Location, LocationKr } from '@constants/location';
 import { PAGE_TITLE } from '@constants/pageTitle';
 import useFetchGroupArticles from '@hooks/queries/useFetchGroupArticles';
 import useIntersect from '@hooks/useIntersect';
-import { ArticleType } from '@typings/types';
 
 const Main = () => {
   const {
@@ -44,11 +43,7 @@ const Main = () => {
     }
   });
 
-  const articles: ArticleType[] = useMemo(
-    // @ts-expect-error
-    () => (data ? data.pages.flatMap(({ data }) => data.data.data) : []),
-    [data]
-  );
+  const articles = useMemo(() => (data ? data.pages.flatMap(({ data }) => data) : []), [data]);
 
   const refreshArticleList = () => {
     void queryClient.resetQueries(['articles']);

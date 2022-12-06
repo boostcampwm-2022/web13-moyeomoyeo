@@ -1,10 +1,11 @@
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
 
 import useAuthQuery from '@hooks/useAuthQuery';
 import { UserType } from '@typings/types';
+import { clientAxios } from '@utils/commonAxios';
 
 const getUserProfile = async (id: number) => {
-  return axios.get(`${process.env.NEXT_PUBLIC_API_URL}/v1/users/${id}`, {
+  return clientAxios.get(`/v1/users/${id}`, {
     params: { id },
     withCredentials: true,
   });
