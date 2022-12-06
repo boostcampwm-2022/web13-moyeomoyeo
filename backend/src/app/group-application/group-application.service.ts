@@ -103,4 +103,24 @@ export class GroupApplicationService {
     application.cancel();
     await this.groupApplicationRepository.save(application);
   }
+
+  public async findMyGroup({
+    user,
+    limit,
+    offset,
+  }: {
+    user: User;
+    limit: number;
+    offset: number;
+  }) {
+    const result = await this.groupApplicationRepository.findMyGroup({
+      id: user.id,
+      limit,
+      offset,
+    });
+    const count = await this.groupApplicationRepository.findMyGroupCount(
+      user.id,
+    );
+    return { result, count };
+  }
 }
