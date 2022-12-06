@@ -49,7 +49,7 @@ export class GroupApplicationService {
       await this.getGroupApplicationContext(user, groupArticleId);
 
     this.validateUserTarget(user, groupArticle);
-    await this.validateRegisterForJoining(application);
+    this.validateRegisterForJoining(application);
 
     const groupApplication = GroupApplication.create(user, group);
     return this.groupApplicationRepository.save(groupApplication);
@@ -67,7 +67,7 @@ export class GroupApplicationService {
     }
   }
 
-  private async validateRegisterForJoining(application: GroupApplication) {
+  private validateRegisterForJoining(application: GroupApplication) {
     if (application) {
       throw new DuplicateApplicationException();
     }
@@ -89,12 +89,12 @@ export class GroupApplicationService {
     );
 
     this.validateUserTarget(user, groupArticle);
-    await this.validateRegisterForCanceling(application);
+    this.validateRegisterForCanceling(application);
 
     await this.deleteApplication(application);
   }
 
-  private async validateRegisterForCanceling(application: GroupApplication) {
+  private validateRegisterForCanceling(application: GroupApplication) {
     if (!application) {
       throw new ApplicationNotFoundException();
     }
