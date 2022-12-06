@@ -60,7 +60,7 @@ const ArticleDetail = () => {
               article &&
               myInfo &&
               article.author.id === myInfo.id && (
-                <MenuButton isInProgress={article.status === ArticleStatus.PROGRESS} />
+                <MenuButton isArticleInProgress={article.status === ArticleStatus.PROGRESS} />
               )
             }
           />

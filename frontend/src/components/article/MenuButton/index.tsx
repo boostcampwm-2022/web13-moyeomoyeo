@@ -14,10 +14,10 @@ import useClipboard from '@hooks/useClipboard';
 import { showToast } from '@utils/toast';
 
 interface Props {
-  isInProgress: boolean;
+  isArticleInProgress: boolean;
 }
 
-const MenuButton = ({ isInProgress }: Props) => {
+const MenuButton = ({ isArticleInProgress }: Props) => {
   const router = useRouter();
   const articleId = Number(router.query.id);
   const { mutate: deleteArticle } = useDeleteArticle();
@@ -85,7 +85,7 @@ const MenuButton = ({ isInProgress }: Props) => {
           <Menu.Item p="md" onClick={() => doCopy(window.location.href)}>
             <Text fz="md">URL 복사하기</Text>
           </Menu.Item>
-          {isInProgress && (
+          {isArticleInProgress && (
             <>
               <Menu.Item p="md" onClick={() => setCancelModalOpen(true)}>
                 <Text fz="md">모집 중단으로 변경</Text>
