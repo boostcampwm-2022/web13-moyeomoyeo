@@ -27,7 +27,6 @@ const getGroupArticles = async (
   const status = filterProgress ? ArticleStatus.PROGRESS : null;
   return clientAxios('/v1/group-articles/search', {
     params: { category, location, status, currentPage, countPerPage: 5 },
-    withCredentials: true,
   });
 };
 
