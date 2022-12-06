@@ -6,12 +6,12 @@ import ArticleEditor from '@components/article/ArticleEditor';
 import ImageThumbnail from '@components/article/ImageThumbnail';
 import TextInput from '@components/common/TextInput';
 import useAsyncError from '@hooks/useAsyncError';
-import { ArticlePostType } from '@typings/types';
+import { ArticlePostInputType } from '@typings/types';
 import uploadImage from '@utils/uploadImage';
 
 interface Props {
-  values: ArticlePostType;
-  onChange: (target: keyof ArticlePostType, value: string) => void;
+  values: ArticlePostInputType;
+  onChange: (target: keyof ArticlePostInputType, value: string) => void;
 }
 
 const ArticlePostInput = ({ values, onChange }: Props) => {

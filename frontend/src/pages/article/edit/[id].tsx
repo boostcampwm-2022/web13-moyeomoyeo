@@ -16,7 +16,7 @@ import { LocationKr } from '@constants/location';
 import { PAGE_TITLE } from '@constants/pageTitle';
 import useEditMyArticle from '@hooks/queries/useEditMyArticle';
 import useFetchMyArticle from '@hooks/queries/useFetchMyArticle';
-import { ArticlePostType } from '@typings/types';
+import { ArticlePostInputType } from '@typings/types';
 import { showToast } from '@utils/toast';
 
 const ArticleEdit = () => {
@@ -25,7 +25,7 @@ const ArticleEdit = () => {
 
   const { data: article } = useFetchMyArticle(articleId);
   const { mutate: editArticle } = useEditMyArticle();
-  const [articleInput, setArticleInput] = useState<ArticlePostType>({
+  const [articleInput, setArticleInput] = useState<ArticlePostInputType>({
     title: '',
     contents: '',
     chatUrl: '',
@@ -136,7 +136,7 @@ const ArticleEdit = () => {
             </TermSection>
             <ArticlePostInput
               values={articleInput}
-              onChange={(target: keyof ArticlePostType, value: string) => {
+              onChange={(target: keyof ArticlePostInputType, value: string) => {
                 setArticleInput((prev) => ({ ...prev, [target]: value }));
               }}
             />

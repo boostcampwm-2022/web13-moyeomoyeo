@@ -47,7 +47,7 @@ interface MyArticleType {
   chatUrl: string;
 }
 
-interface ArticlePostType {
+interface ArticlePostInputType {
   title: string;
   contents: string;
   thumbnail: string;
@@ -90,7 +90,7 @@ export type {
   ArticlePreviewType,
   ArticleType,
   MyArticleType,
-  ArticlePostType,
+  ArticlePostInputType,
   TestResponseType,
   CommentType,
   UserType,

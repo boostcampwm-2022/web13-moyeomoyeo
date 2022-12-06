@@ -15,7 +15,7 @@ import PageLayout from '@components/common/PageLayout';
 import { Category, CategoryKr } from '@constants/category';
 import { Location, LocationKr } from '@constants/location';
 import useAsyncError from '@hooks/useAsyncError';
-import { ArticlePostType } from '@typings/types';
+import { ArticlePostInputType } from '@typings/types';
 import { clientAxios } from '@utils/commonAxios';
 import { showToast } from '@utils/toast';
 
@@ -152,7 +152,7 @@ const WritePage = () => {
             chatUrl,
             contents,
           }}
-          onChange={(target: keyof ArticlePostType, value: string) => {
+          onChange={(target: keyof ArticlePostInputType, value: string) => {
             setArticleInput((prev) => ({ ...prev, [target]: value }));
           }}
         />
