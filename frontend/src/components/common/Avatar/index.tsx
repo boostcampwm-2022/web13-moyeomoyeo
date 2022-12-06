@@ -17,7 +17,13 @@ interface Props extends ComponentProps<typeof Image> {
 
 const Avatar = ({ size, ...rest }: Props) => {
   return (
-    <AvatarImage {...rest} layout="fixed" width={AVATAR_SIZES[size]} height={AVATAR_SIZES[size]} />
+    <AvatarImage
+      {...rest}
+      layout="fixed"
+      width={AVATAR_SIZES[size]}
+      height={AVATAR_SIZES[size]}
+      defaultImgUrl="/avatar.jpg"
+    />
   );
 };
 
