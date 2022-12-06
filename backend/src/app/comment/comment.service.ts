@@ -8,27 +8,39 @@ import { GroupNotFoundException } from '@app/comment/exception/group-not-found.e
 import { CommentResponse } from '@app/comment/dto/comment-response.dto';
 import { CommentNotFoundException } from '@app/comment/exception/comment-not-found.exception';
 import { NotAuthorException } from '@app/comment/exception/not-author.exception';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { GroupArticle } from '@app/group-article/entity/group-article.entity';
+import { CommentAddedEvent } from '@app/notification/event/comment-added.event';
 
 @Injectable()
 export class CommentService {
   constructor(
     private readonly commentRepository: CommentRepository,
     private readonly groupArticleRepository: GroupArticleRepository,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   async writeComment(user: User, commentWritingRequest: CommentWritingRequest) {
-    this.validateArticle(commentWritingRequest.articleId);
+    const groupArticle = await this.groupArticleRepository.findById(
+      commentWritingRequest.articleId,
+    );
+    this.validateArticle(groupArticle);
 
     const comment = Comment.from(
       user,
       commentWritingRequest.articleId,
       commentWritingRequest.contents,
     );
-    return await this.commentRepository.save(comment);
+
+    const result = await this.commentRepository.save(comment);
+    this.eventEmitter.emit(
+      'comment.added',
+      new CommentAddedEvent(groupArticle, result),
+    );
+    return result;
   }
 
-  async validateArticle(articleId: number) {
-    const groupArticle = await this.groupArticleRepository.findById(articleId);
+  async validateArticle(groupArticle: GroupArticle) {
     if (!groupArticle) {
       throw new GroupNotFoundException();
     }
@@ -43,7 +55,8 @@ export class CommentService {
     offset: number;
     articleId: number;
   }) {
-    this.validateArticle(articleId);
+    const groupArticle = await this.groupArticleRepository.findById(articleId);
+    this.validateArticle(groupArticle);
     const allCommentList = await this.commentRepository.selectAllComments({
       articleId,
       limit,
