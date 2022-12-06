@@ -1,4 +1,12 @@
-import { Body, Controller, HttpStatus, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  HttpStatus,
+  Param,
+  ParseIntPipe,
+  Post,
+} from '@nestjs/common';
 import { CommentService } from '@app/comment/comment.service';
 import { JwtAuth } from '@src/common/decorator/jwt-auth.decorator';
 import { ApiSuccessResponse } from '@src/common/decorator/api-success-resposne.decorator';
@@ -10,6 +18,8 @@ import { ResponseEntity } from '@src/common/response-entity';
 import { ApiTags } from '@nestjs/swagger';
 import { ApiErrorResponse } from '@src/common/decorator/api-error-response.decorator';
 import { GroupNotFoundException } from '@app/comment/exception/group-not-found.exception';
+import { CommentNotFoundException } from '@app/comment/exception/comment-not-found.exception';
+import { NotAuthorException } from '@app/comment/exception/not-author.exception';
 
 @Controller('comments')
 @ApiTags('Comment')
@@ -20,7 +30,7 @@ export class CommentController {
   @Post('/')
   @ApiSuccessResponse(HttpStatus.CREATED, CommentWritingResponse)
   @ApiErrorResponse(GroupNotFoundException)
-  async writeCommnet(
+  async writeComment(
     @CurrentUser() user: User,
     @Body() commentWritingRequest: CommentWritingRequest,
   ) {
@@ -30,5 +40,15 @@ export class CommentController {
     );
     const data = CommentWritingResponse.from(comment);
     return ResponseEntity.CREATED_WITH_DATA(data);
+  }
+
+  @Delete(':id')
+  @ApiSuccessResponse(HttpStatus.NO_CONTENT)
+  @ApiErrorResponse(CommentNotFoundException, NotAuthorException)
+  async deleteComment(
+    @CurrentUser() user: User,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    await this.commentService.deleteComment(user, id);
   }
 }

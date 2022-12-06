@@ -49,4 +49,8 @@ export class Comment {
 
     return comment;
   }
+
+  delete() {
+    this.deletedAt = new Date();
+  }
 }
