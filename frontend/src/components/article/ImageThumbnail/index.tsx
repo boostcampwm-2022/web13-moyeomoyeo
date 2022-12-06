@@ -1,8 +1,8 @@
-import Image from 'next/image';
-
 import { useTheme } from '@emotion/react';
 import styled from '@emotion/styled';
 import { IconPhoto } from '@tabler/icons';
+
+import Image from '@components/common/Image';
 
 interface Props {
   /**

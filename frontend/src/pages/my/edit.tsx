@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { ChangeEvent, useEffect, useState } from 'react';
 
@@ -8,6 +7,7 @@ import { IconCheck, IconUpload } from '@tabler/icons';
 
 import Header from '@components/common/Header';
 import DetailTitle from '@components/common/Header/DetailTitle';
+import Image from '@components/common/Image';
 import PageLayout from '@components/common/PageLayout';
 import TextInput from '@components/common/TextInput';
 import useEditMyProfile from '@hooks/queries/useEditMyProfile';
@@ -100,6 +100,7 @@ const MyEditPage = () => {
             alt="profile-image"
             width={120}
             height={120}
+            defaultImgUrl="/avatar.jpg"
           />
         )}
       </ProfileImageSection>
