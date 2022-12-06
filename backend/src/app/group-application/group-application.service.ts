@@ -11,7 +11,8 @@ import { User } from '@app/user/entity/user.entity';
 import { Group } from '@app/group-article/entity/group.entity';
 import { ApplicationNotFoundException } from '@app/group-application/exception/application-not-found.exception';
 import { UserInfo } from '@app/group-application/dto/user-info.dto';
-import { ApplicationWithUserInfoResponse } from '@src/app/group-application/dto/application-with-user-info-response.dto';
+import { ApplicationWithUserInfoResponse } from '@app/group-application/dto/application-with-user-info-response.dto';
+import { NotAuthorException } from '@app/group-application/exception/not-author.exception';
 
 @Injectable()
 export class GroupApplicationService {
@@ -94,9 +95,16 @@ export class GroupApplicationService {
     await this.deleteApplication(application);
   }
 
-  private validateRegisterForCanceling(application: GroupApplication) {
+  private async validateRegisterForCanceling(
+    user: User,
+    application: GroupApplication,
+  ) {
     if (!application) {
       throw new ApplicationNotFoundException();
+    }
+
+    if (application.userId !== user.id) {
+      throw new NotAuthorException();
     }
   }
 
