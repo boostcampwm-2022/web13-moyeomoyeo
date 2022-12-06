@@ -148,9 +148,9 @@ const WritePage = () => {
         <ArticlePostInput
           values={{
             title,
-            contents,
-            chatUrl,
             thumbnail,
+            chatUrl,
+            contents,
           }}
           onChange={(target: keyof ArticlePostType, value: string) => {
             setArticleInput((prev) => ({ ...prev, [target]: value }));

@@ -116,7 +116,7 @@ const ArticleDetail = () => {
                   color={indigo[7]}
                 />
                 <TypographyStylesProvider>
-                  <ContentBox dangerouslySetInnerHTML={{ __html: article.content }} />
+                  <ContentBox dangerouslySetInnerHTML={{ __html: article.contents }} />
                 </TypographyStylesProvider>
                 {article.author.id !== myInfo.id && (
                   <ParticipateButton

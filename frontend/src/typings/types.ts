@@ -21,8 +21,8 @@ interface ArticlePreviewType {
 interface ArticleType {
   id: number;
   title: string;
-  content: string;
-  author: Partial<UserType>;
+  contents: string;
+  author: Pick<UserType, 'id' | 'userName' | 'profileImage'>;
   location: Location;
   category: Category;
   commentCount: number;
@@ -34,11 +34,24 @@ interface ArticleType {
   createdAt: string;
 }
 
+interface MyArticleType {
+  id: number;
+  title: string;
+  contents: string;
+  location: Location;
+  category: Category;
+  thumbnail: string;
+  maxCapacity: number;
+  status: ArticleStatus;
+  createdAt: string;
+  chatUrl: string;
+}
+
 interface ArticlePostType {
   title: string;
   contents: string;
+  thumbnail: string;
   chatUrl: string;
-  thumbnail: string | null;
 }
 
 interface CommentType {
@@ -70,12 +83,13 @@ interface ImageUploadType {
   url: string;
 }
 
-type ApiResponse<T> = AxiosResponse<{ data: T; messasge: string; status: string }>;
+type ApiResponse<T> = AxiosResponse<{ data: T; message: string; status: string }>;
 
 export type {
   ApiResponse,
   ArticlePreviewType,
   ArticleType,
+  MyArticleType,
   ArticlePostType,
   TestResponseType,
   CommentType,

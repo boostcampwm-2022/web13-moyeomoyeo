@@ -15,7 +15,7 @@ import { CategoryKr } from '@constants/category';
 import { LocationKr } from '@constants/location';
 import { PAGE_TITLE } from '@constants/pageTitle';
 import useEditMyArticle from '@hooks/queries/useEditMyArticle';
-import useFetchArticle from '@hooks/queries/useFetchArticle';
+import useFetchMyArticle from '@hooks/queries/useFetchMyArticle';
 import { ArticlePostType } from '@typings/types';
 import { showToast } from '@utils/toast';
 
@@ -23,9 +23,7 @@ const ArticleEdit = () => {
   const router = useRouter();
   const articleId = Number(router.query.id);
 
-  const { article } = useFetchArticle(articleId);
-  // TODO url 받아와서 fill, 수정 기능 붙이기
-  // const { url } = useFetchChatUrl(articleId, true);
+  const { data: article } = useFetchMyArticle(articleId);
   const { mutate: editArticle } = useEditMyArticle();
   const [articleInput, setArticleInput] = useState<ArticlePostType>({
     title: '',
@@ -37,12 +35,11 @@ const ArticleEdit = () => {
 
   useEffect(() => {
     if (article) {
-      const { title, content: contents, thumbnail } = article;
+      const { title, contents, thumbnail, chatUrl } = article;
       setArticleInput({
         title,
         contents,
-        // TODO 수정 필요
-        chatUrl: 'test',
+        chatUrl,
         thumbnail,
       });
     }
