@@ -17,7 +17,7 @@ const UserLoginItem = () => {
   if (isLoading) return null;
 
   return myData ? (
-    <Menu position="bottom-end" transition="rotate-right" transitionDuration={200}>
+    <Menu position="bottom-end">
       <Menu.Target>
         <Avatar size="md" alt={myData.userName} src={myData.profileImage} />
       </Menu.Target>

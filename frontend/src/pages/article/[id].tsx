@@ -151,7 +151,6 @@ const ArticleDetail = () => {
               <Comment key={comment.id} comment={comment} />
             ))}
           />
-
           <ParticipantsModal
             participants={dummyParticipants}
             open={participantsModalOpen}
