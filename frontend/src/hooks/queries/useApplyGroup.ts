@@ -11,7 +11,7 @@ const useApplyGroup = (groupArticleId: number) => {
   return useAuthMutation(applyGroup, {
     onSuccess: async () => {
       await queryClient.invalidateQueries(['applicationStatus', groupArticleId]);
-      // TODO 신청 인원 invalidate
+      await queryClient.invalidateQueries(['participants', groupArticleId]);
     },
   });
 };

@@ -11,7 +11,7 @@ const useCancelApplication = (groupArticleId: number) => {
   return useAuthMutation(cancelApplication, {
     onSuccess: async () => {
       await queryClient.invalidateQueries(['applicationStatus', groupArticleId]);
-      // TODO 신청 인원 invalidate
+      await queryClient.invalidateQueries(['participants', groupArticleId]);
     },
   });
 };
