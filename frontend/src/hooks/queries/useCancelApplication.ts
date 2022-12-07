@@ -9,9 +9,9 @@ const cancelApplication = (groupArticleId: number) =>
 const useCancelApplication = (groupArticleId: number) => {
   const queryClient = useQueryClient();
   return useAuthMutation(cancelApplication, {
-    onSuccess: async () => {
-      await queryClient.invalidateQueries(['applicationStatus', groupArticleId]);
-      await queryClient.invalidateQueries(['participants', groupArticleId]);
+    onSuccess: () => {
+      void queryClient.invalidateQueries(['applicationStatus', groupArticleId]);
+      void queryClient.invalidateQueries(['participants', groupArticleId]);
     },
   });
 };

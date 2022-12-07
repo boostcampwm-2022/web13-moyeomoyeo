@@ -9,9 +9,9 @@ const applyGroup = (groupArticleId: number) =>
 const useApplyGroup = (groupArticleId: number) => {
   const queryClient = useQueryClient();
   return useAuthMutation(applyGroup, {
-    onSuccess: async () => {
-      await queryClient.invalidateQueries(['applicationStatus', groupArticleId]);
-      await queryClient.invalidateQueries(['participants', groupArticleId]);
+    onSuccess: () => {
+      void queryClient.invalidateQueries(['applicationStatus', groupArticleId]);
+      void queryClient.invalidateQueries(['participants', groupArticleId]);
     },
   });
 };
