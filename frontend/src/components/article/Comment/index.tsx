@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
@@ -42,17 +43,19 @@ const Comment = ({ comment }: Props) => {
     <>
       <CommentWrapper>
         <CommentHeader>
-          <CommentAuthor>
-            <Avatar size="sm" src={authorProfileImage} alt={authorName} />
-            <Text fz="md" fw={500}>
-              {authorName}
-            </Text>
-            <Text fz="sm" fw={300} c="gray.4">
-              {dateTimeFormat(createdAt)}
-            </Text>
-          </CommentAuthor>
+          <Link href={`/user/${authorId}`}>
+            <CommentAuthor>
+              <Avatar size="sm" src={authorProfileImage} alt={authorName} />
+              <Text fz="md" fw={500}>
+                {authorName}
+              </Text>
+              <Text fz="sm" fw={300} c="gray.4">
+                {dateTimeFormat(createdAt)}
+              </Text>
+            </CommentAuthor>
+          </Link>
           <CommentUtils>
-            {myData.id === authorId && (
+            {myData?.id === authorId && (
               <CommentUtilItem onClick={() => setConfirmModalOpen(true)}>
                 <Text fz="sm" fw={500} c="gray.4">
                   삭제
