@@ -19,7 +19,6 @@ import StatCounter from '@components/common/StatCounter';
 import { ArticleStatus, ArticleStatusKr } from '@constants/article';
 import { CategoryKr } from '@constants/category';
 import { CATEGORY_COLOR, LOCATION_COLOR, STATUS_COLOR } from '@constants/color';
-import { dummyParticipants } from '@constants/dummy';
 import { LocationKr } from '@constants/location';
 import { PAGE_TITLE } from '@constants/pageTitle';
 import { ParticipateButtonStatus } from '@constants/participateButton';
@@ -27,6 +26,7 @@ import useFetchApplicationStatus from '@hooks/queries/useFetchApplicationStatus'
 import useFetchArticle from '@hooks/queries/useFetchArticle';
 import useFetchChatUrl from '@hooks/queries/useFetchChatUrl';
 import useFetchMyInfo from '@hooks/queries/useFetchMyInfo';
+import useFetchParticipants from '@hooks/queries/useFetchParticipants';
 import { ArticleType } from '@typings/types';
 import dateTimeFormat from '@utils/dateTime';
 
@@ -43,6 +43,7 @@ const ArticleDetail = () => {
     articleId,
     getButtonStatus(article, isJoined) === ParticipateButtonStatus.LINK
   );
+  const { data: participants } = useFetchParticipants(articleId);
 
   const [participantsModalOpen, setParticipantsModalOpen] = useState<boolean>(false);
 
@@ -68,12 +69,12 @@ const ArticleDetail = () => {
         }
       >
         <>
-          <ContentWrapper>
-            {/* TODO 로딩 처리 */}
-            {!article || isJoined === undefined || !myInfo ? (
-              <ArticleLoading />
-            ) : (
-              <>
+          {/* TODO 로딩 처리 */}
+          {!article || isJoined === undefined || !myInfo || !participants ? (
+            <ArticleLoading />
+          ) : (
+            <>
+              <ContentWrapper>
                 <DetailWrapper>
                   <ProfileWrapper>
                     <Avatar
@@ -108,7 +109,7 @@ const ArticleDetail = () => {
                     <StatusWrapper>
                       <StatusText>모집 현황</StatusText>
                       <CountText>
-                        {article.currentCapacity}명 / {article.maxCapacity}명
+                        {participants.length}명 / {article.maxCapacity}명
                       </CountText>
                     </StatusWrapper>
                     <ParticipantButton onClick={() => setParticipantsModalOpen(true)}>
@@ -138,15 +139,14 @@ const ArticleDetail = () => {
                 <CommentWrapper>
                   <div>댓글영역</div>
                 </CommentWrapper>
-              </>
-            )}
-          </ContentWrapper>
-          {/* TODO participants API 요청 */}
-          <ParticipantsModal
-            participants={dummyParticipants}
-            open={participantsModalOpen}
-            onClose={() => setParticipantsModalOpen(false)}
-          />
+              </ContentWrapper>
+              <ParticipantsModal
+                participants={participants}
+                open={participantsModalOpen}
+                onClose={() => setParticipantsModalOpen(false)}
+              />
+            </>
+          )}
         </>
       </PageLayout>
       r
