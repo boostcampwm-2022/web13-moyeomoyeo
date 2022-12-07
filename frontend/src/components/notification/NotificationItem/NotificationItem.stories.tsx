@@ -18,6 +18,7 @@ AddComment.args = {
     type: Notification.ADD_COMMENT,
     title: '박종혁님이 게시글에 댓글을 남겼어요.',
     subTitle: '홀리 쮓',
+    groupArticleId: 1,
     createdAt: '2021-08-01T00:00:00.000Z',
   },
 };
@@ -29,6 +30,7 @@ GroupSuccess.args = {
     type: Notification.GROUP_SUCCESS,
     title: '훠궈 먹읍시다',
     subTitle: '홀리 쮓',
+    groupArticleId: 2,
     createdAt: '2022-02-01T00:00:00.000Z',
   },
 };
@@ -40,6 +42,7 @@ GroupFail.args = {
     type: Notification.GROUP_FAIL,
     title: '모임이 무산되었어요.',
     subTitle: '캐럿스터디 - 인천',
+    groupArticleId: 3,
     createdAt: '2021-08-01T00:00:00.000Z',
   },
 };

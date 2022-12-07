@@ -25,9 +25,6 @@ const NotificationItem = ({ notification }: Props) => {
   const handleClickCloseButton = () => {
     setModalOpen(true);
   };
-  /**
-   * TODO : 알림 데이터에서 들어온 링크를 사용
-   */
 
   return (
     <NotificationWrapper>
@@ -36,7 +33,7 @@ const NotificationItem = ({ notification }: Props) => {
         open={modalOpen}
         onClose={() => setModalOpen(false)}
       />
-      <Link href="/article/21">
+      <Link href={`/article/${notification.groupArticleId}`}>
         <ContentSection>
           <IconWrapper>
             <NotificationIcon variant={type} />
