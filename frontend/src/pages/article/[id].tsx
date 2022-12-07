@@ -40,11 +40,11 @@ const ArticleDetail = () => {
   const { data: myInfo } = useFetchMyInfo();
   const { article } = useFetchArticle(articleId);
   const { isJoined } = useFetchApplicationStatus(articleId);
+  const { data: participants } = useFetchParticipants(articleId);
   const { url } = useFetchChatUrl(
     articleId,
-    getButtonStatus(article, isJoined) === ParticipateButtonStatus.LINK
+    getButtonStatus(article, participants.length, isJoined) === ParticipateButtonStatus.LINK
   );
-  const { data: participants } = useFetchParticipants(articleId);
 
   const [participantsModalOpen, setParticipantsModalOpen] = useState<boolean>(false);
 
@@ -130,7 +130,7 @@ const ArticleDetail = () => {
                   </TypographyStylesProvider>
                   {article.author.id !== myInfo.id && (
                     <ParticipateButton
-                      status={getButtonStatus(article, isJoined)}
+                      status={getButtonStatus(article, participants.length, isJoined)}
                       groupArticleId={article.id}
                       chatRoomLink={url}
                     />
@@ -158,8 +158,9 @@ const ArticleDetail = () => {
 
 export default ArticleDetail;
 
-const getButtonStatus = (article: ArticleType, isJoined: boolean) => {
-  if (!article || isJoined === undefined) return ParticipateButtonStatus.CLOSED;
+const getButtonStatus = (article: ArticleType, currentCapacity: number, isJoined: boolean) => {
+  if (!article || isJoined === undefined || article.maxCapacity === currentCapacity)
+    return ParticipateButtonStatus.CLOSED;
 
   switch (article.status) {
     case ArticleStatus.PROGRESS:
