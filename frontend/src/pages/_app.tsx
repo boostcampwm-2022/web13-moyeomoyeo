@@ -1,9 +1,11 @@
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
+import '@styles/global.css';
 
 import { Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import MediaQuery from 'react-responsive';
 import { v4 as uuid } from 'uuid';
 
 import ApiErrorBoundary from '@components/common/ErrorBoundary/ApiErrorBoundary';
@@ -55,7 +57,23 @@ export default function App({ Component, pageProps }: AppProps<{ dehydratedState
               <AuthErrorBoundary>
                 <ApiErrorBoundary>
                   <LoginRedirect />
+                  <MediaQuery minWidth={600}>
+                    <div
+                      style={{
+                        background: 'white',
+                        width: 'calc(100vw - 600px)',
+                      }}
+                    ></div>
+                  </MediaQuery>
                   <Component {...pageProps} />
+                  <MediaQuery minWidth={600}>
+                    <div
+                      style={{
+                        background: 'white',
+                        width: 'calc(100vw - 600px)',
+                      }}
+                    ></div>
+                  </MediaQuery>
                 </ApiErrorBoundary>
               </AuthErrorBoundary>
             </ErrorBoundary>
