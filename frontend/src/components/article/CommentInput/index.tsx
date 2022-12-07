@@ -19,7 +19,7 @@ const CommentInput = () => {
   return (
     <CommentInputWrapper>
       <TextInput
-        size="lg"
+        size="md"
         placeholder="댓글을 입력해주세요."
         ref={inputRef}
         rightSection={
