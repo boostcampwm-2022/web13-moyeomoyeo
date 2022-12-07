@@ -29,7 +29,7 @@ const getGroupArticles = async (
   const {
     data: { data },
   } = await clientAxios<ArticleResponseType>('/v1/group-articles/search', {
-    params: { category, location, status, currentPage, countPerPage: 5 },
+    params: { category, location, status, currentPage, countPerPage: 6 },
   });
   return data;
 };
