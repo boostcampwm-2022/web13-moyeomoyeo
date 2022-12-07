@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { ActionIcon, TextInput } from '@mantine/core';
 import { IconSend } from '@tabler/icons';
@@ -14,22 +14,32 @@ const CommentInput = () => {
   } = useRouter();
 
   const articleId = Number(id);
-  const inputRef = useRef<HTMLInputElement>(null);
+
   const { mutate: addComment } = useAddComment(articleId);
+  const [commentInput, setCommentInput] = useState('');
 
-  const handleAddComment = () => {
-    if (inputRef.current && inputRef.current.value.trim().length > 0) {
-      addComment({ contents: inputRef.current.value, articleId });
-      inputRef.current.value = '';
-      setTimeout(() => window.scrollTo(0, document.body.scrollHeight), 200);
+  const handleAddComment = useCallback(() => {
+    if (commentInput.trim().length > 0) {
+      addComment(
+        { contents: commentInput, articleId },
+        {
+          onSuccess: () => {
+            setCommentInput('');
+            setTimeout(() => window.scrollTo(0, document.body.scrollHeight), 200);
+          },
+        }
+      );
     }
-  };
+  }, [commentInput, articleId, addComment]);
 
-  const handlePressEnter = (e: KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      handleAddComment();
-    }
-  };
+  const handlePressEnter = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key === 'Enter') {
+        handleAddComment();
+      }
+    },
+    [handleAddComment]
+  );
 
   useEffect(() => {
     window.addEventListener('keypress', handlePressEnter);
@@ -37,17 +47,22 @@ const CommentInput = () => {
     return () => {
       window.removeEventListener('keypress', handlePressEnter);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [handlePressEnter]);
 
   return (
     <CommentInputWrapper>
       <TextInput
         size="md"
         placeholder="댓글을 입력해주세요."
-        ref={inputRef}
+        value={commentInput}
+        onChange={(e) => setCommentInput(e.currentTarget.value)}
         rightSection={
-          <ActionIcon variant="transparent" color="indigo" onClick={handleAddComment}>
+          <ActionIcon
+            variant="transparent"
+            color="indigo"
+            onClick={handleAddComment}
+            disabled={commentInput.trim().length === 0}
+          >
             <IconSend size={24} />
           </ActionIcon>
         }
