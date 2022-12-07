@@ -19,7 +19,13 @@ const UserLoginItem = () => {
   return myData ? (
     <Menu position="bottom-end">
       <Menu.Target>
-        <Avatar size="md" alt={myData.userName} src={myData.profileImage} />
+        <Avatar
+          size="md"
+          alt={myData.userName}
+          src={myData.profileImage}
+          style={{ cursor: 'pointer' }}
+          priority
+        />
       </Menu.Target>
       <Menu.Dropdown>
         <Link href="/my">
