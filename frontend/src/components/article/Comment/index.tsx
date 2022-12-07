@@ -35,10 +35,6 @@ const Comment = ({ comment }: Props) => {
   const { data: myData } = useFetchMyInfo();
   const { mutate: deleteComment } = useDeleteComment(articleId);
 
-  const handleDeleteComment = () => {
-    deleteComment(commentId);
-  };
-
   return (
     <>
       <CommentWrapper>
@@ -73,7 +69,7 @@ const Comment = ({ comment }: Props) => {
       <ConfirmModal
         message="댓글을 삭제하시겠습니까?"
         open={confirmModalOpen}
-        onConfirmButtonClick={handleDeleteComment}
+        onConfirmButtonClick={() => deleteComment(commentId)}
         onCancelButtonClick={() => setConfirmModalOpen(false)}
       />
     </>
