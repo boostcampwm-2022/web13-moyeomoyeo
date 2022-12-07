@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import { useState } from 'react';
 
-import { useQueryClient } from '@tanstack/react-query';
+import { QueryClient, dehydrate, useQueryClient } from '@tanstack/react-query';
+import { GetServerSideProps } from 'next';
 
 import { useTheme } from '@emotion/react';
 import styled from '@emotion/styled';
@@ -19,8 +20,21 @@ import PageLayout from '@components/common/PageLayout';
 import { Category, CategoryKr } from '@constants/category';
 import { Location, LocationKr } from '@constants/location';
 import { PAGE_TITLE } from '@constants/pageTitle';
-import useFetchGroupArticles from '@hooks/queries/useFetchGroupArticles';
+import useFetchGroupArticles, { getGroupArticles } from '@hooks/queries/useFetchGroupArticles';
 import useIntersect from '@hooks/useIntersect';
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  const queryClient = new QueryClient();
+  await queryClient.prefetchInfiniteQuery(
+    ['articles', null, null, false],
+    ({ pageParam = 1 }) => getGroupArticles(pageParam, null, null, false),
+    {
+      getNextPageParam: (lastPage) =>
+        lastPage.totalPage === lastPage.currentPage ? undefined : lastPage.currentPage + 1,
+    }
+  );
+  return { props: { dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))) } };
+};
 
 const Main = () => {
   const {

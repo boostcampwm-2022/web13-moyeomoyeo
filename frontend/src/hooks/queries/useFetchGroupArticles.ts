@@ -21,7 +21,7 @@ interface ArticleResponseType {
   data: ArticlePagingData;
 }
 
-const getGroupArticles = async (
+export const getGroupArticles = async (
   currentPage: number,
   category: Category,
   location: Location,
@@ -31,7 +31,7 @@ const getGroupArticles = async (
   const {
     data: { data },
   } = await clientAxios<ArticleResponseType>('/v1/group-articles/search', {
-    params: { category, location, status, currentPage, countPerPage: 5 },
+    params: { category, location, status, currentPage, countPerPage: 6 },
   });
   return data;
 };

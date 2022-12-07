@@ -2,7 +2,7 @@ import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { v4 as uuid } from 'uuid';
 
@@ -16,16 +16,18 @@ import CommonStyles from '@styles/CommonStyles';
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: false,
-    },
-  },
-});
-
-export default function App({ Component, pageProps }: AppProps) {
+export default function App({ Component, pageProps }: AppProps<{ dehydratedState: unknown }>) {
   const [shouldRender, setShouldRender] = useState<boolean>(!isDevelopment);
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            retry: false,
+          },
+        },
+      })
+  );
 
   useEffect(() => {
     if (isDevelopment) {
@@ -45,18 +47,20 @@ export default function App({ Component, pageProps }: AppProps) {
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
       <QueryClientProvider client={queryClient}>
-        <ReactQueryDevtools initialIsOpen={false} />
-        <CommonStyles>
-          <RouterTransition />
-          <ErrorBoundary key={uuid()}>
-            <AuthErrorBoundary>
-              <ApiErrorBoundary>
-                <LoginRedirect />
-                <Component {...pageProps} />
-              </ApiErrorBoundary>
-            </AuthErrorBoundary>
-          </ErrorBoundary>
-        </CommonStyles>
+        <Hydrate state={pageProps.dehydratedState}>
+          <ReactQueryDevtools initialIsOpen={false} />
+          <CommonStyles>
+            <RouterTransition />
+            <ErrorBoundary key={uuid()}>
+              <AuthErrorBoundary>
+                <ApiErrorBoundary>
+                  <LoginRedirect />
+                  <Component {...pageProps} />
+                </ApiErrorBoundary>
+              </AuthErrorBoundary>
+            </ErrorBoundary>
+          </CommonStyles>
+        </Hydrate>
       </QueryClientProvider>
     </>
   );
