@@ -38,13 +38,16 @@ const ArticleDetail = () => {
   const router = useRouter();
   const articleId = Number(router.query.id);
   const { data: myInfo } = useFetchMyInfo();
-  const { article } = useFetchArticle(articleId);
-  const { isJoined } = useFetchApplicationStatus(articleId);
+  const { data: article } = useFetchArticle(articleId);
+  const { data: isJoined } = useFetchApplicationStatus(articleId);
   const { data: participants } = useFetchParticipants(articleId);
-  const { url } = useFetchChatUrl(
-    articleId,
-    getButtonStatus(article, participants.length, isJoined) === ParticipateButtonStatus.LINK
-  );
+
+  const isUrlAvailable =
+    !!article &&
+    !!participants &&
+    isJoined &&
+    getButtonStatus(article, participants.length, isJoined) === ParticipateButtonStatus.LINK;
+  const { url } = useFetchChatUrl(articleId, isUrlAvailable);
 
   const [participantsModalOpen, setParticipantsModalOpen] = useState<boolean>(false);
 
