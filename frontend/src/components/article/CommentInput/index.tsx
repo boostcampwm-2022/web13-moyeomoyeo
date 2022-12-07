@@ -21,7 +21,7 @@ const CommentInput = () => {
     if (inputRef.current && inputRef.current.value.trim().length > 0) {
       addComment({ contents: inputRef.current.value, articleId });
       inputRef.current.value = '';
-      setTimeout(() => window.scrollTo(0, document.body.scrollHeight), 0);
+      setTimeout(() => window.scrollTo(0, document.body.scrollHeight), 200);
     }
   };
 

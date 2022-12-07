@@ -31,6 +31,7 @@ import useFetchArticle from '@hooks/queries/useFetchArticle';
 import useFetchChatUrl from '@hooks/queries/useFetchChatUrl';
 import useFetchComments from '@hooks/queries/useFetchComments';
 import useFetchMyInfo from '@hooks/queries/useFetchMyInfo';
+import useIntersect from '@hooks/useIntersect';
 import { ArticleType } from '@typings/types';
 import dateTimeFormat from '@utils/dateTime';
 
@@ -47,9 +48,16 @@ const ArticleDetail = () => {
     articleId,
     getButtonStatus(article, isJoined) === ParticipateButtonStatus.LINK
   );
-  const { comments } = useFetchComments(articleId);
+  const { comments, fetchNextPage, hasNextPage, isFetching } = useFetchComments(articleId);
 
   const [participantsModalOpen, setParticipantsModalOpen] = useState<boolean>(false);
+
+  const ref = useIntersect((entry, observer) => {
+    observer.unobserve(entry.target);
+    if (hasNextPage && !isFetching) {
+      void fetchNextPage();
+    }
+  });
 
   return (
     <>
@@ -144,13 +152,14 @@ const ArticleDetail = () => {
           </ContentWrapper>
 
           {/* TODO participants API 요청 */}
+
           <Joiner
-            before
-            after
+            {...(comments.length > 0 && { before: true })}
             components={comments.map((comment) => (
               <Comment key={comment.id} comment={comment} />
             ))}
           />
+          <div ref={ref}></div>
           <ParticipantsModal
             participants={dummyParticipants}
             open={participantsModalOpen}
