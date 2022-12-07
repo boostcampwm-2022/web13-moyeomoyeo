@@ -19,6 +19,7 @@ import { NotAuthorException } from '@app/group-application/exception/not-author.
 import { GroupArticleResponse } from '@app/group-application/dto/group-article-response.dto';
 import { ClosedGroupException } from '@app/group-application/exception/closed-group.exception';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { GroupSucceedEvent } from '@app/notification/event/group-succeed.event';
 
 @Injectable()
 export class GroupApplicationService {
@@ -74,7 +75,9 @@ export class GroupApplicationService {
     });
 
     const groupApplication = GroupApplication.create(user, group);
-    return this.groupApplicationRepository.save(groupApplication);
+    const result = this.groupApplicationRepository.save(groupApplication);
+    this.checkGroupComplete(groupArticle, groupApplicationCount);
+    return result;
   }
 
   private validateJoinGroup({
@@ -100,10 +103,23 @@ export class GroupApplicationService {
 
     if (
       group.maxCapacity <= groupApplicationCount ||
-      group.status === GROUP_STATUS.FAIL ||
-      GROUP_STATUS.SUCCEED
+      group.status !== GROUP_STATUS.PROGRESS
     ) {
       throw new ClosedGroupException();
+    }
+  }
+
+  private checkGroupComplete(
+    groupArticle: GroupArticle,
+    groupApplicationCount: number,
+  ) {
+    if (groupArticle.group.maxCapacity >= groupApplicationCount + 1) {
+      groupArticle.group.complete();
+      this.groupArticleRepository.save(groupArticle);
+      this.eventEmitter.emit(
+        'group.succeed',
+        new GroupSucceedEvent(groupArticle),
+      );
     }
   }
 
@@ -140,6 +156,10 @@ export class GroupApplicationService {
 
     if (application.userId !== currentUser.id) {
       throw new NotAuthorException();
+    }
+
+    if (groupArticle.group.status !== GROUP_STATUS.PROGRESS) {
+      throw new ClosedGroupException();
     }
   }
 

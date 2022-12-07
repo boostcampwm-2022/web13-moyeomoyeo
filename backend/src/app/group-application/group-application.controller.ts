@@ -56,7 +56,7 @@ export class GroupApplicationController {
     return ResponseEntity.CREATED_WITH_DATA(data);
   }
 
-  @Get('/status')
+  @Get('status')
   @ApiSuccessResponse(HttpStatus.OK, CheckJoiningGroupResonse)
   @ApiErrorResponse(GroupNotFoundException)
   async checkJoinedGroup(
@@ -93,6 +93,7 @@ export class GroupApplicationController {
     CannotApplicateException,
     GroupNotFoundException,
     ApplicationNotFoundException,
+    ClosedGroupException,
   )
   async cancelJoinedGroup(
     @CurrentUser() user: User,
