@@ -19,7 +19,7 @@ interface ArticleResponseType {
   data: ArticlePagingData;
 }
 
-const getGroupArticles = async (
+export const getGroupArticles = async (
   currentPage: number,
   category: Category,
   location: Location,
