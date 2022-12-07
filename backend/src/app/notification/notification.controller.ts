@@ -6,6 +6,7 @@ import {
   Param,
   ParseIntPipe,
   Patch,
+  Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { NotificationSettingRepository } from '@app/notification/repository/notification-setting.repository';
@@ -20,6 +21,10 @@ import { PatchNotificationSettingRequest } from '@app/notification/dto/patch-not
 import { ApiErrorResponse } from '@decorator/api-error-response.decorator';
 import { NotificationSettingNotFoundException } from '@app/notification/exception/notification-setting-not-found.exception';
 import { NotAccessibleException } from '@app/notification/exception/not-accessible.exception';
+import { PageRequest } from '@common/util/page-request';
+import { UserNotificationRepository } from '@app/notification/repository/user-notification.repository';
+import { GetUserNotificationsResponse } from '@app/notification/dto/get-user-notifications-response.dto';
+import { GetUserNotificationResult } from '@app/notification/dto/get-user-notification-result.dto';
 
 @Controller('notifications')
 @ApiTags('Notification')
@@ -27,7 +32,36 @@ export class NotificationController {
   constructor(
     private readonly notificationService: NotificationService,
     private readonly notificationSettingRepository: NotificationSettingRepository,
+    private readonly userNotificationRepository: UserNotificationRepository,
   ) {}
+
+  @Get('/')
+  @JwtAuth()
+  @ApiSuccessResponse(HttpStatus.OK, GetUserNotificationsResponse)
+  async getNotifications(
+    @CurrentUser() user: User,
+    @Query() query: PageRequest,
+  ) {
+    const [userNotifications, count] =
+      await this.userNotificationRepository.getNotifications({
+        user,
+        limit: query.getLimit(),
+        offset: query.getOffset(),
+      });
+
+    return ResponseEntity.OK_WITH_DATA(
+      new GetUserNotificationsResponse(
+        count,
+        query.currentPage,
+        query.countPerPage,
+        await Promise.all(
+          userNotifications.map((userNotification) =>
+            GetUserNotificationResult.from(userNotification),
+          ),
+        ),
+      ),
+    );
+  }
 
   @Get('settings')
   @JwtAuth()
