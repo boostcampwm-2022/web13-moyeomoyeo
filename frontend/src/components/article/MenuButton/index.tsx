@@ -2,8 +2,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
-import { useQueryClient } from '@tanstack/react-query';
-
 import styled from '@emotion/styled';
 import { Menu, Text } from '@mantine/core';
 import { IconDotsVertical } from '@tabler/icons';
@@ -29,16 +27,12 @@ const MenuButton = ({ isArticleInProgress }: Props) => {
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
   const [completeModalOpen, setCompleteModalOpen] = useState<boolean>(false);
   const [cancelModalOpen, setCancelModalOpen] = useState<boolean>(false);
-  const queryClient = useQueryClient();
 
   const confirmDeletion = () => {
     deleteArticle(articleId, {
       onSuccess: () => {
-        void (async () => {
-          await queryClient.invalidateQueries(['articles']);
-          showToast({ title: '게시글 삭제 완료!', message: '다른 게시글도 올려보세요.' });
-          router.back();
-        })();
+        showToast({ title: '게시글 삭제 완료!', message: '다른 게시글도 올려보세요.' });
+        router.back();
       },
     });
   };
