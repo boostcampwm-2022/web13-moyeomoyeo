@@ -22,42 +22,47 @@ interface Props {
 }
 
 const GroupArticleCard = ({ article }: Props) => {
+  const {
+    status,
+    thumbnail: { originUrl, blurUrl },
+
+    category,
+    location,
+    title,
+    maxCapacity,
+    currentCapacity,
+    commentCount,
+  } = article;
   return (
     <CardWrapper>
-      {article.status !== ArticleStatus.PROGRESS && (
+      {status !== ArticleStatus.PROGRESS && (
         <DimmedBox>
           <ClosedText>모집 종료</ClosedText>
         </DimmedBox>
       )}
       <ImageWrapper>
         <Image
-          src={article.thumbnail.originUrl}
+          src={originUrl}
           alt={'thumbnail-image'}
           layout="fill"
           objectFit="cover"
           sizes="400px"
+          placeholder="blur"
+          blurDataURL={blurUrl}
+          style={{ transition: '0.3s ease-in-out' }}
         />
       </ImageWrapper>
       <InfoWrapper>
         <TagWrapper>
-          <ArticleTag
-            color={STATUS_COLOR[article.status]}
-            content={ArticleStatusKr[article.status]}
-          />
-          <ArticleTag
-            color={CATEGORY_COLOR[article.category]}
-            content={CategoryKr[article.category]}
-          />
-          <ArticleTag
-            color={LOCATION_COLOR[article.location]}
-            content={LocationKr[article.location]}
-          />
+          <ArticleTag color={STATUS_COLOR[status]} content={ArticleStatusKr[status]} />
+          <ArticleTag color={CATEGORY_COLOR[category]} content={CategoryKr[category]} />
+          <ArticleTag color={LOCATION_COLOR[location]} content={LocationKr[location]} />
         </TagWrapper>
-        <TitleText>{article.title}</TitleText>
+        <TitleText>{title}</TitleText>
         <CapacityText>
-          {article.maxCapacity}명 중 {article.currentCapacity}명 참여중
+          {maxCapacity}명 중 {currentCapacity}명 참여중
         </CapacityText>
-        <StatCounter variant="comment" count={article.commentCount} />
+        <StatCounter variant="comment" count={commentCount} />
       </InfoWrapper>
     </CardWrapper>
   );
