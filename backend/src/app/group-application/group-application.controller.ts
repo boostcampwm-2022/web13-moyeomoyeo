@@ -22,6 +22,8 @@ import { GroupNotFoundException } from '@app/group-application/exception/group-n
 import { CannotApplicateException } from '@src/app/group-application/exception/cannot-applicate.exception';
 import { CheckJoiningGroupResonse } from '@app/group-application/dto/check-joining-group-response.dto';
 import { ApplicationNotFoundException } from '@app/group-application/exception/application-not-found.exception';
+import { MyGroupResponse } from '@app/group-application/dto/my-group-response.dto';
+import { MyGroupRequest } from '@app/group-application/dto/my-group-request.dto';
 import { ApplicationWithUserInfoResponse } from '@app/group-application/dto/application-with-user-info-response.dto';
 
 @Controller('group-applications')
@@ -96,5 +98,22 @@ export class GroupApplicationController {
   ) {
     const groupArticleId = groupApplicationRequest.groupArticleId;
     await this.groupApplicationService.cancelJoinedGroup(user, groupArticleId);
+  }
+
+  @Get('me')
+  @ApiSuccessResponse(HttpStatus.OK, MyGroupResponse)
+  async findMyGroup(@CurrentUser() user: User, @Query() query: MyGroupRequest) {
+    const { response, count } = await this.groupApplicationService.findMyGroup({
+      user,
+      limit: query.getLimit(),
+      offset: query.getOffset(),
+    });
+    const data = new MyGroupResponse(
+      count,
+      query.currentPage,
+      query.countPerPage,
+      response,
+    );
+    return ResponseEntity.OK_WITH_DATA(data);
   }
 }

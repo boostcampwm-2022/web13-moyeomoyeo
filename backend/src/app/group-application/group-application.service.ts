@@ -13,6 +13,7 @@ import { ApplicationNotFoundException } from '@app/group-application/exception/a
 import { UserInfo } from '@app/group-application/dto/user-info.dto';
 import { ApplicationWithUserInfoResponse } from '@app/group-application/dto/application-with-user-info-response.dto';
 import { NotAuthorException } from '@app/group-application/exception/not-author.exception';
+import { GroupArticleResponse } from '@app/group-application/dto/group-article-response.dto';
 
 @Injectable()
 export class GroupApplicationService {
@@ -25,7 +26,7 @@ export class GroupApplicationService {
     const groupArticle = await this.groupArticleRepository.findById(
       groupArticleId,
     );
-    await this.validateGroupArticle(groupArticle);
+    this.validateGroupArticle(groupArticle);
 
     const group = groupArticle.group;
     const application = await this.findGroupApplication(user, group);
@@ -37,7 +38,7 @@ export class GroupApplicationService {
     };
   }
 
-  private async findGroupApplication(user: User, group: Group) {
+  private findGroupApplication(user: User, group: Group) {
     return this.groupApplicationRepository.findByUserIdAndGroupIdAndStatus(
       user.id,
       group.id,
@@ -50,13 +51,13 @@ export class GroupApplicationService {
       await this.getGroupApplicationContext(user, groupArticleId);
 
     this.validateUserTarget(user, groupArticle);
-    await this.validateRegisterForJoining(application);
+    this.validateRegisterForJoining(application);
 
     const groupApplication = GroupApplication.create(user, group);
     return this.groupApplicationRepository.save(groupApplication);
   }
 
-  private async validateGroupArticle(groupArticle: GroupArticle) {
+  private validateGroupArticle(groupArticle: GroupArticle) {
     if (!groupArticle) {
       throw new GroupNotFoundException();
     }
@@ -68,7 +69,7 @@ export class GroupApplicationService {
     }
   }
 
-  private async validateRegisterForJoining(application: GroupApplication) {
+  private validateRegisterForJoining(application: GroupApplication) {
     if (application) {
       throw new DuplicateApplicationException();
     }
@@ -90,12 +91,12 @@ export class GroupApplicationService {
     );
 
     this.validateUserTarget(user, groupArticle);
-    await this.validateRegisterForCanceling(user, application);
+    this.validateRegisterForCanceling(user, application);
 
     await this.deleteApplication(application);
   }
 
-  private async validateRegisterForCanceling(
+  private validateRegisterForCanceling(
     user: User,
     application: GroupApplication,
   ) {
@@ -111,6 +112,27 @@ export class GroupApplicationService {
   private async deleteApplication(application: GroupApplication) {
     application.cancel();
     await this.groupApplicationRepository.save(application);
+  }
+
+  public async findMyGroup({
+    user,
+    limit,
+    offset,
+  }: {
+    user: User;
+    limit: number;
+    offset: number;
+  }) {
+    const result = await this.groupApplicationRepository.findMyGroup({
+      userId: user.id,
+      limit,
+      offset,
+    });
+    const response = result.map((value) => GroupArticleResponse.from(value));
+    const count = await this.groupApplicationRepository.findMyGroupCount(
+      user.id,
+    );
+    return { response, count };
   }
 
   async getAllParticipants(user: User, groupArticleId: number) {
@@ -138,6 +160,6 @@ export class GroupApplicationService {
       },
     );
 
-    return await Promise.all(applicationWithUserInfoList);
+    return Promise.all(applicationWithUserInfoList);
   }
 }
