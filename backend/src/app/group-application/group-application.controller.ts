@@ -25,6 +25,7 @@ import { ApplicationNotFoundException } from '@app/group-application/exception/a
 import { MyGroupResponse } from '@app/group-application/dto/my-group-response.dto';
 import { MyGroupRequest } from '@app/group-application/dto/my-group-request.dto';
 import { ApplicationWithUserInfoResponse } from '@app/group-application/dto/application-with-user-info-response.dto';
+import { ClosedGroupException } from '@app/group-application/exception/closed-group.exception';
 
 @Controller('group-applications')
 @JwtAuth()
@@ -40,6 +41,7 @@ export class GroupApplicationController {
     DuplicateApplicationException,
     CannotApplicateException,
     GroupNotFoundException,
+    ClosedGroupException,
   )
   async joinGroup(
     @CurrentUser() user: User,
