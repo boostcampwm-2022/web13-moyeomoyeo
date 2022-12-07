@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { User } from '@app/user/entity/user.entity';
 import { Notification } from '@app/notification/entity/notification.entity';
+import { NotAccessibleException } from '@app/notification/exception/not-accessible.exception';
 
 @Entity({ name: 'user_notification' })
 @Index('UNIQUE_user_id_notification_id', ['userId', 'notificationId'], {
@@ -49,5 +50,13 @@ export class UserNotification {
     userNotification.notification = Promise.resolve(notification);
     userNotification.notificationId = notification.id;
     return userNotification;
+  }
+
+  remove(user: User) {
+    if (user.id !== this.userId) {
+      throw new NotAccessibleException();
+    }
+
+    this.deletedAt = new Date();
   }
 }

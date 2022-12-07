@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpStatus,
   Param,
@@ -25,6 +26,7 @@ import { PageRequest } from '@common/util/page-request';
 import { UserNotificationRepository } from '@app/notification/repository/user-notification.repository';
 import { GetUserNotificationsResponse } from '@app/notification/dto/get-user-notifications-response.dto';
 import { GetUserNotificationResult } from '@app/notification/dto/get-user-notification-result.dto';
+import { UserNotificationNotFoundException } from '@app/notification/exception/user-notification-not-found.exception';
 
 @Controller('notifications')
 @ApiTags('Notification')
@@ -94,5 +96,16 @@ export class NotificationController {
     @Body() { status }: PatchNotificationSettingRequest,
   ) {
     await this.notificationService.updateStatus(user, id, status);
+  }
+
+  @Delete(':id')
+  @JwtAuth()
+  @ApiSuccessResponse(HttpStatus.NO_CONTENT)
+  @ApiErrorResponse(NotAccessibleException, UserNotificationNotFoundException)
+  async remove(
+    @CurrentUser() user: User,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    await this.notificationService.remove(user, id);
   }
 }
