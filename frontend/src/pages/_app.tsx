@@ -57,23 +57,9 @@ export default function App({ Component, pageProps }: AppProps<{ dehydratedState
               <AuthErrorBoundary>
                 <ApiErrorBoundary>
                   <LoginRedirect />
-                  <MediaQuery minWidth={600}>
-                    <div
-                      style={{
-                        background: 'white',
-                        width: 'calc(100vw - 600px)',
-                      }}
-                    ></div>
-                  </MediaQuery>
+                  <Background />
                   <Component {...pageProps} />
-                  <MediaQuery minWidth={600}>
-                    <div
-                      style={{
-                        background: 'white',
-                        width: 'calc(100vw - 600px)',
-                      }}
-                    ></div>
-                  </MediaQuery>
+                  <Background />
                 </ApiErrorBoundary>
               </AuthErrorBoundary>
             </ErrorBoundary>
@@ -83,3 +69,16 @@ export default function App({ Component, pageProps }: AppProps<{ dehydratedState
     </>
   );
 }
+
+const Background = () => {
+  return (
+    <MediaQuery minWidth={600}>
+      <div
+        style={{
+          background: 'white',
+          width: 'calc((100vw - 600px) / 2)',
+        }}
+      ></div>
+    </MediaQuery>
+  );
+};
