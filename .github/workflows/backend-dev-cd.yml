@@ -63,7 +63,7 @@ jobs:
       status: ${{ job.status }}
     steps:
       - name: deploy
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v0.1.4
         with:
           host: ${{secrets.BACKEND_DEV_REMOTE_IP}}
           username: ${{secrets.BACKEND_DEV_REMOTE_SSH_ID}}
