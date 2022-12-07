@@ -10,9 +10,9 @@ interface Props {
 
 const NotificationIcon = ({ variant }: Props) => {
   const iconScheme =
-    variant === Notification.ADD_COMMENT
+    variant === Notification.COMMENT_ADDED
       ? { color: 'indigo', icon: <IconMessageCircle2 size={20} /> }
-      : variant === Notification.GROUP_SUCCESS
+      : variant === Notification.GROUP_SUCCEED
       ? {
           color: 'cyan',
           icon: <IconCheck size={20} />,

@@ -7,7 +7,7 @@ enum ArticleStatus {
 enum ArticleStatusKr {
   PROGRESS = '모집중',
   SUCCEED = '모집완료',
-  FAIL = '모집증단',
+  FAIL = '모집중단',
 }
 
 export { ArticleStatus, ArticleStatusKr };
