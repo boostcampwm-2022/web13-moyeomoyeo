@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
 
 import useAuthQuery from '@hooks/useAuthQuery';
-import { ApiResponse, ParticipantType, UserType } from '@typings/types';
+import { ApiResponse, ParticipantType } from '@typings/types';
 import { clientAxios } from '@utils/commonAxios';
 
 interface ParticipantsResponseType {
@@ -18,10 +18,7 @@ const useFetchParticipants = (groupArticleId: number) => {
     ['participants', groupArticleId],
     () => clientAxios.get(`/v1/group-applications/participants`, { params: { groupArticleId } }),
     {
-      select: (res) =>
-        res.data.data.map(
-          (participant: { user: Omit<UserType, 'githubUrl' | 'blogUrl'> }) => participant.user
-        ),
+      select: (res) => res.data.data.map((participant) => participant.user),
     }
   );
 
