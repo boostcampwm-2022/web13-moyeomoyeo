@@ -1,7 +1,7 @@
 import { Text } from '@mantine/core';
 
 import Avatar from '@components/common/Avatar';
-import { CommentType as CommentItem } from '@typings/types';
+import { CommentType } from '@typings/types';
 import dateTimeFormat from '@utils/dateTime';
 
 import {
@@ -13,27 +13,14 @@ import {
   CommentWrapper,
 } from './styles';
 
-/**
- * mockComment 지우면 props의 optional 지우기
- */
-const mockComment = {
-  id: 1,
-  authorId: 2,
-  authorName: 'J999_김캠퍼',
-  authorProfileImage: 'https://avatars.githubusercontent.com/u/90585081?v=4"',
-  contents:
-    '좋은 글 잘 읽었습니다!좋은 글 잘 읽었습니다좋은 글 잘 읽었습니다좋은 글 잘 읽었습니다좋은 글 잘 읽었습니다',
-  createdAt: '2022-11-23T08:19:33.899Z',
-};
-
 interface Props {
   /**
    * 댓글 정보를 입력합니다.
    */
-  comment?: CommentItem;
+  comment: CommentType;
 }
 
-const Comment = ({ comment = mockComment }: Props) => {
+const Comment = ({ comment }: Props) => {
   return (
     <CommentWrapper>
       <CommentHeader>
