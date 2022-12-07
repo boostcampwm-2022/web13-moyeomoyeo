@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+
 import { AxiosError } from 'axios';
 
 import useAuthInfiniteQuery from '@hooks/useAuthInfiniteQuery';
@@ -18,7 +20,7 @@ const getComments = async (currentPage: number, articleId: number) => {
 };
 
 const useFetchComments = (articleId: number) => {
-  const { data: comments, ...rest } = useAuthInfiniteQuery<
+  const { data, ...rest } = useAuthInfiniteQuery<
     PagingDataType<CommentType>,
     AxiosError,
     PagingDataType<CommentType>
@@ -26,6 +28,8 @@ const useFetchComments = (articleId: number) => {
     getNextPageParam: (lastPage) =>
       lastPage.totalPage === lastPage.currentPage ? undefined : lastPage.currentPage + 1,
   });
+
+  const comments = useMemo(() => (data ? data.pages.flatMap(({ data }) => data) : []), [data]);
 
   return { comments, ...rest };
 };

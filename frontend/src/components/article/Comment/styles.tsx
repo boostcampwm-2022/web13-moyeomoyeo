@@ -3,8 +3,6 @@ import styled from '@emotion/styled';
 const CommentWrapper = styled.div`
   width: 100%;
   padding: 1.6rem;
-  border-top: 1px solid ${({ theme }) => theme.colors.gray[2]};
-  border-bottom: 1px solid ${({ theme }) => theme.colors.gray[2]};
   display: flex;
   flex-direction: column;
 `;

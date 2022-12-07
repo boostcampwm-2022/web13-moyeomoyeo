@@ -64,6 +64,10 @@ interface CommentType {
   createdAt: string;
 }
 
+interface CommentInputType extends Pick<CommentType, 'contents'> {
+  articleId: number;
+}
+
 interface TestResponseType {
   dataArr: string[];
   isLast: boolean;
@@ -104,6 +108,7 @@ export type {
   PagingDataType,
   TestResponseType,
   CommentType,
+  CommentInputType,
   UserType,
   ImageUploadType,
   NotificationType,

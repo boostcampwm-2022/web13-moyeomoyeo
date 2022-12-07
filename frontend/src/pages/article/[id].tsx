@@ -6,6 +6,8 @@ import styled from '@emotion/styled';
 import { Progress, TypographyStylesProvider } from '@mantine/core';
 import { IconList } from '@tabler/icons';
 
+import Comment from '@components/article/Comment';
+import CommentInput from '@components/article/CommentInput';
 import MenuButton from '@components/article/MenuButton';
 import ParticipantsModal from '@components/article/ParticipantsModal';
 import ParticipateButton from '@components/article/ParticipateButton';
@@ -14,6 +16,7 @@ import ArticleTag from '@components/common/ArticleTag';
 import Avatar from '@components/common/Avatar';
 import Header from '@components/common/Header';
 import DetailTitle from '@components/common/Header/DetailTitle';
+import Joiner from '@components/common/Joiner';
 import PageLayout from '@components/common/PageLayout';
 import StatCounter from '@components/common/StatCounter';
 import { ArticleStatus, ArticleStatusKr } from '@constants/article';
@@ -26,6 +29,7 @@ import { ParticipateButtonStatus } from '@constants/participateButton';
 import useFetchApplicationStatus from '@hooks/queries/useFetchApplicationStatus';
 import useFetchArticle from '@hooks/queries/useFetchArticle';
 import useFetchChatUrl from '@hooks/queries/useFetchChatUrl';
+import useFetchComments from '@hooks/queries/useFetchComments';
 import useFetchMyInfo from '@hooks/queries/useFetchMyInfo';
 import { ArticleType } from '@typings/types';
 import dateTimeFormat from '@utils/dateTime';
@@ -43,6 +47,7 @@ const ArticleDetail = () => {
     articleId,
     getButtonStatus(article, isJoined) === ParticipateButtonStatus.LINK
   );
+  const { comments } = useFetchComments(articleId);
 
   const [participantsModalOpen, setParticipantsModalOpen] = useState<boolean>(false);
 
@@ -66,10 +71,10 @@ const ArticleDetail = () => {
             }
           />
         }
+        footer={<CommentInput />}
       >
         <>
           <ContentWrapper>
-            {/* TODO 로딩 처리 */}
             {!article || isJoined === undefined || !myInfo ? (
               <ArticleLoading />
             ) : (
@@ -134,14 +139,19 @@ const ArticleDetail = () => {
                   )}
                   <StatCounter variant="comment" count={article.commentCount} />
                 </DetailWrapper>
-                <Divider />
-                <CommentWrapper>
-                  <div>댓글영역</div>
-                </CommentWrapper>
               </>
             )}
           </ContentWrapper>
+
           {/* TODO participants API 요청 */}
+          <Joiner
+            before
+            after
+            components={comments.map((comment) => (
+              <Comment key={comment.id} comment={comment} />
+            ))}
+          />
+
           <ParticipantsModal
             participants={dummyParticipants}
             open={participantsModalOpen}
@@ -149,7 +159,6 @@ const ArticleDetail = () => {
           />
         </>
       </PageLayout>
-      r
     </>
   );
 };
@@ -262,15 +271,4 @@ const ContentBox = styled.div`
   padding: 1.6rem;
   border: 1px solid ${({ theme }) => theme.colors.gray[2]};
   border-radius: 8px;
-`;
-
-const CommentWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const Divider = styled.div`
-  width: 100%;
-  height: 0.05rem;
-  background-color: ${({ theme }) => theme.colors.gray[4]};
 `;
