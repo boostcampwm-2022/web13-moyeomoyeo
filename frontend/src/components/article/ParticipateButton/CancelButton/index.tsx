@@ -1,5 +1,8 @@
+import { useState } from 'react';
+
 import { Button } from '@mantine/core';
 
+import ConfirmModal from '@components/common/ConfirmModal';
 import useCancelApplication from '@hooks/queries/useCancelApplication';
 import { showToast } from '@utils/toast';
 
@@ -9,6 +12,7 @@ interface Props {
 
 const CancelButton = ({ groupArticleId }: Props) => {
   const { mutate: cancelApplication } = useCancelApplication(groupArticleId);
+  const [confirmModalOpen, setConfirmModalOpen] = useState<boolean>(false);
 
   const handleClickCancelButton = () => {
     cancelApplication(groupArticleId, {
@@ -20,9 +24,15 @@ const CancelButton = ({ groupArticleId }: Props) => {
 
   return (
     <>
-      <Button onClick={handleClickCancelButton} size="md" color="red" fullWidth>
+      <Button onClick={() => setConfirmModalOpen(true)} size="md" color="red" fullWidth>
         참가 취소
       </Button>
+      <ConfirmModal
+        message="신청을 취소하시겠습니까?"
+        open={confirmModalOpen}
+        onConfirmButtonClick={handleClickCancelButton}
+        onCancelButtonClick={() => setConfirmModalOpen(false)}
+      />
     </>
   );
 };

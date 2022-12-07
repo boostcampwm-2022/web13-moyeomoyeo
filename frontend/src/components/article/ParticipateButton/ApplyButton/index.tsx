@@ -1,5 +1,8 @@
+import { useState } from 'react';
+
 import { Button } from '@mantine/core';
 
+import ConfirmModal from '@components/common/ConfirmModal';
 import useApplyGroup from '@hooks/queries/useApplyGroup';
 import { showToast } from '@utils/toast';
 
@@ -9,6 +12,7 @@ interface Props {
 
 const ApplyButton = ({ groupArticleId }: Props) => {
   const { mutate: applyGroup } = useApplyGroup(groupArticleId);
+  const [confirmModalOpen, setConfirmModalOpen] = useState<boolean>(false);
 
   const applyForRecruitment = () => {
     applyGroup(groupArticleId, {
@@ -23,9 +27,15 @@ const ApplyButton = ({ groupArticleId }: Props) => {
 
   return (
     <>
-      <Button onClick={applyForRecruitment} size="md" color="indigo" fullWidth>
+      <Button onClick={() => setConfirmModalOpen(true)} size="md" color="indigo" fullWidth>
         참가하기
       </Button>
+      <ConfirmModal
+        message="참가 신청하시겠습니까?"
+        open={confirmModalOpen}
+        onConfirmButtonClick={applyForRecruitment}
+        onCancelButtonClick={() => setConfirmModalOpen(false)}
+      />
     </>
   );
 };
