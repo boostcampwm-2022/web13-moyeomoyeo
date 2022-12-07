@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
@@ -69,7 +70,6 @@ const ArticleDetail = () => {
         }
       >
         <>
-          {/* TODO 로딩 처리 */}
           {!article || isJoined === undefined || !myInfo || !participants ? (
             <ArticleLoading />
           ) : (
@@ -77,11 +77,13 @@ const ArticleDetail = () => {
               <ContentWrapper>
                 <DetailWrapper>
                   <ProfileWrapper>
-                    <Avatar
-                      src={article.author.profileImage}
-                      alt={article.author.userName}
-                      size="lg"
-                    />
+                    <Link href={`/user/${article.author.id}`}>
+                      <Avatar
+                        src={article.author.profileImage}
+                        alt={article.author.userName}
+                        size="lg"
+                      />
+                    </Link>
                     <ProfileTextWrapper>
                       <Author>{article.author.userName}</Author>
                       <Time>{dateTimeFormat(article.createdAt)}</Time>

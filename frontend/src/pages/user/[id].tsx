@@ -11,7 +11,8 @@ import useFetchProfile from '@hooks/queries/useFetchProfile';
 
 const UserProfile = () => {
   const {
-    query: { id, isReady },
+    query: { id },
+    isReady,
   } = useRouter();
   const { profile, isFetching } = useFetchProfile(Number(id));
 
