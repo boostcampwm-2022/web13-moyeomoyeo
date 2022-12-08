@@ -40,7 +40,7 @@ export class CommentService {
     return result;
   }
 
-  async validateArticle(groupArticle: GroupArticle) {
+  validateArticle(groupArticle: GroupArticle) {
     if (!groupArticle) {
       throw new GroupNotFoundException();
     }
@@ -79,13 +79,13 @@ export class CommentService {
 
   async deleteComment(user: User, id: number) {
     const comment = await this.commentRepository.findById(id);
-    await this.validateDeleteComment(comment, user);
+    this.validateDeleteComment(comment, user);
 
     comment.delete();
     await this.commentRepository.save(comment);
   }
 
-  async validateDeleteComment(comment: Comment, user: User) {
+  validateDeleteComment(comment: Comment, user: User) {
     if (!comment) {
       throw new CommentNotFoundException();
     }

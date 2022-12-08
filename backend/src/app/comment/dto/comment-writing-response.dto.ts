@@ -11,5 +11,6 @@ export class CommentWritingResponse {
   static from(comment: Comment) {
     const response = new CommentWritingResponse();
     response.id = comment.id;
+    return response;
   }
 }
