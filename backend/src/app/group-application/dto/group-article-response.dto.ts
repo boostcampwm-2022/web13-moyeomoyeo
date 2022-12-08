@@ -13,7 +13,7 @@ export class GroupArticleResponse {
     description: '모임게시판 아이디',
     required: true,
   })
-  groupArticleId: number;
+  id: number;
 
   @ApiProperty({
     example: 'CS 스터디 모임',
@@ -88,7 +88,7 @@ export class GroupArticleResponse {
 
   static async from(myGroup: IMyGroupResult) {
     const response = new GroupArticleResponse();
-    response.groupArticleId = myGroup.groupArticleId;
+    response.id = myGroup.groupArticleId;
     response.title = myGroup.title;
     response.location = myGroup.location;
     response.category = myGroup.category;

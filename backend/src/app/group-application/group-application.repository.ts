@@ -62,6 +62,13 @@ export class GroupApplicationRepository extends Repository<GroupApplication> {
       .offset(offset)
       .getRawMany<IMyApplicationResult>();
 
+    if (groupApplications.length < 1) {
+      return {
+        result: [],
+        totalCount,
+      };
+    }
+
     const result = await this.createQueryBuilder('groupApplication')
       .select([
         'groupArticle.id as groupArticleId',

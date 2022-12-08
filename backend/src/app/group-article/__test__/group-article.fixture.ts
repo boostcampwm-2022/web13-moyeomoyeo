@@ -9,7 +9,7 @@ export const getGroupArticleFixture = async (
   const fixture = new GroupArticle();
   fixture.id = groupArticle.id || faker.datatype.number();
   fixture.group = group;
-  group.article = new Promise((res, rej) => {
+  group.article = new Promise((res) => {
     res(fixture);
   });
   fixture.userId = (await groupArticle.user).id;
