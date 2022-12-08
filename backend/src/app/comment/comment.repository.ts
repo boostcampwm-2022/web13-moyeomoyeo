@@ -1,4 +1,4 @@
-import { DataSource, IsNull, Repository } from 'typeorm';
+import { DataSource, IsNull, Not, Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { Comment } from '@app/comment/entity/comment.entity';
 
@@ -45,7 +45,14 @@ export class CommentRepository extends Repository<Comment> {
     return this.findOneBy({ id, deletedAt: IsNull() });
   }
 
-  findByArticleId(groupArticleId: number) {
-    return this.findBy({ articleId: groupArticleId, deletedAt: IsNull() });
+  findByArticleId(currentUserId: number, groupArticleId: number) {
+    return this.find({
+      relations: { user: true },
+      where: {
+        articleId: groupArticleId,
+        deletedAt: IsNull(),
+        userId: Not(currentUserId),
+      },
+    });
   }
 }
