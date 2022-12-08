@@ -16,6 +16,7 @@ import { CookieConfigModule } from '@config/cookie/config.module';
 import { GroupApplicationModule } from '@app/group-application/group-application.module';
 import { NotificationModule } from '@app/notification/notification.module';
 import { CommentModule } from '@app/comment/comment.module';
+import { AppConfigService } from '@common/config/app/config.service';
 
 @Module({
   imports: [
@@ -37,9 +38,13 @@ import { CommentModule } from '@app/comment/comment.module';
   providers: [AppService],
 })
 export class AppModule implements NestModule {
+  constructor(private readonly appConfigSerivce: AppConfigService) {}
+
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(ApiSuccessLoggerMiddleware, ApiExceptionLoggerMiddleware)
-      .forRoutes('*');
+    if (!this.appConfigSerivce.isTest()) {
+      consumer
+        .apply(ApiSuccessLoggerMiddleware, ApiExceptionLoggerMiddleware)
+        .forRoutes('*');
+    }
   }
 }

@@ -22,7 +22,7 @@
     "test:watch": "env-cmd -f .env.test jest --watch",
     "test:cov": "env-cmd -f .env.test jest --coverage",
     "test:debug": "env-cmd -f .env.test node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "env-cmd -f .env.test jest --config ./test/jest-e2e.json"
+    "test:e2e": "env-cmd -f .env.test jest -i --config ./test/jest-e2e.json"
   },
   "dependencies": {
     "@js-joda/core": "^5.4.2",
@@ -51,6 +51,7 @@
     "typeorm-naming-strategies": "^4.1.0"
   },
   "devDependencies": {
+    "@faker-js/faker": "^7.6.0",
     "@nestjs/cli": "^9.0.0",
     "@nestjs/schematics": "^9.0.0",
     "@nestjs/testing": "^9.0.0",
