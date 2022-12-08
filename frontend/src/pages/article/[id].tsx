@@ -88,7 +88,7 @@ const ArticleDetail = () => {
       >
         <>
           <ContentWrapper>
-            {!article || isJoined === undefined || !myInfo ? (
+            {!article || isJoined === undefined || !myInfo || !participants ? (
               <ArticleLoading />
             ) : (
               <>
@@ -137,7 +137,7 @@ const ArticleDetail = () => {
                     </ParticipantButton>
                   </ParticipantWrapper>
                   <Progress
-                    value={(article.currentCapacity / article.maxCapacity) * 100}
+                    value={(participants.length / article.maxCapacity) * 100}
                     size="lg"
                     radius="lg"
                     color={indigo[7]}
@@ -154,6 +154,11 @@ const ArticleDetail = () => {
                   )}
                   <StatCounter variant="comment" count={article.commentCount} />
                 </DetailWrapper>
+                <ParticipantsModal
+                  participants={participants}
+                  open={participantsModalOpen}
+                  onClose={() => setParticipantsModalOpen(false)}
+                />
               </>
             )}
           </ContentWrapper>
@@ -167,11 +172,6 @@ const ArticleDetail = () => {
             ))}
           />
           <div ref={ref}></div>
-          <ParticipantsModal
-            participants={participants}
-            open={participantsModalOpen}
-            onClose={() => setParticipantsModalOpen(false)}
-          />
         </>
       </PageLayout>
     </>
