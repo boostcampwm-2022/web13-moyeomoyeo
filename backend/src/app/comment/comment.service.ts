@@ -57,15 +57,14 @@ export class CommentService {
   }) {
     const groupArticle = await this.groupArticleRepository.findById(articleId);
     this.validateArticle(groupArticle);
-    const allCommentList = await this.commentRepository.selectAllComments({
-      articleId,
-      limit,
-      offset,
-    });
-
-    const count = await this.commentRepository.getTotalCount(articleId);
+    const { allCommentList, totalCount } =
+      await this.commentRepository.selectAllComments({
+        articleId,
+        limit,
+        offset,
+      });
     const commentResponse = await this.bindCommentResponse(allCommentList);
-    return { count, commentResponse };
+    return { totalCount, commentResponse };
   }
 
   bindCommentResponse(allCommentList: Comment[]) {

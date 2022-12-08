@@ -50,14 +50,15 @@ export class CommentController {
   @ApiSuccessResponse(HttpStatus.OK, GroupArticleCommentGetResponse)
   @ApiErrorResponse(GroupNotFoundException)
   async getComment(@Query() query: GetAllCommentQueryRequest) {
-    const { count, commentResponse } = await this.commentService.getComment({
-      limit: query.getLimit(),
-      offset: query.getOffset(),
-      articleId: query.articleId,
-    });
+    const { totalCount, commentResponse } =
+      await this.commentService.getComment({
+        limit: query.getLimit(),
+        offset: query.getOffset(),
+        articleId: query.articleId,
+      });
 
     const data = new GroupArticleCommentGetResponse(
-      count,
+      totalCount,
       query.currentPage,
       query.countPerPage,
       commentResponse,

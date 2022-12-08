@@ -177,18 +177,16 @@ export class GroupApplicationService {
     limit: number;
     offset: number;
   }) {
-    const result = await this.groupApplicationRepository.findMyGroup({
-      userId: user.id,
-      limit,
-      offset,
-    });
+    const { result, totalCount } =
+      await this.groupApplicationRepository.findMyGroup({
+        userId: user.id,
+        limit,
+        offset,
+      });
     const response = await Promise.all(
       result.map((value) => GroupArticleResponse.from(value)),
     );
-    const count = await this.groupApplicationRepository.findMyGroupCount(
-      user.id,
-    );
-    return { response, count };
+    return { response, totalCount };
   }
 
   public async getAllParticipants(user: User, groupArticleId: number) {

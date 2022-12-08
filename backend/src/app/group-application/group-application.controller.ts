@@ -106,13 +106,14 @@ export class GroupApplicationController {
   @Get('me')
   @ApiSuccessResponse(HttpStatus.OK, MyGroupResponse)
   async findMyGroup(@CurrentUser() user: User, @Query() query: MyGroupRequest) {
-    const { response, count } = await this.groupApplicationService.findMyGroup({
-      user,
-      limit: query.getLimit(),
-      offset: query.getOffset(),
-    });
+    const { response, totalCount } =
+      await this.groupApplicationService.findMyGroup({
+        user,
+        limit: query.getLimit(),
+        offset: query.getOffset(),
+      });
     const data = new MyGroupResponse(
-      count,
+      totalCount,
       query.currentPage,
       query.countPerPage,
       response,
