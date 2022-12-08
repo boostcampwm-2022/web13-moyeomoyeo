@@ -9,6 +9,7 @@ import styled from '@emotion/styled';
 import { Checkbox } from '@mantine/core';
 import { IconRefresh } from '@tabler/icons';
 
+import ArticleListLoading from '@components/common/ArticleListLoading';
 import DropDown from '@components/common/DropDown';
 import EmptyMessage from '@components/common/EmptyMessage';
 import GroupArticleCard from '@components/common/GroupArticleCard';
@@ -45,7 +46,7 @@ const Main = () => {
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
   const [progressChecked, setProgressChecked] = useState<boolean>(false);
 
-  const { data, fetchNextPage, hasNextPage, isFetching } = useFetchGroupArticles(
+  const { data, fetchNextPage, hasNextPage, isFetching, isLoading } = useFetchGroupArticles(
     selectedCategory,
     selectedLocation,
     progressChecked
@@ -118,7 +119,11 @@ const Main = () => {
             <IconRefresh color={gray[6]} onClick={refreshArticleList} />
           </RefreshButton>
         </RefreshWrapper>
-        {articles.length > 0 ? (
+        {isLoading ? (
+          <ListWrapper>
+            <ArticleListLoading />
+          </ListWrapper>
+        ) : articles.length > 0 ? (
           <ListWrapper>
             {articles.map((article) => (
               <Link key={article.id} href={`/article/${article.id}`}>
