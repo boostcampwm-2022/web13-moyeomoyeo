@@ -7,14 +7,13 @@ export const getGroupArticleFixture = async (
   groupArticle: Partial<GroupArticle> = {},
 ) => {
   const fixture = new GroupArticle();
-  fixture.id = group.id || faker.datatype.number({ min: 1, max: 10000 });
   fixture.group = group;
   group.article = new Promise((res, rej) => {
     res(fixture);
   });
   fixture.userId = (await groupArticle.user).id;
   fixture.user = groupArticle.user;
-  fixture.title = groupArticle.title;
+  fixture.title = groupArticle.title || faker.commerce.product();
   fixture.contents =
     groupArticle.contents || faker.commerce.productDescription();
   fixture.type = 'GROUP';

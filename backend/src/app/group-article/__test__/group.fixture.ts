@@ -11,13 +11,12 @@ export const getGroupFixture = (
   group: Partial<Group> = {},
 ) => {
   const fixture = new Group();
-  fixture.id = group.id || faker.datatype.number({ min: 1, max: 10000 });
   fixture.category = groupCategory;
   fixture.location = LOCATION.ONLINE;
   fixture.maxCapacity = group.maxCapacity || 10;
   fixture.status = group.status || GROUP_STATUS.PROGRESS;
   fixture.chatUrl = group.chatUrl || faker.internet.url();
-  fixture.chatUrl = group.chatUrl || faker.internet.url();
+  fixture.thumbnail = group.thumbnail || faker.internet.url();
   fixture.createdAt = new Date();
   fixture.updatedAt = new Date();
   return fixture;
