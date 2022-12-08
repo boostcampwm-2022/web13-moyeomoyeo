@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { Component, PropsWithChildren, useState } from 'react';
 
 import { AxiosError } from 'axios';
@@ -35,13 +36,13 @@ class ApiErrorBoundary extends Component<Props, State> {
     if (!error) return children;
 
     if (error instanceof GetError) {
-      return <ApiErrorModal message={error.message} />;
+      return <GetErrorModal message={error.message} />;
     }
     if (error instanceof RequestError) {
       return (
         <>
           {children}
-          <ApiErrorModal message={error.message} />
+          <RequestErrorModal message={error.message} />
         </>
       );
     }
@@ -50,7 +51,22 @@ class ApiErrorBoundary extends Component<Props, State> {
 
 export default ApiErrorBoundary;
 
-const ApiErrorModal = ({ message }: { message: string }) => {
+const GetErrorModal = ({ message }: { message: string }) => {
+  const router = useRouter();
+  const [open, setOpen] = useState<boolean>(true);
+  return (
+    <AlertModal
+      open={open}
+      onClose={() => {
+        setOpen(false);
+        router.back();
+      }}
+      message={message}
+    />
+  );
+};
+
+const RequestErrorModal = ({ message }: { message: string }) => {
   const [open, setOpen] = useState<boolean>(true);
   return <AlertModal open={open} onClose={() => setOpen(false)} message={message} />;
 };

@@ -52,16 +52,16 @@ export default function App({ Component, pageProps }: AppProps<{ dehydratedState
           <ReactQueryDevtools initialIsOpen={false} />
           <CommonStyles>
             <RouterTransition />
+            <Background />
             <ErrorBoundary key={uuid()}>
               <AuthErrorBoundary>
                 <ApiErrorBoundary>
                   <LoginRedirect />
-                  <Background />
                   <Component {...pageProps} />
-                  <Background />
                 </ApiErrorBoundary>
               </AuthErrorBoundary>
             </ErrorBoundary>
+            <Background />
           </CommonStyles>
         </Hydrate>
       </QueryClientProvider>

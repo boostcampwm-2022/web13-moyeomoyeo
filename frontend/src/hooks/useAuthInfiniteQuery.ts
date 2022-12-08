@@ -9,6 +9,7 @@ import {
 import { AxiosError } from 'axios';
 
 import AuthError from '@utils/errors/AuthError';
+import GetError from '@utils/errors/GetError';
 
 const useAuthInfiniteQuery = <
   TQueryFnData = unknown,
@@ -33,7 +34,7 @@ const useAuthInfiniteQuery = <
     if (error.response.status === 401) {
       throw new AuthError();
     }
-    throw error;
+    throw new GetError(error.response.data.message);
   }
   return { ...rest };
 };
