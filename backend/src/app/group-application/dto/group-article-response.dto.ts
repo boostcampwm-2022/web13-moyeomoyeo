@@ -5,6 +5,7 @@ import {
   LOCATION,
 } from '@src/app/group-article/constants/group-article.constants';
 import { IMyGroupResult } from '@app/group-application/dto/my-group-result.interface';
+import { ImageWithBlurResponse } from '@common/dto/image-with-blur-response.dto';
 
 export class GroupArticleResponse {
   @ApiProperty({
@@ -55,7 +56,7 @@ export class GroupArticleResponse {
     description: '썸네일 이미지 주소',
     required: true,
   })
-  thumbnail: string;
+  thumbnail: ImageWithBlurResponse;
 
   @ApiProperty({
     example: 10,
@@ -85,7 +86,7 @@ export class GroupArticleResponse {
   })
   createdAt: Date;
 
-  static from(myGroup: IMyGroupResult) {
+  static async from(myGroup: IMyGroupResult) {
     const response = new GroupArticleResponse();
     response.groupArticleId = myGroup.groupArticleId;
     response.title = myGroup.title;
@@ -93,7 +94,7 @@ export class GroupArticleResponse {
     response.category = myGroup.category;
     response.commentCount = myGroup.commentCount;
     response.scrapCount = myGroup.scrapCount;
-    response.thumbnail = myGroup.thumbnail;
+    response.thumbnail = await ImageWithBlurResponse.from(myGroup.thumbnail);
     response.maxCapacity = myGroup.maxCapacity;
     response.currentCapacity = Number(myGroup.currentCapacity);
     response.status = myGroup.status;

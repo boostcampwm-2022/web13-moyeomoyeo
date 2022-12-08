@@ -182,7 +182,9 @@ export class GroupApplicationService {
       limit,
       offset,
     });
-    const response = result.map((value) => GroupArticleResponse.from(value));
+    const response = await Promise.all(
+      result.map((value) => GroupArticleResponse.from(value)),
+    );
     const count = await this.groupApplicationRepository.findMyGroupCount(
       user.id,
     );
