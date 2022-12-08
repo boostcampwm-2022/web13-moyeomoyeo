@@ -97,6 +97,7 @@ interface NotificationType {
   type: Notification;
   title: string;
   subTitle: string;
+  groupArticleId: number;
   createdAt: string;
 }
 
