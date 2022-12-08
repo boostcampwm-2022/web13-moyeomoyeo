@@ -8,6 +8,7 @@ import { Scrap } from '@app/scrap/entity/scrap.entity';
 import { Comment } from '@app/comment/entity/comment.entity';
 import { GroupArticle } from '@app/group-article/entity/group-article.entity';
 import { IMyGroupResult } from '@app/group-application/dto/my-group-result.interface';
+import { IMyApplicationResult } from '@app/group-application/dto/my-application-result.interface';
 
 @Injectable()
 export class GroupApplicationRepository extends Repository<GroupApplication> {
@@ -27,10 +28,6 @@ export class GroupApplicationRepository extends Repository<GroupApplication> {
     return this.findOneBy({ userId, groupId, status });
   }
 
-  findMyGroupCount(userId: number) {
-    return this.countBy({ userId, deletedAt: IsNull() });
-  }
-
   findApplicationCountByGroup(groupId: number) {
     return this.countBy({ groupId, deletedAt: IsNull() });
   }
@@ -44,16 +41,28 @@ export class GroupApplicationRepository extends Repository<GroupApplication> {
     limit: number;
     offset: number;
   }) {
-    const groupApplications = await this.find({
-      where: {
-        userId,
-        deletedAt: IsNull(),
-      },
-      take: limit,
-      skip: offset,
-    });
+    const groupApplicationsQuery = this.createQueryBuilder('groupApplication')
+      .select([
+        'groupApplication.id as id',
+        'groupApplication.groupId as groupId',
+      ])
+      .leftJoin(Group, 'group', 'groupApplication.group_id = group.id')
+      .leftJoin(
+        GroupArticle,
+        'groupArticle',
+        'groupArticle.id = group.article_id',
+      )
+      .where('groupApplication.deletedAt IS NULL')
+      .andWhere('groupApplication.user_id = :id', { id: userId })
+      .andWhere('groupArticle.deletedAt IS NULL');
 
-    return this.createQueryBuilder('groupApplication')
+    const totalCount = await groupApplicationsQuery.clone().getCount();
+    const groupApplications = await groupApplicationsQuery
+      .limit(limit)
+      .offset(offset)
+      .getRawMany<IMyApplicationResult>();
+
+    const result = await this.createQueryBuilder('groupApplication')
       .select([
         'groupArticle.id as groupArticleId',
         'groupArticle.title as title',
@@ -91,7 +100,10 @@ export class GroupApplicationRepository extends Repository<GroupApplication> {
         ),
       })
       .groupBy('group.id')
+      .orderBy('group.id', 'DESC')
       .getRawMany<IMyGroupResult>();
+
+    return { result, totalCount };
   }
 
   findAllApplicationByGroupWithUser(groupId: number) {
