@@ -113,7 +113,7 @@ export class GroupApplicationService {
     groupArticle: GroupArticle,
     groupApplicationCount: number,
   ) {
-    if (groupArticle.group.maxCapacity >= groupApplicationCount + 1) {
+    if (groupArticle.group.maxCapacity <= groupApplicationCount + 1) {
       groupArticle.group.complete();
       this.groupArticleRepository.save(groupArticle);
       this.eventEmitter.emit(
