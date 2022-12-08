@@ -1,3 +1,5 @@
+import { useRouter } from 'next/router';
+
 import {
   QueryFunction,
   QueryKey,
@@ -21,10 +23,11 @@ const useAuthInfiniteQuery = <
     'queryKey' | 'queryFn'
   >
 ) => {
+  const { isReady } = useRouter();
   const { error, ...rest } = useInfiniteQuery<TQueryFnData, TError, TData, TQueryKey>(
     queryKey,
     queryFn,
-    options
+    { ...options, enabled: isReady && options.enabled }
   );
   if (error && error instanceof AxiosError) {
     if (error.response.status === 401) {

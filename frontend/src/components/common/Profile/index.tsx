@@ -18,7 +18,7 @@ const Profile = ({ user }: Props) => {
 
   return (
     <ProfileWrapper>
-      <Avatar alt={user.userName} src={profileImage} size="xl" />
+      <Avatar alt={user.userName} src={profileImage} size="xl" priority />
       <UserWrapper>
         <UserName>{userName}</UserName>
         <Description>{description}</Description>

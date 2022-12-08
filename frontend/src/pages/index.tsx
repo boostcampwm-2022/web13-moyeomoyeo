@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
 import { QueryClient, dehydrate, useQueryClient } from '@tanstack/react-query';
 import { GetServerSideProps } from 'next';
@@ -45,7 +45,7 @@ const Main = () => {
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
   const [progressChecked, setProgressChecked] = useState<boolean>(false);
 
-  const { data, fetchNextPage, hasNextPage, isFetching } = useFetchGroupArticles(
+  const { articles, fetchNextPage, hasNextPage, isFetching } = useFetchGroupArticles(
     selectedCategory,
     selectedLocation,
     progressChecked
@@ -56,8 +56,6 @@ const Main = () => {
       void fetchNextPage();
     }
   });
-
-  const articles = useMemo(() => (data ? data.pages.flatMap(({ data }) => data) : []), [data]);
 
   const refreshArticleList = () => {
     void queryClient.resetQueries(['articles']);

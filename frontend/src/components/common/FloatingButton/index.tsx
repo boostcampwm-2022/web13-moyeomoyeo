@@ -21,7 +21,7 @@ const FloatingButton = ({ children }: Props) => {
   const ref = useClickOutside(() => setOpened(false));
 
   return (
-    <Menu position="top-end" transition="rotate-right" transitionDuration={200}>
+    <Menu position="top-end">
       <Menu.Target>
         <FABWrapper
           color="indigo"

@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+
 import { AxiosError } from 'axios';
 
 import { ArticleStatus } from '@constants/article';
@@ -39,7 +41,7 @@ const useFetchGroupArticles = (
   location: Location | null,
   filterProgress: boolean
 ) => {
-  const queryResult = useAuthInfiniteQuery<ArticlePagingData, AxiosError, ArticlePagingData>(
+  const { data, ...rest } = useAuthInfiniteQuery<ArticlePagingData, AxiosError, ArticlePagingData>(
     ['articles', category, location, filterProgress],
     ({ pageParam = 1 }) => getGroupArticles(pageParam, category, location, filterProgress),
     {
@@ -48,7 +50,9 @@ const useFetchGroupArticles = (
     }
   );
 
-  return { ...queryResult };
+  const articles = useMemo(() => (data ? data.pages.flatMap(({ data }) => data) : []), [data]);
+
+  return { articles, ...rest };
 };
 
 export default useFetchGroupArticles;

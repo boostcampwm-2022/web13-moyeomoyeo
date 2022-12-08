@@ -7,6 +7,8 @@ import styled from '@emotion/styled';
 import { Progress, TypographyStylesProvider } from '@mantine/core';
 import { IconList } from '@tabler/icons';
 
+import Comment from '@components/article/Comment';
+import CommentInput from '@components/article/CommentInput';
 import MenuButton from '@components/article/MenuButton';
 import ParticipantsModal from '@components/article/ParticipantsModal';
 import ParticipateButton from '@components/article/ParticipateButton';
@@ -15,6 +17,7 @@ import ArticleTag from '@components/common/ArticleTag';
 import Avatar from '@components/common/Avatar';
 import Header from '@components/common/Header';
 import DetailTitle from '@components/common/Header/DetailTitle';
+import Joiner from '@components/common/Joiner';
 import PageLayout from '@components/common/PageLayout';
 import StatCounter from '@components/common/StatCounter';
 import { ArticleStatus, ArticleStatusKr } from '@constants/article';
@@ -26,8 +29,10 @@ import { ParticipateButtonStatus } from '@constants/participateButton';
 import useFetchApplicationStatus from '@hooks/queries/useFetchApplicationStatus';
 import useFetchArticle from '@hooks/queries/useFetchArticle';
 import useFetchChatUrl from '@hooks/queries/useFetchChatUrl';
+import useFetchComments from '@hooks/queries/useFetchComments';
 import useFetchMyInfo from '@hooks/queries/useFetchMyInfo';
 import useFetchParticipants from '@hooks/queries/useFetchParticipants';
+import useIntersect from '@hooks/useIntersect';
 import { ArticleType } from '@typings/types';
 import dateTimeFormat from '@utils/dateTime';
 
@@ -38,6 +43,7 @@ const ArticleDetail = () => {
   const router = useRouter();
   const articleId = Number(router.query.id);
   const { data: myInfo } = useFetchMyInfo();
+  const { comments, fetchNextPage, hasNextPage, isFetching } = useFetchComments(articleId);
   const { data: article } = useFetchArticle(articleId);
   const { data: isJoined } = useFetchApplicationStatus(articleId);
   const { data: participants } = useFetchParticipants(articleId);
@@ -50,6 +56,13 @@ const ArticleDetail = () => {
   const { url } = useFetchChatUrl(articleId, isUrlAvailable);
 
   const [participantsModalOpen, setParticipantsModalOpen] = useState<boolean>(false);
+
+  const ref = useIntersect((entry, observer) => {
+    observer.unobserve(entry.target);
+    if (hasNextPage && !isFetching) {
+      void fetchNextPage();
+    }
+  });
 
   return (
     <>
@@ -71,13 +84,14 @@ const ArticleDetail = () => {
             }
           />
         }
+        footer={<CommentInput />}
       >
         <>
-          {!article || isJoined === undefined || !myInfo || !participants ? (
-            <ArticleLoading />
-          ) : (
-            <>
-              <ContentWrapper>
+          <ContentWrapper>
+            {!article || isJoined === undefined || !myInfo || !participants ? (
+              <ArticleLoading />
+            ) : (
+              <>
                 <DetailWrapper>
                   <ProfileWrapper>
                     <Link href={`/user/${article.author.id}`}>
@@ -123,7 +137,7 @@ const ArticleDetail = () => {
                     </ParticipantButton>
                   </ParticipantWrapper>
                   <Progress
-                    value={(article.currentCapacity / article.maxCapacity) * 100}
+                    value={(participants.length / article.maxCapacity) * 100}
                     size="lg"
                     radius="lg"
                     color={indigo[7]}
@@ -140,21 +154,26 @@ const ArticleDetail = () => {
                   )}
                   <StatCounter variant="comment" count={article.commentCount} />
                 </DetailWrapper>
-                <Divider />
-                <CommentWrapper>
-                  <div>댓글영역</div>
-                </CommentWrapper>
-              </ContentWrapper>
-              <ParticipantsModal
-                participants={participants}
-                open={participantsModalOpen}
-                onClose={() => setParticipantsModalOpen(false)}
-              />
-            </>
-          )}
+                <ParticipantsModal
+                  participants={participants}
+                  open={participantsModalOpen}
+                  onClose={() => setParticipantsModalOpen(false)}
+                />
+              </>
+            )}
+          </ContentWrapper>
+
+          {/* TODO participants API 요청 */}
+
+          <Joiner
+            {...(comments.length > 0 && { before: true })}
+            components={comments.map((comment) => (
+              <Comment key={comment.id} comment={comment} />
+            ))}
+          />
+          <div ref={ref}></div>
         </>
       </PageLayout>
-      r
     </>
   );
 };
@@ -268,15 +287,4 @@ const ContentBox = styled.div`
   padding: 1.6rem;
   border: 1px solid ${({ theme }) => theme.colors.gray[2]};
   border-radius: 8px;
-`;
-
-const CommentWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const Divider = styled.div`
-  width: 100%;
-  height: 0.05rem;
-  background-color: ${({ theme }) => theme.colors.gray[4]};
 `;
