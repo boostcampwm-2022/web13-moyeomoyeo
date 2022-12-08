@@ -1,7 +1,7 @@
 import { ArticleStatus } from '@constants/article';
 import { Category } from '@constants/category';
 import { Location } from '@constants/location';
-import { ArticlePreviewType, ArticleType, UserType } from '@typings/types';
+import { ArticlePreviewType, ArticleType, ParticipantType, UserType } from '@typings/types';
 
 // TODO 개발용 dummy data, 추후 삭제
 const dummyArticlePreview: ArticlePreviewType = {
@@ -44,7 +44,7 @@ const dummyArticle: ArticleType = {
   createdAt: '2021-04-03T18:45:19Z',
 };
 
-const dummyParticipants: Array<Partial<UserType>> = [
+const dummyParticipants: ParticipantType[] = [
   {
     id: 1,
     userName: 'test1',

@@ -66,6 +66,8 @@ interface UserType {
   blogUrl: string;
 }
 
+interface ParticipantType extends Omit<UserType, 'githubUrl' | 'blogUrl'> {}
+
 interface ImageUploadType {
   key: string;
   url: string;
@@ -92,4 +94,5 @@ export type {
   UserType,
   ImageUploadType,
   NotificationType,
+  ParticipantType,
 };

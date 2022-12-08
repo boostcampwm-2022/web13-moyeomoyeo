@@ -17,7 +17,7 @@ const useFetchApplicationStatus = (groupArticleId: number) => {
     }
   );
 
-  return { isJoined: data };
+  return { data };
 };
 
 export default useFetchApplicationStatus;

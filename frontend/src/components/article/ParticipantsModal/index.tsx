@@ -4,10 +4,10 @@ import { Modal } from '@mantine/core';
 import ParticipantItem from '@components/article/ParticipantsModal/ParticipantItem';
 import EmptyMessage from '@components/common/EmptyMessage';
 import Joiner from '@components/common/Joiner';
-import { UserType } from '@typings/types';
+import { ParticipantType } from '@typings/types';
 
 interface Props {
-  participants: Array<Partial<UserType>>;
+  participants: ParticipantType[];
   open: boolean;
   onClose: () => void;
 }
