@@ -1,4 +1,11 @@
-import { Controller, Get, Res, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpStatus,
+  Post,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { GithubAuthGuard } from '@app/auth/github-auth.guard';
@@ -8,6 +15,7 @@ import { AuthService } from '@app/auth/auth.service';
 import { JwtTokenService } from '@common/module/jwt-token/jwt-token.service';
 import { GithubConfigService } from '@config/github/config.service';
 import { CookieConfigService } from '@config/cookie/config.service';
+import { ApiSuccessResponse } from '@src/common/decorator/api-success-resposne.decorator';
 
 @Controller('/auth')
 @ApiTags('Auth')
@@ -58,5 +66,12 @@ export class AuthController {
     });
 
     response.redirect(this.githubConfigService.redirectUrl);
+  }
+
+  @Post('logout')
+  @ApiSuccessResponse(HttpStatus.NO_CONTENT)
+  logout(@Res({ passthrough: true }) response: Response) {
+    response.clearCookie('access_token');
+    response.clearCookie('refresh_token');
   }
 }
