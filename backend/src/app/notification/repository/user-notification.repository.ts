@@ -31,6 +31,9 @@ export class UserNotificationRepository extends Repository<UserNotification> {
         userId: user.id,
         deletedAt: IsNull(),
       },
+      order: {
+        id: 'DESC',
+      },
       take: limit,
       skip: offset,
     });
