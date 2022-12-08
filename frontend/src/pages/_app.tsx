@@ -5,7 +5,6 @@ import '@styles/global.css';
 
 import { Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import MediaQuery from 'react-responsive';
 import { v4 as uuid } from 'uuid';
 
 import ApiErrorBoundary from '@components/common/ErrorBoundary/ApiErrorBoundary';
@@ -72,13 +71,11 @@ export default function App({ Component, pageProps }: AppProps<{ dehydratedState
 
 const Background = () => {
   return (
-    <MediaQuery minWidth={600}>
-      <div
-        style={{
-          background: 'white',
-          width: 'calc((100vw - 600px) / 2)',
-        }}
-      ></div>
-    </MediaQuery>
+    <div
+      style={{
+        background: 'white',
+        width: 'calc((100vw - 600px) / 2)',
+      }}
+    />
   );
 };
