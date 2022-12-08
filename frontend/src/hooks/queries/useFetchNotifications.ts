@@ -36,6 +36,7 @@ const useFetchNotifications = () => {
   >(['notifications'], ({ pageParam = 1 }) => getNotifications(pageParam), {
     getNextPageParam: (lastPage) =>
       lastPage.totalPage === lastPage.currentPage ? undefined : lastPage.currentPage + 1,
+    refetchInterval: 3000,
   });
 
   const notifications = useMemo(() => (data ? data.pages.flatMap(({ data }) => data) : []), [data]);
