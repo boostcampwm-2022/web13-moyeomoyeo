@@ -5,9 +5,6 @@ const theme: MantineThemeOverride = {
   focusRing: 'auto',
   defaultRadius: 'sm',
   primaryColor: 'indigo',
-  activeStyles: {
-    transform: 'scale(0.95)',
-  },
   defaultGradient: {
     from: 'indigo',
     to: 'cyan',

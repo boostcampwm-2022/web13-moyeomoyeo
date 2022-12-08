@@ -31,7 +31,7 @@ export const getGroupArticles = async (
   const {
     data: { data },
   } = await clientAxios<ArticleResponseType>('/v1/group-articles/search', {
-    params: { category, location, status, currentPage, countPerPage: 6 },
+    params: { category, location, status, currentPage, countPerPage: 8 },
   });
   return data;
 };
@@ -46,7 +46,7 @@ const useFetchGroupArticles = (
     ({ pageParam = 1 }) => getGroupArticles(pageParam, category, location, filterProgress),
     {
       getNextPageParam: (lastPage) =>
-        lastPage.totalPage === lastPage.currentPage ? undefined : lastPage.currentPage + 1,
+        lastPage.data.length === 0 ? undefined : lastPage.currentPage + 1,
     }
   );
 

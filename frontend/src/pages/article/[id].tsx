@@ -12,8 +12,8 @@ import CommentInput from '@components/article/CommentInput';
 import MenuButton from '@components/article/MenuButton';
 import ParticipantsModal from '@components/article/ParticipantsModal';
 import ParticipateButton from '@components/article/ParticipateButton';
-import ArticleLoading from '@components/common/ArticleLoading';
 import ArticleTag from '@components/common/ArticleTag';
+import ArticleViewLoading from '@components/common/ArticleViewLoading';
 import Avatar from '@components/common/Avatar';
 import Header from '@components/common/Header';
 import DetailTitle from '@components/common/Header/DetailTitle';
@@ -89,7 +89,7 @@ const ArticleDetail = () => {
         <>
           <ContentWrapper>
             {!article || isJoined === undefined || !myInfo || !participants ? (
-              <ArticleLoading />
+              <ArticleViewLoading />
             ) : (
               <>
                 <DetailWrapper>
