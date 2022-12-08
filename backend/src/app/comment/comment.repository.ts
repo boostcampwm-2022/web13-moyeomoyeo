@@ -12,14 +12,7 @@ export class CommentRepository extends Repository<Comment> {
     );
   }
 
-  getTotalCount(articleId: number) {
-    return this.countBy({
-      articleId,
-      deletedAt: IsNull(),
-    });
-  }
-
-  selectAllComments({
+  async selectAllComments({
     limit,
     offset,
     articleId,
@@ -28,7 +21,7 @@ export class CommentRepository extends Repository<Comment> {
     offset: number;
     articleId: number;
   }) {
-    return this.find({
+    const [allCommentList, totalCount] = await this.findAndCount({
       relations: {
         user: true,
       },
@@ -39,6 +32,8 @@ export class CommentRepository extends Repository<Comment> {
       take: limit,
       skip: offset,
     });
+
+    return { allCommentList, totalCount };
   }
 
   findById(id: number) {
