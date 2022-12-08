@@ -7,6 +7,7 @@ export const getGroupArticleFixture = async (
   groupArticle: Partial<GroupArticle> = {},
 ) => {
   const fixture = new GroupArticle();
+  fixture.id = groupArticle.id || faker.datatype.number();
   fixture.group = group;
   group.article = new Promise((res, rej) => {
     res(fixture);

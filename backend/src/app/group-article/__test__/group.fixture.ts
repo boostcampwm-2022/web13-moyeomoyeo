@@ -11,6 +11,7 @@ export const getGroupFixture = (
   group: Partial<Group> = {},
 ) => {
   const fixture = new Group();
+  fixture.id = group.id || faker.datatype.number();
   fixture.category = groupCategory;
   fixture.location = LOCATION.ONLINE;
   fixture.maxCapacity = group.maxCapacity || 10;

@@ -35,25 +35,26 @@ describe('Group Application (e2e)', () => {
   beforeEach(async () => {
     const groupCategoryRepository = dataSource.getRepository(GroupCategory);
     const categories = getGroupCategoryFixture();
-    await groupCategoryRepository.insert(categories);
+    await groupCategoryRepository.save(categories);
 
     const userRepository = dataSource.getRepository(User);
     const user1 = getUserFixture({ id: 1 });
     const user2 = getUserFixture({ id: 2 });
-    await userRepository.insert([user1, user2]);
+    await userRepository.save([user1, user2]);
 
-    const group1 = getGroupFixture(categories[1], { maxCapacity: 2 });
-    const group2 = getGroupFixture(categories[1]);
+    const group1 = getGroupFixture(categories[1], { id: 1, maxCapacity: 2 });
+    const group2 = getGroupFixture(categories[1], { id: 2 });
 
     const groupArticleRepository = dataSource.getRepository(GroupArticle);
-    const user = await userRepository.findOneBy({ id: 1 });
     const groupArticle1 = await getGroupArticleFixture(group1, {
-      user: new Promise((res) => res(user)),
-      userId: user.id,
+      id: 1,
+      user: new Promise((res) => res(user1)),
+      userId: user1.id,
     });
     const groupArticle2 = await getGroupArticleFixture(group2, {
-      user: new Promise((res) => res(user)),
-      userId: user.id,
+      id: 2,
+      user: new Promise((res) => res(user1)),
+      userId: user1.id,
     });
     await groupArticleRepository.save([groupArticle1, groupArticle2]);
   });
