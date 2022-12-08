@@ -49,7 +49,7 @@ export class Notification {
     return notification;
   }
 
-  static createCommentAddedNotification(
+  static async createCommentAddedNotification(
     groupArticle: GroupArticle,
     comment: Comment,
   ) {
@@ -57,7 +57,7 @@ export class Notification {
     notification.type = NOTIFICATION_TYPE.COMMENT_ADDED;
     notification.contents = {
       title: groupArticle.title,
-      subTitle: comment.contents,
+      subTitle: `${(await comment.user).userName}: ${comment.contents}`,
       groupArticleId: groupArticle.id,
     };
     return notification;
