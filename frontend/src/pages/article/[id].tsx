@@ -10,8 +10,8 @@ import { IconList } from '@tabler/icons';
 import MenuButton from '@components/article/MenuButton';
 import ParticipantsModal from '@components/article/ParticipantsModal';
 import ParticipateButton from '@components/article/ParticipateButton';
-import ArticleLoading from '@components/common/ArticleLoading';
 import ArticleTag from '@components/common/ArticleTag';
+import ArticleViewLoading from '@components/common/ArticleViewLoading';
 import Avatar from '@components/common/Avatar';
 import Header from '@components/common/Header';
 import DetailTitle from '@components/common/Header/DetailTitle';
@@ -72,79 +72,77 @@ const ArticleDetail = () => {
           />
         }
       >
-        <>
+        <ContentWrapper>
           {!article || isJoined === undefined || !myInfo || !participants ? (
-            <ArticleLoading />
+            <ArticleViewLoading />
           ) : (
             <>
-              <ContentWrapper>
-                <DetailWrapper>
-                  <ProfileWrapper>
-                    <Link href={`/user/${article.author.id}`}>
-                      <Avatar
-                        src={article.author.profileImage}
-                        alt={article.author.userName}
-                        size="lg"
-                      />
-                    </Link>
-                    <ProfileTextWrapper>
-                      <Author>{article.author.userName}</Author>
-                      <Time>{dateTimeFormat(article.createdAt)}</Time>
-                    </ProfileTextWrapper>
-                  </ProfileWrapper>
-                  <Title>{article.title}</Title>
-                  <TagWrapper>
-                    <ArticleTag
-                      color={STATUS_COLOR[article.status]}
-                      content={ArticleStatusKr[article.status]}
+              <DetailWrapper>
+                <ProfileWrapper>
+                  <Link href={`/user/${article.author.id}`}>
+                    <Avatar
+                      src={article.author.profileImage}
+                      alt={article.author.userName}
                       size="lg"
                     />
-                    <ArticleTag
-                      color={CATEGORY_COLOR[article.category]}
-                      content={CategoryKr[article.category]}
-                      size="lg"
-                    />
-                    <ArticleTag
-                      color={LOCATION_COLOR[article.location]}
-                      content={LocationKr[article.location]}
-                      size="lg"
-                    />
-                  </TagWrapper>
-                  <ParticipantWrapper>
-                    <StatusWrapper>
-                      <StatusText>모집 현황</StatusText>
-                      <CountText>
-                        {participants.length}명 / {article.maxCapacity}명
-                      </CountText>
-                    </StatusWrapper>
-                    <ParticipantButton onClick={() => setParticipantsModalOpen(true)}>
-                      <IconList width="16" height="16" color={gray[6]} />
-                      <ViewText>신청자 확인</ViewText>
-                    </ParticipantButton>
-                  </ParticipantWrapper>
-                  <Progress
-                    value={(article.currentCapacity / article.maxCapacity) * 100}
+                  </Link>
+                  <ProfileTextWrapper>
+                    <Author>{article.author.userName}</Author>
+                    <Time>{dateTimeFormat(article.createdAt)}</Time>
+                  </ProfileTextWrapper>
+                </ProfileWrapper>
+                <Title>{article.title}</Title>
+                <TagWrapper>
+                  <ArticleTag
+                    color={STATUS_COLOR[article.status]}
+                    content={ArticleStatusKr[article.status]}
                     size="lg"
-                    radius="lg"
-                    color={indigo[7]}
                   />
-                  <TypographyStylesProvider>
-                    <ContentBox dangerouslySetInnerHTML={{ __html: article.contents }} />
-                  </TypographyStylesProvider>
-                  {article.author.id !== myInfo.id && (
-                    <ParticipateButton
-                      status={getButtonStatus(article, participants.length, isJoined)}
-                      groupArticleId={article.id}
-                      chatRoomLink={url}
-                    />
-                  )}
-                  <StatCounter variant="comment" count={article.commentCount} />
-                </DetailWrapper>
-                <Divider />
-                <CommentWrapper>
-                  <div>댓글영역</div>
-                </CommentWrapper>
-              </ContentWrapper>
+                  <ArticleTag
+                    color={CATEGORY_COLOR[article.category]}
+                    content={CategoryKr[article.category]}
+                    size="lg"
+                  />
+                  <ArticleTag
+                    color={LOCATION_COLOR[article.location]}
+                    content={LocationKr[article.location]}
+                    size="lg"
+                  />
+                </TagWrapper>
+                <ParticipantWrapper>
+                  <StatusWrapper>
+                    <StatusText>모집 현황</StatusText>
+                    <CountText>
+                      {participants.length}명 / {article.maxCapacity}명
+                    </CountText>
+                  </StatusWrapper>
+                  <ParticipantButton onClick={() => setParticipantsModalOpen(true)}>
+                    <IconList width="16" height="16" color={gray[6]} />
+                    <ViewText>신청자 확인</ViewText>
+                  </ParticipantButton>
+                </ParticipantWrapper>
+                <Progress
+                  value={(article.currentCapacity / article.maxCapacity) * 100}
+                  size="lg"
+                  radius="lg"
+                  color={indigo[7]}
+                />
+                <TypographyStylesProvider>
+                  <ContentBox dangerouslySetInnerHTML={{ __html: article.contents }} />
+                </TypographyStylesProvider>
+                {article.author.id !== myInfo.id && (
+                  <ParticipateButton
+                    status={getButtonStatus(article, participants.length, isJoined)}
+                    groupArticleId={article.id}
+                    chatRoomLink={url}
+                  />
+                )}
+                <StatCounter variant="comment" count={article.commentCount} />
+              </DetailWrapper>
+              <Divider />
+              <CommentWrapper>
+                <div>댓글영역</div>
+              </CommentWrapper>
               <ParticipantsModal
                 participants={participants}
                 open={participantsModalOpen}
@@ -152,7 +150,7 @@ const ArticleDetail = () => {
               />
             </>
           )}
-        </>
+        </ContentWrapper>
       </PageLayout>
       r
     </>

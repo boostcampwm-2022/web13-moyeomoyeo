@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { Skeleton, Space } from '@mantine/core';
 
-const ArticleLoading = () => {
+const ArticleViewLoading = () => {
   return (
     <>
       <ArticleAuthor>
@@ -46,4 +46,4 @@ const ArticleApplicationStatus = styled.div`
   justify-content: space-between;
 `;
 
-export default ArticleLoading;
+export default ArticleViewLoading;
