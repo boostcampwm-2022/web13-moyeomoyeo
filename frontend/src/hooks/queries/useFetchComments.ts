@@ -9,7 +9,7 @@ import { clientAxios } from '@utils/commonAxios';
 const getComments = async (currentPage: number, articleId: number) => {
   const {
     data: { data },
-  } = await clientAxios.get<ApiResponseType<PagingDataType<CommentType>>>('/v1/comments', {
+  } = await clientAxios.get<ApiResponseType<PagingDataType<CommentType[]>>>('/v1/comments', {
     params: {
       articleId,
       currentPage,
@@ -21,12 +21,12 @@ const getComments = async (currentPage: number, articleId: number) => {
 
 const useFetchComments = (articleId: number) => {
   const { data, ...rest } = useAuthInfiniteQuery<
-    PagingDataType<CommentType>,
+    PagingDataType<CommentType[]>,
     AxiosError,
-    PagingDataType<CommentType>
+    PagingDataType<CommentType[]>
   >(['comments', articleId], ({ pageParam = 1 }) => getComments(pageParam, articleId), {
     getNextPageParam: (lastPage) =>
-      lastPage.totalPage === lastPage.currentPage ? undefined : lastPage.currentPage + 1,
+      lastPage.data.length === 0 ? undefined : lastPage.currentPage + 1,
   });
 
   const comments = useMemo(() => (data ? data.pages.flatMap(({ data }) => data) : []), [data]);

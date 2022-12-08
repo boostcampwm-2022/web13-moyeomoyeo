@@ -33,7 +33,7 @@ const useFetchMyParticipateArticles = () => {
     ({ pageParam = 1 }) => getMyParticipateArticles(pageParam),
     {
       getNextPageParam: (lastPage) =>
-        lastPage.totalPage === lastPage.currentPage ? undefined : lastPage.currentPage + 1,
+        lastPage.data.length === 0 ? undefined : lastPage.currentPage + 1,
     }
   );
 

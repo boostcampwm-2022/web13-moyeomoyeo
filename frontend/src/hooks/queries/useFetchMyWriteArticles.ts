@@ -34,7 +34,7 @@ const useFetchMyWriteArticles = () => {
     ({ pageParam = 1 }) => getMyWriteArticles(pageParam),
     {
       getNextPageParam: (lastPage) =>
-        lastPage.totalPage === lastPage.currentPage ? undefined : lastPage.currentPage + 1,
+        lastPage.data.length === 0 ? undefined : lastPage.currentPage + 1,
     }
   );
 

@@ -46,7 +46,7 @@ const useFetchGroupArticles = (
     ({ pageParam = 1 }) => getGroupArticles(pageParam, category, location, filterProgress),
     {
       getNextPageParam: (lastPage) =>
-        lastPage.totalPage === lastPage.currentPage ? undefined : lastPage.currentPage + 1,
+        lastPage.data.length === 0 ? undefined : lastPage.currentPage + 1,
     }
   );
 
