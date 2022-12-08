@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 import { useTheme } from '@emotion/react';
 import styled from '@emotion/styled';
 import { IconExternalLink } from '@tabler/icons';
@@ -24,10 +26,11 @@ const ParticipantItem = ({ participant }: Props) => {
           <IntroduceText>{description}</IntroduceText>
         </ProfileTextWrapper>
       </ProfileWrapper>
-      {/* TODO 클릭 시 유저 프로필 페이지로 이동 */}
-      <ProfileLinkButton>
-        <IconExternalLink color={gray[6]} />
-      </ProfileLinkButton>
+      <Link href={`/user/${participant.id}`}>
+        <ProfileLinkButton>
+          <IconExternalLink color={gray[6]} />
+        </ProfileLinkButton>
+      </Link>
     </ItemWrapper>
   );
 };

@@ -23,7 +23,7 @@ const useFetchArticle = (id: number) => {
     }
   );
 
-  return { article: data, isLoading };
+  return { data, isLoading };
 };
 
 export default useFetchArticle;

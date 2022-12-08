@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
@@ -22,7 +23,6 @@ import StatCounter from '@components/common/StatCounter';
 import { ArticleStatus, ArticleStatusKr } from '@constants/article';
 import { CategoryKr } from '@constants/category';
 import { CATEGORY_COLOR, LOCATION_COLOR, STATUS_COLOR } from '@constants/color';
-import { dummyParticipants } from '@constants/dummy';
 import { LocationKr } from '@constants/location';
 import { PAGE_TITLE } from '@constants/pageTitle';
 import { ParticipateButtonStatus } from '@constants/participateButton';
@@ -31,6 +31,7 @@ import useFetchArticle from '@hooks/queries/useFetchArticle';
 import useFetchChatUrl from '@hooks/queries/useFetchChatUrl';
 import useFetchComments from '@hooks/queries/useFetchComments';
 import useFetchMyInfo from '@hooks/queries/useFetchMyInfo';
+import useFetchParticipants from '@hooks/queries/useFetchParticipants';
 import useIntersect from '@hooks/useIntersect';
 import { ArticleType } from '@typings/types';
 import dateTimeFormat from '@utils/dateTime';
@@ -42,13 +43,17 @@ const ArticleDetail = () => {
   const router = useRouter();
   const articleId = Number(router.query.id);
   const { data: myInfo } = useFetchMyInfo();
-  const { article } = useFetchArticle(articleId);
-  const { isJoined } = useFetchApplicationStatus(articleId);
-  const { url } = useFetchChatUrl(
-    articleId,
-    getButtonStatus(article, isJoined) === ParticipateButtonStatus.LINK
-  );
   const { comments, fetchNextPage, hasNextPage, isFetching } = useFetchComments(articleId);
+  const { data: article } = useFetchArticle(articleId);
+  const { data: isJoined } = useFetchApplicationStatus(articleId);
+  const { data: participants } = useFetchParticipants(articleId);
+
+  const isUrlAvailable =
+    !!article &&
+    !!participants &&
+    isJoined &&
+    getButtonStatus(article, participants.length, isJoined) === ParticipateButtonStatus.LINK;
+  const { url } = useFetchChatUrl(articleId, isUrlAvailable);
 
   const [participantsModalOpen, setParticipantsModalOpen] = useState<boolean>(false);
 
@@ -89,11 +94,13 @@ const ArticleDetail = () => {
               <>
                 <DetailWrapper>
                   <ProfileWrapper>
-                    <Avatar
-                      src={article.author.profileImage}
-                      alt={article.author.userName}
-                      size="lg"
-                    />
+                    <Link href={`/user/${article.author.id}`}>
+                      <Avatar
+                        src={article.author.profileImage}
+                        alt={article.author.userName}
+                        size="lg"
+                      />
+                    </Link>
                     <ProfileTextWrapper>
                       <Author>{article.author.userName}</Author>
                       <Time>{dateTimeFormat(article.createdAt)}</Time>
@@ -121,7 +128,7 @@ const ArticleDetail = () => {
                     <StatusWrapper>
                       <StatusText>모집 현황</StatusText>
                       <CountText>
-                        {article.currentCapacity}명 / {article.maxCapacity}명
+                        {participants.length}명 / {article.maxCapacity}명
                       </CountText>
                     </StatusWrapper>
                     <ParticipantButton onClick={() => setParticipantsModalOpen(true)}>
@@ -140,7 +147,7 @@ const ArticleDetail = () => {
                   </TypographyStylesProvider>
                   {article.author.id !== myInfo.id && (
                     <ParticipateButton
-                      status={getButtonStatus(article, isJoined)}
+                      status={getButtonStatus(article, participants.length, isJoined)}
                       groupArticleId={article.id}
                       chatRoomLink={url}
                     />
@@ -161,7 +168,7 @@ const ArticleDetail = () => {
           />
           <div ref={ref}></div>
           <ParticipantsModal
-            participants={dummyParticipants}
+            participants={participants}
             open={participantsModalOpen}
             onClose={() => setParticipantsModalOpen(false)}
           />
@@ -173,8 +180,9 @@ const ArticleDetail = () => {
 
 export default ArticleDetail;
 
-const getButtonStatus = (article: ArticleType, isJoined: boolean) => {
-  if (!article || isJoined === undefined) return ParticipateButtonStatus.CLOSED;
+const getButtonStatus = (article: ArticleType, currentCapacity: number, isJoined: boolean) => {
+  if (!article || isJoined === undefined || article.maxCapacity === currentCapacity)
+    return ParticipateButtonStatus.CLOSED;
 
   switch (article.status) {
     case ArticleStatus.PROGRESS:

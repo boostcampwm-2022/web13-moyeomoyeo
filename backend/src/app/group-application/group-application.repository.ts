@@ -31,6 +31,10 @@ export class GroupApplicationRepository extends Repository<GroupApplication> {
     return this.countBy({ userId, deletedAt: IsNull() });
   }
 
+  findApplicationCountByGroup(groupId: number) {
+    return this.countBy({ groupId, deletedAt: IsNull() });
+  }
+
   async findMyGroup({
     userId,
     limit,
