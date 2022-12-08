@@ -1,18 +1,19 @@
 import Link from 'next/link';
-import { useMemo } from 'react';
 
 import styled from '@emotion/styled';
 
+import ArticleListLoading from '@components/common/ArticleListLoading';
 import EmptyMessage from '@components/common/EmptyMessage';
 import GroupArticleCard from '@components/common/GroupArticleCard';
 import Header from '@components/common/Header';
 import DetailTitle from '@components/common/Header/DetailTitle';
 import PageLayout from '@components/common/PageLayout';
-import useFetchMyArticles from '@hooks/queries/useFetchMyArticles';
+import useFetchMyParticipateArticles from '@hooks/queries/useFetchMyParticipateArticles';
 import useIntersect from '@hooks/useIntersect';
 
 const MyParcipatePage = () => {
-  const { data, fetchNextPage, hasNextPage, isFetching } = useFetchMyArticles();
+  const { articles, fetchNextPage, hasNextPage, isFetching, isLoading } =
+    useFetchMyParticipateArticles();
 
   const ref = useIntersect((entry, observer) => {
     observer.unobserve(entry.target);
@@ -21,10 +22,6 @@ const MyParcipatePage = () => {
     }
   });
 
-  const articles = useMemo(
-    () => (data ? data.pages.flatMap(({ data }) => data.articles) : []),
-    [data]
-  );
   return (
     <PageLayout
       header={
@@ -36,13 +33,17 @@ const MyParcipatePage = () => {
       }
     >
       <PageContentWrapper>
-        {articles.length ? (
+        {isLoading ? (
+          <ArticleList>
+            <ArticleListLoading />
+          </ArticleList>
+        ) : articles.length ? (
           <ArticleList>
             {articles.map((article) => (
               <Link href={`/article/${article.id}`} key={article.id}>
-                <div>
+                <CardLink>
                   <GroupArticleCard article={article} />
-                </div>
+                </CardLink>
               </Link>
             ))}
             <div ref={ref}></div>
@@ -66,6 +67,10 @@ const ArticleList = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-gap: 1.3rem;
+`;
+
+const CardLink = styled.div`
+  overflow: auto;
 `;
 
 export default MyParcipatePage;

@@ -1,8 +1,8 @@
 import Link from 'next/link';
-import { useMemo } from 'react';
 
 import styled from '@emotion/styled';
 
+import ArticleListLoading from '@components/common/ArticleListLoading';
 import EmptyMessage from '@components/common/EmptyMessage';
 import GroupArticleCard from '@components/common/GroupArticleCard';
 import Header from '@components/common/Header';
@@ -13,7 +13,7 @@ import useFetchMyWriteArticles from '@hooks/queries/useFetchMyWriteArticles';
 import useIntersect from '@hooks/useIntersect';
 
 const MyWriteArticlesPage = () => {
-  const { data, fetchNextPage, hasNextPage, isFetching } = useFetchMyWriteArticles();
+  const { articles, fetchNextPage, hasNextPage, isFetching, isLoading } = useFetchMyWriteArticles();
 
   const {
     OWN_GROUP: { title, subTitle },
@@ -26,12 +26,14 @@ const MyWriteArticlesPage = () => {
     }
   });
 
-  const articles = useMemo(() => (data ? data.pages.flatMap(({ data }) => data) : []), [data]);
-
   return (
     <PageLayout header={<Header leftNode={<DetailTitle title={title} subTitle={subTitle} />} />}>
       <ContentWrapper>
-        {articles.length ? (
+        {isLoading ? (
+          <ArticleList>
+            <ArticleListLoading />
+          </ArticleList>
+        ) : articles.length ? (
           <ArticleList>
             {articles.map((article) => (
               <Link key={article.id} href={`/article/${article.id}`}>

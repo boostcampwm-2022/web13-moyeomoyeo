@@ -1,8 +1,7 @@
 import { useMemo } from 'react';
 
-import { AxiosError } from 'axios';
+import { useInfiniteQuery } from '@tanstack/react-query';
 
-import useAuthInfiniteQuery from '@hooks/useAuthInfiniteQuery';
 import { ArticlePreviewType } from '@typings/types';
 import { clientAxios } from '@utils/commonAxios';
 
@@ -19,19 +18,19 @@ interface ArticleResponseType {
   data: ArticlePagingData;
 }
 
-const getMyWriteArticles = async (currentPage: number) => {
+const getMyParticipateArticles = async (currentPage: number) => {
   const {
     data: { data },
-  } = await clientAxios.get<ArticleResponseType>('/v1/my-group-articles', {
+  } = await clientAxios.get<ArticleResponseType>('/v1/group-applications/me', {
     params: { currentPage, countPerPage: 8 },
   });
   return data;
 };
 
-const useFetchMyWriteArticles = () => {
-  const { data, ...rest } = useAuthInfiniteQuery<ArticlePagingData, AxiosError, ArticlePagingData>(
-    ['articles', 'mywrite'],
-    ({ pageParam = 1 }) => getMyWriteArticles(pageParam),
+const useFetchMyParticipateArticles = () => {
+  const { data, ...rest } = useInfiniteQuery(
+    ['articles', 'myparticipate'],
+    ({ pageParam = 1 }) => getMyParticipateArticles(pageParam),
     {
       getNextPageParam: (lastPage) =>
         lastPage.totalPage === lastPage.currentPage ? undefined : lastPage.currentPage + 1,
@@ -43,4 +42,4 @@ const useFetchMyWriteArticles = () => {
   return { articles, ...rest };
 };
 
-export default useFetchMyWriteArticles;
+export default useFetchMyParticipateArticles;
