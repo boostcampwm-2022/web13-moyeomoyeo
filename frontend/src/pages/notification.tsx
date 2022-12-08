@@ -1,5 +1,3 @@
-import { useMemo } from 'react';
-
 import styled from '@emotion/styled';
 
 import EmptyMessage from '@components/common/EmptyMessage';
@@ -14,7 +12,7 @@ import useFetchNotifications from '@hooks/queries/useFetchNotifications';
 import useIntersect from '@hooks/useIntersect';
 
 const NotificationPage = () => {
-  const { data, fetchNextPage, hasNextPage, isFetching } = useFetchNotifications();
+  const { data: notifications, fetchNextPage, hasNextPage, isFetching } = useFetchNotifications();
 
   const ref = useIntersect((entry, observer) => {
     observer.unobserve(entry.target);
@@ -22,8 +20,6 @@ const NotificationPage = () => {
       void fetchNextPage();
     }
   });
-
-  const notifications = useMemo(() => (data ? data.pages.flatMap(({ data }) => data) : []), [data]);
 
   return (
     <PageLayout
@@ -54,6 +50,7 @@ const NotificationPage = () => {
           )}
         </PageWrapper>
       ) : (
+        // TODO 로딩 처리
         <div>로딩중</div>
       )}
     </PageLayout>

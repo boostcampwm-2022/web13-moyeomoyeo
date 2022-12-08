@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+
 import { AxiosError } from 'axios';
 
 import useAuthInfiniteQuery from '@hooks/useAuthInfiniteQuery';
@@ -27,7 +29,7 @@ const getNotifications = async (currentPage: number) => {
 };
 
 const useFetchNotifications = () => {
-  const queryResult = useAuthInfiniteQuery<
+  const { data, ...queryResult } = useAuthInfiniteQuery<
     NotificationPagingData,
     AxiosError,
     NotificationPagingData
@@ -35,7 +37,10 @@ const useFetchNotifications = () => {
     getNextPageParam: (lastPage) =>
       lastPage.totalPage === lastPage.currentPage ? undefined : lastPage.currentPage + 1,
   });
-  return { ...queryResult };
+
+  const notifications = useMemo(() => (data ? data.pages.flatMap(({ data }) => data) : []), [data]);
+
+  return { data: notifications, ...queryResult };
 };
 
 export default useFetchNotifications;
