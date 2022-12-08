@@ -17,7 +17,7 @@ interface Props extends ComponentProps<typeof Image> {
 
 const Avatar = forwardRef<HTMLDivElement, Props>(({ size, ...rest }, ref) => {
   return (
-    <div ref={ref}>
+    <AvatarWrapper ref={ref}>
       <AvatarImage
         {...rest}
         layout="fixed"
@@ -25,11 +25,15 @@ const Avatar = forwardRef<HTMLDivElement, Props>(({ size, ...rest }, ref) => {
         height={AVATAR_SIZES[size]}
         defaultImgUrl="/avatar.jpg"
       />
-    </div>
+    </AvatarWrapper>
   );
 });
 
 Avatar.displayName = 'Avatar';
+
+const AvatarWrapper = styled.div`
+  font-size: 0;
+`;
 
 const AvatarImage = styled(Image)`
   border-radius: 50%;

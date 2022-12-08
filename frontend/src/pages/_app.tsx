@@ -1,6 +1,7 @@
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
+import '@styles/global.css';
 
 import { Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
@@ -55,7 +56,9 @@ export default function App({ Component, pageProps }: AppProps<{ dehydratedState
               <AuthErrorBoundary>
                 <ApiErrorBoundary>
                   <LoginRedirect />
+                  <Background />
                   <Component {...pageProps} />
+                  <Background />
                 </ApiErrorBoundary>
               </AuthErrorBoundary>
             </ErrorBoundary>
@@ -65,3 +68,14 @@ export default function App({ Component, pageProps }: AppProps<{ dehydratedState
     </>
   );
 }
+
+const Background = () => {
+  return (
+    <div
+      style={{
+        background: 'white',
+        width: 'calc((100vw - 600px) / 2)',
+      }}
+    />
+  );
+};

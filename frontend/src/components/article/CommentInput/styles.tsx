@@ -5,6 +5,8 @@ const CommentInputWrapper = styled.div`
   width: 100%;
   position: sticky;
   bottom: 0;
+  background-color: ${({ theme }) => theme.white};
+  border-top: 1px solid ${({ theme }) => theme.colors.gray[2]};
 `;
 
 export { CommentInputWrapper };

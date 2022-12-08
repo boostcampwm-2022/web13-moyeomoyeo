@@ -94,17 +94,18 @@ export class NotificationListener {
   async handleCommentAddedEvent(event: CommentAddedEvent) {
     const { groupArticle, comment } = event;
     try {
-      const commentList = this.commentRepository.findByArticleId(
+      const commentList = await this.commentRepository.findByArticleId(
+        comment.userId,
         groupArticle.id,
       );
 
       const targetUsers =
         await this.notificationSettingRepository.findTargetUsers({
           type: NOTIFICATION_SETTING_TYPE.COMMENT,
-          userIds: (await commentList).map((comment) => comment.userId),
+          userIds: commentList.map((comment) => comment.userId),
         });
 
-      const notification = Notification.createCommentAddedNotification(
+      const notification = await Notification.createCommentAddedNotification(
         groupArticle,
         comment,
       );

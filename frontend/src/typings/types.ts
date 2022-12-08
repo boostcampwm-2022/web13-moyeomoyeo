@@ -5,7 +5,20 @@ import { Category } from '@constants/category';
 import { Location } from '@constants/location';
 import { Notification } from '@constants/notification';
 
-interface ArticleThumbnail {
+interface PagingDataType<T> {
+  totalPage: number;
+  currentPage: number;
+  countPerPage: number;
+  data: T;
+}
+
+interface ApiResponseType<T> {
+  status: string;
+  message: string;
+  data: T;
+}
+
+interface ArticleThumbnailType {
   originUrl: string;
   blurUrl: string;
 }
@@ -17,7 +30,7 @@ interface ArticlePreviewType {
   category: Category;
   commentCount: number;
   scrapCount: number;
-  thumbnail: ArticleThumbnail;
+  thumbnail: ArticleThumbnailType;
   maxCapacity: number;
   currentCapacity: number;
   status: ArticleStatus;
@@ -51,6 +64,10 @@ interface CommentType {
   createdAt: string;
 }
 
+interface CommentInputType extends Pick<CommentType, 'contents'> {
+  articleId: number;
+}
+
 interface TestResponseType {
   dataArr: string[];
   isLast: boolean;
@@ -80,17 +97,21 @@ interface NotificationType {
   type: Notification;
   title: string;
   subTitle: string;
+  groupArticleId: number;
   createdAt: string;
 }
 
 export type {
   ApiResponse,
+  ApiResponseType,
   ArticlePreviewType,
   ArticleType,
   MyArticleType,
   ArticlePostInputType,
+  PagingDataType,
   TestResponseType,
   CommentType,
+  CommentInputType,
   UserType,
   ImageUploadType,
   NotificationType,

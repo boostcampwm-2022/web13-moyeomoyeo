@@ -1,29 +1,68 @@
-import { useRef } from 'react';
+import { useRouter } from 'next/router';
+import { useCallback, useEffect, useState } from 'react';
 
 import { ActionIcon, TextInput } from '@mantine/core';
 import { IconSend } from '@tabler/icons';
 
+import useAddComment from '@hooks/queries/useAddComment';
+
 import { CommentInputWrapper } from './styles';
 
 const CommentInput = () => {
-  const inputRef = useRef<HTMLInputElement>(null);
-  /**
-   * TODO : 댓글 입력 핸들러 수정
-   */
-  const handleSubmitComment = () => {
-    alert('댓글 입력');
-    if (inputRef.current) {
-      inputRef.current.value = '';
+  const {
+    query: { id },
+  } = useRouter();
+
+  const articleId = Number(id);
+
+  const { mutate: addComment } = useAddComment(articleId);
+  const [commentInput, setCommentInput] = useState('');
+
+  const handleAddComment = useCallback(() => {
+    if (commentInput.trim().length > 0) {
+      addComment(
+        { contents: commentInput, articleId },
+        {
+          onSuccess: () => {
+            setCommentInput('');
+            setTimeout(() => window.scrollTo(0, document.body.scrollHeight), 200);
+          },
+        }
+      );
     }
-  };
+  }, [commentInput, articleId, addComment]);
+
+  const handlePressEnter = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key === 'Enter') {
+        handleAddComment();
+      }
+    },
+    [handleAddComment]
+  );
+
+  useEffect(() => {
+    window.addEventListener('keypress', handlePressEnter);
+
+    return () => {
+      window.removeEventListener('keypress', handlePressEnter);
+    };
+  }, [handlePressEnter]);
+
   return (
     <CommentInputWrapper>
       <TextInput
-        size="lg"
+        size="md"
         placeholder="댓글을 입력해주세요."
-        ref={inputRef}
+        value={commentInput}
+        onChange={(e) => setCommentInput(e.currentTarget.value)}
         rightSection={
-          <ActionIcon variant="transparent" color="indigo" onClick={handleSubmitComment}>
+          <ActionIcon
+            variant="transparent"
+            color="indigo"
+            onClick={handleAddComment}
+            disabled={commentInput.trim().length === 0}
+          >
             <IconSend size={24} />
           </ActionIcon>
         }

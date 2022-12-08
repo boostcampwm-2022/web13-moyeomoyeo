@@ -7,39 +7,20 @@ import UserLoginItem from '@components/common/Header/UserLoginItem';
 import NavigationTab from '@components/common/NavigationTab';
 import PageLayout from '@components/common/PageLayout';
 import NotificationItem from '@components/notification/NotificationItem';
-import { Notification } from '@constants/notification';
 import { PAGE_TITLE } from '@constants/pageTitle';
-import { NotificationType } from '@typings/types';
-
-const dummyNotifications: NotificationType[] = [
-  {
-    id: 1,
-    type: Notification.ADD_COMMENT,
-    title: '박종혁님이 게시글에 댓글을 남겼어요.',
-    subTitle: '홀리 쮓',
-    createdAt: '2021-08-01T00:00:00.000Z',
-  },
-  {
-    id: 2,
-    type: Notification.GROUP_SUCCESS,
-    title: '훠궈 먹읍시다',
-    subTitle: '홀리 쮓',
-    createdAt: '2022-02-01T00:00:00.000Z',
-  },
-  {
-    id: 3,
-    type: Notification.GROUP_FAIL,
-    title: '모임이 무산되었어요.',
-    subTitle: '캐럿스터디 - 인천',
-    createdAt: '2021-08-01T00:00:00.000Z',
-  },
-];
+import useFetchNotifications from '@hooks/queries/useFetchNotifications';
+import useIntersect from '@hooks/useIntersect';
 
 const NotificationPage = () => {
-  /**
-   * TODO : API 붙이기
-   */
-  const notifications = dummyNotifications;
+  const { data: notifications, fetchNextPage, hasNextPage, isFetching } = useFetchNotifications();
+
+  const ref = useIntersect((entry, observer) => {
+    observer.unobserve(entry.target);
+    if (hasNextPage && !isFetching) {
+      void fetchNextPage();
+    }
+  });
+
   return (
     <PageLayout
       header={
@@ -55,15 +36,23 @@ const NotificationPage = () => {
       }
       footer={<NavigationTab />}
     >
-      <PageWrapper>
-        {notifications.length > 0 ? (
-          notifications.map((notification) => (
-            <NotificationItem key={notification.id} notification={notification} />
-          ))
-        ) : (
-          <EmptyMessage target="notification" large />
-        )}
-      </PageWrapper>
+      {notifications ? (
+        <PageWrapper>
+          {notifications.length > 0 ? (
+            <>
+              {notifications.map((notification) => (
+                <NotificationItem key={notification.id} notification={notification} />
+              ))}
+              <div ref={ref} />
+            </>
+          ) : (
+            <EmptyMessage target="notification" large />
+          )}
+        </PageWrapper>
+      ) : (
+        // TODO 로딩 처리
+        <div>로딩중</div>
+      )}
     </PageLayout>
   );
 };

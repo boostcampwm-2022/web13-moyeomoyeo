@@ -5,8 +5,9 @@ import styled from '@emotion/styled';
 import { ActionIcon, Text } from '@mantine/core';
 import { IconX } from '@tabler/icons';
 
-import AlertModal from '@components/common/AlertModal';
+import ConfirmModal from '@components/common/ConfirmModal';
 import NotificationIcon from '@components/notification/NotificationIcon';
+import useDeleteNotification from '@hooks/queries/useDeleteNotification';
 import { NotificationType } from '@typings/types';
 import dateTimeFormat from '@utils/dateTime';
 
@@ -19,24 +20,19 @@ interface Props {
 
 const NotificationItem = ({ notification }: Props) => {
   const { type, title, subTitle, createdAt } = notification;
+  const { mutate: deleteNotification } = useDeleteNotification();
 
-  const [modalOpen, setModalOpen] = useState(false);
-
-  const handleClickCloseButton = () => {
-    setModalOpen(true);
-  };
-  /**
-   * TODO : 알림 데이터에서 들어온 링크를 사용
-   */
+  const [confirmModalOpen, setConfirmModalOpen] = useState(false);
 
   return (
     <NotificationWrapper>
-      <AlertModal
+      <ConfirmModal
         message="알림을 삭제하시겠습니까?"
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
+        open={confirmModalOpen}
+        onConfirmButtonClick={() => deleteNotification(notification.id)}
+        onCancelButtonClick={() => setConfirmModalOpen(false)}
       />
-      <Link href="/article/21">
+      <Link href={`/article/${notification.groupArticleId}`}>
         <ContentSection>
           <IconWrapper>
             <NotificationIcon variant={type} />
@@ -56,7 +52,12 @@ const NotificationItem = ({ notification }: Props) => {
         </ContentSection>
       </Link>
       <AsideSection>
-        <ActionIcon variant="transparent" color="gray.6" size="sm" onClick={handleClickCloseButton}>
+        <ActionIcon
+          variant="transparent"
+          color="gray.6"
+          size="sm"
+          onClick={() => setConfirmModalOpen(true)}
+        >
           <IconX size={20} />
         </ActionIcon>
         <Text size="xs" weight={500} c="gray.6">

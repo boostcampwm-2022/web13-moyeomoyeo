@@ -7,6 +7,8 @@ import styled from '@emotion/styled';
 import { Progress, TypographyStylesProvider } from '@mantine/core';
 import { IconList } from '@tabler/icons';
 
+import Comment from '@components/article/Comment';
+import CommentInput from '@components/article/CommentInput';
 import MenuButton from '@components/article/MenuButton';
 import ParticipantsModal from '@components/article/ParticipantsModal';
 import ParticipateButton from '@components/article/ParticipateButton';
@@ -15,6 +17,7 @@ import ArticleViewLoading from '@components/common/ArticleViewLoading';
 import Avatar from '@components/common/Avatar';
 import Header from '@components/common/Header';
 import DetailTitle from '@components/common/Header/DetailTitle';
+import Joiner from '@components/common/Joiner';
 import PageLayout from '@components/common/PageLayout';
 import StatCounter from '@components/common/StatCounter';
 import { ArticleStatus, ArticleStatusKr } from '@constants/article';
@@ -26,8 +29,10 @@ import { ParticipateButtonStatus } from '@constants/participateButton';
 import useFetchApplicationStatus from '@hooks/queries/useFetchApplicationStatus';
 import useFetchArticle from '@hooks/queries/useFetchArticle';
 import useFetchChatUrl from '@hooks/queries/useFetchChatUrl';
+import useFetchComments from '@hooks/queries/useFetchComments';
 import useFetchMyInfo from '@hooks/queries/useFetchMyInfo';
 import useFetchParticipants from '@hooks/queries/useFetchParticipants';
+import useIntersect from '@hooks/useIntersect';
 import { ArticleType } from '@typings/types';
 import dateTimeFormat from '@utils/dateTime';
 
@@ -38,6 +43,7 @@ const ArticleDetail = () => {
   const router = useRouter();
   const articleId = Number(router.query.id);
   const { data: myInfo } = useFetchMyInfo();
+  const { comments, fetchNextPage, hasNextPage, isFetching } = useFetchComments(articleId);
   const { data: article } = useFetchArticle(articleId);
   const { data: isJoined } = useFetchApplicationStatus(articleId);
   const { data: participants } = useFetchParticipants(articleId);
@@ -50,6 +56,13 @@ const ArticleDetail = () => {
   const { url } = useFetchChatUrl(articleId, isUrlAvailable);
 
   const [participantsModalOpen, setParticipantsModalOpen] = useState<boolean>(false);
+
+  const ref = useIntersect((entry, observer) => {
+    observer.unobserve(entry.target);
+    if (hasNextPage && !isFetching) {
+      void fetchNextPage();
+    }
+  });
 
   return (
     <>
@@ -71,88 +84,96 @@ const ArticleDetail = () => {
             }
           />
         }
+        footer={<CommentInput />}
       >
-        <ContentWrapper>
-          {!article || isJoined === undefined || !myInfo || !participants ? (
-            <ArticleViewLoading />
-          ) : (
-            <>
-              <DetailWrapper>
-                <ProfileWrapper>
-                  <Link href={`/user/${article.author.id}`}>
-                    <Avatar
-                      src={article.author.profileImage}
-                      alt={article.author.userName}
+        <>
+          <ContentWrapper>
+            {!article || isJoined === undefined || !myInfo || !participants ? (
+              <ArticleViewLoading />
+            ) : (
+              <>
+                <DetailWrapper>
+                  <ProfileWrapper>
+                    <Link href={`/user/${article.author.id}`}>
+                      <Avatar
+                        src={article.author.profileImage}
+                        alt={article.author.userName}
+                        size="lg"
+                      />
+                    </Link>
+                    <ProfileTextWrapper>
+                      <Author>{article.author.userName}</Author>
+                      <Time>{dateTimeFormat(article.createdAt)}</Time>
+                    </ProfileTextWrapper>
+                  </ProfileWrapper>
+                  <Title>{article.title}</Title>
+                  <TagWrapper>
+                    <ArticleTag
+                      color={STATUS_COLOR[article.status]}
+                      content={ArticleStatusKr[article.status]}
                       size="lg"
                     />
-                  </Link>
-                  <ProfileTextWrapper>
-                    <Author>{article.author.userName}</Author>
-                    <Time>{dateTimeFormat(article.createdAt)}</Time>
-                  </ProfileTextWrapper>
-                </ProfileWrapper>
-                <Title>{article.title}</Title>
-                <TagWrapper>
-                  <ArticleTag
-                    color={STATUS_COLOR[article.status]}
-                    content={ArticleStatusKr[article.status]}
+                    <ArticleTag
+                      color={CATEGORY_COLOR[article.category]}
+                      content={CategoryKr[article.category]}
+                      size="lg"
+                    />
+                    <ArticleTag
+                      color={LOCATION_COLOR[article.location]}
+                      content={LocationKr[article.location]}
+                      size="lg"
+                    />
+                  </TagWrapper>
+                  <ParticipantWrapper>
+                    <StatusWrapper>
+                      <StatusText>모집 현황</StatusText>
+                      <CountText>
+                        {participants.length}명 / {article.maxCapacity}명
+                      </CountText>
+                    </StatusWrapper>
+                    <ParticipantButton onClick={() => setParticipantsModalOpen(true)}>
+                      <IconList width="16" height="16" color={gray[6]} />
+                      <ViewText>신청자 확인</ViewText>
+                    </ParticipantButton>
+                  </ParticipantWrapper>
+                  <Progress
+                    value={(participants.length / article.maxCapacity) * 100}
                     size="lg"
+                    radius="lg"
+                    color={indigo[7]}
                   />
-                  <ArticleTag
-                    color={CATEGORY_COLOR[article.category]}
-                    content={CategoryKr[article.category]}
-                    size="lg"
-                  />
-                  <ArticleTag
-                    color={LOCATION_COLOR[article.location]}
-                    content={LocationKr[article.location]}
-                    size="lg"
-                  />
-                </TagWrapper>
-                <ParticipantWrapper>
-                  <StatusWrapper>
-                    <StatusText>모집 현황</StatusText>
-                    <CountText>
-                      {participants.length}명 / {article.maxCapacity}명
-                    </CountText>
-                  </StatusWrapper>
-                  <ParticipantButton onClick={() => setParticipantsModalOpen(true)}>
-                    <IconList width="16" height="16" color={gray[6]} />
-                    <ViewText>신청자 확인</ViewText>
-                  </ParticipantButton>
-                </ParticipantWrapper>
-                <Progress
-                  value={(article.currentCapacity / article.maxCapacity) * 100}
-                  size="lg"
-                  radius="lg"
-                  color={indigo[7]}
+                  <TypographyStylesProvider>
+                    <ContentBox dangerouslySetInnerHTML={{ __html: article.contents }} />
+                  </TypographyStylesProvider>
+                  {article.author.id !== myInfo.id && (
+                    <ParticipateButton
+                      status={getButtonStatus(article, participants.length, isJoined)}
+                      groupArticleId={article.id}
+                      chatRoomLink={url}
+                    />
+                  )}
+                  <StatCounter variant="comment" count={article.commentCount} />
+                </DetailWrapper>
+                <ParticipantsModal
+                  participants={participants}
+                  open={participantsModalOpen}
+                  onClose={() => setParticipantsModalOpen(false)}
                 />
-                <TypographyStylesProvider>
-                  <ContentBox dangerouslySetInnerHTML={{ __html: article.contents }} />
-                </TypographyStylesProvider>
-                {article.author.id !== myInfo.id && (
-                  <ParticipateButton
-                    status={getButtonStatus(article, participants.length, isJoined)}
-                    groupArticleId={article.id}
-                    chatRoomLink={url}
-                  />
-                )}
-                <StatCounter variant="comment" count={article.commentCount} />
-              </DetailWrapper>
-              <Divider />
-              <CommentWrapper>
-                <div>댓글영역</div>
-              </CommentWrapper>
-              <ParticipantsModal
-                participants={participants}
-                open={participantsModalOpen}
-                onClose={() => setParticipantsModalOpen(false)}
-              />
-            </>
-          )}
-        </ContentWrapper>
+              </>
+            )}
+          </ContentWrapper>
+
+          {/* TODO participants API 요청 */}
+
+          <Joiner
+            {...(comments.length > 0 && { before: true })}
+            components={comments.map((comment) => (
+              <Comment key={comment.id} comment={comment} />
+            ))}
+          />
+          <div ref={ref}></div>
+        </>
       </PageLayout>
-      r
     </>
   );
 };
@@ -266,15 +287,4 @@ const ContentBox = styled.div`
   padding: 1.6rem;
   border: 1px solid ${({ theme }) => theme.colors.gray[2]};
   border-radius: 8px;
-`;
-
-const CommentWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const Divider = styled.div`
-  width: 100%;
-  height: 0.05rem;
-  background-color: ${({ theme }) => theme.colors.gray[4]};
 `;
