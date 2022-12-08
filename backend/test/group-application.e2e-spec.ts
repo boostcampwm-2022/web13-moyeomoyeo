@@ -120,5 +120,18 @@ describe('Group Application (e2e)', () => {
       expect(result.status).toEqual(200);
       expect(result.body.data.isJoined).toEqual(false);
     });
+
+    test('JWT 토큰이 없을 때', async () => {
+      // given
+      const groupArticleId = 1;
+
+      // when
+      const result = await request(app.getHttpServer()).get(
+        url(groupArticleId),
+      );
+
+      // then
+      expect(result.status).toEqual(401);
+    });
   });
 });
