@@ -22,7 +22,6 @@ import { ApiErrorResponse } from '@src/common/decorator/api-error-response.decor
 import { GroupNotFoundException } from '@app/comment/exception/group-not-found.exception';
 import { GroupArticleCommentGetResponse } from '@src/app/comment/dto/group-article-comment-get-response.dto';
 import { GetAllCommentQueryRequest } from '@app/comment/dto/get-all-comment-query-request.dto';
-import { CommentRepository } from '@app/comment/comment.repository';
 import { CommentNotFoundException } from '@app/comment/exception/comment-not-found.exception';
 import { NotAuthorException } from '@app/comment/exception/not-author.exception';
 
@@ -30,10 +29,7 @@ import { NotAuthorException } from '@app/comment/exception/not-author.exception'
 @ApiTags('Comment')
 @JwtAuth()
 export class CommentController {
-  constructor(
-    private readonly commentService: CommentService,
-    private readonly commentRepository: CommentRepository,
-  ) {}
+  constructor(private readonly commentService: CommentService) {}
 
   @Post('/')
   @ApiSuccessResponse(HttpStatus.CREATED, CommentWritingResponse)
