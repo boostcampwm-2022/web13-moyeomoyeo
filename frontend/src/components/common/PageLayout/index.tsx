@@ -24,6 +24,7 @@ const PageLayout = ({ header, footer, hasFloatingUtil, children }: Props) => {
 };
 
 const PageWrapper = styled.div`
+  max-width: 600px;
   width: 100%;
   height: 100%;
   min-height: 100vh;

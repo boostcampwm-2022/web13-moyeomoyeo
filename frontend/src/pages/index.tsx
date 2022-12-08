@@ -64,76 +64,78 @@ const Main = () => {
   };
 
   return (
-    <PageLayout
-      header={
-        <Header
-          leftNode={
-            <RootTitle title={PAGE_TITLE.ARTICLE.title} subTitle={PAGE_TITLE.ARTICLE.subTitle} />
-          }
-          rightNode={<UserLoginItem />}
-        />
-      }
-      footer={<NavigationTab />}
-      hasFloatingUtil
-    >
-      <ContentWrapper>
-        <FilterWrapper>
-          <DropDown
-            label="카테고리"
-            data={[
-              { value: null, label: '전체' },
-              ...Object.values(Category).map((category) => ({
-                value: category,
-                label: CategoryKr[category],
-              })),
-            ]}
-            value={selectedCategory}
-            onChange={(value) => setSelectedCategory(value as Category)}
-            size="md"
-            maxDropdownHeight={200}
+    <>
+      <PageLayout
+        header={
+          <Header
+            leftNode={
+              <RootTitle title={PAGE_TITLE.ARTICLE.title} subTitle={PAGE_TITLE.ARTICLE.subTitle} />
+            }
+            rightNode={<UserLoginItem />}
           />
-          <DropDown
-            label="장소"
-            data={[
-              { value: null, label: '전체' },
-              ...Object.values(Location).map((location) => ({
-                value: location,
-                label: LocationKr[location],
-              })),
-            ]}
-            value={selectedLocation}
-            onChange={(value) => setSelectedLocation(value as Location)}
-            size="md"
-            maxDropdownHeight={200}
-          />
-        </FilterWrapper>
-        <RefreshWrapper>
-          <Checkbox
-            checked={progressChecked}
-            onChange={(event) => setProgressChecked(event.currentTarget.checked)}
-            label="모집 중인 모임만 보기"
-            size="md"
-          />
-          <RefreshButton>
-            <IconRefresh color={gray[6]} onClick={refreshArticleList} />
-          </RefreshButton>
-        </RefreshWrapper>
-        {articles.length > 0 ? (
-          <ListWrapper>
-            {articles.map((article) => (
-              <Link key={article.id} href={`/article/${article.id}`}>
-                <CardLink key={article.id}>
-                  <GroupArticleCard article={article} />
-                </CardLink>
-              </Link>
-            ))}
-            <div ref={ref}></div>
-          </ListWrapper>
-        ) : (
-          <EmptyMessage target="article" large />
-        )}
-      </ContentWrapper>
-    </PageLayout>
+        }
+        footer={<NavigationTab />}
+        hasFloatingUtil
+      >
+        <ContentWrapper>
+          <FilterWrapper>
+            <DropDown
+              label="카테고리"
+              data={[
+                { value: null, label: '전체' },
+                ...Object.values(Category).map((category) => ({
+                  value: category,
+                  label: CategoryKr[category],
+                })),
+              ]}
+              value={selectedCategory}
+              onChange={(value) => setSelectedCategory(value as Category)}
+              size="md"
+              maxDropdownHeight={200}
+            />
+            <DropDown
+              label="장소"
+              data={[
+                { value: null, label: '전체' },
+                ...Object.values(Location).map((location) => ({
+                  value: location,
+                  label: LocationKr[location],
+                })),
+              ]}
+              value={selectedLocation}
+              onChange={(value) => setSelectedLocation(value as Location)}
+              size="md"
+              maxDropdownHeight={200}
+            />
+          </FilterWrapper>
+          <RefreshWrapper>
+            <Checkbox
+              checked={progressChecked}
+              onChange={(event) => setProgressChecked(event.currentTarget.checked)}
+              label="모집 중인 모임만 보기"
+              size="md"
+            />
+            <RefreshButton>
+              <IconRefresh color={gray[6]} onClick={refreshArticleList} />
+            </RefreshButton>
+          </RefreshWrapper>
+          {articles.length > 0 ? (
+            <ListWrapper>
+              {articles.map((article) => (
+                <Link key={article.id} href={`/article/${article.id}`}>
+                  <CardLink key={article.id}>
+                    <GroupArticleCard article={article} />
+                  </CardLink>
+                </Link>
+              ))}
+              <div ref={ref}></div>
+            </ListWrapper>
+          ) : (
+            <EmptyMessage target="article" large />
+          )}
+        </ContentWrapper>
+      </PageLayout>
+    </>
   );
 };
 
