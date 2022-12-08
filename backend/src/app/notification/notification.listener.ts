@@ -95,6 +95,7 @@ export class NotificationListener {
     const { groupArticle, comment } = event;
     try {
       const commentList = this.commentRepository.findByArticleId(
+        comment.userId,
         groupArticle.id,
       );
 
@@ -104,7 +105,7 @@ export class NotificationListener {
           userIds: (await commentList).map((comment) => comment.userId),
         });
 
-      const notification = Notification.createCommentAddedNotification(
+      const notification = await Notification.createCommentAddedNotification(
         groupArticle,
         comment,
       );
