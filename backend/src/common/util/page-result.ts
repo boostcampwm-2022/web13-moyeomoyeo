@@ -26,6 +26,12 @@ export abstract class PageResult<T> {
   }
 
   @Expose()
+  @ApiProperty({ example: 1991, description: '전체 데이터 수' })
+  get totalCount() {
+    return this._totalCount;
+  }
+
+  @Expose()
   @ApiProperty({ example: 1, description: '현재 페이지' })
   get currentPage() {
     return this._currentPage;
