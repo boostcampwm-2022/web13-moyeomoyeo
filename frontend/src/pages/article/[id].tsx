@@ -48,11 +48,7 @@ const ArticleDetail = () => {
   const { data: isJoined } = useFetchApplicationStatus(articleId);
   const { data: participants } = useFetchParticipants(articleId);
 
-  const isUrlAvailable =
-    !!article &&
-    !!participants &&
-    isJoined &&
-    getButtonStatus(article, participants.length, isJoined) === ParticipateButtonStatus.LINK;
+  const isUrlAvailable = getButtonStatus(article, isJoined) === ParticipateButtonStatus.LINK;
   const { url } = useFetchChatUrl(articleId, isUrlAvailable);
 
   const [participantsModalOpen, setParticipantsModalOpen] = useState<boolean>(false);
@@ -147,7 +143,7 @@ const ArticleDetail = () => {
                   </TypographyStylesProvider>
                   {article.author.id !== myInfo.id && (
                     <ParticipateButton
-                      status={getButtonStatus(article, participants.length, isJoined)}
+                      status={getButtonStatus(article, isJoined)}
                       groupArticleId={article.id}
                       chatRoomLink={url}
                     />
@@ -162,9 +158,6 @@ const ArticleDetail = () => {
               </>
             )}
           </ContentWrapper>
-
-          {/* TODO participants API 요청 */}
-
           <Joiner
             {...(comments.length > 0 && { before: true })}
             components={comments.map((comment) => (
@@ -180,10 +173,8 @@ const ArticleDetail = () => {
 
 export default ArticleDetail;
 
-const getButtonStatus = (article: ArticleType, currentCapacity: number, isJoined: boolean) => {
-  if (!article || isJoined === undefined || article.maxCapacity === currentCapacity)
-    return ParticipateButtonStatus.CLOSED;
-
+const getButtonStatus = (article: ArticleType, isJoined: boolean) => {
+  if (!article || isJoined === undefined) return ParticipateButtonStatus.CLOSED;
   switch (article.status) {
     case ArticleStatus.PROGRESS:
       return isJoined ? ParticipateButtonStatus.CANCEL : ParticipateButtonStatus.APPLY;
