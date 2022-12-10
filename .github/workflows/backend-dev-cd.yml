@@ -61,7 +61,6 @@ jobs:
 
       - name: copy docker compose into dev server
         uses: appleboy/scp-action@master
-        env:
         with:
           host: ${{ secrets.BACKEND_DEV_REMOTE_IP }}
           username: ${{ secrets.BACKEND_DEV_REMOTE_SSH_ID }}
