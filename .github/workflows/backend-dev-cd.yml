@@ -63,8 +63,8 @@ jobs:
           username: ${{ secrets.BACKEND_DEV_REMOTE_SSH_ID }}
           password: ${{ secrets.BACKEND_DEV_REMOTE_ADMIN_KEY }}
           port: ${{ secrets.BACKEND_DEV_REMOTE_SSH_PORT }}
-          source: './backend/docker-compose.yml'
-          target: 'moyeomoyeo'
+          source: 'backend/docker-compose.yml'
+          target: 'root/moyeomoyeo'
 
       - name: deploy
         uses: appleboy/ssh-action@v0.1.4
