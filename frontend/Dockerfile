@@ -8,6 +8,7 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 # 의존성 설치
+RUN npm  install -g npm@latest
 RUN npm ci
 
 # 프로젝트의 모든 파일 복사
