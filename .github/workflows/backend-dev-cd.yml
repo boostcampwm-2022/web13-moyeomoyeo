@@ -2,7 +2,7 @@ name: Backend Dev CD
 run-name: ${{ github.actor }}가 실행함
 on:
   push:
-    branches:
+    pull_request:
       - develop
     paths:
       - 'backend/**'
@@ -26,12 +26,6 @@ jobs:
           touch .env.development
           echo -e ${{ secrets.BACKEND_DEVELOPMENT_ENVIRONMENT }} > .env.development
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
       - name: docker registry login
         uses: docker/login-action@v2
         with:
@@ -41,7 +35,7 @@ jobs:
 
       - name: build and push
         id: docker_build
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v3.2.0
         with:
           context: backend
           file: backend/Dockerfile
