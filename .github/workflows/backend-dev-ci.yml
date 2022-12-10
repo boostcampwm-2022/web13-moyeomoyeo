@@ -52,6 +52,7 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: dependency install
+        if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci
 
       - name: create environment variable file
