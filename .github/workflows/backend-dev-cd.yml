@@ -66,7 +66,7 @@ jobs:
           username: ${{ secrets.BACKEND_DEV_REMOTE_SSH_ID }}
           password: ${{ secrets.BACKEND_DEV_REMOTE_ADMIN_KEY }}
           port: ${{ secrets.BACKEND_DEV_REMOTE_SSH_PORT }}
-          source: 'backend/docker-compose.yml'
+          source: 'backend/docker-compose.yml,backend/dev/nginx/nginx.conf,backend/scripts/dev-deploy.sh'
           target: 'moyeomoyeo'
 
       - name: deploy
@@ -77,13 +77,7 @@ jobs:
           password: ${{secrets.BACKEND_DEV_REMOTE_ADMIN_KEY}}
           port: ${{secrets.BACKEND_DEV_REMOTE_SSH_PORT}}
           script: |
-            rm -rf web13-moyeomoyeo
-
-            git clone git@github.com:boostcampwm-2022/web13-moyeomoyeo.git
-
-            cd web13-moyeomoyeo
-
-            git checkout -t origin/develop
+            cd moyeomoyeo
 
             sudo chmod +x ./backend/scripts/dev-deploy.sh
 
