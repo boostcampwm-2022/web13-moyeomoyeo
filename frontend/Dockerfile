@@ -5,11 +5,10 @@ FROM node:16.18.1-alpine
 WORKDIR /usr/src/app
 
 # package.json, package-lock.json 복사
-COPY package.json ./
-COPY package-lock.json ./
+COPY package*.json ./
 
 # 의존성 설치
-RUN npm ci
+RUN npm install
 
 # 프로젝트의 모든 파일 복사
 COPY . .
