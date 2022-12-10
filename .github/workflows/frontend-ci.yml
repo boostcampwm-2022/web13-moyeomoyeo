@@ -25,14 +25,23 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16.18.1
-      
+
       - name: create environment variable file
         run: |
           touch .env
           echo -e API_URL=https://api.moyeomoyeo.com\\nNEXT_PUBLIC_API_URL=https://api.moyeomoyeo.com > .env
 
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: dependency install
-        run: npm install
+        run: npm ci
 
       - name: test
         run: npm run test-all
@@ -49,14 +58,23 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-          
+
       - name: create environment variable file
         run: |
           touch .env
           echo -e API_URL=https://api.moyeomoyeo.com\\nNEXT_PUBLIC_API_URL=https://api.moyeomoyeo.com > .env
 
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: depedency install
-        run: npm install
+        run: npm ci
 
       - name: chromatic
         id: chromatic
@@ -73,7 +91,6 @@ jobs:
         with:
           message: 'storybook link -> ${{ steps.chromatic.outputs.storybookUrl }}'
           reactions: rocket
-
 
   lhci:
     runs-on: ubuntu-latest
@@ -96,16 +113,25 @@ jobs:
           touch .env
           echo -e API_URL=https://api.moyeomoyeo.com\\nNEXT_PUBLIC_API_URL=https://api.moyeomoyeo.com > .env
 
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: dependency install
         run: |
-          npm install
+          npm ci
 
       - name: Build
         run: |
           npm run build
 
       - name: lighthouse
-        run: | 
+        run: |
           npm install -g @lhci/cli
           lhci autorun || echo "Fail to Run Lighthouse CI"
 
