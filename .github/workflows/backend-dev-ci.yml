@@ -23,10 +23,10 @@ jobs:
         ports:
           - 3306:3306
         env:
-          MYSQL_ROOT_PASSWORD: "test"
-          MYSQL_USER: "test"
-          MYSQL_PASSWORD: "test"
-          MYSQL_DATABASE: "test"
+          MYSQL_ROOT_PASSWORD: 'test'
+          MYSQL_USER: 'test'
+          MYSQL_PASSWORD: 'test'
+          MYSQL_DATABASE: 'test'
         options: >-
           --health-cmd="mysqladmin ping"
           --health-interval=10s
@@ -42,19 +42,28 @@ jobs:
         with:
           node-version: 16.18.1
 
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: dependency install
-        run: npm install
+        run: npm ci
+
+      - name: create environment variable file
+        run: |
+          touch .env.test
+          echo -e ${{ secrets.BACKEND_CI_TEST_ENVIRONMENT }} > .env.test
 
       - name: lint test
         run: npm run lint
 
       - name: build
         run: npm run build
-
-      - name: create environment variable file
-        run: |
-          touch .env.test
-          echo -e ${{ secrets.BACKEND_CI_TEST_ENVIRONMENT }} > .env.test
 
       - name: test
         run: npm run test
@@ -63,7 +72,7 @@ jobs:
         run: npm run test:e2e
 
   slack-notifications:
-    needs: [ CI ]
+    needs: [CI]
     if: ${{ always() }}
     uses: ./.github/workflows/slack-notification.yml
     with:
