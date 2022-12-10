@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { useEffect, useState } from 'react';
 import '@styles/global.css';
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { RecoilRoot } from 'recoil';
 import { v4 as uuid } from 'uuid';
@@ -51,21 +51,23 @@ export default function App({ Component, pageProps }: AppProps<{ dehydratedState
       </Head>
       <RecoilRoot>
         <QueryClientProvider client={queryClient}>
-          <ReactQueryDevtools initialIsOpen={false} />
-          <CommonStyles>
-            <RouterTransition />
-            <Background />
-            <ErrorBoundary key={uuid()}>
-              <AuthErrorBoundary>
-                <ApiErrorBoundary>
-                  <LoginRedirect />
-                  <Component {...pageProps} />
-                  <ScrollHandler />
-                </ApiErrorBoundary>
-              </AuthErrorBoundary>
-            </ErrorBoundary>
-            <Background />
-          </CommonStyles>
+          <Hydrate state={pageProps.dehydratedState}>
+            <ReactQueryDevtools initialIsOpen={false} />
+            <CommonStyles>
+              <RouterTransition />
+              <Background />
+              <ErrorBoundary key={uuid()}>
+                <AuthErrorBoundary>
+                  <ApiErrorBoundary>
+                    <LoginRedirect />
+                    <Component {...pageProps} />
+                    <ScrollHandler />
+                  </ApiErrorBoundary>
+                </AuthErrorBoundary>
+              </ErrorBoundary>
+              <Background />
+            </CommonStyles>
+          </Hydrate>
         </QueryClientProvider>
       </RecoilRoot>
     </>
