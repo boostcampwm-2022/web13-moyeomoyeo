@@ -75,8 +75,8 @@ export class GroupApplicationService {
     });
 
     const groupApplication = GroupApplication.create(user, group);
-    const result = this.groupApplicationRepository.save(groupApplication);
-    this.checkGroupComplete(groupArticle, groupApplicationCount);
+    const result = await this.groupApplicationRepository.save(groupApplication);
+    await this.checkGroupComplete(groupArticle, groupApplicationCount);
     return result;
   }
 
@@ -109,13 +109,13 @@ export class GroupApplicationService {
     }
   }
 
-  private checkGroupComplete(
+  private async checkGroupComplete(
     groupArticle: GroupArticle,
     groupApplicationCount: number,
   ) {
     if (groupArticle.group.maxCapacity <= groupApplicationCount + 1) {
       groupArticle.group.complete();
-      this.groupArticleRepository.save(groupArticle);
+      await this.groupArticleRepository.save(groupArticle);
       this.eventEmitter.emit(
         'group.succeed',
         new GroupSucceedEvent(groupArticle),
