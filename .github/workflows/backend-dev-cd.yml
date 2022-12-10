@@ -56,14 +56,14 @@ jobs:
     outputs:
       status: ${{ job.status }}
     steps:
-      - name: copy file via ssh password
+      - name: copy docker compose into dev server
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.BACKEND_DEV_REMOTE_IP }}
           username: ${{ secrets.BACKEND_DEV_REMOTE_SSH_ID }}
           password: ${{ secrets.BACKEND_DEV_REMOTE_ADMIN_KEY }}
           port: ${{ secrets.BACKEND_DEV_REMOTE_SSH_PORT }}
-          source: 'docker-compose.yml,dev/nginx/nginx.conf'
+          source: 'docker-compose.yml'
           target: 'moyeomoyeo'
 
       - name: deploy
