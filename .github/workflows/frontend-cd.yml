@@ -53,6 +53,19 @@ jobs:
     outputs:
       status: ${{ job.status }}
     steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: copy docker compose into dev server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.FRONTEND_DEV_REMOTE_IP }}
+          username: ${{ secrets.FRONTEND_DEV_REMOTE_SSH_ID }}
+          password: ${{ secrets.FRONTEND_DEV_REMOTE_ADMIN_KEY }}
+          port: ${{ secrets.FRONTEND_DEV_REMOTE_SSH_PORT }}
+          source: 'frontend/docker-compose.yml,frontend/dev/nginx/nginx.conf,frontend/dev/default/nginx.conf,frontend/scripts/dev-deploy.sh'
+          target: 'moyeomoyeo'
+
       - name: deploy
         uses: appleboy/ssh-action@v0.1.4
         with:
@@ -61,13 +74,7 @@ jobs:
           password: ${{secrets.FRONTEND_DEV_REMOTE_ADMIN_KEY}}
           port: ${{secrets.FRONTEND_DEV_REMOTE_SSH_PORT}}
           script: |
-            rm -rf web13-moyeomoyeo
-
-            git clone git@github.com:boostcampwm-2022/web13-moyeomoyeo.git
-
-            cd web13-moyeomoyeo
-
-            git checkout -t origin/develop
+            cd moyeomoyeo
 
             sudo chmod +x ./frontend/scripts/dev-deploy.sh
 
