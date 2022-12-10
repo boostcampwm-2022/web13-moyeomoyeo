@@ -2,7 +2,7 @@ name: Backend Dev CD
 run-name: ${{ github.actor }}가 실행함
 on:
   push:
-    pull_request:
+    push:
       - develop
     paths:
       - 'backend/**'
@@ -59,7 +59,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v3
 
-      - name: copy docker compose into dev server
+      - name: copy docker compose & config file into dev server
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.BACKEND_DEV_REMOTE_IP }}
