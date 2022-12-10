@@ -102,7 +102,9 @@ export class NotificationListener {
       const targetUsers =
         await this.notificationSettingRepository.findTargetUsers({
           type: NOTIFICATION_SETTING_TYPE.COMMENT,
-          userIds: commentList.map((comment) => comment.userId),
+          userIds: commentList
+            .map((comment) => comment.userId)
+            .concat(groupArticle.userId),
         });
 
       const notification = await Notification.createCommentAddedNotification(
