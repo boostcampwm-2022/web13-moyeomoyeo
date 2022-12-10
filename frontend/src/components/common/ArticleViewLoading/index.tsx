@@ -1,7 +1,15 @@
 import styled from '@emotion/styled';
 import { Skeleton, Space } from '@mantine/core';
 
+import useDeferredResponse from '@hooks/useDeferredResponse';
+
 const ArticleViewLoading = () => {
+  const isDeferred = useDeferredResponse();
+
+  if (!isDeferred) {
+    return <></>;
+  }
+
   return (
     <>
       <ArticleAuthor>
