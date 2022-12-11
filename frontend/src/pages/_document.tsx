@@ -11,7 +11,7 @@ export default class _Document extends Document {
 
   render() {
     return (
-      <Html>
+      <Html lang="ko">
         <Head>
           <FaviconConfig />
         </Head>
