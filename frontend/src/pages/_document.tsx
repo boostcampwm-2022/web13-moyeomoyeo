@@ -2,6 +2,8 @@ import Document, { Head, Html, Main, NextScript } from 'next/document';
 
 import { createGetInitialProps } from '@mantine/next';
 
+import FaviconConfig from '@components/common/FaviconConfig';
+
 const getInitialProps = createGetInitialProps();
 
 export default class _Document extends Document {
@@ -10,7 +12,9 @@ export default class _Document extends Document {
   render() {
     return (
       <Html>
-        <Head />
+        <Head>
+          <FaviconConfig />
+        </Head>
         <body>
           <Main />
           <NextScript />
