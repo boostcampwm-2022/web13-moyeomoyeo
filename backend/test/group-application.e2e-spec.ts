@@ -299,4 +299,138 @@ describe('Group Application (e2e)', () => {
       expect(result.status).toEqual(404);
     });
   });
+
+  describe('신청 취소 POST /group-applications/cancel', () => {
+    const url = () => `/v1/group-applications/cancel`;
+
+    test('내가 참여한 모임에 취소 신청을 하면 204코드를 받는다.', async () => {
+      // given
+      const jwtService = app.get(JwtTokenService);
+      const user = await dataSource.getRepository(User).findOneBy({ id: 2 });
+      const accessToken = jwtService.generateAccessToken(user);
+
+      const groupApplicationRepository =
+        dataSource.getRepository(GroupApplication);
+      const groupArticleRepository = dataSource.getRepository(GroupArticle);
+      const groupArticleId = 2;
+      const groupArticle = await groupArticleRepository.findOneBy({
+        id: groupArticleId,
+      });
+      const group = groupArticle.group;
+
+      const groupApplication = await getGroupApplicationRegisterFixture(group, {
+        id: 1,
+        user: new Promise(async (res) => res(user)),
+        userId: user.id,
+      });
+      await groupApplicationRepository.save(groupApplication);
+
+      // when
+      const result = await request(app.getHttpServer())
+        .post(url())
+        .send({ groupArticleId })
+        .set({ Cookie: setCookie(accessToken.accessToken) });
+
+      // then
+      expect(result.status).toEqual(204);
+    });
+
+    test('내가 참여한 모임이지만 마감된 모집일 때 취소 신청을 하면 400 코드를 받는다.', async () => {
+      // given
+      const jwtService = app.get(JwtTokenService);
+      const user = await dataSource.getRepository(User).findOneBy({ id: 2 });
+      const accessToken = jwtService.generateAccessToken(user);
+
+      const groupApplicationRepository =
+        dataSource.getRepository(GroupApplication);
+      const groupArticleRepository = dataSource.getRepository(GroupArticle);
+      const groupArticleId = 1;
+      const groupArticle = await groupArticleRepository.findOneBy({
+        id: groupArticleId,
+      });
+      const group = groupArticle.group;
+      group.status = GROUP_STATUS.SUCCEED;
+
+      const groupApplication = await getGroupApplicationRegisterFixture(group, {
+        id: 1,
+        user: new Promise(async (res) => res(user)),
+        userId: user.id,
+      });
+      await groupApplicationRepository.save(groupApplication);
+      await groupArticleRepository.save(groupArticle);
+
+      // when
+      const result = await request(app.getHttpServer())
+        .post(url())
+        .send({ groupArticleId })
+        .set({ Cookie: setCookie(accessToken.accessToken) });
+
+      // then
+      expect(result.status).toEqual(400);
+    });
+
+    test('자신이 만든 모집게시글 참여여부 조회 시 400 코드를 던진다.', async () => {
+      // given
+      const jwtService = app.get(JwtTokenService);
+      const user = await dataSource.getRepository(User).findOneBy({ id: 1 });
+      const accessToken = jwtService.generateAccessToken(user);
+      const groupArticleId = 1;
+
+      // when
+      const result = await request(app.getHttpServer())
+        .post(url())
+        .send({ groupArticleId })
+        .set({ Cookie: setCookie(accessToken.accessToken) });
+
+      // then
+      expect(result.status).toEqual(400);
+    });
+
+    test('JWT 토큰이 존재하지 않을 때 401에러를 던진다.', async () => {
+      // given
+      const groupArticleId = 1;
+
+      // when
+      const result = await request(app.getHttpServer())
+        .post(url())
+        .send({ groupArticleId });
+
+      // then
+      expect(result.status).toEqual(401);
+    });
+
+    test('없는 그룹에 취소 신청을 하면 404코드를 받는다.', async () => {
+      // given
+      const jwtService = app.get(JwtTokenService);
+      const user = await dataSource.getRepository(User).findOneBy({ id: 2 });
+      const accessToken = jwtService.generateAccessToken(user);
+      const groupArticleId = 10000;
+
+      // when
+      const result = await request(app.getHttpServer())
+        .post(url())
+        .send({ groupArticleId })
+        .set({ Cookie: setCookie(accessToken.accessToken) });
+
+      // then
+      expect(result.status).toEqual(404);
+    });
+
+    test('참가 신청을 하지 않은 그룹에 취소 신청을 하면 404코드를 받는다.', async () => {
+      // given
+      const jwtService = app.get(JwtTokenService);
+      const user = await dataSource.getRepository(User).findOneBy({ id: 2 });
+      const accessToken = jwtService.generateAccessToken(user);
+      const groupArticleId = 2;
+
+      // when
+      const result = await request(app.getHttpServer())
+        .post(url())
+        .send({ groupArticleId })
+        .set({ Cookie: setCookie(accessToken.accessToken) });
+
+      // then
+      expect(result.status).toEqual(404);
+    });
+  });
 });
