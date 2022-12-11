@@ -25,7 +25,6 @@ const GroupArticleCard = ({ article }: Props) => {
   const {
     status,
     thumbnail: { originUrl, blurUrl },
-
     category,
     location,
     title,
@@ -46,7 +45,7 @@ const GroupArticleCard = ({ article }: Props) => {
           alt={'thumbnail-image'}
           layout="fill"
           objectFit="cover"
-          sizes="400px"
+          sizes="(min-width: 800px) 300px,150px"
           placeholder="blur"
           blurDataURL={blurUrl}
           style={{ transition: '0.3s ease-in-out' }}
