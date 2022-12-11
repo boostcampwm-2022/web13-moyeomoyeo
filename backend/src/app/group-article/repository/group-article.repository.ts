@@ -150,4 +150,103 @@ export class GroupArticleRepository extends Repository<GroupArticle> {
       .groupBy('groupArticle.id')
       .getRawOne<IGroupArticleDetail>();
   }
+
+  async searchV2({
+    limit,
+    nextId,
+    category,
+    status,
+    location,
+    user,
+  }: {
+    limit: number;
+    nextId?: number;
+    category?: CATEGORY;
+    status?: GROUP_STATUS;
+    location?: LOCATION;
+    user?: User;
+  }) {
+    const groupArticleIdsQuery = await this.createQueryBuilder('groupArticle')
+      .select('groupArticle.id as id')
+      .leftJoin(Group, 'group', 'groupArticle.id = group.article_id')
+      .leftJoin(
+        GroupCategory,
+        'groupCategory',
+        'groupCategory.id = group.category.id AND groupCategory.deletedAt IS NULL',
+      )
+      .where('groupArticle.deletedAt IS NULL')
+      .orderBy('groupArticle.id', 'DESC')
+      .limit(limit);
+
+    if (nextId) {
+      groupArticleIdsQuery.andWhere('groupArticle.id < :nextId', { nextId });
+    }
+
+    if (location) {
+      groupArticleIdsQuery.andWhere('group.location = :location', { location });
+    }
+
+    if (category) {
+      groupArticleIdsQuery.andWhere('groupCategory.name = :categoryName', {
+        categoryName: category,
+      });
+    }
+
+    if (status) {
+      groupArticleIdsQuery.andWhere('group.status = :status', { status });
+    }
+
+    if (user) {
+      groupArticleIdsQuery.andWhere('groupArticle.userId = :userId', {
+        userId: user.id,
+      });
+    }
+
+    const groupArticleIds = await groupArticleIdsQuery.getRawMany<{
+      id: number;
+    }>();
+
+    if (groupArticleIds.length === 0) {
+      return [];
+    }
+
+    return this.createQueryBuilder('groupArticle')
+      .select([
+        'groupArticle.id as id',
+        'groupArticle.title as title',
+        'groupArticle.createdAt as createdAt',
+        'group.maxCapacity as maxCapacity',
+        'group.thumbnail as thumbnail',
+        'group.status as status',
+        'group.location as location',
+        'groupCategory.id as groupCategoryId',
+        'groupCategory.name as groupCategoryName',
+        'COUNT(DISTINCT groupApplication.id) as currentCapacity',
+        'COUNT(DISTINCT scrap.id) as scrapCount',
+        'COUNT(DISTINCT comment.id) as commentCount',
+      ])
+      .leftJoin(Group, 'group', 'groupArticle.id = group.article_id')
+      .leftJoin(
+        GroupCategory,
+        'groupCategory',
+        'groupCategory.id = group.category.id AND groupCategory.deletedAt IS NULL',
+      )
+      .leftJoin(
+        GroupApplication,
+        'groupApplication',
+        'group.id = groupApplication.groupId AND groupApplication.deletedAt IS NULL',
+      )
+      .leftJoin(
+        Comment,
+        'comment',
+        'groupArticle.id = comment.articleId AND comment.deletedAt IS NULL',
+      )
+      .leftJoin(Scrap, 'scrap', 'groupArticle.id = scrap.articleId')
+      .where('groupArticle.id IN (:...ids)', {
+        ids: groupArticleIds.map((id) => id.id),
+      })
+      .groupBy('groupArticle.id')
+      .orderBy('groupArticle.id', 'DESC')
+      .getRawMany<IGroupArticleSearchResult>();
+  }
 }

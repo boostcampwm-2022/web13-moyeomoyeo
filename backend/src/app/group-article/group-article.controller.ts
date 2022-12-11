@@ -9,6 +9,7 @@ import {
   Post,
   Put,
   Query,
+  Version,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { ApiErrorResponse } from '@src/common/decorator/api-error-response.decorator';
@@ -36,6 +37,8 @@ import { UpdateGroupArticleRequest } from '@app/group-article/dto/update-group-a
 import { NotSuccessGroupException } from '@app/group-article/exception/not-success-group.exception';
 import { NotParticipantException } from '@app/group-article/exception/not-participant.exception';
 import { GetGroupChatUrlResponseDto } from '@app/group-article/dto/get-group-chat-url-response.dto';
+import { V2SearchGroupArticlesRequest } from '@app/group-article/dto/v2-search-group-articles-request.dto';
+import { V2SearchGroupArticlesResponse } from '@app/group-article/dto/v2-search-group-articles-response.dto';
 
 @Controller('group-articles')
 @ApiTags('Group-Article')
@@ -137,6 +140,29 @@ export class GroupArticleController {
         await Promise.all(
           result[0].map((row) => GroupArticleSearchResult.from(row)),
         ),
+      ),
+    );
+  }
+
+  @Get('search')
+  @Version('2')
+  @ApiSuccessResponse(HttpStatus.OK)
+  async searchV2(@Query() query: V2SearchGroupArticlesRequest) {
+    const result = await this.groupArticleRepository.searchV2({
+      limit: query.limit,
+      nextId: query.nextId,
+      status: query.status,
+      location: query.location,
+      category: query.category,
+    });
+
+    return ResponseEntity.OK_WITH_DATA(
+      new V2SearchGroupArticlesResponse(
+        query.limit,
+        await Promise.all(
+          result.map((row) => GroupArticleSearchResult.from(row)),
+        ),
+        query.nextId,
       ),
     );
   }
