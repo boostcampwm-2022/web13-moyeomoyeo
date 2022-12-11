@@ -38,7 +38,7 @@ export abstract class NoOffsetPageResult<T extends { id: number }> {
     description: '마지막 데이터인지 여부',
   })
   get isLast() {
-    return this._data.length === 0;
+    return this._data.length < this._limit;
   }
 
   abstract get data(): T[];

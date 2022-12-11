@@ -32,7 +32,7 @@ describe('No Offset Paging Result Test', () => {
       sortedData: [{ id: 1000 }, { id: 500 }],
       beforeNextId: 1000,
       resultNextId: 500,
-      isLast: false,
+      isLast: true,
     },
     {
       limit: 3,

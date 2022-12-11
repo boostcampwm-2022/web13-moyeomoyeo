@@ -9,7 +9,7 @@ export class NoOffsetPageRequest {
   @Min(1)
   @ApiProperty({
     type: Number,
-    example: 1,
+    example: 10,
     description: '가져올 데이터 수(default: 10)',
     required: false,
   })
@@ -21,7 +21,7 @@ export class NoOffsetPageRequest {
   @Min(1)
   @ApiProperty({
     type: Number,
-    example: 1,
+    example: 50,
     description: '다음 아이디',
     required: false,
   })
