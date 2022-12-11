@@ -2,7 +2,7 @@ name: Frontend Dev CD
 run-name: ${{ github.actor }}가 실행함
 on:
   push:
-    push:
+    branches:
       - develop
     paths:
       - 'frontend/**'
