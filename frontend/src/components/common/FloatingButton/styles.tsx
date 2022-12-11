@@ -9,7 +9,10 @@ const _FABWrapper = styled(ActionIcon)`
   position: fixed;
   bottom: 7.2rem;
   right: 1.6rem;
-  z-index: 100;
+  z-index: 200;
+  @media screen and (min-width: 600px) {
+    right: calc(50vw - 300px + 1.6rem);
+  }
 `;
 
 const FABWrapper = createPolymorphicComponent<'button', ActionIconProps>(_FABWrapper);
