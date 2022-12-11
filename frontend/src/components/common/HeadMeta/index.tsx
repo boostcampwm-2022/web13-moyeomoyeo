@@ -23,7 +23,7 @@ const HeadMeta = ({ title, description, url, image }: Props) => {
           title: title || '모여모여',
           images: [
             {
-              url: '/default.jpg',
+              url: 'https://www.moyeomoyeo.com/default.jpg',
               width: 578,
               height: 309,
               alt: 'Moyeomoyeo Opengraph Image Alt',
