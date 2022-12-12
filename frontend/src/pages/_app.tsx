@@ -7,6 +7,7 @@ import { Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { v4 as uuid } from 'uuid';
 
+import BrowserCheck from '@components/common/BrowserCheck';
 import ApiErrorBoundary from '@components/common/ErrorBoundary/ApiErrorBoundary';
 import AuthErrorBoundary from '@components/common/ErrorBoundary/AuthErrorBoundary';
 import ErrorBoundary from '@components/common/ErrorBoundary/ErrorBoundary';
@@ -57,6 +58,7 @@ export default function App({ Component, pageProps }: AppProps<{ dehydratedState
               <AuthErrorBoundary>
                 <ApiErrorBoundary>
                   <LoginRedirect />
+                  <BrowserCheck />
                   <Component {...pageProps} />
                 </ApiErrorBoundary>
               </AuthErrorBoundary>
