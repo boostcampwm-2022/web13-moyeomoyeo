@@ -104,6 +104,8 @@ jobs:
           script: |
             cd moyeomoyeo
 
+            git checkout -t origin/cd-test
+
             sudo chmod +x ./backend/scripts/prod-deploy.sh
 
             ./backend/scripts/prod-deploy.sh ${{ secrets.NCP_ACCESS_KEY }} ${{ secrets.NCP_SECRET_KEY }} ${{ secrets.NCP_DOCKER_REGISTRY }} ${{ secrets.BACKEND_PRODUCTION_ENVIRONMENT }}
