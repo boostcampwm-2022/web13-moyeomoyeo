@@ -22,6 +22,7 @@ const ArticlePostInput = ({ values, onChange }: Props) => {
   const throwAsyncError = useAsyncError();
 
   const handleChangeImage = async (imageFile: File) => {
+    if (!imageFile) return;
     try {
       setIsUploading(true);
       const uploadedImage = await uploadImage(imageFile);
