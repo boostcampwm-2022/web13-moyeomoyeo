@@ -13,8 +13,23 @@ const compressImage = async (file: File) => {
   return new File([compressedBlob], file.name);
 };
 
+const convertToJpeg = async (file: File) => {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const heic2any = require('heic2any');
+  const jpegBlob = await heic2any({ blob: file, toType: 'image/jpeg' });
+  const jpegFile = new File([jpegBlob as Blob], file.name.split('.')[0] + '.jpeg', {
+    lastModified: new Date().getTime(),
+    type: 'image/jpeg',
+  });
+  return jpegFile;
+};
+
 const uploadImage = async (file: File) => {
   const formData = new FormData();
+  if ((file && file.type === 'image/heic') || file.type === 'image/heif') {
+    file = await convertToJpeg(file);
+  }
+
   const compressedImage = await compressImage(file);
   formData.append('files', compressedImage);
 
@@ -27,6 +42,7 @@ const uploadImage = async (file: File) => {
       'Content-Type': 'multipart/form-data',
     },
   });
+
   return imageData as ImageUploadType;
 };
 

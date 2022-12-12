@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import styled from '@emotion/styled';
 import { FileInput, Text } from '@mantine/core';
 import { IconUpload } from '@tabler/icons';
@@ -16,11 +18,14 @@ interface Props {
 
 const ArticlePostInput = ({ values, onChange }: Props) => {
   const { title, contents, chatUrl, thumbnail } = values;
+  const [isUploading, setIsUploading] = useState(false);
   const throwAsyncError = useAsyncError();
 
   const handleChangeImage = async (imageFile: File) => {
     try {
+      setIsUploading(true);
       const uploadedImage = await uploadImage(imageFile);
+      setIsUploading(false);
       onChange('thumbnail', uploadedImage.url);
     } catch (err) {
       throwAsyncError('이미지 업로드에 실패했습니다.');
@@ -53,12 +58,12 @@ const ArticlePostInput = ({ values, onChange }: Props) => {
             *
           </Text>
         </FileInputLabel>
-        <ImageThumbnail src={thumbnail} />
+        <ImageThumbnail src={thumbnail} isUploading={isUploading} />
         <FileInput
           size="md"
           required
           placeholder="이미지를 첨부해주세요 (최대 1장)"
-          accept="image/*"
+          accept="image/*, .heic, .heif"
           onChange={handleChangeImage}
           icon={<IconUpload size={16} />}
         />
