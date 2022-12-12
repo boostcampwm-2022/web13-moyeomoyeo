@@ -14,8 +14,7 @@ const compressImage = async (file: File) => {
 };
 
 const convertToJpeg = async (file: File) => {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const heic2any = require('heic2any');
+  const heic2any = (await import('heic2any')).default;
   const jpegBlob = await heic2any({ blob: file, toType: 'image/jpeg' });
   const jpegFile = new File([jpegBlob as Blob], file.name.split('.')[0] + '.jpeg', {
     lastModified: new Date().getTime(),
@@ -25,12 +24,14 @@ const convertToJpeg = async (file: File) => {
 };
 
 const uploadImage = async (file: File) => {
-  const formData = new FormData();
-  if (file && (file.type === 'image/heic' || file.type === 'image/heif')) {
-    file = await convertToJpeg(file);
+  let uploadedFile = file;
+  if (uploadedFile.type === 'image/heic' || uploadedFile.type === 'image/heif') {
+    uploadedFile = await convertToJpeg(uploadedFile);
   }
 
-  const compressedImage = await compressImage(file);
+  const compressedImage = await compressImage(uploadedFile);
+
+  const formData = new FormData();
   formData.append('files', compressedImage);
 
   const {
