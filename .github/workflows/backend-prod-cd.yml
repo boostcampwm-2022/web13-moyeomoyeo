@@ -52,7 +52,6 @@ jobs:
 
       - name: backend environment setting
         run: |
-          checkout -t origin/cd-test
           touch .env.production
           echo -e ${{ secrets.BACKEND_PRODUCTION_ENVIRONMENT }} > .env.production
 
