@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - cd-test
-
     paths:
       - 'backend/**'
       - '.github/workflows/backend-prod-cd.yml'
