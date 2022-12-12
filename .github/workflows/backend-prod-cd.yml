@@ -11,7 +11,6 @@ on:
 
 jobs:
   Register-Docker-Image:
-    needs: [Release-Tag]
     runs-on: ubuntu-20.04
     defaults:
       run:
@@ -93,7 +92,7 @@ jobs:
             ./backend/scripts/prod-deploy.sh ${{ secrets.NCP_ACCESS_KEY }} ${{ secrets.NCP_SECRET_KEY }} ${{ secrets.NCP_DOCKER_REGISTRY }} ${{ secrets.BACKEND_PRODUCTION_ENVIRONMENT }}
 
   slack-notifications:
-    needs: [Release-Tag, Register-Docker-Image, CD]
+    needs: [Register-Docker-Image, CD]
     if: ${{ always() }}
     uses: ./.github/workflows/slack-notification.yml
     with:
