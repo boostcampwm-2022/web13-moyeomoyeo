@@ -63,11 +63,13 @@ export class GroupArticle extends Article {
       title,
       contents,
       thumbnail,
+      blurThumbnail,
       chatUrl,
     }: {
       title: string;
       contents: string;
       thumbnail: string;
+      blurThumbnail: string;
       chatUrl: string;
     },
   ) {
@@ -78,6 +80,7 @@ export class GroupArticle extends Article {
     this.title = title;
     this.contents = contents;
     this.group.thumbnail = thumbnail;
+    this.group.blurThumbnail = blurThumbnail;
     this.group.chatUrl = chatUrl;
   }
 

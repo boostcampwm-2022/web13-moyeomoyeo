@@ -140,11 +140,14 @@ export class GroupArticleService {
       throw new GroupArticleNotFoundException();
     }
 
+    const blurThumbnail = await getBlurImage(thumbnail);
+
     groupArticle.update(user, {
       title,
       contents,
       thumbnail,
       chatUrl,
+      blurThumbnail,
     });
 
     await this.groupArticleRepository.save(groupArticle, { reload: false });
