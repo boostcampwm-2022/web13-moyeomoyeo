@@ -27,7 +27,7 @@ jobs:
         id: extract_version_name
 
       - name: show head commit
-        run: echo ${{ github.event.head_commit.message }}
+        run: echo -e ${{ github.event.head_commit.message }}
 
       - name: create release
         uses: actions/create-release@v1
