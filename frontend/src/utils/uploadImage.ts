@@ -26,7 +26,7 @@ const convertToJpeg = async (file: File) => {
 
 const uploadImage = async (file: File) => {
   const formData = new FormData();
-  if ((file && file.type === 'image/heic') || file.type === 'image/heif') {
+  if (file && (file.type === 'image/heic' || file.type === 'image/heif')) {
     file = await convertToJpeg(file);
   }
 
