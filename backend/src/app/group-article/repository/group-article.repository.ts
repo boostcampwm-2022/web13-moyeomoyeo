@@ -46,39 +46,15 @@ export class GroupArticleRepository extends Repository<GroupArticle> {
     user?: User;
   }): Promise<[IGroupArticleSearchResult[], number]> {
     const query = this.createQueryBuilder('groupArticle')
-      .select([
-        'groupArticle.id as id',
-        'groupArticle.title as title',
-        'groupArticle.createdAt as createdAt',
-        'group.maxCapacity as maxCapacity',
-        'group.thumbnail as thumbnail',
-        'group.status as status',
-        'group.location as location',
-        'groupCategory.id as groupCategoryId',
-        'groupCategory.name as groupCategoryName',
-        'COUNT(DISTINCT groupApplication.id) as currentCapacity',
-        'COUNT(DISTINCT scrap.id) as scrapCount',
-        'COUNT(DISTINCT comment.id) as commentCount',
-      ])
+      .select(['groupArticle.id as id'])
       .leftJoin(Group, 'group', 'groupArticle.id = group.article_id')
       .leftJoin(
         GroupCategory,
         'groupCategory',
         'groupCategory.id = group.category.id AND groupCategory.deletedAt IS NULL',
       )
-      .leftJoin(
-        GroupApplication,
-        'groupApplication',
-        'group.id = groupApplication.groupId AND groupApplication.deletedAt IS NULL',
-      )
-      .leftJoin(
-        Comment,
-        'comment',
-        'groupArticle.id = comment.articleId AND comment.deletedAt IS NULL',
-      )
-      .leftJoin(Scrap, 'scrap', 'groupArticle.id = scrap.articleId')
-      .where('groupArticle.deletedAt IS NULL')
-      .groupBy('groupArticle.id');
+      .where(`groupArticle.type = "GROUP"`)
+      .andWhere('groupArticle.deletedAt IS NULL');
 
     if (location) {
       query.andWhere('group.location = :location', { location });
@@ -100,6 +76,31 @@ export class GroupArticleRepository extends Repository<GroupArticle> {
 
     const count = await query.clone().getCount();
     const result = await query
+      .addSelect([
+        'groupArticle.title as title',
+        'groupArticle.createdAt as createdAt',
+        'group.maxCapacity as maxCapacity',
+        'group.thumbnail as thumbnail',
+        'group.status as status',
+        'group.location as location',
+        'groupCategory.id as groupCategoryId',
+        'groupCategory.name as groupCategoryName',
+        'COUNT(DISTINCT groupApplication.id) as currentCapacity',
+        'COUNT(DISTINCT scrap.id) as scrapCount',
+        'COUNT(DISTINCT comment.id) as commentCount',
+      ])
+      .leftJoin(
+        GroupApplication,
+        'groupApplication',
+        'group.id = groupApplication.groupId AND groupApplication.deletedAt IS NULL',
+      )
+      .leftJoin(
+        Comment,
+        'comment',
+        'groupArticle.id = comment.articleId AND comment.deletedAt IS NULL',
+      )
+      .leftJoin(Scrap, 'scrap', 'groupArticle.id = scrap.articleId')
+      .groupBy('groupArticle.id')
       .orderBy('groupArticle.id', 'DESC')
       .limit(limit)
       .offset(offset)
@@ -166,7 +167,7 @@ export class GroupArticleRepository extends Repository<GroupArticle> {
     location?: LOCATION;
     user?: User;
   }) {
-    const groupArticleIdsQuery = await this.createQueryBuilder('groupArticle')
+    const groupArticleIdsQuery = this.createQueryBuilder('groupArticle')
       .select('groupArticle.id as id')
       .leftJoin(Group, 'group', 'groupArticle.id = group.article_id')
       .leftJoin(
@@ -202,14 +203,6 @@ export class GroupArticleRepository extends Repository<GroupArticle> {
       });
     }
 
-    const groupArticleIds = await groupArticleIdsQuery.getRawMany<{
-      id: number;
-    }>();
-
-    if (groupArticleIds.length === 0) {
-      return [];
-    }
-
     return this.createQueryBuilder('groupArticle')
       .select([
         'groupArticle.id as id',
@@ -225,6 +218,12 @@ export class GroupArticleRepository extends Repository<GroupArticle> {
         'COUNT(DISTINCT scrap.id) as scrapCount',
         'COUNT(DISTINCT comment.id) as commentCount',
       ])
+      .innerJoin(
+        `(${groupArticleIdsQuery.getQuery()})`,
+        't1',
+        't1.id = groupArticle.id',
+        { location, categoryName: category, status, nextId, userId: user?.id },
+      )
       .leftJoin(Group, 'group', 'groupArticle.id = group.article_id')
       .leftJoin(
         GroupCategory,
@@ -242,9 +241,6 @@ export class GroupArticleRepository extends Repository<GroupArticle> {
         'groupArticle.id = comment.articleId AND comment.deletedAt IS NULL',
       )
       .leftJoin(Scrap, 'scrap', 'groupArticle.id = scrap.articleId')
-      .where('groupArticle.id IN (:...ids)', {
-        ids: groupArticleIds.map((id) => id.id),
-      })
       .groupBy('groupArticle.id')
       .orderBy('groupArticle.id', 'DESC')
       .getRawMany<IGroupArticleSearchResult>();
