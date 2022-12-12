@@ -11,7 +11,7 @@ on:
 
 jobs:
   Register-Docker-Image:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     defaults:
       run:
         working-directory: './backend'
@@ -26,12 +26,6 @@ jobs:
           touch .env.development
           echo -e ${{ secrets.BACKEND_DEVELOPMENT_ENVIRONMENT }} > .env.development
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
       - name: docker registry login
         uses: docker/login-action@v2
         with:
@@ -41,7 +35,7 @@ jobs:
 
       - name: build and push
         id: docker_build
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v3.2.0
         with:
           context: backend
           file: backend/Dockerfile
@@ -55,13 +49,26 @@ jobs:
 
   CD:
     needs: [Register-Docker-Image]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     defaults:
       run:
         working-directory: './backend'
     outputs:
       status: ${{ job.status }}
     steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: copy docker compose & config file into dev server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.BACKEND_DEV_REMOTE_IP }}
+          username: ${{ secrets.BACKEND_DEV_REMOTE_SSH_ID }}
+          password: ${{ secrets.BACKEND_DEV_REMOTE_ADMIN_KEY }}
+          port: ${{ secrets.BACKEND_DEV_REMOTE_SSH_PORT }}
+          source: 'backend/docker-compose.yml,backend/dev/nginx/nginx.conf,backend/scripts/dev-deploy.sh'
+          target: 'moyeomoyeo'
+
       - name: deploy
         uses: appleboy/ssh-action@v0.1.4
         with:
@@ -70,13 +77,7 @@ jobs:
           password: ${{secrets.BACKEND_DEV_REMOTE_ADMIN_KEY}}
           port: ${{secrets.BACKEND_DEV_REMOTE_SSH_PORT}}
           script: |
-            rm -rf web13-moyeomoyeo
-
-            git clone git@github.com:boostcampwm-2022/web13-moyeomoyeo.git
-
-            cd web13-moyeomoyeo
-
-            git checkout -t origin/develop
+            cd moyeomoyeo
 
             sudo chmod +x ./backend/scripts/dev-deploy.sh
 

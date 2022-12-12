@@ -1,5 +1,5 @@
 # node 16.18.1 이미지 사용
-FROM node:16.18.1-alpine as development
+FROM node:16.18.1-alpine
 
 # 작업 디렉토리 설정
 WORKDIR /usr/src/app
