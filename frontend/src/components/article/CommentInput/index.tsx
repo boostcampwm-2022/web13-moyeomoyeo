@@ -28,44 +28,45 @@ const CommentInput = ({ onAddComment }: Props) => {
   const { data: myData } = useFetchMyInfo();
   const [commentInput, setCommentInput] = useState('');
 
+  const handleAddCommentSuccess = useCallback(
+    (commentId: number) => {
+      const {
+        pages: {
+          0: { totalCount: totalComments },
+        },
+      } = queryClient.getQueryData<InfiniteData<PagingDataType<unknown>>>(['comments', articleId]);
+
+      if (totalComments > 5) {
+        onAddComment({
+          id: commentId,
+          authorId: myData.id,
+          authorName: myData.userName,
+          authorProfileImage: myData.profileImage,
+          contents: commentInput.trim(),
+          createdAt: new Date().toUTCString(),
+        });
+      } else {
+        setTimeout(() => window.scrollTo(0, document.body.scrollHeight), 200);
+      }
+      setCommentInput('');
+    },
+    [articleId, commentInput, myData, onAddComment, queryClient]
+  );
+
   const handleAddComment = useCallback(() => {
     if (commentInput.trim().length > 0) {
       addComment(
         { contents: commentInput, articleId },
         {
-          onSuccess: (res) => {
-            const {
-              data: {
-                data: { id: commentId },
-              },
-            } = res;
-            const {
-              pages: {
-                0: { totalCount: totalComments },
-              },
-            } = queryClient.getQueryData<InfiniteData<PagingDataType<unknown>>>([
-              'comments',
-              articleId,
-            ]);
-
-            if (totalComments > 5) {
-              onAddComment({
-                id: commentId,
-                authorId: myData.id,
-                authorName: myData.userName,
-                authorProfileImage: myData.profileImage,
-                contents: commentInput.trim(),
-                createdAt: new Date().toUTCString(),
-              });
-            } else {
-              setTimeout(() => window.scrollTo(0, document.body.scrollHeight), 200);
-            }
-            setCommentInput('');
-          },
+          onSuccess: ({
+            data: {
+              data: { id: commentId },
+            },
+          }) => handleAddCommentSuccess(commentId),
         }
       );
     }
-  }, [commentInput, articleId, addComment, queryClient, myData, onAddComment]);
+  }, [commentInput, articleId, addComment, handleAddCommentSuccess]);
 
   const handlePressEnter = useCallback(
     (e: KeyboardEvent) => {
