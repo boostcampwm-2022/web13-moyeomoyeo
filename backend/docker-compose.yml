@@ -1,8 +1,8 @@
 version: '3.3'
 
 services:
-  moyeo-nginx:
-    container_name: moyeo-nginx
+  nginx:
+    container_name: nginx
     image: nginx
     restart: always
     volumes:
@@ -26,7 +26,7 @@ services:
       - /letsencrypt/certbot/conf:/etc/letsencrypt
       - /letsencrypt/certbot/www:/var/www/certbot
     depends_on:
-      - moyeo-nginx
+      - nginx
     networks:
       - backbone
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"

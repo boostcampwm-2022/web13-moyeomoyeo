@@ -1,8 +1,8 @@
 version: '3.3'
 
 services:
-  moyeo-nginx:
-    container_name: moyeo-nginx
+  nginx:
+    container_name: nginx
     build:
       context: .
       dockerfile: nginx.Dockerfile
