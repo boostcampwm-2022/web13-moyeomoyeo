@@ -88,20 +88,20 @@ jobs:
       - name: copy docker compose & config file into dev server
         uses: appleboy/scp-action@master
         with:
-          host: ${{ secrets.BACKEND_DEV_REMOTE_IP }}
-          username: ${{ secrets.BACKEND_DEV_REMOTE_SSH_ID }}
-          password: ${{ secrets.BACKEND_DEV_REMOTE_ADMIN_KEY }}
-          port: ${{ secrets.BACKEND_DEV_REMOTE_SSH_PORT }}
+          host: ${{ secrets.BACKEND_PROD_REMOTE_IP }}
+          username: ${{ secrets.BACKEND_PROD_REMOTE_SSH_ID }}
+          password: ${{ secrets.BACKEND_PROD_REMOTE_ADMIN_KEY }}
+          port: ${{ secrets.BACKEND_PROD_REMOTE_SSH_PORT }}
           source: 'backend/docker-compose.prod.yml,backend/dev/nginx/nginx.conf,backend/scripts/prod-deploy.sh'
           target: 'moyeomoyeo'
 
       - name: deploy
         uses: appleboy/ssh-action@v0.1.4
         with:
-          host: ${{secrets.BACKEND_DEV_REMOTE_IP}}
-          username: ${{secrets.BACKEND_DEV_REMOTE_SSH_ID}}
-          password: ${{secrets.BACKEND_DEV_REMOTE_ADMIN_KEY}}
-          port: ${{secrets.BACKEND_DEV_REMOTE_SSH_PORT}}
+          host: ${{ secrets.BACKEND_PROD_REMOTE_IP }}
+          username: ${{ secrets.BACKEND_PROD_REMOTE_SSH_ID }}
+          password: ${{ secrets.BACKEND_PROD_REMOTE_ADMIN_KEY }}
+          port: ${{ secrets.BACKEND_PROD_REMOTE_SSH_PORT }}
           script: |
             cd moyeomoyeo
 
