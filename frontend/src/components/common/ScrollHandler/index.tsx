@@ -13,6 +13,10 @@ const ScrollHandler = () => {
     const saveScrollY = (url: string) => {
       if (url.startsWith('/article')) {
         setScrollY(window.scrollY);
+        return;
+      }
+      if (url !== '/') {
+        setScrollY(0);
       }
     };
 
