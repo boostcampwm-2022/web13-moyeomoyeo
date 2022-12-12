@@ -1,0 +1,47 @@
+version: '3.3'
+
+services:
+  nginx:
+    container_name: nginx
+    image: nginx
+    restart: always
+    volumes:
+      - ./dev/nginx:/etc/nginx/conf.d
+      - /letsencrypt/certbot/conf:/etc/letsencrypt
+      - /letsencrypt/certbot/www:/var/www/certbot
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - moyeo-server
+    networks:
+      - backbone
+    command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
+
+  certbot:
+    container_name: certbot
+    image: certbot/certbot
+    restart: unless-stopped
+    volumes:
+      - /letsencrypt/certbot/conf:/etc/letsencrypt
+      - /letsencrypt/certbot/www:/var/www/certbot
+    depends_on:
+      - nginx
+    networks:
+      - backbone
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+
+  moyeo-server:
+    container_name: moyeo-server
+    image: ${DOCKER_SERVER_IMAGE}
+    environment:
+      NODE_ENV: development
+    ports:
+      - 3000:3000
+    command: npm run start:dev
+    networks:
+      - backbone
+
+networks:
+  backbone:
+    driver: bridge
