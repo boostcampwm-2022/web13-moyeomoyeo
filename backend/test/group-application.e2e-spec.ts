@@ -18,7 +18,6 @@ import { getGroupApplicationRegisterFixture } from '@app/group-application/__tes
 import { GROUP_STATUS } from '@app/group-article/constants/group-article.constants';
 import { Group } from '@app/group-article/entity/group.entity';
 import { GroupApplicationRepository } from '@src/app/group-application/group-application.repository';
-import { GroupArticleResponse } from '@src/app/group-application/dto/group-article-response.dto';
 
 describe('Group Application (e2e)', () => {
   let app: INestApplication;
