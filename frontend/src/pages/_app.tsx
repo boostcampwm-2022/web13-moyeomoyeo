@@ -60,8 +60,8 @@ export default function App({ Component, pageProps }: AppProps<{ dehydratedState
                 <AuthErrorBoundary>
                   <ApiErrorBoundary>
                     <LoginRedirect />
-                    <Component {...pageProps} />
                     <ScrollHandler />
+                    <Component {...pageProps} />
                   </ApiErrorBoundary>
                 </AuthErrorBoundary>
               </ErrorBoundary>
