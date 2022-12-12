@@ -6,7 +6,7 @@ services:
     image: nginx
     restart: always
     volumes:
-      - ./nginx/dev:/etc/nginx/conf.d
+      - ./nginx/prod:/etc/nginx/conf.d
       - /letsencrypt/certbot/conf:/etc/letsencrypt
       - /letsencrypt/certbot/www:/var/www/certbot
     ports:
@@ -35,29 +35,10 @@ services:
     container_name: moyeo-server
     image: ${DOCKER_SERVER_IMAGE}
     environment:
-      NODE_ENV: development
+      NODE_ENV: production
     ports:
       - 3000:3000
-    command: npm run start:dev
-    networks:
-      - backbone
-
-  moyeo-db:
-    container_name: moyeo-db
-    image: mysql:8.0
-    restart: always
-    ports:
-      - ${MYSQL_PORT}:3306
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-    volumes:
-      - ~/db:/var/lib/mysql
-    command:
-      - --character-set-server=utf8mb4
-      - --collation-server=utf8mb4_unicode_ci
+    command: npm run start
     networks:
       - backbone
 
