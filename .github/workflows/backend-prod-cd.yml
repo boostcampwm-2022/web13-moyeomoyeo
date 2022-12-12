@@ -3,7 +3,7 @@ run-name: ${{ github.actor }}가 실행함
 on:
   pull_request:
     branches:
-      - main
+      - develop
     paths:
       - 'backend/**'
       - '.github/workflows/backend-prod-cd.yml'
