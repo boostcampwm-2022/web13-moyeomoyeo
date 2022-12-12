@@ -11,7 +11,7 @@ on:
 
 jobs:
   checking:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     defaults:
       run:
         working-directory: './frontend'
@@ -46,7 +46,7 @@ jobs:
         run: npm run test-all
 
   storybook:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     defaults:
       run:
         working-directory: './frontend'
@@ -91,7 +91,7 @@ jobs:
           reactions: rocket
 
   lhci:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     defaults:
       run:
         working-directory: './frontend'
