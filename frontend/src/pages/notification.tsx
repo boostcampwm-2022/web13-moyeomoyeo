@@ -5,6 +5,7 @@ import Header from '@components/common/Header';
 import RootTitle from '@components/common/Header/RootTitle';
 import UserLoginItem from '@components/common/Header/UserLoginItem';
 import NavigationTab from '@components/common/NavigationTab';
+import NotificationLoading from '@components/common/NotificationLoading/NotificationLoading';
 import PageLayout from '@components/common/PageLayout';
 import NotificationItem from '@components/notification/NotificationItem';
 import { PAGE_TITLE } from '@constants/pageTitle';
@@ -12,7 +13,13 @@ import useFetchNotifications from '@hooks/queries/useFetchNotifications';
 import useIntersect from '@hooks/useIntersect';
 
 const NotificationPage = () => {
-  const { data: notifications, fetchNextPage, hasNextPage, isFetching } = useFetchNotifications();
+  const {
+    data: notifications,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isLoading,
+  } = useFetchNotifications();
 
   const ref = useIntersect((entry, observer) => {
     observer.unobserve(entry.target);
@@ -36,23 +43,23 @@ const NotificationPage = () => {
       }
       footer={<NavigationTab />}
     >
-      {notifications ? (
-        <PageWrapper>
-          {notifications.length > 0 ? (
-            <>
-              {notifications.map((notification) => (
-                <NotificationItem key={notification.id} notification={notification} />
-              ))}
-              <div ref={ref} />
-            </>
-          ) : (
-            <EmptyMessage target="notification" large />
-          )}
-        </PageWrapper>
-      ) : (
-        // TODO 로딩 처리
-        <div>로딩중</div>
-      )}
+      <PageWrapper>
+        {isLoading && <NotificationLoading />}
+        {notifications && (
+          <>
+            {notifications.length > 0 ? (
+              <>
+                {notifications.map((notification) => (
+                  <NotificationItem key={notification.id} notification={notification} />
+                ))}
+                <div ref={ref} />
+              </>
+            ) : (
+              <EmptyMessage target="notification" large />
+            )}
+          </>
+        )}
+      </PageWrapper>
     </PageLayout>
   );
 };
