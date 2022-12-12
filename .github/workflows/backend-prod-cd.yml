@@ -1,9 +1,9 @@
 name: Backend Production CD
 run-name: ${{ github.actor }}가 실행함
 on:
-  pull_request:
+  push:
     branches:
-      - develop
+      - main
     paths:
       - 'backend/**'
       - '.github/workflows/backend-prod-cd.yml'
@@ -65,7 +65,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v3
 
-      - name: copy docker compose & config file into dev server
+      - name: copy docker compose & config file into production server
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.BACKEND_PROD_REMOTE_IP }}
