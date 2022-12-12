@@ -10,24 +10,6 @@ on:
       - '.github/workflows/slack-notification.yml'
 
 jobs:
-  Release-Tag:
-    runs-on: ubuntu-20.04
-    defaults:
-      run:
-        working-directory: './backend'
-    outputs:
-      status: ${{ job.status }}
-      tag: ${{ steps.tag_version.outputs.new_tag }}
-    steps:
-      - name: checkout
-        uses: actions/checkout@v3
-
-       - name: Github Release 최신 tag 받아오기
-        id: tag_version
-        uses: mathieudutour/github-tag-action@v6.1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-
   Register-Docker-Image:
     needs: [Release-Tag]
     runs-on: ubuntu-20.04
@@ -39,6 +21,12 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v3
+
+      - name: Github Release 최신 tag 받아오기
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: backend environment setting
         run: |
@@ -60,7 +48,7 @@ jobs:
           file: backend/Dockerfile
           tags: |
             ${{ secrets.NCP_DOCKER_REGISTRY }}/moyeo-server-production:latest
-            ${{ secrets.NCP_DOCKER_REGISTRY }}/moyeo-server-production:${{ needs.Release-Tag.outputs.tag }}
+            ${{ secrets.NCP_DOCKER_REGISTRY }}/moyeo-server-production:${{ steps.tag_version.outputs.new_tag }}
           push: true
 
       - name: Image digest
