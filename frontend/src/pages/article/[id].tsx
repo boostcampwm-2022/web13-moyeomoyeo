@@ -33,7 +33,7 @@ import useFetchComments from '@hooks/queries/useFetchComments';
 import useFetchMyInfo from '@hooks/queries/useFetchMyInfo';
 import useFetchParticipants from '@hooks/queries/useFetchParticipants';
 import useIntersect from '@hooks/useIntersect';
-import { ArticleType } from '@typings/types';
+import { ArticleType, CommentType } from '@typings/types';
 import dateTimeFormat from '@utils/dateTime';
 
 const ArticleDetail = () => {
@@ -48,6 +48,7 @@ const ArticleDetail = () => {
   const { data: article } = useFetchArticle(articleId);
   const { data: isJoined } = useFetchApplicationStatus(articleId);
   const { data: participants } = useFetchParticipants(articleId);
+  const [addedComment, setAddedComment] = useState<CommentType | null>(null);
 
   const isUrlAvailable = getButtonStatus(article, isJoined) === ParticipateButtonStatus.LINK;
   const { url } = useFetchChatUrl(articleId, isUrlAvailable);
@@ -81,7 +82,7 @@ const ArticleDetail = () => {
             }
           />
         }
-        footer={<CommentInput />}
+        footer={<CommentInput onAddComment={setAddedComment} />}
       >
         <>
           <ContentWrapper>
@@ -159,10 +160,15 @@ const ArticleDetail = () => {
               </>
             )}
           </ContentWrapper>
+          {addedComment && <Comment comment={addedComment} newComment />}
           <Joiner
             {...(comments.length > 0 && { before: true })}
             components={comments.map((comment) => (
-              <Comment key={comment.id} comment={comment} />
+              <Comment
+                key={comment.id}
+                comment={comment}
+                onDeleteComment={() => setAddedComment(null)}
+              />
             ))}
           />
           <div ref={ref}></div>
