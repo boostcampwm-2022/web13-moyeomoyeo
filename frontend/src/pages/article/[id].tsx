@@ -158,13 +158,17 @@ const ArticleDetail = () => {
               </>
             )}
           </ContentWrapper>
-          <Joiner
-            {...(comments.length > 0 && { before: true })}
-            components={comments.map((comment) => (
-              <Comment key={comment.id} comment={comment} />
-            ))}
-          />
-          <div ref={ref}></div>
+          {!(!article || isJoined === undefined || !myInfo || !participants) && (
+            <>
+              <Joiner
+                {...(comments.length > 0 && { before: true })}
+                components={comments.map((comment) => (
+                  <Comment key={comment.id} comment={comment} />
+                ))}
+              />
+              <div ref={ref}></div>
+            </>
+          )}
         </>
       </PageLayout>
     </>
