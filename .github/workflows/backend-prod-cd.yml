@@ -6,7 +6,7 @@ on:
       - cd-test
     paths:
       - 'backend/**'
-      - '.github/workflows/backend-dev-cd.yml'
+      - '.github/workflows/backend-prod-cd.yml'
       - '.github/workflows/slack-notification.yml'
 
 jobs:
