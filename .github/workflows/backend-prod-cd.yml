@@ -1,9 +1,9 @@
 name: Backend Production CD
 run-name: ${{ github.actor }}가 실행함
 on:
-  pull_request:
+  push:
     branches:
-      - develop
+      - main
     paths:
       - 'backend/**'
       - '.github/workflows/backend-prod-cd.yml'
