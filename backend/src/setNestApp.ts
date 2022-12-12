@@ -9,13 +9,17 @@ import { ValidationError } from 'class-validator';
 import * as cookieParser from 'cookie-parser';
 import { BadParameterException } from '@exception/bad-parameter.exception';
 import { AllExceptionFilter } from '@filter/all-exception.filter';
+import { AppConfigService } from '@config/app/config.service';
 
 export const setNestApp = (app: INestApplication) => {
+  const appConfigService = app.get(AppConfigService);
+
   app.use(cookieParser());
 
-  // TODO: cors 설정을 nginx로 옮기거나 적절한 설정 필요
   app.enableCors({
-    origin: true,
+    origin: appConfigService.isPrduction()
+      ? 'https://www.moyeomoyeo.com'
+      : true,
     credentials: true,
   });
 
