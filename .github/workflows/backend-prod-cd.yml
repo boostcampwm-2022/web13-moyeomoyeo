@@ -1,7 +1,7 @@
 name: Backend Production CD
 run-name: ${{ github.actor }}가 실행함
 on:
-  push:
+  pull_request:
     branches:
       - main
     paths:
@@ -21,11 +21,17 @@ jobs:
       - name: checkout
         uses: actions/checkout@v3
 
-      - name: take tag version
+      - name: take tag version and push tag
         id: tag_version
         uses: mathieudutour/github-tag-action@v6.1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create a GitHub release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          body: ${{ steps.tag_version.outputs.changelog }}
 
       - name: backend environment setting
         run: |
@@ -47,7 +53,7 @@ jobs:
           file: backend/Dockerfile
           tags: |
             ${{ secrets.NCP_DOCKER_REGISTRY }}/moyeo-server-production:latest
-            ${{ secrets.NCP_DOCKER_REGISTRY }}/moyeo-server-production:${{ steps.tag_version.outputs.previous_tag }}
+            ${{ secrets.NCP_DOCKER_REGISTRY }}/moyeo-server-production:${{ steps.tag_version.outputs.new_tag }}
           push: true
 
       - name: Image digest
