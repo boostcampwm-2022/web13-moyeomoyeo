@@ -64,8 +64,6 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v3
-        with:
-          ref: origin/feature/301-backend-production-deploy
 
       - name: copy docker compose & config file into dev server
         uses: appleboy/scp-action@master
