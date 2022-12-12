@@ -86,7 +86,7 @@ export class GroupArticleResponse {
   })
   createdAt: Date;
 
-  static async from(myGroup: IMyGroupResult) {
+  static from(myGroup: IMyGroupResult) {
     const response = new GroupArticleResponse();
     response.id = myGroup.groupArticleId;
     response.title = myGroup.title;
@@ -94,7 +94,10 @@ export class GroupArticleResponse {
     response.category = myGroup.category;
     response.commentCount = myGroup.commentCount;
     response.scrapCount = myGroup.scrapCount;
-    response.thumbnail = await ImageWithBlurResponse.from(myGroup.thumbnail);
+    response.thumbnail = ImageWithBlurResponse.from(
+      myGroup.thumbnail,
+      myGroup.blurThumbnail,
+    );
     response.maxCapacity = myGroup.maxCapacity;
     response.currentCapacity = Number(myGroup.currentCapacity);
     response.status = myGroup.status;

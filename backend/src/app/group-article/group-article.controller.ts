@@ -137,9 +137,7 @@ export class GroupArticleController {
         result[1],
         query.currentPage,
         query.countPerPage,
-        await Promise.all(
-          result[0].map((row) => GroupArticleSearchResult.from(row)),
-        ),
+        result[0].map((row) => GroupArticleSearchResult.from(row)),
       ),
     );
   }
@@ -159,9 +157,7 @@ export class GroupArticleController {
     return ResponseEntity.OK_WITH_DATA(
       new V2SearchGroupArticlesResponse(
         query.limit,
-        await Promise.all(
-          result.map((row) => GroupArticleSearchResult.from(row)),
-        ),
+        result.map((row) => GroupArticleSearchResult.from(row)),
         query.nextId,
       ),
     );
