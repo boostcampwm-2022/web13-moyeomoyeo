@@ -18,7 +18,7 @@ export const getGroupFixture = (
   fixture.status = group.status || GROUP_STATUS.PROGRESS;
   fixture.chatUrl = group.chatUrl || faker.internet.url();
   fixture.thumbnail = group.thumbnail || faker.internet.url();
-  fixture.blurThumbnail = group.blurThumbnail || faker.internet.url();
+  fixture.blurThumbnail = group.blurThumbnail || '';
   fixture.createdAt = new Date();
   fixture.updatedAt = new Date();
   return fixture;
