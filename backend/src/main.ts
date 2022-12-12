@@ -9,9 +9,12 @@ async function bootstrap() {
 
   setNestApp(app);
 
-  setSwagger(app);
-
   const appConfigService = app.get(AppConfigService);
+
+  if (appConfigService.isDevelopment()) {
+    setSwagger(app);
+  }
+
   await app.listen(appConfigService.port);
 }
 
