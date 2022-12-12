@@ -47,7 +47,7 @@ jobs:
           file: backend/Dockerfile
           tags: |
             ${{ secrets.NCP_DOCKER_REGISTRY }}/moyeo-server-production:latest
-            ${{ secrets.NCP_DOCKER_REGISTRY }}/moyeo-server-production:${{ steps.tag_version.outputs.new_tag }}
+            ${{ secrets.NCP_DOCKER_REGISTRY }}/moyeo-server-production:${{ steps.tag_version.outputs.previous_tag }}
           push: true
 
       - name: Image digest

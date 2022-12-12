@@ -38,7 +38,7 @@ services:
       NODE_ENV: production
     ports:
       - 3000:3000
-    command: npm run start
+    command: npm run env-cmd -f .env.production nest start
     networks:
       - backbone
 
