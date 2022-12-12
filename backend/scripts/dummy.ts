@@ -110,9 +110,9 @@ async function bulkInsert() {
       { length: GROUP_ARTICLE_COUNT },
       (v, k) =>
         `(${k + 1}, ${k + 1}, ${randomValue(1, groupCategories.length - 1)}, "${
-          locations[(k + 1) % locations.length]
+          locations[randomValue(0, locations.length - 1)]
         }", ${randomValue(2, 15)},"${
-          groupStatus[(k + 1) % groupStatus.length]
+          groupStatus[randomValue(0, groupStatus.length - 1)]
         }","${faker.internet.url()}", "${faker.internet.url()}")`,
     ).join(',');
 
