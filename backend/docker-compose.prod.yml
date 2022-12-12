@@ -35,7 +35,7 @@ services:
     container_name: moyeo-server
     image: ${DOCKER_SERVER_IMAGE}
     environment:
-      NODE_ENV: development
+      NODE_ENV: production
     ports:
       - 3000:3000
     command: npm run start:dev
