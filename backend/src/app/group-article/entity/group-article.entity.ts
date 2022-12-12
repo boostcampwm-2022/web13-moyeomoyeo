@@ -25,6 +25,7 @@ export class GroupArticle extends Article {
       title,
       contents,
       thumbnail,
+      blurThumbnail,
       location,
       chatUrl,
       maxCapacity,
@@ -33,6 +34,7 @@ export class GroupArticle extends Article {
       title: string;
       contents: string;
       thumbnail: string;
+      blurThumbnail: string;
       location: LOCATION;
       chatUrl: string;
       maxCapacity: number;
@@ -50,6 +52,7 @@ export class GroupArticle extends Article {
       maxCapacity,
       category,
       thumbnail,
+      blurThumbnail,
     });
     return article;
   }
