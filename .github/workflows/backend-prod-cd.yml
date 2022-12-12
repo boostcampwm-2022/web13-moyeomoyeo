@@ -27,7 +27,7 @@ jobs:
         id: extract_version_name
 
       - name: create release
-        uses: actions/create-release@v1
+        uses: actions/create-release@v1.1.4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -91,7 +91,7 @@ jobs:
           username: ${{ secrets.BACKEND_DEV_REMOTE_SSH_ID }}
           password: ${{ secrets.BACKEND_DEV_REMOTE_ADMIN_KEY }}
           port: ${{ secrets.BACKEND_DEV_REMOTE_SSH_PORT }}
-          source: 'backend/docker-compose.yml,backend/dev/nginx/nginx.conf,backend/scripts/dev-deploy.sh'
+          source: 'backend/docker-compose.yml,backend/dev/nginx/nginx.conf,backend/scripts/prod-deploy.sh'
           target: 'moyeomoyeo'
 
       - name: deploy
