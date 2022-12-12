@@ -13,7 +13,6 @@ const useAddComment = (articleId: number) => {
   const queryClient = useQueryClient();
   return useAuthMutation(addComment, {
     onSuccess: async () => {
-      await queryClient.invalidateQueries(['article', articleId]);
       await queryClient.invalidateQueries(['comments', articleId]);
     },
   });

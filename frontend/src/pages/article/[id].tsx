@@ -43,7 +43,8 @@ const ArticleDetail = () => {
   const router = useRouter();
   const articleId = Number(router.query.id);
   const { data: myInfo } = useFetchMyInfo();
-  const { comments, fetchNextPage, hasNextPage, isFetching } = useFetchComments(articleId);
+  const { comments, totalComments, fetchNextPage, hasNextPage, isFetching } =
+    useFetchComments(articleId);
   const { data: article } = useFetchArticle(articleId);
   const { data: isJoined } = useFetchApplicationStatus(articleId);
   const { data: participants } = useFetchParticipants(articleId);
@@ -148,7 +149,7 @@ const ArticleDetail = () => {
                       chatRoomLink={url}
                     />
                   )}
-                  <StatCounter variant="comment" count={article.commentCount} />
+                  <StatCounter variant="comment" count={totalComments} />
                 </DetailWrapper>
                 <ParticipantsModal
                   participants={participants}

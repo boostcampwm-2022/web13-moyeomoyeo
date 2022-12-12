@@ -31,7 +31,7 @@ const useFetchComments = (articleId: number) => {
 
   const comments = useMemo(() => (data ? data.pages.flatMap(({ data }) => data) : []), [data]);
 
-  return { comments, ...rest };
+  return { comments, totalComments: comments.length, ...rest };
 };
 
 export default useFetchComments;
