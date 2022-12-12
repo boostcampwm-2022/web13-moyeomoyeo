@@ -61,6 +61,26 @@ describe('Group Application (e2e)', () => {
       userId: user1.id,
     });
     await groupArticleRepository.save([groupArticle1, groupArticle2]);
+
+    const groupApplication1 = await getGroupApplicationRegisterFixture(
+      groupArticle1.group,
+      {
+        id: 1,
+        user: new Promise(async (res) => res(user1)),
+        userId: user1.id,
+      },
+    );
+    const groupApplication2 = await getGroupApplicationRegisterFixture(
+      groupArticle2.group,
+      {
+        id: 2,
+        user: new Promise(async (res) => res(user1)),
+        userId: user1.id,
+      },
+    );
+    await dataSource
+      .getRepository(GroupApplication)
+      .save([groupApplication1, groupApplication2]);
   });
 
   afterEach(async () => {
@@ -108,7 +128,7 @@ describe('Group Application (e2e)', () => {
       const group = groupArticle.group;
 
       const groupApplication = await getGroupApplicationRegisterFixture(group, {
-        id: 1,
+        id: 3,
         user: new Promise(async (res) => res(user)),
         userId: user.id,
       });
@@ -201,7 +221,7 @@ describe('Group Application (e2e)', () => {
       const group = groupArticle.group;
 
       const groupApplication = await getGroupApplicationRegisterFixture(group, {
-        id: 1,
+        id: 3,
         user: new Promise(async (res) => res(user)),
         userId: user.id,
       });
@@ -300,6 +320,183 @@ describe('Group Application (e2e)', () => {
     });
   });
 
+  describe('신청자 조회 GET /group-applications/participants?groupArticleId={id}', () => {
+    const url = (id: number) =>
+      `/v1/group-applications/participants?groupArticleId=${id}`;
+
+    test('모집 신청하기 정상 작동 시 200 코드를 던지고 신청한 유저를 조회할 수 있다.(신청자가 글 작성자만 있는 경우)', async () => {
+      // given
+      const jwtService = app.get(JwtTokenService);
+      const userRepository = dataSource.getRepository(User);
+      const user = await userRepository.findOneBy({ id: 2 });
+      const accessToken = jwtService.generateAccessToken(user);
+      const groupArticleId = 1;
+
+      // when
+      const result = await request(app.getHttpServer())
+        .get(url(groupArticleId))
+        .set({ Cookie: setCookie(accessToken.accessToken) });
+
+      // then
+      const groupArticle = await dataSource
+        .getRepository(GroupArticle)
+        .findOneBy({ id: groupArticleId });
+      const group = groupArticle.group;
+      const participantsApplications = await dataSource
+        .getRepository(GroupApplication)
+        .find({ where: { groupId: group.id }, relations: { user: true } });
+      expect(result.status).toEqual(200);
+      const testList = participantsApplications.map(
+        async (participantsApplication, index) => {
+          const participant = await participantsApplication.user;
+          expect(result.body.data[index].user).toEqual({
+            id: participant.id,
+            userName: participant.userName,
+            description: participant.description,
+            profileImage: participant.profileImage,
+          });
+        },
+      );
+      Promise.all(testList);
+    });
+
+    test('모집 신청하기 정상 작동 시 200 코드를 던지고 신청한 유저를 조회할 수 있다.(본인이 신청하고 본인이 조회하는 경우)', async () => {
+      // given
+      const jwtService = app.get(JwtTokenService);
+      const userRepository = dataSource.getRepository(User);
+      const participant = await userRepository.findOneBy({ id: 2 });
+      const groupArticleId = 1;
+      const groupApplicationRepository =
+        dataSource.getRepository(GroupApplication);
+      const groupArticleRepository = dataSource.getRepository(GroupArticle);
+      const groupArticle = await groupArticleRepository.findOneBy({
+        id: groupArticleId,
+      });
+      const group = groupArticle.group;
+      const groupApplication = await getGroupApplicationRegisterFixture(group, {
+        id: 3,
+        user: new Promise(async (res) => res(participant)),
+        userId: participant.id,
+      });
+      await groupApplicationRepository.save(groupApplication);
+      const accessToken = jwtService.generateAccessToken(participant);
+
+      // when
+      const result = await request(app.getHttpServer())
+        .get(url(groupArticleId))
+        .set({ Cookie: setCookie(accessToken.accessToken) });
+
+      // then
+      const participantsApplications = await dataSource
+        .getRepository(GroupApplication)
+        .find({ where: { groupId: group.id }, relations: { user: true } });
+      expect(result.status).toEqual(200);
+      const testList = participantsApplications.map(
+        async (participantsApplication, index) => {
+          const participant = await participantsApplication.user;
+          expect(result.body.data[index].user).toEqual({
+            id: participant.id,
+            userName: participant.userName,
+            description: participant.description,
+            profileImage: participant.profileImage,
+          });
+        },
+      );
+      Promise.all(testList);
+    });
+
+    test('JWT 토큰이 존재하지 않을 때 401에러를 던진다.', async () => {
+      // given
+      const groupArticleId = 1;
+
+      // when
+      const result = await request(app.getHttpServer()).get(
+        url(groupArticleId),
+      );
+
+      // then
+      expect(result.status).toEqual(401);
+    });
+
+    test('모집 신청하기 정상 작동 시 200 코드를 던지고 신청한 유저를 조회할 수 있다.(신청자가 있을 때 다른 사람이 조회하는 경우)', async () => {
+      // given
+      const jwtService = app.get(JwtTokenService);
+      const userRepository = dataSource.getRepository(User);
+      const participant = await userRepository.findOneBy({ id: 2 });
+      const groupArticleId = 1;
+      const groupApplicationRepository =
+        dataSource.getRepository(GroupApplication);
+      const groupArticleRepository = dataSource.getRepository(GroupArticle);
+      const groupArticle = await groupArticleRepository.findOneBy({
+        id: groupArticleId,
+      });
+      const group = groupArticle.group;
+      const groupApplication = await getGroupApplicationRegisterFixture(group, {
+        id: 3,
+        user: new Promise(async (res) => res(participant)),
+        userId: participant.id,
+      });
+      await groupApplicationRepository.save(groupApplication);
+
+      // 방문자가 조회
+      const visitor = getUserFixture({ id: 3 });
+      await userRepository.save(visitor);
+      const accessToken = jwtService.generateAccessToken(visitor);
+
+      // when
+      const result = await request(app.getHttpServer())
+        .get(url(groupArticleId))
+        .set({ Cookie: setCookie(accessToken.accessToken) });
+
+      // then
+      const participantsApplications = await dataSource
+        .getRepository(GroupApplication)
+        .find({ where: { groupId: group.id }, relations: { user: true } });
+      expect(result.status).toEqual(200);
+      const testList = participantsApplications.map(
+        async (participantsApplication, index) => {
+          const participant = await participantsApplication.user;
+          expect(result.body.data[index].user).toEqual({
+            id: participant.id,
+            userName: participant.userName,
+            description: participant.description,
+            profileImage: participant.profileImage,
+          });
+        },
+      );
+      Promise.all(testList);
+    });
+
+    test('JWT 토큰이 존재하지 않을 때 401에러를 던진다.', async () => {
+      // given
+      const groupArticleId = 1;
+
+      // when
+      const result = await request(app.getHttpServer()).get(
+        url(groupArticleId),
+      );
+
+      // then
+      expect(result.status).toEqual(401);
+    });
+
+    test('존재하지 않는 그룹에 참가신청을 하면 404 에러를 던진다.', async () => {
+      // given
+      const jwtService = app.get(JwtTokenService);
+      const user = await dataSource.getRepository(User).findOneBy({ id: 2 });
+      const accessToken = jwtService.generateAccessToken(user);
+      const groupArticleId = 1000;
+
+      // when
+      const result = await request(app.getHttpServer())
+        .get(url(groupArticleId))
+        .set({ Cookie: setCookie(accessToken.accessToken) });
+
+      // then
+      expect(result.status).toEqual(404);
+    });
+  });
+
   describe('신청 취소 POST /group-applications/cancel', () => {
     const url = () => `/v1/group-applications/cancel`;
 
@@ -319,7 +516,7 @@ describe('Group Application (e2e)', () => {
       const group = groupArticle.group;
 
       const groupApplication = await getGroupApplicationRegisterFixture(group, {
-        id: 1,
+        id: 3,
         user: new Promise(async (res) => res(user)),
         userId: user.id,
       });
@@ -352,7 +549,7 @@ describe('Group Application (e2e)', () => {
       group.status = GROUP_STATUS.SUCCEED;
 
       const groupApplication = await getGroupApplicationRegisterFixture(group, {
-        id: 1,
+        id: 3,
         user: new Promise(async (res) => res(user)),
         userId: user.id,
       });
