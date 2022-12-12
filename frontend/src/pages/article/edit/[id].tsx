@@ -94,54 +94,49 @@ const ArticleEdit = () => {
           />
         }
       >
-        {/* TODO 로딩처리 */}
-        {article === undefined ? (
-          <div>로딩중</div>
-        ) : (
-          <>
-            <TermSection>
-              <SelectSection>
-                <DropDown
-                  label="카테고리"
-                  data={Object.entries(CategoryKr).map(([key, value]) => ({
-                    label: value,
-                    value: key,
-                  }))}
-                  value={article.category}
-                  required
-                  disabled
-                />
-                <DropDown
-                  label="장소"
-                  data={Object.entries(LocationKr).map(([key, value]) => ({
-                    label: value,
-                    value: key,
-                  }))}
-                  value={article.location}
-                  required
-                  disabled
-                />
-              </SelectSection>
-              <PersonSection>
-                <PersonSectionHeader>
-                  <Text size="md" weight={500}>
-                    인원제한
-                  </Text>
-                  <Text size="md" weight={500}>
-                    {article.maxCapacity}명
-                  </Text>
-                </PersonSectionHeader>
-                <Slider min={1} max={15} value={article.maxCapacity} disabled />
-              </PersonSection>
-            </TermSection>
-            <ArticlePostInput
-              values={articleInput}
-              onChange={(target: keyof ArticlePostInputType, value: string) => {
-                setArticleInput((prev) => ({ ...prev, [target]: value }));
-              }}
-            />
-          </>
-        )}
+        <>
+          <TermSection>
+            <SelectSection>
+              <DropDown
+                label="카테고리"
+                data={Object.entries(CategoryKr).map(([key, value]) => ({
+                  label: value,
+                  value: key,
+                }))}
+                value={article?.category ?? undefined}
+                required
+                disabled
+              />
+              <DropDown
+                label="장소"
+                data={Object.entries(LocationKr).map(([key, value]) => ({
+                  label: value,
+                  value: key,
+                }))}
+                value={article?.location ?? undefined}
+                required
+                disabled
+              />
+            </SelectSection>
+            <PersonSection>
+              <PersonSectionHeader>
+                <Text size="md" weight={500}>
+                  인원제한
+                </Text>
+                <Text size="md" weight={500}>
+                  {article?.maxCapacity ?? ''}명
+                </Text>
+              </PersonSectionHeader>
+              <Slider min={1} max={15} value={article?.maxCapacity ?? 0} disabled />
+            </PersonSection>
+          </TermSection>
+          <ArticlePostInput
+            values={articleInput}
+            onChange={(target: keyof ArticlePostInputType, value: string) => {
+              setArticleInput((prev) => ({ ...prev, [target]: value }));
+            }}
+          />
+        </>
       </PageLayout>
     </>
   );
