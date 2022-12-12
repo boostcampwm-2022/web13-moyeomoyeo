@@ -5,9 +5,7 @@ import { ApiResponse, MyArticleType } from '@typings/types';
 import { clientAxios } from '@utils/commonAxios';
 
 const getMyArticle = async (id: number) => {
-  return clientAxios.get(`${process.env.NEXT_PUBLIC_API_URL}/v1/my-group-articles/${id}`, {
-    params: { id },
-  });
+  return clientAxios.get(`/v1/my-group-articles/${id}`);
 };
 
 const useFetchMyArticle = (id: number) => {
