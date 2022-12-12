@@ -104,7 +104,7 @@ jobs:
           script: |
             cd moyeomoyeo
 
-            git checkout -t origin/cd-test
+            git checkout -t origin/main
 
             sudo chmod +x ./backend/scripts/prod-deploy.sh
 
