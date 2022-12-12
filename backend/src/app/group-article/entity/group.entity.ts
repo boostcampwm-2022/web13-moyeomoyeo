@@ -43,6 +43,9 @@ export class Group {
   @Column({ type: 'varchar', length: 300 })
   thumbnail: string;
 
+  @Column({ type: 'varchar', length: 2000, default: '' })
+  blurThumbnail: string;
+
   @CreateDateColumn()
   createdAt: Date;
 
