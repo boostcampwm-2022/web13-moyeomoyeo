@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { useEffect } from 'react';
 
 import { QueryClient, dehydrate, useQueryClient } from '@tanstack/react-query';
 import { GetServerSideProps } from 'next';
@@ -24,8 +23,7 @@ import { Location, LocationKr } from '@constants/location';
 import { PAGE_TITLE } from '@constants/pageTitle';
 import useFetchGroupArticles, { getGroupArticles } from '@hooks/queries/useFetchGroupArticles';
 import useIntersect from '@hooks/useIntersect';
-import { categoryAtom, locationAtom, progressCheckedAtom, scrollYAtom } from '@recoil/atoms';
-import { ArticlePreviewType } from '@typings/types';
+import { categoryAtom, locationAtom, progressCheckedAtom } from '@recoil/atoms';
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   if (ctx.req.headers.referer) {
@@ -46,7 +44,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   return { props: { dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))) } };
 };
 
-const Main = ({ data }: { data: ArticlePreviewType[] }) => {
+const Main = () => {
   const {
     colors: { gray },
   } = useTheme();
@@ -54,8 +52,6 @@ const Main = ({ data }: { data: ArticlePreviewType[] }) => {
   const [selectedCategory, setSelectedCategory] = useRecoilState(categoryAtom);
   const [selectedLocation, setSelectedLocation] = useRecoilState(locationAtom);
   const [progressChecked, setProgressChecked] = useRecoilState(progressCheckedAtom);
-
-  const [scrollY, setScrollY] = useRecoilState(scrollYAtom);
 
   const { articles, fetchNextPage, hasNextPage, isFetching, isLoading } = useFetchGroupArticles(
     selectedCategory,
@@ -78,11 +74,6 @@ const Main = ({ data }: { data: ArticlePreviewType[] }) => {
       progressChecked,
     ]);
   };
-
-  useEffect(() => {
-    window.scrollTo({ top: scrollY });
-    setScrollY(0);
-  }, []);
 
   return (
     <>

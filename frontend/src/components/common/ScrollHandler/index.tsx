@@ -1,25 +1,35 @@
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 
 import { scrollYAtom } from '@recoil/atoms';
 
 const ScrollHandler = () => {
   const router = useRouter();
-  const setScrollY = useSetRecoilState(scrollYAtom);
+  const [scrollY, setScrollY] = useRecoilState(scrollYAtom);
 
   useEffect(() => {
-    const handleRouteChange = (url: string) => {
-      if (url !== '/') {
+    const saveScrollY = (url: string) => {
+      if (url.startsWith('/article')) {
         setScrollY(window.scrollY);
       }
     };
-    router.events.on('routeChangeStart', handleRouteChange);
-    return () => {
-      router.events.off('routeChangeStart', handleRouteChange);
+
+    const restoreScrollY = (url: string) => {
+      if (url === '/') {
+        window.scrollTo({ top: scrollY });
+        setScrollY(0);
+      }
     };
-  }, [router.events, setScrollY]);
+
+    router.events.on('routeChangeStart', saveScrollY);
+    router.events.on('routeChangeComplete', restoreScrollY);
+    return () => {
+      router.events.off('routeChangeStart', saveScrollY);
+      router.events.off('routeChangeComplete', restoreScrollY);
+    };
+  }, [router.events, scrollY, setScrollY]);
 
   return <></>;
 };
