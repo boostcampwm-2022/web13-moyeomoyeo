@@ -17,6 +17,7 @@ import { GroupApplication } from '@app/group-application/entity/group-applicatio
 import { getGroupApplicationRegisterFixture } from '@app/group-application/__test__/group-application.fixture';
 import { GROUP_STATUS } from '@app/group-article/constants/group-article.constants';
 import { Group } from '@app/group-article/entity/group.entity';
+import { GroupApplicationRepository } from '@src/app/group-application/group-application.repository';
 
 describe('Group Application (e2e)', () => {
   let app: INestApplication;
@@ -628,6 +629,125 @@ describe('Group Application (e2e)', () => {
 
       // then
       expect(result.status).toEqual(404);
+    });
+  });
+
+  describe('내가 참여한 모임 조회 GET /group-applications/me', () => {
+    const url = () => `/v1/group-applications/me`;
+
+    test('내가 참여한 모임을 정상 조회할 때 200 코드를 받는다.', async () => {
+      // given
+      const userRepository = dataSource.getRepository(User);
+      const groupArticleRepository = dataSource.getRepository(GroupArticle);
+      const groupApplicationRepository = app.get(GroupApplicationRepository);
+      const categoryRepository = dataSource.getRepository(GroupCategory);
+
+      const newAuthor1 = getUserFixture({ id: 3 });
+      const newAuthor2 = getUserFixture({ id: 4 });
+      await userRepository.save([newAuthor1, newAuthor2]);
+      const category = await categoryRepository.findOneBy({ id: 1 });
+      const group1 = getGroupFixture(category, { id: 3 });
+      const group2 = getGroupFixture(category, { id: 4 });
+      const groupArticle1 = await getGroupArticleFixture(group1, {
+        id: 3,
+        user: new Promise((res) => res(newAuthor1)),
+        userId: newAuthor1.id,
+      });
+      const groupArticle2 = await getGroupArticleFixture(group2, {
+        id: 4,
+        user: new Promise((res) => res(newAuthor2)),
+        userId: newAuthor2.id,
+      });
+      await groupArticleRepository.save([groupArticle1, groupArticle2]);
+
+      const groupApplication1 = await getGroupApplicationRegisterFixture(
+        groupArticle1.group,
+        {
+          id: 3,
+          user: new Promise(async (res) => res(newAuthor1)),
+          userId: newAuthor1.id,
+        },
+      );
+      const groupApplication2 = await getGroupApplicationRegisterFixture(
+        groupArticle2.group,
+        {
+          id: 4,
+          user: new Promise(async (res) => res(newAuthor2)),
+          userId: newAuthor2.id,
+        },
+      );
+      await dataSource
+        .getRepository(GroupApplication)
+        .save([groupApplication1, groupApplication2]);
+
+      const jwtService = app.get(JwtTokenService);
+      const user = await userRepository.findOneBy({ id: 2 });
+      const accessToken = jwtService.generateAccessToken(user);
+
+      const firstArticle = await groupArticleRepository.findOneBy({ id: 1 });
+      const userApplication1 = await getGroupApplicationRegisterFixture(
+        groupArticle1.group,
+        {
+          id: 5,
+          user: new Promise(async (res) => res(user)),
+          userId: user.id,
+        },
+      );
+      const userApplication2 = await getGroupApplicationRegisterFixture(
+        firstArticle.group,
+        {
+          id: 6,
+          user: new Promise(async (res) => res(user)),
+          userId: user.id,
+        },
+      );
+      await groupApplicationRepository.save([
+        userApplication1,
+        userApplication2,
+      ]);
+
+      // when
+      const result = await request(app.getHttpServer())
+        .get(url())
+        .set({ Cookie: setCookie(accessToken.accessToken) });
+
+      // then
+      const limit = 5;
+      const offset = 0;
+      const articleList = await groupApplicationRepository.findMyGroup({
+        userId: user.id,
+        limit,
+        offset,
+      });
+      expect(result.status).toEqual(200);
+      expect(result.body.data.data.length).toEqual(2);
+      articleList.result.forEach((article, index) => {
+        expect(result.body.data.data[index]).toEqual({
+          category: article.category,
+          commentCount: article.commentCount,
+          createdAt: article.createdAt.toISOString(),
+          currentCapacity: Number(article.currentCapacity),
+          id: article.groupArticleId,
+          location: article.location,
+          maxCapacity: article.maxCapacity,
+          scrapCount: article.scrapCount,
+          status: article.status,
+          thumbnail: {
+            blurUrl: article.thumbnail,
+            originUrl: article.thumbnail,
+          },
+          title: article.title,
+        });
+      });
+    });
+
+    test('JWT 토큰이 존재하지 않을 때 401에러를 던진다.', async () => {
+      // given
+      // when
+      const result = await request(app.getHttpServer()).get(url());
+
+      // then
+      expect(result.status).toEqual(401);
     });
   });
 });

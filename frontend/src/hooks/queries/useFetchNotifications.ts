@@ -39,7 +39,10 @@ const useFetchNotifications = () => {
     refetchInterval: 3000,
   });
 
-  const notifications = useMemo(() => (data ? data.pages.flatMap(({ data }) => data) : []), [data]);
+  const notifications = useMemo(
+    () => (data ? data.pages.flatMap(({ data }) => data) : undefined),
+    [data]
+  );
 
   return { data: notifications, ...queryResult };
 };

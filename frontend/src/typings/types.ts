@@ -7,6 +7,7 @@ import { Notification } from '@constants/notification';
 
 interface PagingDataType<T> {
   totalPage: number;
+  totalCount: number;
   currentPage: number;
   countPerPage: number;
   data: T;

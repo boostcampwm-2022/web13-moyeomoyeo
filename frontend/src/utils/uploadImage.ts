@@ -13,9 +13,25 @@ const compressImage = async (file: File) => {
   return new File([compressedBlob], file.name);
 };
 
+const convertToJpeg = async (file: File) => {
+  const heic2any = (await import('heic2any')).default;
+  const jpegBlob = await heic2any({ blob: file, toType: 'image/jpeg' });
+  const jpegFile = new File([jpegBlob as Blob], file.name.split('.')[0] + '.jpeg', {
+    lastModified: new Date().getTime(),
+    type: 'image/jpeg',
+  });
+  return jpegFile;
+};
+
 const uploadImage = async (file: File) => {
+  let uploadedFile = file;
+  if (uploadedFile.type === 'image/heic' || uploadedFile.type === 'image/heif') {
+    uploadedFile = await convertToJpeg(uploadedFile);
+  }
+
+  const compressedImage = await compressImage(uploadedFile);
+
   const formData = new FormData();
-  const compressedImage = await compressImage(file);
   formData.append('files', compressedImage);
 
   const {
@@ -27,6 +43,7 @@ const uploadImage = async (file: File) => {
       'Content-Type': 'multipart/form-data',
     },
   });
+
   return imageData as ImageUploadType;
 };
 

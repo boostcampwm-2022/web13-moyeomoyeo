@@ -31,7 +31,8 @@
       "@mocks/*": ["src/mocks/*"],
       "@public/*": ["public/*"],
       "@constants/*": ["src/constants/*"],
-      "@utils/*": ["src/utils/*"]
+      "@utils/*": ["src/utils/*"],
+      "@recoil/*": ["src/recoil/*"]
     }
   },
   "include": ["custom.d.ts", "next-env.d.ts", "**/*.ts", "**/*.tsx", ".storybook/**/*.tsx"],

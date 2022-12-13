@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
-import { Text } from '@mantine/core';
+import { Badge, Text } from '@mantine/core';
 
 import Avatar from '@components/common/Avatar';
 import ConfirmModal from '@components/common/ConfirmModal';
@@ -25,9 +25,11 @@ interface Props {
    * 댓글 정보를 입력합니다.
    */
   comment: CommentType;
+  newComment?: boolean;
+  onDeleteComment?: () => void;
 }
 
-const Comment = ({ comment }: Props) => {
+const Comment = ({ comment, newComment = false, onDeleteComment = () => {} }: Props) => {
   const router = useRouter();
   const articleId = Number(router.query.id);
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
@@ -48,10 +50,11 @@ const Comment = ({ comment }: Props) => {
               <Text fz="sm" fw={300} c="gray.4">
                 {dateTimeFormat(createdAt)}
               </Text>
+              {newComment && <Badge radius="sm">새로운 댓글</Badge>}
             </CommentAuthor>
           </Link>
           <CommentUtils>
-            {myData?.id === authorId && (
+            {!newComment && myData?.id === authorId && (
               <CommentUtilItem onClick={() => setConfirmModalOpen(true)}>
                 <Text fz="sm" fw={500} c="gray.4">
                   삭제
@@ -69,7 +72,10 @@ const Comment = ({ comment }: Props) => {
       <ConfirmModal
         message="댓글을 삭제하시겠습니까?"
         open={confirmModalOpen}
-        onConfirmButtonClick={() => deleteComment(commentId)}
+        onConfirmButtonClick={() => {
+          onDeleteComment();
+          deleteComment(commentId);
+        }}
         onCancelButtonClick={() => setConfirmModalOpen(false)}
       />
     </>

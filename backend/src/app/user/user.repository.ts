@@ -5,10 +5,11 @@ import { Injectable } from '@nestjs/common';
 @Injectable()
 export class UserRepository extends Repository<User> {
   constructor(private readonly dataSource: DataSource) {
+    const baseRepository = dataSource.getRepository(User);
     super(
-      User,
-      dataSource.createEntityManager(),
-      dataSource.createQueryRunner(),
+      baseRepository.target,
+      baseRepository.manager,
+      baseRepository.queryRunner,
     );
   }
 
