@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { getPlaiceholder } from 'plaiceholder';
 
 export class ImageWithBlurResponse {
   @ApiProperty({
@@ -18,15 +17,10 @@ export class ImageWithBlurResponse {
   })
   blurUrl: string;
 
-  static async from(url: string) {
+  static from(thumbnail: string, blurThumbnail: string) {
     const res = new ImageWithBlurResponse();
-    res.originUrl = url;
-    try {
-      const { base64 } = await getPlaiceholder(url);
-      res.blurUrl = base64;
-    } catch (e) {
-      res.blurUrl = url;
-    }
+    res.originUrl = thumbnail;
+    res.blurUrl = blurThumbnail === '' ? thumbnail : blurThumbnail;
     return res;
   }
 }

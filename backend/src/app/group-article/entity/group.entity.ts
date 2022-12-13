@@ -43,6 +43,9 @@ export class Group {
   @Column({ type: 'varchar', length: 300 })
   thumbnail: string;
 
+  @Column({ type: 'varchar', length: 2000, default: '' })
+  blurThumbnail: string;
+
   @CreateDateColumn()
   createdAt: Date;
 
@@ -55,12 +58,14 @@ export class Group {
     maxCapacity,
     category,
     thumbnail,
+    blurThumbnail,
   }: {
     location: LOCATION;
     chatUrl: string;
     maxCapacity: number;
     category: GroupCategory;
     thumbnail: string;
+    blurThumbnail: string;
   }) {
     const group = new Group();
     group.location = location;
@@ -69,6 +74,7 @@ export class Group {
     group.maxCapacity = maxCapacity;
     group.category = category;
     group.thumbnail = thumbnail;
+    group.blurThumbnail = blurThumbnail;
 
     return group;
   }
