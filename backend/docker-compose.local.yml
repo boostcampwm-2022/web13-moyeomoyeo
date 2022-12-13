@@ -1,0 +1,70 @@
+version: '3.3'
+
+services:
+  moyeo-nginx:
+    container_name: moyeo-nginx
+    build:
+      context: .
+      dockerfile: nginx.Dockerfile
+    restart: always
+    ports:
+      - 80:80
+    depends_on:
+      - moyeo-server
+    networks:
+      - backbone
+
+  moyeo-server:
+    container_name: moyeo-server
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      NODE_ENV: development
+    ports:
+      - 3000:3000
+    command: npm run start:dev
+    networks:
+      - backbone
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+
+  moyeo-db:
+    container_name: moyeo-db
+    image: mysql:8.0
+    restart: always
+    ports:
+      - 3330:3306
+    env_file:
+      - .env.development
+    environment:
+      MYSQL_ROOT_PASSWORD: test
+    volumes:
+      - ~/db:/var/lib/mysql
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    networks:
+      - backbone
+
+  moyeo-test-db:
+    container_name: moyeo-test-db
+    image: mysql:8.0
+    restart: always
+    env_file:
+      - .env.test
+    ports:
+      - 3331:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: test
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    networks:
+      - backbone
+
+networks:
+  backbone:
+    name: backbone
+    driver: bridge

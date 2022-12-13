@@ -1,0 +1,42 @@
+name: Slack Notification
+run-name: ${{ github.actor }} notify slack 🚀
+
+on:
+  workflow_call:
+    inputs:
+      title:
+        required: true
+        type: string
+      status:
+        required: true
+        type: string
+      commit_url:
+        required: true
+        type: string
+    secrets:
+      webhook_url:
+        required: true
+
+jobs:
+  slack-notification:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Slack Notifications
+        id: slack
+        uses: slackapi/slack-github-action@v1.23.0
+        with:
+          payload: |
+            {
+              "text": "${{ inputs.title }}: ${{ inputs.status }}\n${{ inputs.commit_url }}",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "${{ inputs.title }}: ${{ inputs.status }}\n${{ inputs.commit_url }}"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.webhook_url }}

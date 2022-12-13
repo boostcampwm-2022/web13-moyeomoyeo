@@ -1,0 +1,92 @@
+name: Frontend Dev CD
+run-name: ${{ github.actor }}가 실행함
+on:
+  push:
+    branches:
+      - develop
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/frontend-cd.yml'
+      - '.github/workflows/slack-notification.yml'
+
+jobs:
+  Register-Docker-Image:
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        working-directory: './frontend'
+    outputs:
+      status: ${{ job.status }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: docker registry login
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ secrets.NCP_DOCKER_REGISTRY }}
+          username: ${{ secrets.NCP_ACCESS_KEY }}
+          password: ${{ secrets.NCP_SECRET_KEY }}
+
+      - name: build and push
+        id: docker_build
+        uses: docker/build-push-action@v3.2.0
+        with:
+          context: frontend
+          build-args: |
+            FRONTEND_PRODUCTION_ENV=${{ secrets.FRONTEND_PRODUCTION_ENV }}
+          file: frontend/Dockerfile
+          tags: |
+            ${{ secrets.NCP_DOCKER_REGISTRY }}/moyeo-client:latest
+            ${{ secrets.NCP_DOCKER_REGISTRY }}/moyeo-client:${{ github.sha }}
+          push: true
+
+      - name: Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}
+
+  CD:
+    needs: [Register-Docker-Image]
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        working-directory: './frontend'
+    outputs:
+      status: ${{ job.status }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: copy docker compose & config file into dev server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.FRONTEND_DEV_REMOTE_IP }}
+          username: ${{ secrets.FRONTEND_DEV_REMOTE_SSH_ID }}
+          password: ${{ secrets.FRONTEND_DEV_REMOTE_ADMIN_KEY }}
+          port: ${{ secrets.FRONTEND_DEV_REMOTE_SSH_PORT }}
+          source: 'frontend/docker-compose.yml,frontend/dev/nginx/nginx.conf,frontend/dev/default/nginx.conf,frontend/scripts/dev-deploy.sh'
+          target: 'moyeomoyeo'
+
+      - name: deploy
+        uses: appleboy/ssh-action@v0.1.4
+        with:
+          host: ${{secrets.FRONTEND_DEV_REMOTE_IP}}
+          username: ${{secrets.FRONTEND_DEV_REMOTE_SSH_ID}}
+          password: ${{secrets.FRONTEND_DEV_REMOTE_ADMIN_KEY}}
+          port: ${{secrets.FRONTEND_DEV_REMOTE_SSH_PORT}}
+          script: |
+            cd moyeomoyeo
+
+            sudo chmod +x ./frontend/scripts/dev-deploy.sh
+
+            ./frontend/scripts/dev-deploy.sh ${{ secrets.NCP_ACCESS_KEY }} ${{ secrets.NCP_SECRET_KEY }} ${{ secrets.NCP_DOCKER_REGISTRY }} ${{ secrets.FRONTEND_PRODUCTION_ENV }}
+
+  slack-notifications:
+    needs: [Register-Docker-Image, CD]
+    if: ${{ always() }}
+    uses: ./.github/workflows/slack-notification.yml
+    with:
+      title: 프론트엔드 개발용 CD
+      status: '${{ needs.CD.outputs.status }}'
+      commit_url: ${{ github.event.pull_request.html_url || github.event.head_commit.url }}
+    secrets:
+      webhook_url: ${{ secrets.SLACK_NOTIFICATION_WEBHOOK_URL }}

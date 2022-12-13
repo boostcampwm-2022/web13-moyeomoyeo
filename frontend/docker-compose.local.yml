@@ -1,0 +1,25 @@
+version: '3.3'
+
+services:
+  frontend:
+    container_name: moyeo-nextjs
+    image: moyeo-frontend-dev
+    environment:
+      NODE_ENV: development
+    ports:
+      - 3000:3000
+    command: npm run dev
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+  storybook:
+    container_name: moyeo-storybook
+    image: moyeo-frontend-dev
+    environment:
+      NODE_ENV: development
+    ports:
+      - 6006:6006
+    command: npm run storybook
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules

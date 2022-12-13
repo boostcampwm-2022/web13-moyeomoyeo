@@ -1,0 +1,11 @@
+node_modules
+
+.DS.Store
+.DS_Store
+
+dist
+
+.env
+.env.*
+
+.vscode

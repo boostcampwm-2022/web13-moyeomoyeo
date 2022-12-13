@@ -1,0 +1,82 @@
+name: Backend Production CI
+run-name: ${{ github.actor }}가 실행함
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'backend/**'
+      - '.github/workflows/backend-prod-ci.yml'
+      - '.github/workflows/slack-notification.yml'
+jobs:
+  CI:
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        working-directory: './backend'
+    outputs:
+      status: ${{ job.status }}
+
+    services:
+      mysql:
+        image: mysql:8.0
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: 'test'
+          MYSQL_USER: 'test'
+          MYSQL_PASSWORD: 'test'
+          MYSQL_DATABASE: 'test'
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: nodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.18.1
+
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}-production
+
+      - name: dependency install
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: create environment variable file
+        run: |
+          touch .env.test
+          echo -e ${{ secrets.BACKEND_CI_TEST_ENVIRONMENT }} > .env.test
+
+      - name: lint test
+        run: npm run lint
+
+      - name: build
+        run: npm run build
+
+      - name: test
+        run: npm run test
+
+      - name: e2e test
+        run: npm run test:e2e
+
+  slack-notifications:
+    needs: [CI]
+    if: ${{ always() }}
+    uses: ./.github/workflows/slack-notification.yml
+    with:
+      title: Backend Production CI
+      status: '${{ needs.CI.outputs.status }}'
+      commit_url: ${{ github.event.pull_request.html_url || github.event.head_commit.url }}
+    secrets:
+      webhook_url: ${{ secrets.SLACK_NOTIFICATION_WEBHOOK_URL }}

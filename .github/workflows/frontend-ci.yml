@@ -1,0 +1,222 @@
+name: Frontend CI
+run-name: ${{ github.actor }}가 실행함
+on:
+  pull_request:
+    branches:
+      - develop
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/frontend-ci.yml'
+      - '.github/workflows/slack-notification.yml'
+
+jobs:
+  checking:
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        working-directory: './frontend'
+    outputs:
+      status: ${{ job.status }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: nodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.18.1
+
+      - name: create environment variable file
+        run: |
+          touch .env
+          echo -e API_URL=https://api.moyeomoyeo.com\\nNEXT_PUBLIC_API_URL=https://api.moyeomoyeo.com > .env
+
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}-checking
+
+      - name: dependency install
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: test
+        run: npm run test-all
+
+  storybook:
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        working-directory: './frontend'
+    outputs:
+      status: ${{ job.status }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: create environment variable file
+        run: |
+          touch .env
+          echo -e API_URL=https://api.moyeomoyeo.com\\nNEXT_PUBLIC_API_URL=https://api.moyeomoyeo.com > .env
+
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}-storybook
+
+      - name: depedency install
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: chromatic
+        id: chromatic
+        uses: chromaui/action@v1
+        with:
+          workingDir: frontend
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: comment PR
+        uses: thollander/actions-comment-pull-request@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          message: 'storybook link -> ${{ steps.chromatic.outputs.storybookUrl }}'
+          reactions: rocket
+
+  lhci:
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        working-directory: './frontend'
+    outputs:
+      status: ${{ job.status }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: nodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.18.1
+
+      - name: create environment variable file
+        run: |
+          touch .env
+          echo -e API_URL=https://api.moyeomoyeo.com\\nNEXT_PUBLIC_API_URL=https://api.moyeomoyeo.com > .env
+
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}-lhci
+
+      - name: dependency install
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          npm ci
+
+      - name: Build
+        run: |
+          npm run build
+
+      - name: lighthouse
+        run: |
+          npm install -g @lhci/cli
+          lhci autorun || echo "Fail to Run Lighthouse CI"
+
+      - name: Format lighthouse score
+        id: format_lighthouse_score
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const fs = require('fs');
+            const results = JSON.parse(fs.readFileSync("./frontend/lhci_reports/manifest.json"));
+            let comments = "";
+
+            results.forEach((result, idx) => {
+              const { summary, jsonPath } = result;
+              const details = JSON.parse(fs.readFileSync(jsonPath));
+              const { audits } = details;
+              const formatResult = (res) => Math.round(res * 100);
+
+              Object.keys(summary).forEach(
+                (key) => (summary[key] = formatResult(summary[key]))
+              );
+
+              const score = (res) => (res >= 90 ? "🟢" : res >= 50 ? "🟠" : "🔴");
+
+              const comment = [
+                `⚡️ Lighthouse report ${idx + 1}!`,
+                `| Category | Score |`,
+                `| --- | --- |`,
+                `| ${score(summary.performance)} Performance | ${summary.performance} |`,
+                `| ${score(summary.accessibility)} Accessbility | ${summary.accessibility} |`,
+                `| ${score(summary.seo)} SEO | ${summary.seo} |`,
+                `| ${score(summary.pwa)} PWA | ${summary.pwa} |`,
+              ].join("\n");
+
+              const detail = [
+                `| Category | Score |`,
+                `| --- | --- |`,
+                `| ${score(
+                  audits["largest-contentful-paint"].score * 100
+                )} Largest Contentful Paint | ${
+                  audits["largest-contentful-paint"].displayValue
+                } |`,
+                `| ${score(
+                  audits["first-contentful-paint"].score * 100
+                )} First Contentful Paint | ${
+                  audits["first-contentful-paint"].displayValue
+                } |`,
+                `| ${score(
+                  audits["speed-index"].score * 100
+                )} Speed Index | ${
+                  audits["speed-index"].displayValue
+                } |`,
+                `| ${score(
+                  audits["total-blocking-time"].score * 100
+                )} Total Blocking Time | ${
+                  audits["total-blocking-time"].displayValue
+                } |`,
+                `| ${score(
+                  audits["interactive"].score * 100
+                )} Time To Interactive | ${
+                  audits["interactive"].displayValue
+                } |`,
+                `| ${score(
+                  audits["cumulative-layout-shift"].score * 100
+                )} Cumulative Layout Shift | ${
+                  audits["cumulative-layout-shift"].displayValue
+                } |`,
+              ].join("\n");
+              comments += comment + "\n" + "\n" + detail + "\n" + "\n";
+            });
+            core.setOutput('comments', comments)
+
+      - name: comment PR
+        uses: thollander/actions-comment-pull-request@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          message: ${{ steps.format_lighthouse_score.outputs.comments }}
+          reactions: rocket
+
+  slack-notifications:
+    needs: [checking, lhci, storybook]
+    if: ${{ always() }}
+    uses: ./.github/workflows/slack-notification.yml
+    with:
+      title: 프론트엔드 개발용 CI
+      status: 'checking : ${{ needs.checking.outputs.status }} && lhci : ${{ needs.lhci.outputs.status }} && storybook : ${{ needs.storybook.outputs.status }}'
+      commit_url: ${{ github.event.pull_request.html_url || github.event.head_commit.url }}
+    secrets:
+      webhook_url: ${{ secrets.SLACK_NOTIFICATION_WEBHOOK_URL }}

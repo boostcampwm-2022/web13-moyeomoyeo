@@ -1,0 +1,23 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+FRONTEND_GIT_DIFFS=$(git diff --cached --name-only | { grep "frontend" || true; })
+
+if [ -z $FRONTEND_GIT_DIFFS ]; then
+  exit 0
+fi
+
+echo '🏗️👷 Before commit, Checking format, linting and typing your project.'
+
+cd frontend
+
+# Check tsconfig standards
+echo '🔎 Check typing...'
+npm run check-types ||
+(
+    echo '🤡😂❌🤡 Failed Type check. 🤡😂❌🤡
+            Are you seriously trying to write that? Make the changes required above.'
+    false;
+)
+
+npx lint-staged

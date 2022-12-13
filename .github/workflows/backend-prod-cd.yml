@@ -1,0 +1,107 @@
+name: Backend Production CD
+run-name: ${{ github.actor }}가 실행함
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'backend/**'
+      - '.github/workflows/backend-prod-cd.yml'
+      - '.github/workflows/slack-notification.yml'
+
+jobs:
+  Register-Docker-Image:
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        working-directory: './backend'
+    outputs:
+      status: ${{ job.status }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: take tag version and push tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create a GitHub release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
+
+      - name: backend environment setting
+        run: |
+          touch .env.production
+          echo -e ${{ secrets.BACKEND_PRODUCTION_ENVIRONMENT }} > .env.production
+
+      - name: docker registry login
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ secrets.NCP_DOCKER_REGISTRY }}
+          username: ${{ secrets.NCP_ACCESS_KEY }}
+          password: ${{ secrets.NCP_SECRET_KEY }}
+
+      - name: build and push
+        id: docker_build
+        uses: docker/build-push-action@v3.2.0
+        with:
+          context: backend
+          file: backend/Dockerfile
+          tags: |
+            ${{ secrets.NCP_DOCKER_REGISTRY }}/moyeo-server-production:latest
+            ${{ secrets.NCP_DOCKER_REGISTRY }}/moyeo-server-production:${{ steps.tag_version.outputs.new_tag }}
+          push: true
+
+      - name: Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}
+
+  CD:
+    needs: [Register-Docker-Image]
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        working-directory: './backend'
+    outputs:
+      status: ${{ job.status }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: copy docker compose & config file into production server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.BACKEND_PROD_REMOTE_IP }}
+          username: ${{ secrets.BACKEND_PROD_REMOTE_SSH_ID }}
+          password: ${{ secrets.BACKEND_PROD_REMOTE_ADMIN_KEY }}
+          port: ${{ secrets.BACKEND_PROD_REMOTE_SSH_PORT }}
+          source: 'backend/docker-compose.prod.yml,backend/nginx/prod/nginx.conf,backend/scripts/prod-deploy.sh'
+          target: 'moyeomoyeo'
+
+      - name: deploy
+        uses: appleboy/ssh-action@v0.1.4
+        with:
+          host: ${{ secrets.BACKEND_PROD_REMOTE_IP }}
+          username: ${{ secrets.BACKEND_PROD_REMOTE_SSH_ID }}
+          password: ${{ secrets.BACKEND_PROD_REMOTE_ADMIN_KEY }}
+          port: ${{ secrets.BACKEND_PROD_REMOTE_SSH_PORT }}
+          script: |
+            cd moyeomoyeo
+
+            sudo chmod +x ./backend/scripts/prod-deploy.sh
+
+            ./backend/scripts/prod-deploy.sh ${{ secrets.NCP_ACCESS_KEY }} ${{ secrets.NCP_SECRET_KEY }} ${{ secrets.NCP_DOCKER_REGISTRY }} ${{ secrets.BACKEND_PRODUCTION_ENVIRONMENT }}
+
+  slack-notifications:
+    needs: [Register-Docker-Image, CD]
+    if: ${{ always() }}
+    uses: ./.github/workflows/slack-notification.yml
+    with:
+      title: 백엔드 Production CD
+      status: '${{ needs.CD.outputs.status }}'
+      commit_url: ${{ github.event.pull_request.html_url || github.event.head_commit.url }}
+    secrets:
+      webhook_url: ${{ secrets.SLACK_NOTIFICATION_WEBHOOK_URL }}
