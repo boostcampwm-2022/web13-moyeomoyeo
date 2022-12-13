@@ -52,6 +52,7 @@ const ArticleDetail = () => {
 
   const isUrlAvailable = getButtonStatus(article, isJoined) === ParticipateButtonStatus.LINK;
   const { url } = useFetchChatUrl(articleId, isUrlAvailable);
+  const isArticleViewable = !article || isJoined === undefined || !myInfo || !participants;
 
   const [participantsModalOpen, setParticipantsModalOpen] = useState<boolean>(false);
 
@@ -86,7 +87,7 @@ const ArticleDetail = () => {
       >
         <>
           <ContentWrapper>
-            {!article || isJoined === undefined || !myInfo || !participants ? (
+            {isArticleViewable ? (
               <ArticleViewLoading />
             ) : (
               <>
@@ -160,18 +161,18 @@ const ArticleDetail = () => {
               </>
             )}
           </ContentWrapper>
-          {addedComment && <Comment comment={addedComment} newComment />}
-          <Joiner
-            {...(comments.length > 0 && { before: true })}
-            components={comments.map((comment) => (
-              <Comment
-                key={comment.id}
-                comment={comment}
-                onDeleteComment={() => setAddedComment(null)}
+          {!isArticleViewable && (
+            <>
+              {addedComment && <Comment comment={addedComment} newComment />}
+              <Joiner
+                {...(comments.length > 0 && { before: true })}
+                components={comments.map((comment) => (
+                  <Comment key={comment.id} comment={comment} />
+                ))}
               />
-            ))}
-          />
-          <div ref={ref}></div>
+              <div ref={ref}></div>
+            </>
+          )}
         </>
       </PageLayout>
     </>
