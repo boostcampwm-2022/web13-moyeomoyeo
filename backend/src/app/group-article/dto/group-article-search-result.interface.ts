@@ -10,6 +10,8 @@ export interface IGroupArticleSearchResult {
 
   thumbnail: string;
 
+  blurThumbnail: string;
+
   status: GROUP_STATUS;
 
   location: LOCATION;

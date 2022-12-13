@@ -33,7 +33,7 @@ import useFetchComments from '@hooks/queries/useFetchComments';
 import useFetchMyInfo from '@hooks/queries/useFetchMyInfo';
 import useFetchParticipants from '@hooks/queries/useFetchParticipants';
 import useIntersect from '@hooks/useIntersect';
-import { ArticleType } from '@typings/types';
+import { ArticleType, CommentType } from '@typings/types';
 import dateTimeFormat from '@utils/dateTime';
 
 const ArticleDetail = () => {
@@ -43,10 +43,12 @@ const ArticleDetail = () => {
   const router = useRouter();
   const articleId = Number(router.query.id);
   const { data: myInfo } = useFetchMyInfo();
-  const { comments, fetchNextPage, hasNextPage, isFetching } = useFetchComments(articleId);
+  const { comments, totalComments, fetchNextPage, hasNextPage, isFetching } =
+    useFetchComments(articleId);
   const { data: article } = useFetchArticle(articleId);
   const { data: isJoined } = useFetchApplicationStatus(articleId);
   const { data: participants } = useFetchParticipants(articleId);
+  const [addedComment, setAddedComment] = useState<CommentType | null>(null);
 
   const isUrlAvailable = getButtonStatus(article, isJoined) === ParticipateButtonStatus.LINK;
   const { url } = useFetchChatUrl(articleId, isUrlAvailable);
@@ -81,7 +83,7 @@ const ArticleDetail = () => {
             }
           />
         }
-        footer={<CommentInput />}
+        footer={<CommentInput onAddComment={setAddedComment} />}
       >
         <>
           <ContentWrapper>
@@ -149,7 +151,7 @@ const ArticleDetail = () => {
                       chatRoomLink={url}
                     />
                   )}
-                  <StatCounter variant="comment" count={article.commentCount} />
+                  <StatCounter variant="comment" count={totalComments} />
                 </DetailWrapper>
                 <ParticipantsModal
                   participants={participants}
@@ -161,6 +163,7 @@ const ArticleDetail = () => {
           </ContentWrapper>
           {!isArticleViewable && (
             <>
+              {addedComment && <Comment comment={addedComment} newComment />}
               <Joiner
                 {...(comments.length > 0 && { before: true })}
                 components={comments.map((comment) => (

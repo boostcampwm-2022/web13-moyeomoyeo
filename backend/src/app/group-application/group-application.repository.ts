@@ -13,10 +13,11 @@ import { IMyApplicationResult } from '@app/group-application/dto/my-application-
 @Injectable()
 export class GroupApplicationRepository extends Repository<GroupApplication> {
   constructor(private readonly dataSource: DataSource) {
+    const baseRepository = dataSource.getRepository(GroupApplication);
     super(
-      GroupApplication,
-      dataSource.createEntityManager(),
-      dataSource.createQueryRunner(),
+      baseRepository.target,
+      baseRepository.manager,
+      baseRepository.queryRunner,
     );
   }
 
@@ -78,6 +79,7 @@ export class GroupApplicationRepository extends Repository<GroupApplication> {
         'COUNT(DISTINCT comment.id) as commentCount',
         'COUNT(DISTINCT scrap.id) as scrapCount',
         'group.thumbnail as thumbnail',
+        'group.blurThumbnail as blurThumbnail',
         'group.maxCapacity as maxCapacity',
         'COUNT(DISTINCT groupApplication.id) as currentCapacity',
         'group.status as status',

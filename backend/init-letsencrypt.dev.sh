@@ -7,7 +7,7 @@ if ! [ -x "$(command -v docker-compose)" ]; then
   exit 1
 fi
 
-domains=(api.moyeomoyeo.com)
+domains=(dev.moyeomoyeo.com)
 rsa_key_size=4096
 data_path="/letsencrypt/certbot"
 email="pythonstrup@gmail.com" # Adding a valid address is strongly recommended
@@ -41,7 +41,7 @@ echo
 
 
 echo "### Starting nginx ..."
-docker-compose up --force-recreate -d nginx
+docker-compose up --force-recreate -d moyeo-nginx
 echo
 
 echo "### Deleting dummy certificate for $domains ..."
@@ -79,4 +79,4 @@ docker-compose run --rm --entrypoint "\
 echo
 
 echo "### Reloading nginx ..."
-docker-compose exec nginx nginx -s reload
+docker-compose exec moyeo-nginx nginx -s reload

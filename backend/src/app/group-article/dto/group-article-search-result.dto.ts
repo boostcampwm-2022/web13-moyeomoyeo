@@ -51,11 +51,14 @@ export class GroupArticleSearchResult {
   })
   createdAt: Date;
 
-  static async from(row: IGroupArticleSearchResult) {
+  static from(row: IGroupArticleSearchResult) {
     const res = new GroupArticleSearchResult();
     res.id = row.id;
     res.title = row.title;
-    res.thumbnail = await ImageWithBlurResponse.from(row.thumbnail);
+    res.thumbnail = ImageWithBlurResponse.from(
+      row.thumbnail,
+      row.blurThumbnail,
+    );
     res.category = row.groupCategoryName;
     res.location = row.location;
     res.status = row.status;

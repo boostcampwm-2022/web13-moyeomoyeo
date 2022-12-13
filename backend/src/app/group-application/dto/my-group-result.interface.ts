@@ -19,6 +19,8 @@ export interface IMyGroupResult {
 
   thumbnail: string;
 
+  blurThumbnail: string;
+
   maxCapacity: number;
 
   currentCapacity: string;

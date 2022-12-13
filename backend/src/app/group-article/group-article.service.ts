@@ -18,6 +18,7 @@ import { NotParticipantException } from '@app/group-article/exception/not-partic
 import { NotSuccessGroupException } from '@app/group-article/exception/not-success-group.exception';
 import { GroupSucceedEvent } from '@app/notification/event/group-succeed.event';
 import { GroupFailedEvent } from '@app/notification/event/group-failed.event';
+import { getBlurImage } from '@common/util/get-blur-image';
 
 @Injectable()
 export class GroupArticleService {
@@ -40,10 +41,15 @@ export class GroupArticleService {
       throw new GroupCategoryNotFoundException();
     }
 
+    const blurThumbnail = await getBlurImage(
+      groupArticleRegisterRequest.thumbnail,
+    );
+
     const groupArticle = GroupArticle.create(user, {
       title: groupArticleRegisterRequest.title,
       contents: groupArticleRegisterRequest.contents,
       thumbnail: groupArticleRegisterRequest.thumbnail,
+      blurThumbnail,
       location: groupArticleRegisterRequest.location,
       maxCapacity: groupArticleRegisterRequest.maxCapacity,
       chatUrl: groupArticleRegisterRequest.chatUrl,
@@ -134,11 +140,14 @@ export class GroupArticleService {
       throw new GroupArticleNotFoundException();
     }
 
+    const blurThumbnail = await getBlurImage(thumbnail);
+
     groupArticle.update(user, {
       title,
       contents,
       thumbnail,
       chatUrl,
+      blurThumbnail,
     });
 
     await this.groupArticleRepository.save(groupArticle, { reload: false });
