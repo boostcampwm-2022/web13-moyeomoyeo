@@ -6,6 +6,7 @@ import Header from '@components/common/Header';
 import DetailTitle from '@components/common/Header/DetailTitle';
 import PageLayout from '@components/common/PageLayout';
 import Profile from '@components/common/Profile';
+import ProfileLoading from '@components/common/ProfileLoading/ProfileLoading';
 import { PAGE_TITLE } from '@constants/pageTitle';
 import useFetchProfile from '@hooks/queries/useFetchProfile';
 
@@ -31,8 +32,7 @@ const UserProfile = () => {
     >
       <ContentWrapper>
         <ProfileWrapper>
-          {/* TODO 로딩중 */}
-          {!isReady || isFetching ? <div>로딩중</div> : <Profile user={profile} />}
+          {!isReady || isFetching ? <ProfileLoading /> : <Profile user={profile} />}
         </ProfileWrapper>
       </ContentWrapper>
     </PageLayout>
