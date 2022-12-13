@@ -12,8 +12,9 @@ import { CommentModule } from '@app/comment/comment.module';
 
 export const setSwagger = (app: INestApplication) => {
   const config = new DocumentBuilder()
-    .setTitle('MoyeoMoyeo REST API Specification')
+    .setTitle('모여모여 REST API Specification')
     .setVersion('1.0.0')
+    .addServer('https://dev.moyeomoyeo.com')
     .addServer(`http://localhost`)
     .addServer('https://api.moyeomoyeo.com')
     .addCookieAuth(
