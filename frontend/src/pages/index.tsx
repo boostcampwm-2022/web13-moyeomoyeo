@@ -1,8 +1,8 @@
 import Link from 'next/link';
-import { useState } from 'react';
 
 import { QueryClient, dehydrate, useQueryClient } from '@tanstack/react-query';
 import { GetServerSideProps } from 'next';
+import { useRecoilState } from 'recoil';
 
 import { useTheme } from '@emotion/react';
 import styled from '@emotion/styled';
@@ -23,8 +23,15 @@ import { Location, LocationKr } from '@constants/location';
 import { PAGE_TITLE } from '@constants/pageTitle';
 import useFetchGroupArticles, { getGroupArticles } from '@hooks/queries/useFetchGroupArticles';
 import useIntersect from '@hooks/useIntersect';
+import { categoryAtom, locationAtom, progressCheckedAtom } from '@recoil/atoms';
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  if (ctx.req.headers.referer) {
+    return {
+      props: {},
+    };
+  }
+
   const queryClient = new QueryClient();
   await queryClient.prefetchInfiniteQuery(
     ['articles', null, null, false],
@@ -42,15 +49,16 @@ const Main = () => {
     colors: { gray },
   } = useTheme();
   const queryClient = useQueryClient();
-  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
-  const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
-  const [progressChecked, setProgressChecked] = useState<boolean>(false);
+  const [selectedCategory, setSelectedCategory] = useRecoilState(categoryAtom);
+  const [selectedLocation, setSelectedLocation] = useRecoilState(locationAtom);
+  const [progressChecked, setProgressChecked] = useRecoilState(progressCheckedAtom);
 
   const { articles, fetchNextPage, hasNextPage, isFetching, isLoading } = useFetchGroupArticles(
     selectedCategory,
     selectedLocation,
     progressChecked
   );
+
   const ref = useIntersect((entry, observer) => {
     observer.unobserve(entry.target);
     if (hasNextPage && !isFetching) {
@@ -59,7 +67,12 @@ const Main = () => {
   });
 
   const refreshArticleList = () => {
-    void queryClient.resetQueries(['articles']);
+    void queryClient.resetQueries([
+      'articles',
+      selectedCategory,
+      selectedLocation,
+      progressChecked,
+    ]);
   };
 
   return (
