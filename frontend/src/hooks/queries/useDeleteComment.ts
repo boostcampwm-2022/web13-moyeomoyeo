@@ -9,7 +9,6 @@ const useDeleteComment = (articleId: number) => {
   const queryClient = useQueryClient();
   return useAuthMutation(deleteComment, {
     onSuccess: async () => {
-      await queryClient.invalidateQueries(['article', articleId]);
       await queryClient.invalidateQueries(['comments', articleId]);
     },
   });
