@@ -44,8 +44,8 @@ const MyEditPage = () => {
     myProfile &&
     profileImage.length > 0 &&
     userName.length > 0 &&
-    userName.length <= 10 &&
-    description.length <= 20;
+    userName.length <= 20 &&
+    description.length <= 30;
 
   const handleUserDataChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -62,6 +62,7 @@ const MyEditPage = () => {
   };
 
   const handleClickProfileChangeBtn = async () => {
+    if (!possibleToSubmit) return;
     updateMyProfile(userDataInput, {
       onSuccess: () => {
         showToast({
@@ -115,12 +116,12 @@ const MyEditPage = () => {
         <TextInput
           required
           name="userName"
-          label="닉네임 (필수, 최대 10자)"
+          label="닉네임 (필수, 최대 20자)"
           placeholder="닉네임을 입력하세요"
           value={userName}
           onChange={handleUserDataChange}
           error={userName.length <= 0 && '닉네임은 필수입니다'}
-          maxLength={10}
+          maxLength={20}
         />
         <TextInput
           required
@@ -137,12 +138,12 @@ const MyEditPage = () => {
           onChange={handleUserDataChange}
         />
         <TextInput
-          label="한 줄 소개 (최대 20자)"
+          label="한 줄 소개 (최대 30자)"
           name="description"
           placeholder="자신에 대해 한 줄로 소개해주세요"
           onChange={handleUserDataChange}
           value={description}
-          maxLength={20}
+          maxLength={30}
         />
       </InputsSections>
     </PageLayout>
