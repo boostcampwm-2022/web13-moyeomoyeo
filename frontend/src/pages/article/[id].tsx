@@ -50,6 +50,7 @@ const ArticleDetail = () => {
 
   const isUrlAvailable = getButtonStatus(article, isJoined) === ParticipateButtonStatus.LINK;
   const { url } = useFetchChatUrl(articleId, isUrlAvailable);
+  const isArticleViewable = !article || isJoined === undefined || !myInfo || !participants;
 
   const [participantsModalOpen, setParticipantsModalOpen] = useState<boolean>(false);
 
@@ -84,7 +85,7 @@ const ArticleDetail = () => {
       >
         <>
           <ContentWrapper>
-            {!article || isJoined === undefined || !myInfo || !participants ? (
+            {isArticleViewable ? (
               <ArticleViewLoading />
             ) : (
               <>
@@ -158,7 +159,7 @@ const ArticleDetail = () => {
               </>
             )}
           </ContentWrapper>
-          {!(!article || isJoined === undefined || !myInfo || !participants) && (
+          {!isArticleViewable && (
             <>
               <Joiner
                 {...(comments.length > 0 && { before: true })}
