@@ -33,13 +33,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   }
 
   const queryClient = new QueryClient();
-  await queryClient.prefetchInfiniteQuery(
-    ['articles', null, null, false],
-    ({ pageParam = 1 }) => getGroupArticles(pageParam, null, null, false),
-    {
-      getNextPageParam: (lastPage) =>
-        lastPage.totalPage === lastPage.currentPage ? undefined : lastPage.currentPage + 1,
-    }
+  await queryClient.prefetchInfiniteQuery(['articles', null, null, false], ({ pageParam }) =>
+    getGroupArticles(pageParam, null, null, false)
   );
   return { props: { dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))) } };
 };
