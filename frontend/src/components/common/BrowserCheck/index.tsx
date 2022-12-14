@@ -1,18 +1,20 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+
+import { isChrome, isChromium } from 'react-device-detect';
 
 import AlertModal from '@components/common/AlertModal';
 
 const BrowserCheck = () => {
   const [modalOpen, setModalOpen] = useState(false);
 
-  // useEffect(() => {
-  //   const browserChecked = localStorage.getItem('browser-checked');
-  //   if (browserChecked) return;
-  //   if (!(isChrome || isChromium)) {
-  //     setModalOpen(true);
-  //   }
-  //   localStorage.setItem('browser-checked', 'true');
-  // }, []);
+  useEffect(() => {
+    const browserChecked = sessionStorage.getItem('browser-checked');
+    if (browserChecked) return;
+    if (!(isChrome || isChromium)) {
+      setModalOpen(true);
+    }
+    sessionStorage.setItem('browser-checked', 'true');
+  }, []);
 
   return (
     <>
