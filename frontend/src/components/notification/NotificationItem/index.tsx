@@ -25,58 +25,65 @@ const NotificationItem = ({ notification }: Props) => {
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
 
   return (
-    <NotificationWrapper>
+    <>
       <ConfirmModal
         message="알림을 삭제하시겠습니까?"
         open={confirmModalOpen}
         onConfirmButtonClick={() => deleteNotification(notification.id)}
         onCancelButtonClick={() => setConfirmModalOpen(false)}
       />
-      <Link href={`/article/${notification.groupArticleId}`}>
-        <ContentSection>
-          <IconWrapper>
-            <NotificationIcon variant={type} />
-          </IconWrapper>
-          <TitleWrapper>
-            <Text
-              size="md"
-              weight={700}
-              sx={{ whiteSpace: 'nowrap', overflowX: 'hidden', textOverflow: 'ellipsis' }}
-            >
-              {title}
-            </Text>
-            <Text size="sm" color="gray" weight={500}>
-              {subTitle}
-            </Text>
-          </TitleWrapper>
-        </ContentSection>
-      </Link>
-      <AsideSection>
-        <ActionIcon
-          variant="transparent"
-          color="gray.6"
-          size="sm"
-          onClick={() => setConfirmModalOpen(true)}
-        >
-          <IconX size={20} />
-        </ActionIcon>
-        <Text size="xs" weight={500} c="gray.6">
-          {dateTimeFormat(createdAt)}
-        </Text>
-      </AsideSection>
-    </NotificationWrapper>
+      <NotificationWrapper>
+        <Link href={`/article/${notification.groupArticleId}`}>
+          <ContentSection>
+            <IconWrapper>
+              <NotificationIcon variant={type} />
+            </IconWrapper>
+            <TitleWrapper>
+              <Text
+                size="md"
+                weight={700}
+                sx={{ whiteSpace: 'nowrap', overflowX: 'hidden', textOverflow: 'ellipsis' }}
+              >
+                {title}
+              </Text>
+              <Text
+                size="sm"
+                color="gray"
+                weight={500}
+                sx={{ whiteSpace: 'nowrap', overflowX: 'hidden', textOverflow: 'ellipsis' }}
+              >
+                {subTitle}
+              </Text>
+            </TitleWrapper>
+          </ContentSection>
+        </Link>
+        <AsideSection>
+          <ActionIcon
+            variant="transparent"
+            color="gray.6"
+            size="sm"
+            onClick={() => setConfirmModalOpen(true)}
+          >
+            <IconX size={20} />
+          </ActionIcon>
+          <Text size="xs" weight={500} c="gray.6">
+            {dateTimeFormat(createdAt)}
+          </Text>
+        </AsideSection>
+      </NotificationWrapper>
+    </>
   );
 };
 
 export default NotificationItem;
 
 const NotificationWrapper = styled.div`
-  display: grid;
   align-items: center;
-  grid-template-columns: 1fr 5rem;
+  display: flex;
   gap: 1.6rem;
   padding: 1.6rem;
   width: 100%;
+  height: 100%;
   border: 1px solid ${({ theme }) => theme.colors.gray[2]};
   border-radius: 0.8rem;
 `;
@@ -102,13 +109,15 @@ const TitleWrapper = styled.div`
   flex-direction: column;
   gap: 0.8rem;
   overflow-x: hidden;
+  white-space: nowrap;
 `;
 
 const AsideSection = styled.div`
   height: 100%;
   display: flex;
+  flex: 1;
   flex-direction: column;
   align-items: flex-end;
   justify-content: space-between;
-  min-width: 4rem;
+  white-space: nowrap;
 `;
