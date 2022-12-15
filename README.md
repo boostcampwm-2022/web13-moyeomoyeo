@@ -39,11 +39,43 @@
 
 <br></br>
 
+# ✨ 주요 기능
+
+[👉🏻 시연영상 보러가기](https://www.youtube.com/watch?v=FR3IAFBxvO4)
+
+<table>
+    <tr>
+      <td align="center" width="25%">모집게시글 목록 조회</td>
+      <td align="center" width="25%">모집 게시글 등록</td>
+      <td align="center" width="25%">모집 신청 참가/취소</td>
+      <td align="center" width="25%">모집 성사 알림, 오픈채팅방 링크</td>
+    </tr>
+    <tr>
+      <td><img src="https://user-images.githubusercontent.com/67570061/207778404-43ffe050-fdeb-41a0-a77e-db3977ab4a1c.gif"/></td>
+      <td><img src="https://user-images.githubusercontent.com/67570061/207778608-54e0a59a-5998-413b-8650-c9a8839a4179.gif"/></td>
+      <td><img src="https://user-images.githubusercontent.com/67570061/207778658-2bf27fc2-b55c-4621-8776-f8c72c8ca9ea.gif"/></td>
+      <td><img src="https://user-images.githubusercontent.com/67570061/207779175-1ca1f5f6-0cf4-4b96-bfa2-cbbe1cb494e3.gif"/></td>
+    </tr>
+    <tr>
+      <td>무한 스크롤을 통한 페이지네이션이 적용되어 있으며, 필터링이 가능합니다.</td>
+      <td>원하는 모임 모집 게시글을 작성할 수 있습니다.</td>
+      <td>모집중인 모임에 참가 신청/취소 할 수 있습니다.</td>
+      <td>모집이 완료되면 알림이 발송되며, 오픈채팅방 링크를 통해 모임 채팅방에 참여할 수 있습니다.</td>
+    </tr>
+ </table>
+
+ 
+
+<br></br>
+
 
 # 🫵 프로젝트 포인트
 
-
-강조하고 싶은 것들
+- 중복 게시글 조회 방지를 위해 페이지네이션 방식 변경 및 쿼리 개선을 진행했습니다. [👉🏻보러가기](https://boostcamp-wm.notion.site/feat-2a1dd8ea684d44ebb7176d5efbbc8aeb)
+- `custom hook`, `error class`, `ErrorBoundary`를 이용하여 API 핵심 로직과 에러 처리의 관심사를 분리하였고,<br/>사용자에게 적절한 오류 화면을 보여주도록 했습니다. [👉🏻보러가기](https://boostcamp-wm.notion.site/957e4b7034d64d0c8fa59f47e58c112d)
+- 성능 및 사용자 경험 개선을 위해 이미지 최적화와 SSR, Blur, Skeleton을 적용 했습니다. [👉🏻보러가기](https://boostcamp-wm.notion.site/e959fbc871514fb29a407dfe3f2447b9)
+- 컴포넌트의 체계적인 설계와 문서화를 통해 개발자 경험을 향상시키고자 스토리북을 도입했습니다. [👉🏻보러가기](https://boostcamp-wm.notion.site/a54eb762007f4ec185ee008a396d7a82)
+- CI/CD 파이프라인을 구축하고 지속적으로 개선했습니다. CI 시간을 약 40s 단축했습니다. [👉🏻보러가기](https://boostcamp-wm.notion.site/CI-CD-e6f15386baa34b238884678928ff3c61)
 
 <br></br>
 
