@@ -45,10 +45,11 @@ const GroupArticleCard = ({ article }: Props) => {
           alt={'thumbnail-image'}
           layout="fill"
           objectFit="cover"
-          sizes="(min-width: 800px) 300px,150px"
+          sizes="(min-width: 600px) 300px,150px"
           placeholder="blur"
           blurDataURL={blurUrl}
-          style={{ transition: '0.3s ease-in-out' }}
+          style={{ transition: '0.2s ease-in-out' }}
+          priority
         />
       </ImageWrapper>
       <InfoWrapper>
