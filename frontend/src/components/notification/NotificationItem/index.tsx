@@ -46,7 +46,12 @@ const NotificationItem = ({ notification }: Props) => {
               >
                 {title}
               </Text>
-              <Text size="sm" color="gray" weight={500}>
+              <Text
+                size="sm"
+                color="gray"
+                weight={500}
+                sx={{ whiteSpace: 'nowrap', overflowX: 'hidden', textOverflow: 'ellipsis' }}
+              >
                 {subTitle}
               </Text>
             </TitleWrapper>
