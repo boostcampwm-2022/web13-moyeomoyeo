@@ -12,6 +12,10 @@ echo -e $4 > .env
 
 echo "create .env"
 
+docker-compose up -d moyeo-nginx
+docker-compose up -d moyeo-db
+docker-compose up -d certbot
+
 RUNNING_APPLICATION=$(docker ps | grep moyeo-server-blue)
 DEFAULT_CONF="nginx/default.conf"
 
