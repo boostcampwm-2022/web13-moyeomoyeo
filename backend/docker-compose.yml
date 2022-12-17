@@ -50,6 +50,5 @@ services:
 
 networks:
   backbone:
-    driver: bridge
     external: true
     internal: true
