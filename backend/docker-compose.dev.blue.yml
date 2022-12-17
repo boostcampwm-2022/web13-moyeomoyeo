@@ -11,3 +11,8 @@ services:
     command: npm run start:dev
     networks:
       - backbone
+
+networks:
+  default:
+    external:
+      name: backbone
