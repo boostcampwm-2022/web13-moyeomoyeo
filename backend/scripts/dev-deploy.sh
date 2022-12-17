@@ -17,7 +17,7 @@ docker-compose up -d moyeo-db
 docker-compose up -d certbot
 
 RUNNING_APPLICATION=$(docker ps | grep moyeo-server-blue)
-DEFAULT_CONF="nginx/default.conf"
+DEFAULT_CONF="./nginx/dev/conf/nginx.conf"
 
 if [ $RUNNING_APPLICATION  ];then
 	echo "green Deploy..."
