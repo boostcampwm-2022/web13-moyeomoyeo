@@ -13,6 +13,7 @@ echo -e $4 > .env
 echo "create .env"
 
 EXIST_BLUE=$(docker-compose -p moyeo-server-blue -f docker-compose.dev.blue.yml ps | grep Up)
+echo "$EXIST_BLUE"
 
 if [ -z "$EXIST_BLUE" ]; then
     echo "blue up"
@@ -31,7 +32,7 @@ sleep 10
 EXIST_AFTER=$(docker-compose -p moyeo-server-${AFTER_COMPOSE} -f docker-compose.dev.${AFTER_COMPOSE}.yml ps | grep Up)
 
 if [ -n "$EXIST_AFTER" ]; then
-  echo "$AFTER_COMPOSE"
+  echo "$AFTER_COMPOSE nginx setting"
   docker exec -it moyeo-nginx cp /etc/nginx/bluegreen/nginx.${AFTER_COMPOSE}.conf /etc/nginx/conf.d/nginx.conf
   docker exec -it moyeo-nginx nginx -s reload
  
