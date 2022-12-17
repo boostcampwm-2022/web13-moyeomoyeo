@@ -13,7 +13,6 @@ services:
       - backbone
 
 networks:
-  backbone:
-    driver: bridge
+  default:
+    name: backbone
     external: true
-    internal: true
