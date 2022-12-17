@@ -21,7 +21,7 @@ if [ -z "$EXIST_BLUE" ]; then
     AFTER_COMPOSE="green"
 else
     echo "green up"
-    docker-compose -p moyeo-server-green -f docker-compose.green.yml up -d --build
+    docker-compose -p moyeo-server-green -f docker-compose.dev.green.yml up -d --build
     BEFORE_COMPOSE="blue"
     AFTER_COMPOSE="green"
 fi
