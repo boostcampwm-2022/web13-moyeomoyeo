@@ -33,8 +33,10 @@ EXIST_AFTER=$(docker-compose -p moyeo-server-${AFTER_COMPOSE} -f docker-compose.
 
 if [ -n "$EXIST_AFTER" ]; then
   echo "$AFTER_COMPOSE nginx setting"
-  docker cp nginx/dev/bluegreen/nginx.${AFTER_COMPOSE}.conf moyeo-nginx:/etc/nginx/conf.d/nginx.conf
-  docker exec -it moyeo-nginx nginx -s reload
+  sudo docker exec -it moyeo-nginx /bin/bash
+  cp /etc/nginx/bluegreen/nginx.${AFTER_COMPOSE}.conf /etc/nginx/conf.d/nginx.conf
+  nginx -s reload
+  exit
  
   docker-compose -p moyeo-server-${BEFORE_COMPOSE} -f docker-compose.dev.${BEFORE_COMPOSE}.yml down
   echo "$BEFORE_COMPOSE down"
