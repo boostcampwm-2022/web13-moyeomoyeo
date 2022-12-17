@@ -12,7 +12,7 @@ echo -e $4 > .env
 
 echo "create .env"
 
-EXIST_BLUE=$(docker-compose -p moyeo-server-blue -f docker-compose.dev.blue.yml pa grep Up)
+EXIST_BLUE=$(docker-compose -p moyeo-server-blue -f docker-compose.dev.blue.yml ps | grep Up)
 
 if [ -z "$EXIST_BLUE" ]; then
     echo "blue up"
