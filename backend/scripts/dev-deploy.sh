@@ -15,7 +15,7 @@ echo "create .env"
 RUNNING_APPLICATION=$(docker ps | grep moyeo-server-blue)
 DEFAULT_CONF="nginx/default.conf"
 
-if [ "$RUNNING_APPLICATION"  ];then
+if [ $RUNNING_APPLICATION  ];then
 	echo "green Deploy..."
 	docker-compose pull moyeo-server-green
 	docker-compose up -d moyeo-server-green
@@ -40,7 +40,7 @@ else
 	
 	while [ 1 == 1 ]; do
 		echo "blue health check...."
-                REQUEST=$(docker exec moeyo-nginx curl http://moyeo-server-blue:3000)
+                REQUEST=$(docker exec moyeo-nginx curl http://moyeo-server-blue:3000)
                 echo $REQUEST
 		if [ -n "$REQUEST" ]; then
             break ;
