@@ -12,7 +12,7 @@ echo -e $4 > .env
 
 echo "create .env"
 
-RUNNING_APPLICATION=$(docker ps | grep blue)
+RUNNING_APPLICATION=$(docker ps | grep moyeo-server-blue)
 DEFAULT_CONF="nginx/default.conf"
 
 if [ -z "$RUNNING_APPLICATION"  ];then
