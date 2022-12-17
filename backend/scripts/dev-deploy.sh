@@ -17,8 +17,8 @@ EXIST_BLUE=$(docker-compose -p moyeo-server-blue -f docker-compose.dev.blue.yml 
 if [ -z "$EXIST_BLUE" ]; then
     echo "blue up"
     docker-compose -p moyeo-server-blue -f docker-compose.dev.blue.yml up -d --build
-    BEFORE_COMPOSE="blue"
-    AFTER_COMPOSE="green"
+    BEFORE_COMPOSE="green"
+    AFTER_COMPOSE="blue"
 else
     echo "green up"
     docker-compose -p moyeo-server-green -f docker-compose.dev.green.yml up -d --build
@@ -31,6 +31,7 @@ sleep 10
 EXIST_AFTER=$(docker-compose -p moyeo-server-${AFTER_COMPOSE} -f docker-compose.dev.${AFTER_COMPOSE}.yml ps | grep Up)
 
 if [ -n "$EXIST_AFTER" ]; then
+  echo "$AFTER_COMPOSE"
   docker exec -it moyeo-nginx cp /etc/nginx/bluegreen/nginx.${AFTER_COMPOSE}.conf /etc/nginx/conf.d/nginx.conf
   docker exec -it moyeo-nginx nginx -s reload
  
