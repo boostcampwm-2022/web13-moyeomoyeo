@@ -72,4 +72,4 @@ services:
 
 networks:
   backbone:
-    external: true
+    driver: bridge
