@@ -12,30 +12,43 @@ echo -e $4 > .env
 
 echo "create .env"
 
-EXIST_BLUE=$(docker-compose -p moyeo-server-blue -f docker-compose.dev.blue.yml ps | grep Up)
-echo "$EXIST_BLUE"
+RUNNING_APPLICATION=$(docker ps | grep blue)
+DEFAULT_CONF="nginx/default.conf"
 
-if [ -z "$EXIST_BLUE" ]; then
-    echo "blue up"
-    docker-compose -p moyeo-server-blue -f docker-compose.dev.blue.yml up -d --build
-    BEFORE_COMPOSE="green"
-    AFTER_COMPOSE="blue"
+if [ -z "$RUNNING_APPLICATION"  ];then
+	echo "green Deploy..."
+	docker-compose pull moyeo-server-green
+	docker-compose up -d moyeo-server-green
+	
+	while [ 1 == 1 ]; do
+		echo "green health check...."
+		REQUEST=$(docker exec moyeo-nginx curl http://moyeo-server-green:3000)
+		echo $REQUEST
+		if [ -n "$REQUEST" ]; then
+			break ;
+		fi
+		sleep 3
+	done;
+	
+	sed -i 's/moyeo-server-blue/moyeo-server-green/g' $DEFAULT_CONF
+	docker exec moyeo-nginx service nginx reload
+	docker-compose stop moyeo-server-blue
 else
-    echo "green up"
-    docker-compose -p moyeo-server-green -f docker-compose.dev.green.yml up -d --build
-    BEFORE_COMPOSE="blue"
-    AFTER_COMPOSE="green"
-fi
-
-sleep 10
- 
-EXIST_AFTER=$(docker-compose -p moyeo-server-${AFTER_COMPOSE} -f docker-compose.dev.${AFTER_COMPOSE}.yml ps | grep Up)
-
-if [ -n "$EXIST_AFTER" ]; then
-  echo "$AFTER_COMPOSE nginx setting"
-#   docker cp nginx/dev/bluegreen/nginx.${AFTER_COMPOSE}.conf moyeo-nginx:/etc/nginx/conf.d/nginx.conf
-  docker exec -it moyeo-nginx nginx -s reload
- 
-  docker-compose -p moyeo-server-${BEFORE_COMPOSE} -f docker-compose.dev.${BEFORE_COMPOSE}.yml down
-  echo "$BEFORE_COMPOSE down"
+	echo "blue Deploy..."
+	docker-compose pull moyeo-server-blue
+    docker-compose up -d moyeo-server-blue
+	
+	while [ 1 == 1 ]; do
+		echo "blue health check...."
+                REQUEST=$(docker exec moeyo-nginx curl http://moyeo-server-blue:3000)
+                echo $REQUEST
+		if [ -n "$REQUEST" ]; then
+            break ;
+        fi
+		sleep 3
+    done;
+	
+	sed -i 's/moyeo-server-green/moyeo-server-blue/g' $DEFAULT_CONF
+    docker exec moyeo-nginx service nginx reload
+	docker-compose stop moyeo-server-green
 fi
