@@ -14,5 +14,5 @@ services:
 
 networks:
   default:
-    name: backbone
-    external: true
+    external:
+      name: backbone
