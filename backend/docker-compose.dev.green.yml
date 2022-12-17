@@ -15,4 +15,3 @@ services:
 networks:
   backbone:
     external: true
-    internal: true
