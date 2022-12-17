@@ -31,17 +31,6 @@ services:
       - backbone
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
-  moyeo-server:
-    container_name: moyeo-server
-    image: ${DOCKER_SERVER_IMAGE}
-    environment:
-      NODE_ENV: development
-    ports:
-      - 3000:3000
-    command: npm run start:dev
-    networks:
-      - backbone
-
   moyeo-db:
     container_name: moyeo-db
     image: mysql:8.0

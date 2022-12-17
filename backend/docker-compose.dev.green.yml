@@ -1,0 +1,13 @@
+version: '3.3'
+
+services:
+  moyeo-server:
+    container_name: moyeo-server-green
+    image: ${DOCKER_SERVER_IMAGE}
+    environment:
+      NODE_ENV: development
+    ports:
+      - 3000:3000
+    command: npm run start:dev
+    networks:
+      - backbone
