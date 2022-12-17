@@ -31,7 +31,7 @@ sleep 10
 EXIST_AFTER=$(docker-compose -p moyeo-server-${AFTER_COMPOSE} -f docker-compose.dev.${AFTER_COMPOSE}.yml ps | grep Up)
 
 if [ -n "$EXIST_AFTER" ]; then
-  docker exec -it moyeo-nginx cp /etc/nginx/conf.d/nginx.${AFTER_COMPOSE}.conf /etc/nginx/conf.d/nginx.conf
+  docker exec -it moyeo-nginx cp /etc/nginx/bluegreen/nginx.${AFTER_COMPOSE}.conf /etc/nginx/conf.d/nginx.conf
   docker exec -it moyeo-nginx nginx -s reload
  
   docker-compose -p moyeo-server-${BEFORE_COMPOSE} -f docker-compose.dev.${BEFORE_COMPOSE}.yml down

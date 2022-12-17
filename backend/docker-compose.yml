@@ -6,7 +6,8 @@ services:
     image: nginx
     restart: always
     volumes:
-      - ./nginx/dev:/etc/nginx/conf.d
+      - ./nginx/dev/conf:/etc/nginx/conf.d
+      - ./nginx/dev/bluegreen:/etc/nginx/bluegreen
       - /letsencrypt/certbot/conf:/etc/letsencrypt
       - /letsencrypt/certbot/www:/var/www/certbot
     ports:
