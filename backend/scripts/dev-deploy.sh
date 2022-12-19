@@ -12,14 +12,10 @@ echo -e $4 > .env
 
 echo "create .env"
 
-docker compose up -d moyeo-nginx
-docker compose up -d moyeo-db
-docker compose up -d certbot
-
 RUNNING_APPLICATION=$(docker ps | grep moyeo-server-blue)
 DEFAULT_CONF="./nginx/dev/conf/nginx.conf"
 
-if [ -z `$RUNNING_APPLICATION` ]; then
+if [ -z "`$RUNNING_APPLICATION`" ]; then
 	echo "green Deploy..."
 	docker compose pull moyeo-server-green
 	docker compose up -d moyeo-server-green
