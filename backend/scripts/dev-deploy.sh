@@ -12,17 +12,18 @@ echo -e $4 > .env
 
 echo "create .env"
 
-docker-compose up -d moyeo-nginx
-docker-compose up -d moyeo-db
-docker-compose up -d certbot
+docker compose up -d moyeo-nginx
+docker compose up -d moyeo-db
+docker compose up -d certbot
 
 RUNNING_APPLICATION=$(docker ps | grep moyeo-server-blue)
 DEFAULT_CONF="./nginx/dev/conf/nginx.conf"
 
 if [ -z "`$RUNNING_APPLICATION`" ]; then
 	echo "green Deploy..."
-	docker-compose pull moyeo-server-green
-	docker-compose up -d moyeo-server-green
+	docker compose pull moyeo-server-green
+	docker compose up -d moyeo-server-green
+	docker rmi $(docker images -f "dangling=true" -q)
 	
 	while [ 1 == 1 ]; do
 		echo "green health check...."
@@ -36,11 +37,12 @@ if [ -z "`$RUNNING_APPLICATION`" ]; then
 	
 	sed -i 's/moyeo-server-blue/moyeo-server-green/g' $DEFAULT_CONF
 	docker exec moyeo-nginx service nginx reload
-	docker-compose stop moyeo-server-blue
+	docker compose stop moyeo-server-blue
 else
 	echo "blue Deploy..."
-	docker-compose pull moyeo-server-blue
-    docker-compose up -d moyeo-server-blue
+	docker compose pull moyeo-server-blue
+    docker compose up -d moyeo-server-blue
+	docker rmi $(docker images -f "dangling=true" -q)
 	
 	while [ 1 == 1 ]; do
 		echo "blue health check...."
@@ -54,5 +56,5 @@ else
 	
 	sed -i 's/moyeo-server-green/moyeo-server-blue/g' $DEFAULT_CONF
     docker exec moyeo-nginx service nginx reload
-	docker-compose stop moyeo-server-green
+	docker compose stop moyeo-server-green
 fi
