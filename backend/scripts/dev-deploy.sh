@@ -54,3 +54,5 @@ else
     docker exec moyeo-nginx service nginx reload
 	docker compose stop moyeo-server-green
 fi
+
+docker volume prune
