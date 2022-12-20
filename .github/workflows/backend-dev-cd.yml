@@ -66,7 +66,7 @@ jobs:
           username: ${{ secrets.BACKEND_DEV_REMOTE_SSH_ID }}
           password: ${{ secrets.BACKEND_DEV_REMOTE_ADMIN_KEY }}
           port: ${{ secrets.BACKEND_DEV_REMOTE_SSH_PORT }}
-          source: 'backend/docker-compose.yml,backend/nginx/dev/nginx.conf,backend/scripts/dev-deploy.sh'
+          source: 'backend/docker-compose.yml,backend/nginx/dev/conf/nginx.conf,backend/scripts/dev-deploy.sh'
           target: 'moyeomoyeo'
 
       - name: deploy
