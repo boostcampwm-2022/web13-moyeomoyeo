@@ -18,6 +18,7 @@ import {
   LOCATION,
 } from '@app/group-article/constants/group-article.constants';
 import { GroupArticleRegisterRequest } from '@app/group-article/dto/group-article-register-request.dto';
+import { UpdateGroupArticleRequest } from '@src/app/group-article/dto/update-group-article-request.dto';
 
 describe('Group Application (e2e)', () => {
   let app: INestApplication;
@@ -82,7 +83,7 @@ describe('Group Application (e2e)', () => {
       const accessToken = jwtService.generateAccessToken(user);
       const groupArticleRquest = new GroupArticleRegisterRequest();
       groupArticleRquest.title = 'CS 스터디';
-      groupArticleRquest.contents = '';
+      groupArticleRquest.contents = 'Hello';
       groupArticleRquest.category = CATEGORY.STUDY;
       groupArticleRquest.location = LOCATION.ONLINE;
       groupArticleRquest.maxCapacity = 5;
@@ -101,6 +102,31 @@ describe('Group Application (e2e)', () => {
       expect(result.body.data.id).toEqual(3);
     });
 
+    test('모집게시글을 등록할 때 contents를 적지 않으면 400 에러를 던진다.', async () => {
+      // given
+      const jwtService = app.get(JwtTokenService);
+      const user = await dataSource.getRepository(User).findOneBy({ id: 1 });
+      const accessToken = jwtService.generateAccessToken(user);
+      const groupArticleRquest = new GroupArticleRegisterRequest();
+      groupArticleRquest.title = 'CS 스터디';
+      groupArticleRquest.contents = '';
+      groupArticleRquest.category = CATEGORY.STUDY;
+      groupArticleRquest.location = LOCATION.ONLINE;
+      groupArticleRquest.maxCapacity = 5;
+      groupArticleRquest.thumbnail =
+        'https://kr.object.ncloudstorage.com/moyeo-images/uploads/images/1669282011949-761671c7-cc43-4cee-bcb5-4bf3fea9478b.png';
+      groupArticleRquest.chatUrl = '채팅 url';
+
+      // when
+      const result = await request(app.getHttpServer())
+        .post(url())
+        .set({ Cookie: setCookie(accessToken.accessToken) })
+        .send(groupArticleRquest);
+
+      // then
+      expect(result.status).toEqual(400);
+    });
+
     test('모집게시글을 등록할 때 타이틀이 0자면 400 에러를 보낸다.', async () => {
       // given
       const jwtService = app.get(JwtTokenService);
@@ -108,7 +134,7 @@ describe('Group Application (e2e)', () => {
       const accessToken = jwtService.generateAccessToken(user);
       const groupArticleRquest = new GroupArticleRegisterRequest();
       groupArticleRquest.title = '';
-      groupArticleRquest.contents = '';
+      groupArticleRquest.contents = 'Hello';
       groupArticleRquest.category = CATEGORY.STUDY;
       groupArticleRquest.location = LOCATION.ONLINE;
       groupArticleRquest.maxCapacity = 5;
@@ -133,7 +159,7 @@ describe('Group Application (e2e)', () => {
       const accessToken = jwtService.generateAccessToken(user);
       const groupArticleRquest = new GroupArticleRegisterRequest();
       groupArticleRquest.title = 'a'.repeat(101);
-      groupArticleRquest.contents = '';
+      groupArticleRquest.contents = 'Hello';
       groupArticleRquest.category = CATEGORY.STUDY;
       groupArticleRquest.location = LOCATION.ONLINE;
       groupArticleRquest.maxCapacity = 5;
@@ -163,7 +189,7 @@ describe('Group Application (e2e)', () => {
         .set({ Cookie: setCookie(accessToken.accessToken) })
         .send({
           title: 'study',
-          contents: '',
+          contents: 'Hello',
           category: 'nothing',
           location: LOCATION.ONLINE,
           maxCapacity: 10,
@@ -188,7 +214,7 @@ describe('Group Application (e2e)', () => {
         .set({ Cookie: setCookie(accessToken.accessToken) })
         .send({
           title: 'study',
-          contents: '',
+          contents: 'Hello',
           category: CATEGORY.STUDY,
           location: 'nothing',
           maxCapacity: 10,
@@ -208,7 +234,7 @@ describe('Group Application (e2e)', () => {
       const accessToken = jwtService.generateAccessToken(user);
       const groupArticleRquest = new GroupArticleRegisterRequest();
       groupArticleRquest.title = 'CS 스터디';
-      groupArticleRquest.contents = '';
+      groupArticleRquest.contents = 'Hello';
       groupArticleRquest.category = CATEGORY.STUDY;
       groupArticleRquest.location = LOCATION.ONLINE;
       groupArticleRquest.maxCapacity = 30;
@@ -234,6 +260,183 @@ describe('Group Application (e2e)', () => {
 
       // then
       expect(result.status).toEqual(401);
+    });
+  });
+
+  describe('모집 게시글 수정 PUT /group-articles/:id', () => {
+    const url = (id: number) => `/v1/group-articles/${id}`;
+
+    test('모집게시글을 정상적으로 수정하면 204 코드를 던진다.', async () => {
+      // given
+      const jwtService = app.get(JwtTokenService);
+      const user = await dataSource.getRepository(User).findOneBy({ id: 1 });
+      const accessToken = jwtService.generateAccessToken(user);
+      const updateGroupArticleRequest = new UpdateGroupArticleRequest();
+      updateGroupArticleRequest.title = 'CS 스터디';
+      updateGroupArticleRequest.contents = 'Hello';
+      updateGroupArticleRequest.thumbnail =
+        'https://kr.object.ncloudstorage.com/moyeo-images/uploads/images/1669282011949-761671c7-cc43-4cee-bcb5-4bf3fea9478b.png';
+      updateGroupArticleRequest.chatUrl = '채팅 url';
+      const groupArticleId = 1;
+
+      // when
+      const result = await request(app.getHttpServer())
+        .put(url(groupArticleId))
+        .set({ Cookie: setCookie(accessToken.accessToken) })
+        .send(updateGroupArticleRequest);
+
+      // then
+      expect(result.status).toEqual(204);
+    });
+
+    test('모집게시글을 수정할 때 제목이 없으면 400 코드를 던진다.', async () => {
+      // given
+      const jwtService = app.get(JwtTokenService);
+      const user = await dataSource.getRepository(User).findOneBy({ id: 1 });
+      const accessToken = jwtService.generateAccessToken(user);
+      const updateGroupArticleRequest = new UpdateGroupArticleRequest();
+      updateGroupArticleRequest.title = '';
+      updateGroupArticleRequest.contents = 'Hello';
+      updateGroupArticleRequest.thumbnail =
+        'https://kr.object.ncloudstorage.com/moyeo-images/uploads/images/1669282011949-761671c7-cc43-4cee-bcb5-4bf3fea9478b.png';
+      updateGroupArticleRequest.chatUrl = '채팅 url';
+      const groupArticleId = 1;
+
+      // when
+      const result = await request(app.getHttpServer())
+        .put(url(groupArticleId))
+        .set({ Cookie: setCookie(accessToken.accessToken) })
+        .send(updateGroupArticleRequest);
+
+      // then
+      expect(result.status).toEqual(400);
+    });
+
+    test('모집게시글을 수정할 때 콘텐츠가 없으면 400 코드를 던진다.', async () => {
+      // given
+      const jwtService = app.get(JwtTokenService);
+      const user = await dataSource.getRepository(User).findOneBy({ id: 1 });
+      const accessToken = jwtService.generateAccessToken(user);
+      const updateGroupArticleRequest = new UpdateGroupArticleRequest();
+      updateGroupArticleRequest.title = 'CS 스터디';
+      updateGroupArticleRequest.contents = '';
+      updateGroupArticleRequest.thumbnail =
+        'https://kr.object.ncloudstorage.com/moyeo-images/uploads/images/1669282011949-761671c7-cc43-4cee-bcb5-4bf3fea9478b.png';
+      updateGroupArticleRequest.chatUrl = '채팅 url';
+      const groupArticleId = 1;
+
+      // when
+      const result = await request(app.getHttpServer())
+        .put(url(groupArticleId))
+        .set({ Cookie: setCookie(accessToken.accessToken) })
+        .send(updateGroupArticleRequest);
+
+      // then
+      expect(result.status).toEqual(400);
+    });
+
+    test('모집게시글을 수정할 때 썸네일이 없으면 400 코드를 던진다.', async () => {
+      // given
+      const jwtService = app.get(JwtTokenService);
+      const user = await dataSource.getRepository(User).findOneBy({ id: 1 });
+      const accessToken = jwtService.generateAccessToken(user);
+      const updateGroupArticleRequest = new UpdateGroupArticleRequest();
+      updateGroupArticleRequest.title = 'CS 스터디';
+      updateGroupArticleRequest.contents = 'Hello';
+      updateGroupArticleRequest.thumbnail = '';
+      updateGroupArticleRequest.chatUrl = '채팅 url';
+      const groupArticleId = 1;
+
+      // when
+      const result = await request(app.getHttpServer())
+        .put(url(groupArticleId))
+        .set({ Cookie: setCookie(accessToken.accessToken) })
+        .send(updateGroupArticleRequest);
+
+      // then
+      expect(result.status).toEqual(400);
+    });
+
+    test('모집게시글을 수정할 때 채팅 URL이 없으면 400 코드를 던진다.', async () => {
+      // given
+      const jwtService = app.get(JwtTokenService);
+      const user = await dataSource.getRepository(User).findOneBy({ id: 1 });
+      const accessToken = jwtService.generateAccessToken(user);
+      const updateGroupArticleRequest = new UpdateGroupArticleRequest();
+      updateGroupArticleRequest.title = 'CS 스터디';
+      updateGroupArticleRequest.contents = 'Hello';
+      updateGroupArticleRequest.thumbnail =
+        'https://kr.object.ncloudstorage.com/moyeo-images/uploads/images/1669282011949-761671c7-cc43-4cee-bcb5-4bf3fea9478b.png';
+      updateGroupArticleRequest.chatUrl = '';
+      const groupArticleId = 1;
+
+      // when
+      const result = await request(app.getHttpServer())
+        .put(url(groupArticleId))
+        .set({ Cookie: setCookie(accessToken.accessToken) })
+        .send(updateGroupArticleRequest);
+
+      // then
+      expect(result.status).toEqual(400);
+    });
+
+    test('JWT 토큰이 없을 때 401 에러를 던진다.', async () => {
+      // given
+      const groupArticleId = 1;
+
+      // when
+      const result = await request(app.getHttpServer()).put(
+        url(groupArticleId),
+      );
+
+      // then
+      expect(result.status).toEqual(401);
+    });
+
+    test('모집게시글을 수정할 때 작성자가 아니라면 403 코드를 던진다.', async () => {
+      // given
+      const jwtService = app.get(JwtTokenService);
+      const user = await dataSource.getRepository(User).findOneBy({ id: 2 });
+      const accessToken = jwtService.generateAccessToken(user);
+      const updateGroupArticleRequest = new UpdateGroupArticleRequest();
+      updateGroupArticleRequest.title = 'CS 스터디';
+      updateGroupArticleRequest.contents = 'Hello';
+      updateGroupArticleRequest.thumbnail =
+        'https://kr.object.ncloudstorage.com/moyeo-images/uploads/images/1669282011949-761671c7-cc43-4cee-bcb5-4bf3fea9478b.png';
+      updateGroupArticleRequest.chatUrl = 'chat url';
+      const groupArticleId = 1;
+
+      // when
+      const result = await request(app.getHttpServer())
+        .put(url(groupArticleId))
+        .set({ Cookie: setCookie(accessToken.accessToken) })
+        .send(updateGroupArticleRequest);
+
+      // then
+      expect(result.status).toEqual(403);
+    });
+
+    test('모집게시글을 수정할 때 없는 게시물에 접근하면 404 코드를 던진다.', async () => {
+      // given
+      const jwtService = app.get(JwtTokenService);
+      const user = await dataSource.getRepository(User).findOneBy({ id: 1 });
+      const accessToken = jwtService.generateAccessToken(user);
+      const updateGroupArticleRequest = new UpdateGroupArticleRequest();
+      updateGroupArticleRequest.title = 'CS 스터디';
+      updateGroupArticleRequest.contents = 'Hello';
+      updateGroupArticleRequest.thumbnail =
+        'https://kr.object.ncloudstorage.com/moyeo-images/uploads/images/1669282011949-761671c7-cc43-4cee-bcb5-4bf3fea9478b.png';
+      updateGroupArticleRequest.chatUrl = 'chat url';
+      const groupArticleId = 10000;
+
+      // when
+      const result = await request(app.getHttpServer())
+        .put(url(groupArticleId))
+        .set({ Cookie: setCookie(accessToken.accessToken) })
+        .send(updateGroupArticleRequest);
+
+      // then
+      expect(result.status).toEqual(404);
     });
   });
 });
