@@ -32,6 +32,7 @@ export class GroupArticleRegisterRequest {
     required: true,
   })
   @IsString()
+  @Length(1)
   contents: string;
 
   @ApiProperty({
@@ -66,6 +67,7 @@ export class GroupArticleRegisterRequest {
     description: '썸네일 이미지가 저장되어있는 주소(url)',
     required: true,
   })
+  @Length(1)
   @IsUrl()
   thumbnail: string;
 
@@ -75,5 +77,6 @@ export class GroupArticleRegisterRequest {
     required: false,
   })
   @IsString()
+  @Length(1)
   chatUrl: string;
 }
