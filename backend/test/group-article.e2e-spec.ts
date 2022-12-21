@@ -15,7 +15,6 @@ import { JwtTokenService } from '@common/module/jwt-token/jwt-token.service';
 import { setCookie } from './utils/jwt-test.utils';
 import {
   CATEGORY,
-  GROUP_STATUS,
   LOCATION,
 } from '@app/group-article/constants/group-article.constants';
 import { GroupArticleRegisterRequest } from '@app/group-article/dto/group-article-register-request.dto';
@@ -657,6 +656,73 @@ describe('Group Application (e2e)', () => {
         .put(url(groupArticleId))
         .set({ Cookie: setCookie(accessToken.accessToken) })
         .send(updateGroupArticleRequest);
+
+      // then
+      expect(result.status).toEqual(404);
+    });
+  });
+
+  describe('모집 게시글 단일 조회 GET /group-articles/:id', () => {
+    const url = (id: number) => `/v1/group-articles/${id}`;
+
+    test('모집게시글을 정상조회하면 200코드와 게시글 상세정보를 준다.', async () => {
+      // given
+      const jwtService = app.get(JwtTokenService);
+      const user = await dataSource.getRepository(User).findOneBy({ id: 1 });
+      const accessToken = jwtService.generateAccessToken(user);
+      const groupArticleId = 1;
+
+      const groupArticle = await dataSource
+        .getRepository(GroupArticle)
+        .findOneBy({ id: 1 });
+
+      // when
+      const result = await request(app.getHttpServer())
+        .get(url(groupArticleId))
+        .set({ Cookie: setCookie(accessToken.accessToken) });
+
+      // then
+      expect(result.status).toEqual(200);
+      expect(result.body.data.id).toEqual(groupArticle.id);
+      expect(result.body.data.title).toEqual(groupArticle.title);
+      expect(result.body.data.contents).toEqual(groupArticle.contents);
+      expect(result.body.data.author).toEqual({
+        id: user.id,
+        userName: user.userName,
+        profileImage: user.profileImage,
+      });
+      expect(result.body.data.category).toEqual(
+        groupArticle.group.category.name,
+      );
+      expect(result.body.data.location).toEqual(groupArticle.group.location);
+      expect(result.body.data.thumbnail).toEqual(groupArticle.group.thumbnail);
+      expect(result.body.data.status).toEqual(groupArticle.group.status);
+    });
+
+    test('JWT 토큰이 없을 때 401 에러를 던진다.', async () => {
+      // given
+      const groupArticleId = 1;
+
+      // when
+      const result = await request(app.getHttpServer()).get(
+        url(groupArticleId),
+      );
+
+      // then
+      expect(result.status).toEqual(401);
+    });
+
+    test('해당하는 모집 게시글이 존재하지 않는다면 404코드를 준다.', async () => {
+      // given
+      const jwtService = app.get(JwtTokenService);
+      const user = await dataSource.getRepository(User).findOneBy({ id: 1 });
+      const accessToken = jwtService.generateAccessToken(user);
+      const groupArticleId = 10000;
+
+      // when
+      const result = await request(app.getHttpServer())
+        .get(url(groupArticleId))
+        .set({ Cookie: setCookie(accessToken.accessToken) });
 
       // then
       expect(result.status).toEqual(404);
