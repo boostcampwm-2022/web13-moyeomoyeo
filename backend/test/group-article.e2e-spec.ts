@@ -15,6 +15,7 @@ import { JwtTokenService } from '@common/module/jwt-token/jwt-token.service';
 import { setCookie } from './utils/jwt-test.utils';
 import {
   CATEGORY,
+  GROUP_STATUS,
   LOCATION,
 } from '@app/group-article/constants/group-article.constants';
 import { GroupArticleRegisterRequest } from '@app/group-article/dto/group-article-register-request.dto';
@@ -260,6 +261,117 @@ describe('Group Application (e2e)', () => {
 
       // then
       expect(result.status).toEqual(401);
+    });
+  });
+
+  describe('모집 게시글 모집 중단 POST /group-articles/:id/recruitment-cancel', () => {
+    const url = (id: number) => `/v1/group-articles/${id}/recruitment-cancel`;
+
+    test('모집게시글의 상태를 정상적으로 모집 취소로 바꾼다면 204 코드를 던진다.', async () => {
+      // given
+      const jwtService = app.get(JwtTokenService);
+      const user = await dataSource.getRepository(User).findOneBy({ id: 1 });
+      const accessToken = jwtService.generateAccessToken(user);
+      const groupArticleId = 1;
+
+      // when
+      const result = await request(app.getHttpServer())
+        .post(url(groupArticleId))
+        .set({ Cookie: setCookie(accessToken.accessToken) });
+
+      // then
+      expect(result.status).toEqual(204);
+    });
+
+    test('모집게시글의 상태가 이미 모집완료라면 400 코드를 던진다.', async () => {
+      // given
+      const jwtService = app.get(JwtTokenService);
+      const user = await dataSource.getRepository(User).findOneBy({ id: 1 });
+      const accessToken = jwtService.generateAccessToken(user);
+
+      const groupArticleId = 1;
+      const groupAriticleRepository = dataSource.getRepository(GroupArticle);
+      const groupArticle = await groupAriticleRepository.findOneBy({
+        id: groupArticleId,
+      });
+      groupArticle.complete(user);
+      await groupAriticleRepository.save(groupArticle);
+
+      // when
+      const result = await request(app.getHttpServer())
+        .post(url(groupArticleId))
+        .set({ Cookie: setCookie(accessToken.accessToken) });
+
+      // then
+      expect(result.status).toEqual(400);
+    });
+
+    test('모집게시글의 상태가 이미 모집취소 상태라면 400 코드를 던진다.', async () => {
+      // given
+      const jwtService = app.get(JwtTokenService);
+      const user = await dataSource.getRepository(User).findOneBy({ id: 1 });
+      const accessToken = jwtService.generateAccessToken(user);
+
+      const groupArticleId = 1;
+      const groupAriticleRepository = dataSource.getRepository(GroupArticle);
+      const groupArticle = await groupAriticleRepository.findOneBy({
+        id: groupArticleId,
+      });
+      groupArticle.cancel(user);
+      await groupAriticleRepository.save(groupArticle);
+
+      // when
+      const result = await request(app.getHttpServer())
+        .post(url(groupArticleId))
+        .set({ Cookie: setCookie(accessToken.accessToken) });
+
+      // then
+      expect(result.status).toEqual(400);
+    });
+
+    test('JWT 토큰이 없을 때 401 에러를 던진다.', async () => {
+      // given
+      const groupArticleId = 1;
+
+      // when
+      const result = await request(app.getHttpServer()).post(
+        url(groupArticleId),
+      );
+
+      // then
+      expect(result.status).toEqual(401);
+    });
+
+    test('글 작성자가 아닌 다른 유저가 모집 상태를 바꾸려고 하면 403 코드를 던진다.', async () => {
+      // given
+      const jwtService = app.get(JwtTokenService);
+      const user = await dataSource.getRepository(User).findOneBy({ id: 2 });
+      const accessToken = jwtService.generateAccessToken(user);
+      const groupArticleId = 1;
+
+      // when
+      const result = await request(app.getHttpServer())
+        .post(url(groupArticleId))
+        .set({ Cookie: setCookie(accessToken.accessToken) });
+
+      // then
+      expect(result.status).toEqual(403);
+    });
+
+    test('아이디에 해당하는 모집게시글이 없다면 404 코드를 던진다.', async () => {
+      // given
+      const jwtService = app.get(JwtTokenService);
+      const user = await dataSource.getRepository(User).findOneBy({ id: 1 });
+      const accessToken = jwtService.generateAccessToken(user);
+      const groupArticleId = 10000;
+
+      // when
+      const result = await request(app.getHttpServer())
+        .post(url(groupArticleId))
+        .set({ Cookie: setCookie(accessToken.accessToken) });
+
+      // then
+      expect(result.status).toEqual(404);
     });
   });
 
