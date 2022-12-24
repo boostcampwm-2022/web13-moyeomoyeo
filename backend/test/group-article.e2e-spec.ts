@@ -922,7 +922,7 @@ describe('Group Application (e2e)', () => {
     });
   });
 
-  describe('모집 게시글 리스트 조회 GET /group-articles/search?currentPage={currentPage}&countPerPage={countPerPage}category={category}&location={location}&status={status}', () => {
+  describe('모집 게시글 리스트 조회 GET /v1/group-articles/search?currentPage={currentPage}&countPerPage={countPerPage}category={category}&location={location}&status={status}', () => {
     const url = ({
       currentPage = 1,
       countPerPage = 10,
@@ -1299,6 +1299,403 @@ describe('Group Application (e2e)', () => {
       expect(result.body.data.totalCount).toEqual(5);
       expect(result.body.data.currentPage).toEqual(1);
       expect(result.body.data.countPerPage).toEqual(10);
+
+      // 최신순인지
+      expect(result.body.data.data[0].id).toEqual(5);
+      expect(result.body.data.data[1].id).toEqual(4);
+      expect(result.body.data.data[2].id).toEqual(3);
+      expect(result.body.data.data[3].id).toEqual(2);
+      expect(result.body.data.data[4].id).toEqual(1);
+    });
+  });
+
+  describe('모집 게시글 리스트 조회 GET /v2/group-articles/search?currentPage={currentPage}&countPerPage={countPerPage}category={category}&location={location}&status={status}', () => {
+    const url = ({
+      limit = 10,
+      nextId = 50,
+      category = '',
+      location = '',
+      status = '',
+    }: {
+      limit: number;
+      nextId: number;
+      category: string;
+      location: string;
+      status: string;
+    }) => {
+      let url = `/v2/group-articles/search?limit=${limit}&nextId=${nextId}`;
+      if (category.length > 0) url += `&category=${category}`;
+      if (location.length > 0) url += `&location=${location}`;
+      if (status.length > 0) url += `&status=${status}`;
+      return url;
+    };
+
+    test('모집게시글을 조건에 맞게 검색하면 200 코드와 게시글 데이터를 전달해준다.', async () => {
+      // given
+      const limit = 10;
+      const nextId = 50;
+      const category = CATEGORY.STUDY;
+      const location = LOCATION.ONLINE;
+      const status = GROUP_STATUS.PROGRESS;
+
+      // when
+      const result = await request(app.getHttpServer()).get(
+        url({ limit, nextId, category, location, status }),
+      );
+
+      // then
+      expect(result.status).toEqual(200);
+      expect(result.body.data.limit).toEqual(limit);
+      expect(result.body.data.beforeNextId).toEqual(nextId);
+      expect(result.body.data.nextId).toEqual(1);
+      expect(result.body.data.isLast).toEqual(true);
+
+      // 최신순인지
+      expect(result.body.data.data[0].id).toEqual(2);
+      expect(result.body.data.data[1].id).toEqual(1);
+
+      // 검색 조건이 맞는지
+      expect(result.body.data.data[0].category).toEqual(CATEGORY.STUDY);
+      expect(result.body.data.data[1].category).toEqual(CATEGORY.STUDY);
+      expect(result.body.data.data[0].location).toEqual(LOCATION.ONLINE);
+      expect(result.body.data.data[1].location).toEqual(LOCATION.ONLINE);
+      expect(result.body.data.data[0].status).toEqual(GROUP_STATUS.PROGRESS);
+      expect(result.body.data.data[1].status).toEqual(GROUP_STATUS.PROGRESS);
+    });
+
+    test('모집게시글을 조건에 맞게 검색하면 200 코드와 게시글 데이터를 전달해준다.', async () => {
+      // given
+      const limit = 10;
+      const nextId = 50;
+      const category = CATEGORY.STUDY;
+      const location = LOCATION.ONLINE;
+      const status = GROUP_STATUS.PROGRESS;
+
+      // when
+      const result = await request(app.getHttpServer()).get(
+        url({ limit, nextId, category, location, status }),
+      );
+
+      // then
+      expect(result.status).toEqual(200);
+      expect(result.body.data.limit).toEqual(limit);
+      expect(result.body.data.beforeNextId).toEqual(nextId);
+      expect(result.body.data.nextId).toEqual(1);
+      expect(result.body.data.isLast).toEqual(true);
+
+      // 최신순인지
+      expect(result.body.data.data[0].id).toEqual(2);
+      expect(result.body.data.data[1].id).toEqual(1);
+
+      //검색조건이 맞는지
+      expect(result.body.data.data[0].location).toEqual(LOCATION.ONLINE);
+      expect(result.body.data.data[1].location).toEqual(LOCATION.ONLINE);
+      expect(result.body.data.data[0].category).toEqual(CATEGORY.STUDY);
+      expect(result.body.data.data[1].category).toEqual(CATEGORY.STUDY);
+      expect(result.body.data.data[0].status).toEqual(GROUP_STATUS.PROGRESS);
+      expect(result.body.data.data[1].status).toEqual(GROUP_STATUS.PROGRESS);
+    });
+
+    test('모집게시글을 카테고리 없이 조회하면 모든 카테고리에 해당하는 게시글을 불러온다.', async () => {
+      // given
+      const categories = getGroupCategoryFixture();
+
+      const userRepository = dataSource.getRepository(User);
+      const user = getUserFixture({ id: 3 });
+      await userRepository.save(user);
+
+      const group1 = getGroupFixture(categories[2], {
+        id: 3,
+        maxCapacity: 5,
+        status: GROUP_STATUS.SUCCEED,
+      });
+      const group2 = getGroupFixture(categories[3], {
+        id: 4,
+        status: GROUP_STATUS.FAIL,
+      });
+      const group3 = getGroupFixture(categories[3], {
+        id: 5,
+        status: GROUP_STATUS.PROGRESS,
+      });
+
+      const groupArticleRepository = dataSource.getRepository(GroupArticle);
+      const groupArticle1 = await getGroupArticleFixture(group1, {
+        id: 3,
+        user: new Promise((res) => res(user)),
+        userId: user.id,
+      });
+      const groupArticle2 = await getGroupArticleFixture(group2, {
+        id: 4,
+        user: new Promise((res) => res(user)),
+        userId: user.id,
+      });
+      const groupArticle3 = await getGroupArticleFixture(group3, {
+        id: 5,
+        user: new Promise((res) => res(user)),
+        userId: user.id,
+      });
+      await groupArticleRepository.save([
+        groupArticle1,
+        groupArticle2,
+        groupArticle3,
+      ]);
+
+      const limit = 10;
+      const nextId = 50;
+      const category = '';
+      const location = LOCATION.ONLINE;
+      const status = GROUP_STATUS.PROGRESS;
+
+      // when
+      const result = await request(app.getHttpServer()).get(
+        url({ limit, nextId, category, location, status }),
+      );
+
+      // then
+      expect(result.status).toEqual(200);
+      expect(result.body.data.limit).toEqual(limit);
+      expect(result.body.data.beforeNextId).toEqual(nextId);
+      expect(result.body.data.nextId).toEqual(1);
+      expect(result.body.data.isLast).toEqual(true);
+
+      // 최신순인지
+      expect(result.body.data.data[0].id).toEqual(5);
+      expect(result.body.data.data[1].id).toEqual(2);
+      expect(result.body.data.data[2].id).toEqual(1);
+
+      //검색조건이 맞는지
+      expect(result.body.data.data[0].location).toEqual(LOCATION.ONLINE);
+      expect(result.body.data.data[1].location).toEqual(LOCATION.ONLINE);
+      expect(result.body.data.data[2].location).toEqual(LOCATION.ONLINE);
+      expect(result.body.data.data[0].status).toEqual(GROUP_STATUS.PROGRESS);
+      expect(result.body.data.data[1].status).toEqual(GROUP_STATUS.PROGRESS);
+      expect(result.body.data.data[2].status).toEqual(GROUP_STATUS.PROGRESS);
+    });
+
+    test('모집게시글을 location 없이 조회하면 모든 location에 해당하고 검색 조건이 맞는 게시글을 불러온다.', async () => {
+      // given
+      const categories = getGroupCategoryFixture();
+
+      const userRepository = dataSource.getRepository(User);
+      const user = getUserFixture({ id: 3 });
+      await userRepository.save(user);
+
+      const group1 = getGroupFixture(categories[2], {
+        id: 3,
+        maxCapacity: 5,
+        status: GROUP_STATUS.SUCCEED,
+      });
+      const group2 = getGroupFixture(categories[3], {
+        id: 4,
+        status: GROUP_STATUS.PROGRESS,
+        location: LOCATION.SEOUL,
+      });
+      const group3 = getGroupFixture(categories[1], {
+        id: 5,
+        status: GROUP_STATUS.PROGRESS,
+        location: LOCATION.BUSAN,
+      });
+
+      const groupArticleRepository = dataSource.getRepository(GroupArticle);
+      const groupArticle1 = await getGroupArticleFixture(group1, {
+        id: 3,
+        user: new Promise((res) => res(user)),
+        userId: user.id,
+      });
+      const groupArticle2 = await getGroupArticleFixture(group2, {
+        id: 4,
+        user: new Promise((res) => res(user)),
+        userId: user.id,
+      });
+      const groupArticle3 = await getGroupArticleFixture(group3, {
+        id: 5,
+        user: new Promise((res) => res(user)),
+        userId: user.id,
+      });
+      await groupArticleRepository.save([
+        groupArticle1,
+        groupArticle2,
+        groupArticle3,
+      ]);
+
+      const limit = 10;
+      const nextId = 50;
+      const category = CATEGORY.STUDY;
+      const location = '';
+      const status = GROUP_STATUS.PROGRESS;
+
+      // when
+      const result = await request(app.getHttpServer()).get(
+        url({ limit, nextId, category, location, status }),
+      );
+
+      // then
+      expect(result.status).toEqual(200);
+      expect(result.body.data.limit).toEqual(limit);
+      expect(result.body.data.beforeNextId).toEqual(nextId);
+      expect(result.body.data.nextId).toEqual(1);
+      expect(result.body.data.isLast).toEqual(true);
+
+      // 최신순인지
+      expect(result.body.data.data[0].id).toEqual(5);
+      expect(result.body.data.data[1].id).toEqual(2);
+      expect(result.body.data.data[2].id).toEqual(1);
+
+      //검색조건이 맞는지
+      expect(result.body.data.data[0].category).toEqual(CATEGORY.STUDY);
+      expect(result.body.data.data[1].category).toEqual(CATEGORY.STUDY);
+      expect(result.body.data.data[2].category).toEqual(CATEGORY.STUDY);
+      expect(result.body.data.data[0].status).toEqual(GROUP_STATUS.PROGRESS);
+      expect(result.body.data.data[1].status).toEqual(GROUP_STATUS.PROGRESS);
+      expect(result.body.data.data[2].status).toEqual(GROUP_STATUS.PROGRESS);
+    });
+
+    test('모집게시글을 location 없이 조회하면 모든 status에 해당하고 검색 조건이 맞는 해당하는 게시글을 불러온다.', async () => {
+      // given
+      const categories = getGroupCategoryFixture();
+
+      const userRepository = dataSource.getRepository(User);
+      const user = getUserFixture({ id: 3 });
+      await userRepository.save(user);
+
+      const group1 = getGroupFixture(categories[1], {
+        id: 3,
+        maxCapacity: 5,
+        status: GROUP_STATUS.SUCCEED,
+        location: LOCATION.ONLINE,
+      });
+      const group2 = getGroupFixture(categories[3], {
+        id: 4,
+        status: GROUP_STATUS.PROGRESS,
+        location: LOCATION.SEOUL,
+      });
+      const group3 = getGroupFixture(categories[1], {
+        id: 5,
+        status: GROUP_STATUS.SUCCEED,
+        location: LOCATION.ONLINE,
+      });
+
+      const groupArticleRepository = dataSource.getRepository(GroupArticle);
+      const groupArticle1 = await getGroupArticleFixture(group1, {
+        id: 3,
+        user: new Promise((res) => res(user)),
+        userId: user.id,
+      });
+      const groupArticle2 = await getGroupArticleFixture(group2, {
+        id: 4,
+        user: new Promise((res) => res(user)),
+        userId: user.id,
+      });
+      const groupArticle3 = await getGroupArticleFixture(group3, {
+        id: 5,
+        user: new Promise((res) => res(user)),
+        userId: user.id,
+      });
+      await groupArticleRepository.save([
+        groupArticle1,
+        groupArticle2,
+        groupArticle3,
+      ]);
+
+      const limit = 10;
+      const nextId = 50;
+      const category = CATEGORY.STUDY;
+      const location = LOCATION.ONLINE;
+      const status = '';
+
+      // when
+      const result = await request(app.getHttpServer()).get(
+        url({ limit, nextId, category, location, status }),
+      );
+
+      // then
+      expect(result.status).toEqual(200);
+      expect(result.body.data.limit).toEqual(limit);
+      expect(result.body.data.beforeNextId).toEqual(nextId);
+      expect(result.body.data.nextId).toEqual(1);
+      expect(result.body.data.isLast).toEqual(true);
+
+      // 최신순인지
+      expect(result.body.data.data[0].id).toEqual(5);
+      expect(result.body.data.data[1].id).toEqual(3);
+      expect(result.body.data.data[2].id).toEqual(2);
+      expect(result.body.data.data[3].id).toEqual(1);
+
+      //검색조건이 맞는지
+      expect(result.body.data.data[0].category).toEqual(CATEGORY.STUDY);
+      expect(result.body.data.data[1].category).toEqual(CATEGORY.STUDY);
+      expect(result.body.data.data[2].category).toEqual(CATEGORY.STUDY);
+      expect(result.body.data.data[3].category).toEqual(CATEGORY.STUDY);
+      expect(result.body.data.data[0].location).toEqual(LOCATION.ONLINE);
+      expect(result.body.data.data[1].location).toEqual(LOCATION.ONLINE);
+      expect(result.body.data.data[2].location).toEqual(LOCATION.ONLINE);
+      expect(result.body.data.data[3].location).toEqual(LOCATION.ONLINE);
+    });
+
+    test('모집게시글을 검색 조건 없이 조회하면 모든 게시글을 조회한다.', async () => {
+      // given
+      const categories = getGroupCategoryFixture();
+
+      const userRepository = dataSource.getRepository(User);
+      const user = getUserFixture({ id: 3 });
+      await userRepository.save(user);
+
+      const group1 = getGroupFixture(categories[1], {
+        id: 3,
+        maxCapacity: 5,
+        status: GROUP_STATUS.FAIL,
+        location: LOCATION.BUSAN,
+      });
+      const group2 = getGroupFixture(categories[3], {
+        id: 4,
+        status: GROUP_STATUS.PROGRESS,
+        location: LOCATION.SEOUL,
+      });
+      const group3 = getGroupFixture(categories[2], {
+        id: 5,
+        status: GROUP_STATUS.SUCCEED,
+        location: LOCATION.ONLINE,
+      });
+
+      const groupArticleRepository = dataSource.getRepository(GroupArticle);
+      const groupArticle1 = await getGroupArticleFixture(group1, {
+        id: 3,
+        user: new Promise((res) => res(user)),
+        userId: user.id,
+      });
+      const groupArticle2 = await getGroupArticleFixture(group2, {
+        id: 4,
+        user: new Promise((res) => res(user)),
+        userId: user.id,
+      });
+      const groupArticle3 = await getGroupArticleFixture(group3, {
+        id: 5,
+        user: new Promise((res) => res(user)),
+        userId: user.id,
+      });
+      await groupArticleRepository.save([
+        groupArticle1,
+        groupArticle2,
+        groupArticle3,
+      ]);
+
+      const limit = 10;
+      const nextId = 50;
+      const category = '';
+      const location = '';
+      const status = '';
+
+      // when
+      const result = await request(app.getHttpServer()).get(
+        url({ limit, nextId, category, location, status }),
+      );
+
+      // then
+      expect(result.status).toEqual(200);
+      expect(result.body.data.limit).toEqual(limit);
+      expect(result.body.data.beforeNextId).toEqual(nextId);
+      expect(result.body.data.nextId).toEqual(1);
+      expect(result.body.data.isLast).toEqual(true);
 
       // 최신순인지
       expect(result.body.data.data[0].id).toEqual(5);
