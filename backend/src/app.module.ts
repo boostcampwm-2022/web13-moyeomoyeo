@@ -15,6 +15,8 @@ import { GroupApplicationModule } from '@app/group-application/group-application
 import { NotificationModule } from '@app/notification/notification.module';
 import { CommentModule } from '@app/comment/comment.module';
 import { AppConfigService } from '@common/config/app/config.service';
+import { SseModule } from '@common/module/sse/sse.module';
+import { SseController } from '@src/sse.controller';
 
 @Module({
   imports: [
@@ -31,7 +33,9 @@ import { AppConfigService } from '@common/config/app/config.service';
     GroupApplicationModule,
     NotificationModule,
     CommentModule,
+    SseModule,
   ],
+  controllers: [SseController],
 })
 export class AppModule implements NestModule {
   constructor(private readonly appConfigService: AppConfigService) {}
