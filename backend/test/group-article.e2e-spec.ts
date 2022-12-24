@@ -1705,4 +1705,69 @@ describe('Group Application (e2e)', () => {
       expect(result.body.data.data[4].id).toEqual(1);
     });
   });
+
+  describe('모집 게시글 삭제 DELETE /group-articles/:id', () => {
+    const url = (id: number) => `/v1/group-articles/${id}`;
+
+    test('모집게시글을 정상적으로 삭제하면 204 코드를 던진다.', async () => {
+      // given
+      const jwtService = app.get(JwtTokenService);
+      const user = await dataSource.getRepository(User).findOneBy({ id: 1 });
+      const accessToken = jwtService.generateAccessToken(user);
+      const groupArticleId = 1;
+
+      // when
+      const result = await request(app.getHttpServer())
+        .delete(url(groupArticleId))
+        .set({ Cookie: setCookie(accessToken.accessToken) });
+
+      // then
+      expect(result.status).toEqual(204);
+    });
+
+    test('JWT 토큰이 없을 때 401 에러를 던진다.', async () => {
+      // given
+      const groupArticleId = 1;
+
+      // when
+      const result = await request(app.getHttpServer()).delete(
+        url(groupArticleId),
+      );
+
+      // then
+      expect(result.status).toEqual(401);
+    });
+
+    test('모집게시글을 삭제할 때 작성자가 아니라면 403 코드를 던진다.', async () => {
+      // given
+      const jwtService = app.get(JwtTokenService);
+      const user = await dataSource.getRepository(User).findOneBy({ id: 2 });
+      const accessToken = jwtService.generateAccessToken(user);
+      const groupArticleId = 1;
+
+      // when
+      const result = await request(app.getHttpServer())
+        .delete(url(groupArticleId))
+        .set({ Cookie: setCookie(accessToken.accessToken) });
+
+      // then
+      expect(result.status).toEqual(403);
+    });
+
+    test('모집게시글을 삭제할 때 없는 게시물에 접근하면 404 코드를 던진다.', async () => {
+      // given
+      const jwtService = app.get(JwtTokenService);
+      const user = await dataSource.getRepository(User).findOneBy({ id: 1 });
+      const accessToken = jwtService.generateAccessToken(user);
+      const groupArticleId = 10000;
+
+      // when
+      const result = await request(app.getHttpServer())
+        .delete(url(groupArticleId))
+        .set({ Cookie: setCookie(accessToken.accessToken) });
+
+      // then
+      expect(result.status).toEqual(404);
+    });
+  });
 });
