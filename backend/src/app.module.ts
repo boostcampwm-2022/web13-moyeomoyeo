@@ -1,7 +1,5 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { EventEmitterModule } from '@nestjs/event-emitter';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { AppConfigModule } from '@config/app/config.module';
 import { ApiSuccessLoggerMiddleware } from '@middleware/api-success-logger.middleware';
 import { ApiExceptionLoggerMiddleware } from '@middleware/api-exception-logger.middleware';
@@ -34,8 +32,6 @@ import { AppConfigService } from '@common/config/app/config.service';
     NotificationModule,
     CommentModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule implements NestModule {
   constructor(private readonly appConfigSerivce: AppConfigService) {}
