@@ -6,9 +6,10 @@ import { NotificationListener } from '@app/notification/notification.listener';
 import { GroupApplicationModule } from '@app/group-application/group-application.module';
 import { CommentModule } from '@app/comment/comment.module';
 import { UserNotificationRepository } from '@app/notification/repository/user-notification.repository';
+import { SseModule } from '@common/module/sse/sse.module';
 
 @Module({
-  imports: [GroupApplicationModule, CommentModule],
+  imports: [GroupApplicationModule, CommentModule, SseModule],
   controllers: [NotificationController],
   providers: [
     NotificationService,
