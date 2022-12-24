@@ -34,10 +34,10 @@ import { AppConfigService } from '@common/config/app/config.service';
   ],
 })
 export class AppModule implements NestModule {
-  constructor(private readonly appConfigSerivce: AppConfigService) {}
+  constructor(private readonly appConfigService: AppConfigService) {}
 
   configure(consumer: MiddlewareConsumer) {
-    if (!this.appConfigSerivce.isTest()) {
+    if (!this.appConfigService.isTest()) {
       consumer
         .apply(ApiSuccessLoggerMiddleware, ApiExceptionLoggerMiddleware)
         .forRoutes('*');
