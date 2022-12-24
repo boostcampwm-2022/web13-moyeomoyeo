@@ -852,4 +852,74 @@ describe('Group Application (e2e)', () => {
       expect(result.status).toEqual(404);
     });
   });
+
+  describe('모집게시글 카테고리 조회 GET /group-articles/categories', () => {
+    const url = () => `/v1/group-articles/categories`;
+
+    test('카테고리를 정상 조회하면 200 OK와 카테고리 정보를 던져준다.', async () => {
+      // given
+      const jwtService = app.get(JwtTokenService);
+      const userRepository = dataSource.getRepository(User);
+      const user = await userRepository.findOneBy({ id: 1 });
+      const accessToken = jwtService.generateAccessToken(user);
+
+      // when
+      const result = await request(app.getHttpServer())
+        .get(url())
+        .set({ Cookie: setCookie(accessToken.accessToken) });
+
+      // then
+      expect(result.status).toEqual(200);
+      expect(result.body.data[0]).toEqual({
+        id: 1,
+        name: 'MEAL',
+      });
+      expect(result.body.data[1]).toEqual({
+        id: 2,
+        name: 'STUDY',
+      });
+      expect(result.body.data[2]).toEqual({
+        id: 3,
+        name: 'ETC',
+      });
+      expect(result.body.data[3]).toEqual({
+        id: 4,
+        name: 'COMPETITION',
+      });
+      expect(result.body.data[4]).toEqual({
+        id: 5,
+        name: 'PROJECT',
+      });
+    });
+
+    test('JWT 토큰이 없어도 200 OK와 카테고리 데이터를 준다.', async () => {
+      // given
+
+      // when
+      const result = await request(app.getHttpServer()).get(url());
+
+      // then
+      expect(result.status).toEqual(200);
+      expect(result.body.data[0]).toEqual({
+        id: 1,
+        name: 'MEAL',
+      });
+      expect(result.body.data[1]).toEqual({
+        id: 2,
+        name: 'STUDY',
+      });
+      expect(result.body.data[2]).toEqual({
+        id: 3,
+        name: 'ETC',
+      });
+      expect(result.body.data[3]).toEqual({
+        id: 4,
+        name: 'COMPETITION',
+      });
+      expect(result.body.data[4]).toEqual({
+        id: 5,
+        name: 'PROJECT',
+      });
+    });
+  });
 });
