@@ -15,7 +15,7 @@
     "start:prod": "node dist/main",
     "start:local": "docker compose -f docker-compose.local.yml up -d --build",
     "stop:local": "docker compose -f docker-compose.local.yml down",
-    "reload:local": "docker compose -f docker-compose.local.yml up --force-recreate -d",
+    "reload:local": "docker compose -f docker-compose.local.yml up -d --build",
     "lint:fix": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
     "test": "env-cmd -f .env.test jest",
