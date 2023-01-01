@@ -8,6 +8,7 @@ import {
   ParseIntPipe,
   Patch,
   Query,
+  Version,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { NotificationSettingRepository } from '@app/notification/repository/notification-setting.repository';
@@ -27,6 +28,8 @@ import { UserNotificationRepository } from '@app/notification/repository/user-no
 import { GetUserNotificationsResponse } from '@app/notification/dto/get-user-notifications-response.dto';
 import { GetUserNotificationResult } from '@app/notification/dto/get-user-notification-result.dto';
 import { UserNotificationNotFoundException } from '@app/notification/exception/user-notification-not-found.exception';
+import { NoOffsetPageRequest } from '@common/util/no-offset-page-request';
+import { V2GetUserNotificationsResponse } from '@app/notification/dto/v2-get-user-notifications-response.dto';
 
 @Controller('notifications')
 @ApiTags('Notification')
@@ -61,6 +64,34 @@ export class NotificationController {
             GetUserNotificationResult.from(userNotification),
           ),
         ),
+      ),
+    );
+  }
+
+  @Get('/')
+  @Version('2')
+  @JwtAuth()
+  @ApiSuccessResponse(HttpStatus.OK, V2GetUserNotificationsResponse)
+  async getNotificationsV2(
+    @CurrentUser() user: User,
+    @Query() query: NoOffsetPageRequest,
+  ) {
+    const userNotifications =
+      await this.userNotificationRepository.getNotificationsV2({
+        user,
+        limit: query.limit,
+        nextId: query.nextId,
+      });
+
+    return ResponseEntity.OK_WITH_DATA(
+      new V2GetUserNotificationsResponse(
+        query.limit,
+        await Promise.all(
+          userNotifications.map((userNotification) =>
+            GetUserNotificationResult.from(userNotification),
+          ),
+        ),
+        query.nextId,
       ),
     );
   }

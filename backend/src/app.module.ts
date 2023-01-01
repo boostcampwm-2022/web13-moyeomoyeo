@@ -1,7 +1,5 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { EventEmitterModule } from '@nestjs/event-emitter';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { AppConfigModule } from '@config/app/config.module';
 import { ApiSuccessLoggerMiddleware } from '@middleware/api-success-logger.middleware';
 import { ApiExceptionLoggerMiddleware } from '@middleware/api-exception-logger.middleware';
@@ -17,6 +15,8 @@ import { GroupApplicationModule } from '@app/group-application/group-application
 import { NotificationModule } from '@app/notification/notification.module';
 import { CommentModule } from '@app/comment/comment.module';
 import { AppConfigService } from '@common/config/app/config.service';
+import { SseModule } from '@common/module/sse/sse.module';
+import { SseController } from '@src/sse.controller';
 
 @Module({
   imports: [
@@ -33,15 +33,15 @@ import { AppConfigService } from '@common/config/app/config.service';
     GroupApplicationModule,
     NotificationModule,
     CommentModule,
+    SseModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [SseController],
 })
 export class AppModule implements NestModule {
-  constructor(private readonly appConfigSerivce: AppConfigService) {}
+  constructor(private readonly appConfigService: AppConfigService) {}
 
   configure(consumer: MiddlewareConsumer) {
-    if (!this.appConfigSerivce.isTest()) {
+    if (!this.appConfigService.isTest()) {
       consumer
         .apply(ApiSuccessLoggerMiddleware, ApiExceptionLoggerMiddleware)
         .forRoutes('*');

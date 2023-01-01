@@ -12,6 +12,8 @@ import {
 } from '@app/notification/entity/notification-contents';
 import { GroupArticle } from '@app/group-article/entity/group-article.entity';
 import { Comment } from '@src/app/comment/entity/comment.entity';
+import { User } from '@app/user/entity/user.entity';
+import { UserNotification } from '@app/notification/entity/user-notification.entity';
 
 @Entity()
 export class Notification {
@@ -61,5 +63,9 @@ export class Notification {
       groupArticleId: groupArticle.id,
     };
     return notification;
+  }
+
+  createUserNotifications(users: User[]) {
+    return users.map((user) => UserNotification.create(user, this));
   }
 }
