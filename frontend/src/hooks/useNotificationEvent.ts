@@ -10,14 +10,16 @@ interface Props {
 const useNotificationEvent = ({ onNotification, enabled = true }: Props) => {
   const { data: myData } = useFetchMyInfo();
   useEffect(() => {
-    if (!enabled || !myData) return;
+    if (!myData) return;
     let sse: EventSource | null = null;
     try {
       sse = new EventSource(`${process.env.NEXT_PUBLIC_API_URL}/v1/sse`, {
         withCredentials: true,
       });
 
-      sse.addEventListener('NOTIFICATION', onNotification);
+      sse.addEventListener('NOTIFICATION', (e) => {
+        if (enabled) onNotification(e);
+      });
 
       sse.onerror = (event) => {
         sse.close();
