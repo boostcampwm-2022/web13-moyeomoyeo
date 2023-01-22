@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import { AxiosError } from 'axios';
 
 import useAuthInfiniteQuery from '@hooks/useAuthInfiniteQuery';
+import useNotificationEvent from '@hooks/useNotificationEvent';
 import { NotificationType } from '@typings/types';
 import { clientAxios } from '@utils/commonAxios';
 
@@ -29,20 +30,25 @@ const getNotifications = async (currentPage: number) => {
 };
 
 const useFetchNotifications = () => {
-  const { data, ...queryResult } = useAuthInfiniteQuery<
+  const { data, refetch, ...queryResult } = useAuthInfiniteQuery<
     NotificationPagingData,
     AxiosError,
     NotificationPagingData
   >(['notifications'], ({ pageParam = 1 }) => getNotifications(pageParam), {
     getNextPageParam: (lastPage) =>
       lastPage.data.length === 0 ? undefined : lastPage.currentPage + 1,
-    refetchInterval: 3000,
   });
 
   const notifications = useMemo(
     () => (data ? data.pages.flatMap(({ data }) => data) : undefined),
     [data]
   );
+
+  useNotificationEvent({
+    onNotification: (e) => {
+      void refetch();
+    },
+  });
 
   return { data: notifications, ...queryResult };
 };
