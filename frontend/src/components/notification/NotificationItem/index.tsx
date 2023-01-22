@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { useState } from 'react';
 
+import { motion } from 'framer-motion';
+
 import styled from '@emotion/styled';
 import { ActionIcon, Text } from '@mantine/core';
 import { IconX } from '@tabler/icons';
@@ -32,7 +34,7 @@ const NotificationItem = ({ notification }: Props) => {
         onConfirmButtonClick={() => deleteNotification(notification.id)}
         onCancelButtonClick={() => setConfirmModalOpen(false)}
       />
-      <NotificationWrapper>
+      <NotificationWrapper layout>
         <Link href={`/article/${notification.groupArticleId}`}>
           <ContentSection>
             <IconWrapper>
@@ -77,7 +79,7 @@ const NotificationItem = ({ notification }: Props) => {
 
 export default NotificationItem;
 
-const NotificationWrapper = styled.div`
+const NotificationWrapper = styled(motion.div)`
   align-items: center;
   display: flex;
   gap: 1.6rem;
