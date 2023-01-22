@@ -10,9 +10,8 @@ import { ArticlePreviewType } from '@typings/types';
 import { clientAxios } from '@utils/commonAxios';
 
 interface ArticlePagingData {
-  totalPage: number;
-  currentPage: number;
-  countPerPage: number;
+  isLast: boolean;
+  nextId: number;
   data: ArticlePreviewType[];
 }
 interface ArticleResponseType {
@@ -22,7 +21,7 @@ interface ArticleResponseType {
 }
 
 export const getGroupArticles = async (
-  currentPage: number,
+  nextId: number,
   category: Category,
   location: Location,
   filterProgress: boolean
@@ -30,8 +29,8 @@ export const getGroupArticles = async (
   const status = filterProgress ? ArticleStatus.PROGRESS : null;
   const {
     data: { data },
-  } = await clientAxios<ArticleResponseType>('/v1/group-articles/search', {
-    params: { category, location, status, currentPage, countPerPage: 8 },
+  } = await clientAxios<ArticleResponseType>('v2/group-articles/search', {
+    params: { category, location, status, nextId, limit: 8 },
   });
   return data;
 };
@@ -43,10 +42,9 @@ const useFetchGroupArticles = (
 ) => {
   const { data, ...rest } = useAuthInfiniteQuery<ArticlePagingData, AxiosError, ArticlePagingData>(
     ['articles', category, location, filterProgress],
-    ({ pageParam = 1 }) => getGroupArticles(pageParam, category, location, filterProgress),
+    ({ pageParam }) => getGroupArticles(pageParam, category, location, filterProgress),
     {
-      getNextPageParam: (lastPage) =>
-        lastPage.data.length === 0 ? undefined : lastPage.currentPage + 1,
+      getNextPageParam: (lastPage) => (lastPage.isLast ? undefined : lastPage.nextId),
     }
   );
 

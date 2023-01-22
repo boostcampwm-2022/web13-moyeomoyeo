@@ -6,14 +6,12 @@ services:
     image: nginx
     restart: always
     volumes:
-      - ./nginx/dev:/etc/nginx/conf.d
+      - ./nginx/dev/conf:/etc/nginx/conf.d
       - /letsencrypt/certbot/conf:/etc/letsencrypt
       - /letsencrypt/certbot/www:/var/www/certbot
     ports:
       - 80:80
       - 443:443
-    depends_on:
-      - moyeo-server
     networks:
       - backbone
     command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
@@ -31,17 +29,6 @@ services:
       - backbone
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
-  moyeo-server:
-    container_name: moyeo-server
-    image: ${DOCKER_SERVER_IMAGE}
-    environment:
-      NODE_ENV: development
-    ports:
-      - 3000:3000
-    command: npm run start:dev
-    networks:
-      - backbone
-
   moyeo-db:
     container_name: moyeo-db
     image: mysql:8.0
@@ -58,6 +45,28 @@ services:
     command:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
+    networks:
+      - backbone
+
+  moyeo-server-green:
+    container_name: moyeo-server-green
+    image: ${DOCKER_SERVER_IMAGE}
+    environment:
+      NODE_ENV: development
+    expose:
+      - 3000
+    command: npm run start:dev
+    networks:
+      - backbone
+
+  moyeo-server-blue:
+    container_name: moyeo-server-blue
+    image: ${DOCKER_SERVER_IMAGE}
+    environment:
+      NODE_ENV: development
+    expose:
+      - 3000
+    command: npm run start:dev
     networks:
       - backbone
 

@@ -144,7 +144,7 @@ export class GroupArticleController {
 
   @Get('search')
   @Version('2')
-  @ApiSuccessResponse(HttpStatus.OK)
+  @ApiSuccessResponse(HttpStatus.OK, V2SearchGroupArticlesResponse)
   async searchV2(@Query() query: V2SearchGroupArticlesRequest) {
     const result = await this.groupArticleRepository.searchV2({
       limit: query.limit,

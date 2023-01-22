@@ -1,6 +1,6 @@
-import { DataSource, IsNull, Repository } from 'typeorm';
-import { UserNotification } from '@app/notification/entity/user-notification.entity';
 import { Injectable } from '@nestjs/common';
+import { DataSource, IsNull, Repository, LessThan } from 'typeorm';
+import { UserNotification } from '@app/notification/entity/user-notification.entity';
 import { User } from '@app/user/entity/user.entity';
 
 @Injectable()
@@ -36,6 +36,29 @@ export class UserNotificationRepository extends Repository<UserNotification> {
       },
       take: limit,
       skip: offset,
+    });
+  }
+
+  getNotificationsV2({
+    user,
+    limit,
+    nextId,
+  }: {
+    user: User;
+    limit: number;
+    nextId?: number;
+  }) {
+    return this.find({
+      relations: {
+        notification: true,
+      },
+      where: {
+        userId: user.id,
+        deletedAt: IsNull(),
+        ...(nextId ? { id: LessThan(nextId) } : {}),
+      },
+      take: limit,
+      order: { id: 'DESC' },
     });
   }
 }

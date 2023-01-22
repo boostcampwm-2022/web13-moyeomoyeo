@@ -1,5 +1,7 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
+import styled from '@emotion/styled';
+
 import { Notification } from '@constants/notification';
 
 import NotificationItem from '.';
@@ -37,6 +39,38 @@ GroupSuccess.args = {
 
 export const GroupFail = Template.bind({});
 GroupFail.args = {
+  notification: {
+    id: 1,
+    type: Notification.GROUP_FAILED,
+    title: '모임이 무산되었어요.',
+    subTitle: '캐럿스터디 - 인천',
+    groupArticleId: 3,
+    createdAt: '2021-08-01T00:00:00.000Z',
+  },
+};
+
+const PageWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 1.6rem;
+  gap: 1.6rem;
+`;
+
+const PageTemplate: ComponentStory<typeof NotificationItem> = (args) => (
+  <PageWrapper>
+    <NotificationItem {...args} />
+    <NotificationItem {...args} />
+    <NotificationItem {...args} />
+    <NotificationItem {...args} />
+    <NotificationItem {...args} />
+    <NotificationItem {...args} />
+  </PageWrapper>
+);
+
+export const Collection = PageTemplate.bind({});
+Collection.args = {
   notification: {
     id: 1,
     type: Notification.GROUP_FAILED,

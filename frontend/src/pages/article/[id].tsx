@@ -167,7 +167,11 @@ const ArticleDetail = () => {
               <Joiner
                 {...(comments.length > 0 && { before: true })}
                 components={comments.map((comment) => (
-                  <Comment key={comment.id} comment={comment} />
+                  <Comment
+                    key={comment.id}
+                    comment={comment}
+                    onDeleteComment={() => setAddedComment(null)}
+                  />
                 ))}
               />
               <div ref={ref}></div>

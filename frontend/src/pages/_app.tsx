@@ -8,11 +8,11 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { RecoilRoot } from 'recoil';
 import { v4 as uuid } from 'uuid';
 
-import BrowserCheck from '@components/common/BrowserCheck';
 import ApiErrorBoundary from '@components/common/ErrorBoundary/ApiErrorBoundary';
 import AuthErrorBoundary from '@components/common/ErrorBoundary/AuthErrorBoundary';
 import ErrorBoundary from '@components/common/ErrorBoundary/ErrorBoundary';
 import LoginRedirect from '@components/common/LoginRedirect';
+import NotificationToast from '@components/common/NotificationToast';
 import RouterTransition from '@components/common/RouterTransition';
 import ScrollHandler from '@components/common/ScrollHandler';
 import initMockApi from '@mocks/.';
@@ -61,7 +61,7 @@ export default function App({ Component, pageProps }: AppProps<{ dehydratedState
                 <AuthErrorBoundary>
                   <ApiErrorBoundary>
                     <LoginRedirect />
-                    <BrowserCheck />
+                    <NotificationToast />
                     <ScrollHandler />
                     <Component {...pageProps} />
                   </ApiErrorBoundary>
