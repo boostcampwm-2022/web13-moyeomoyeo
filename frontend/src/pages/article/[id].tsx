@@ -7,6 +7,7 @@ import styled from '@emotion/styled';
 import { Progress, TypographyStylesProvider } from '@mantine/core';
 import { IconList } from '@tabler/icons';
 
+import ArticleComments from '@components/article/ArticleComments';
 import Comment from '@components/article/Comment';
 import CommentInput from '@components/article/CommentInput';
 import MenuButton from '@components/article/MenuButton';
@@ -17,7 +18,6 @@ import ArticleViewLoading from '@components/common/ArticleViewLoading';
 import Avatar from '@components/common/Avatar';
 import Header from '@components/common/Header';
 import DetailTitle from '@components/common/Header/DetailTitle';
-import Joiner from '@components/common/Joiner';
 import PageLayout from '@components/common/PageLayout';
 import StatCounter from '@components/common/StatCounter';
 import { ArticleStatus, ArticleStatusKr } from '@constants/article';
@@ -52,7 +52,9 @@ const ArticleDetail = () => {
 
   const isUrlAvailable = getButtonStatus(article, isJoined) === ParticipateButtonStatus.LINK;
   const { url } = useFetchChatUrl(articleId, isUrlAvailable);
-  const isArticleViewable = !article || isJoined === undefined || !myInfo || !participants;
+  const isArticleLoading = !article || isJoined === undefined || !myInfo || !participants;
+
+  // const { openModal, closeModal } = useModals();
 
   const [participantsModalOpen, setParticipantsModalOpen] = useState<boolean>(false);
 
@@ -87,7 +89,7 @@ const ArticleDetail = () => {
       >
         <>
           <ContentWrapper>
-            {isArticleViewable ? (
+            {isArticleLoading ? (
               <ArticleViewLoading />
             ) : (
               <>
@@ -161,19 +163,10 @@ const ArticleDetail = () => {
               </>
             )}
           </ContentWrapper>
-          {!isArticleViewable && (
+          {!isArticleLoading && (
             <>
               {addedComment && <Comment comment={addedComment} newComment />}
-              <Joiner
-                {...(comments.length > 0 && { before: true })}
-                components={comments.map((comment) => (
-                  <Comment
-                    key={comment.id}
-                    comment={comment}
-                    onDeleteComment={() => setAddedComment(null)}
-                  />
-                ))}
-              />
+              <ArticleComments comments={comments} articleId={article.id} />
               <div ref={ref}></div>
             </>
           )}
