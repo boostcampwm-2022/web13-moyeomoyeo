@@ -1,12 +1,8 @@
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useState } from 'react';
 
 import { Badge, Text } from '@mantine/core';
 
 import Avatar from '@components/common/Avatar';
-import ConfirmModal from '@components/common/ConfirmModal';
-import useDeleteComment from '@hooks/queries/useDeleteComment';
 import useFetchMyInfo from '@hooks/queries/useFetchMyInfo';
 import { CommentType } from '@typings/types';
 import dateTimeFormat from '@utils/dateTime';
@@ -30,12 +26,8 @@ interface Props {
 }
 
 const Comment = ({ comment, newComment = false, onDeleteComment = () => {} }: Props) => {
-  const router = useRouter();
-  const articleId = Number(router.query.id);
-  const [confirmModalOpen, setConfirmModalOpen] = useState(false);
-  const { id: commentId, authorId, authorName, authorProfileImage, createdAt, contents } = comment;
+  const { authorId, authorName, authorProfileImage, createdAt, contents } = comment;
   const { data: myData } = useFetchMyInfo();
-  const { mutate: deleteComment } = useDeleteComment(articleId);
 
   return (
     <>
@@ -55,7 +47,7 @@ const Comment = ({ comment, newComment = false, onDeleteComment = () => {} }: Pr
           </Link>
           <CommentUtils>
             {!newComment && myData?.id === authorId && (
-              <CommentUtilItem onClick={() => setConfirmModalOpen(true)}>
+              <CommentUtilItem onClick={onDeleteComment}>
                 <Text fz="sm" fw={500} c="gray.4">
                   삭제
                 </Text>
@@ -69,15 +61,6 @@ const Comment = ({ comment, newComment = false, onDeleteComment = () => {} }: Pr
           </Text>
         </CommentContent>
       </CommentWrapper>
-      <ConfirmModal
-        message="댓글을 삭제하시겠습니까?"
-        open={confirmModalOpen}
-        onConfirmButtonClick={() => {
-          onDeleteComment();
-          deleteComment(commentId);
-        }}
-        onCancelButtonClick={() => setConfirmModalOpen(false)}
-      />
     </>
   );
 };

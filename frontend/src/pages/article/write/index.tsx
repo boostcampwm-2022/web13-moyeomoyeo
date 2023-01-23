@@ -7,7 +7,6 @@ import { ActionIcon, Slider, Text } from '@mantine/core';
 import { IconCheck, IconUser } from '@tabler/icons';
 
 import ArticlePostInput from '@components/article/ArticlePostInput';
-import AlertModal from '@components/common/AlertModal';
 import DropDown from '@components/common/DropDown';
 import Header from '@components/common/Header';
 import DetailTitle from '@components/common/Header/DetailTitle';
@@ -32,7 +31,7 @@ interface ArticleInputType {
 const WritePage = () => {
   const router = useRouter();
   const throwAsyncError = useAsyncError();
-  const [confirmModalOpen, setConfirmModalOpen] = useState(false);
+
   const [articleInput, setArticleInput] = useState<ArticleInputType>({
     category: null,
     location: null,
@@ -89,11 +88,6 @@ const WritePage = () => {
           />
         }
       >
-        <AlertModal
-          message="게시글 등록이 완료되었습니다."
-          open={confirmModalOpen}
-          onClose={() => setConfirmModalOpen(false)}
-        />
         <TermSection>
           <SelectSection>
             <DropDown
