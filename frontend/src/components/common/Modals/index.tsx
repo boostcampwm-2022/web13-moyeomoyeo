@@ -1,8 +1,13 @@
 import { ComponentProps, FunctionComponent } from 'react';
 
-import ParticipantsModal from '@components/article/ParticipantsModal';
-import ConfirmModal from '@components/common/ConfirmModal';
+import loadable from '@loadable/component';
+
 import useModals from '@hooks/useModals';
+
+const ConfirmModal = loadable(() => import('@components/common/ConfirmModal'), { ssr: false });
+const ParticipantsModal = loadable(() => import('@components/article/ParticipantsModal'), {
+  ssr: false,
+});
 
 export const modals = {
   confirm: ConfirmModal as FunctionComponent<ComponentProps<typeof ConfirmModal>>,
