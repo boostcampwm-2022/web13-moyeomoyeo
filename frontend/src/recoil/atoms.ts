@@ -23,7 +23,7 @@ const scrollYAtom = atom({
   default: 0,
 });
 
-const modalsAtom = atom<Array<{ Component: FunctionComponent; props: Object }>>({
+const modalsAtom = atom<Array<{ Component: FunctionComponent<any>; props: Object }>>({
   key: `modalsAtom/${uuid()}`,
   default: [],
 });
