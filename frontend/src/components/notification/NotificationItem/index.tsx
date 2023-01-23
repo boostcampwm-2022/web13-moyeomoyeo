@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { useState } from 'react';
 
 import { motion } from 'framer-motion';
 
@@ -7,9 +6,10 @@ import styled from '@emotion/styled';
 import { ActionIcon, Text } from '@mantine/core';
 import { IconX } from '@tabler/icons';
 
-import ConfirmModal from '@components/common/ConfirmModal';
+import { modals } from '@components/common/Modals';
 import NotificationIcon from '@components/notification/NotificationIcon';
 import useDeleteNotification from '@hooks/queries/useDeleteNotification';
+import useModals from '@hooks/useModals';
 import { NotificationType } from '@typings/types';
 import dateTimeFormat from '@utils/dateTime';
 
@@ -23,57 +23,59 @@ interface Props {
 const NotificationItem = ({ notification }: Props) => {
   const { type, title, subTitle, createdAt } = notification;
   const { mutate: deleteNotification } = useDeleteNotification();
+  const { openModal, closeModal } = useModals();
 
-  const [confirmModalOpen, setConfirmModalOpen] = useState(false);
+  const handleClickConfirmButton = () => {
+    deleteNotification(notification.id);
+    closeModal(modals.confirm);
+  };
 
   return (
-    <>
-      <ConfirmModal
-        message="알림을 삭제하시겠습니까?"
-        open={confirmModalOpen}
-        onConfirmButtonClick={() => deleteNotification(notification.id)}
-        onCancelButtonClick={() => setConfirmModalOpen(false)}
-      />
-      <NotificationWrapper layout>
-        <Link href={`/article/${notification.groupArticleId}`}>
-          <ContentSection>
-            <IconWrapper>
-              <NotificationIcon variant={type} />
-            </IconWrapper>
-            <TitleWrapper>
-              <Text
-                size="md"
-                weight={700}
-                sx={{ whiteSpace: 'nowrap', overflowX: 'hidden', textOverflow: 'ellipsis' }}
-              >
-                {title}
-              </Text>
-              <Text
-                size="sm"
-                color="gray"
-                weight={500}
-                sx={{ whiteSpace: 'nowrap', overflowX: 'hidden', textOverflow: 'ellipsis' }}
-              >
-                {subTitle}
-              </Text>
-            </TitleWrapper>
-          </ContentSection>
-        </Link>
-        <AsideSection>
-          <ActionIcon
-            variant="transparent"
-            color="gray.6"
-            size="sm"
-            onClick={() => setConfirmModalOpen(true)}
-          >
-            <IconX size={20} />
-          </ActionIcon>
-          <Text size="xs" weight={500} c="gray.6">
-            {dateTimeFormat(createdAt)}
-          </Text>
-        </AsideSection>
-      </NotificationWrapper>
-    </>
+    <NotificationWrapper layout>
+      <Link href={`/article/${notification.groupArticleId}`}>
+        <ContentSection>
+          <IconWrapper>
+            <NotificationIcon variant={type} />
+          </IconWrapper>
+          <TitleWrapper>
+            <Text
+              size="md"
+              weight={700}
+              sx={{ whiteSpace: 'nowrap', overflowX: 'hidden', textOverflow: 'ellipsis' }}
+            >
+              {title}
+            </Text>
+            <Text
+              size="sm"
+              color="gray"
+              weight={500}
+              sx={{ whiteSpace: 'nowrap', overflowX: 'hidden', textOverflow: 'ellipsis' }}
+            >
+              {subTitle}
+            </Text>
+          </TitleWrapper>
+        </ContentSection>
+      </Link>
+      <AsideSection>
+        <ActionIcon
+          variant="transparent"
+          color="gray.6"
+          size="sm"
+          onClick={() =>
+            openModal(modals.confirm, {
+              message: '알림을 삭제하시겠습니까?',
+              onConfirmButtonClick: handleClickConfirmButton,
+              onCancelButtonClick: () => closeModal(modals.confirm),
+            })
+          }
+        >
+          <IconX size={20} />
+        </ActionIcon>
+        <Text size="xs" weight={500} c="gray.6">
+          {dateTimeFormat(createdAt)}
+        </Text>
+      </AsideSection>
+    </NotificationWrapper>
   );
 };
 

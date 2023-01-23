@@ -1,3 +1,5 @@
+import { FunctionComponent } from 'react';
+
 import { atom } from 'recoil';
 import { v4 as uuid } from 'uuid';
 
@@ -21,4 +23,9 @@ const scrollYAtom = atom({
   default: 0,
 });
 
-export { categoryAtom, locationAtom, progressCheckedAtom, scrollYAtom };
+const modalsAtom = atom<Array<{ Component: FunctionComponent<any>; props: Object }>>({
+  key: `modalsAtom/${uuid()}`,
+  default: [],
+});
+
+export { categoryAtom, locationAtom, progressCheckedAtom, scrollYAtom, modalsAtom };

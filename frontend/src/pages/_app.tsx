@@ -12,6 +12,7 @@ import ApiErrorBoundary from '@components/common/ErrorBoundary/ApiErrorBoundary'
 import AuthErrorBoundary from '@components/common/ErrorBoundary/AuthErrorBoundary';
 import ErrorBoundary from '@components/common/ErrorBoundary/ErrorBoundary';
 import LoginRedirect from '@components/common/LoginRedirect';
+import Modals from '@components/common/Modals';
 import NotificationToast from '@components/common/NotificationToast';
 import RouterTransition from '@components/common/RouterTransition';
 import ScrollHandler from '@components/common/ScrollHandler';
@@ -63,6 +64,7 @@ export default function App({ Component, pageProps }: AppProps<{ dehydratedState
                     <LoginRedirect />
                     <NotificationToast />
                     <ScrollHandler />
+                    <Modals />
                     <Component {...pageProps} />
                   </ApiErrorBoundary>
                 </AuthErrorBoundary>
