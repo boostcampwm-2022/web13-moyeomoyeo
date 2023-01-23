@@ -11,13 +11,13 @@ import ArticleComments from '@components/article/ArticleComments';
 import Comment from '@components/article/Comment';
 import CommentInput from '@components/article/CommentInput';
 import MenuButton from '@components/article/MenuButton';
-import ParticipantsModal from '@components/article/ParticipantsModal';
 import ParticipateButton from '@components/article/ParticipateButton';
 import ArticleTag from '@components/common/ArticleTag';
 import ArticleViewLoading from '@components/common/ArticleViewLoading';
 import Avatar from '@components/common/Avatar';
 import Header from '@components/common/Header';
 import DetailTitle from '@components/common/Header/DetailTitle';
+import { modals } from '@components/common/Modals';
 import PageLayout from '@components/common/PageLayout';
 import StatCounter from '@components/common/StatCounter';
 import { ArticleStatus, ArticleStatusKr } from '@constants/article';
@@ -33,6 +33,7 @@ import useFetchComments from '@hooks/queries/useFetchComments';
 import useFetchMyInfo from '@hooks/queries/useFetchMyInfo';
 import useFetchParticipants from '@hooks/queries/useFetchParticipants';
 import useIntersect from '@hooks/useIntersect';
+import useModals from '@hooks/useModals';
 import { ArticleType, CommentType } from '@typings/types';
 import dateTimeFormat from '@utils/dateTime';
 
@@ -54,9 +55,7 @@ const ArticleDetail = () => {
   const { url } = useFetchChatUrl(articleId, isUrlAvailable);
   const isArticleLoading = !article || isJoined === undefined || !myInfo || !participants;
 
-  // const { openModal, closeModal } = useModals();
-
-  const [participantsModalOpen, setParticipantsModalOpen] = useState<boolean>(false);
+  const { openModal, closeModal } = useModals();
 
   const ref = useIntersect((entry, observer) => {
     observer.unobserve(entry.target);
@@ -132,7 +131,14 @@ const ArticleDetail = () => {
                         {participants.length}명 / {article.maxCapacity}명
                       </CountText>
                     </StatusWrapper>
-                    <ParticipantButton onClick={() => setParticipantsModalOpen(true)}>
+                    <ParticipantButton
+                      onClick={() =>
+                        openModal(modals.participants, {
+                          participants,
+                          onClose: () => closeModal(modals.participants),
+                        })
+                      }
+                    >
                       <IconList width="16" height="16" color={gray[6]} />
                       <ViewText>신청자 확인</ViewText>
                     </ParticipantButton>
@@ -155,11 +161,6 @@ const ArticleDetail = () => {
                   )}
                   <StatCounter variant="comment" count={totalComments} />
                 </DetailWrapper>
-                <ParticipantsModal
-                  participants={participants}
-                  open={participantsModalOpen}
-                  onClose={() => setParticipantsModalOpen(false)}
-                />
               </>
             )}
           </ContentWrapper>
