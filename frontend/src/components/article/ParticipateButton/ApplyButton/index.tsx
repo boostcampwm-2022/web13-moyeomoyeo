@@ -13,7 +13,7 @@ const ApplyButton = ({ groupArticleId }: Props) => {
   const { mutate: applyGroup } = useApplyGroup(groupArticleId);
   const { openModal, closeModal } = useModals();
 
-  const handleClickApplyConfirm = () => {
+  const handleClickConfirmButton = () => {
     applyGroup(groupArticleId, {
       onSuccess: () => {
         showToast({
@@ -30,7 +30,7 @@ const ApplyButton = ({ groupArticleId }: Props) => {
       onClick={() =>
         openModal(modals.confirm, {
           message: '참가 신청하시겠습니까?',
-          onConfirmButtonClick: handleClickApplyConfirm,
+          onConfirmButtonClick: handleClickConfirmButton,
           onCancelButtonClick: () => closeModal(modals.confirm),
         })
       }

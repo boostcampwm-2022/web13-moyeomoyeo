@@ -13,7 +13,7 @@ const CancelButton = ({ groupArticleId }: Props) => {
   const { mutate: cancelApplication } = useCancelApplication(groupArticleId);
   const { openModal, closeModal } = useModals();
 
-  const handleClickCancelConfirm = () => {
+  const handleClickConfirmButton = () => {
     cancelApplication(groupArticleId, {
       onSuccess: () => {
         showToast({ title: '신청 취소 완료!', message: '다른 모집 게시글도 확인해보세요.' });
@@ -27,7 +27,7 @@ const CancelButton = ({ groupArticleId }: Props) => {
       onClick={() =>
         openModal(modals.confirm, {
           message: '신청을 취소하시겠습니까?',
-          onConfirmButtonClick: handleClickCancelConfirm,
+          onConfirmButtonClick: handleClickConfirmButton,
           onCancelButtonClick: () => closeModal(modals.confirm),
         })
       }
