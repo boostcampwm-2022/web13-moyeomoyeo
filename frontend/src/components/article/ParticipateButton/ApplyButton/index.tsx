@@ -1,9 +1,8 @@
-import { useState } from 'react';
-
 import { Button } from '@mantine/core';
 
-import ConfirmModal from '@components/common/ConfirmModal';
+import { modals } from '@components/common/Modals';
 import useApplyGroup from '@hooks/queries/useApplyGroup';
+import useModals from '@hooks/useModals';
 import { showToast } from '@utils/toast';
 
 interface Props {
@@ -12,9 +11,9 @@ interface Props {
 
 const ApplyButton = ({ groupArticleId }: Props) => {
   const { mutate: applyGroup } = useApplyGroup(groupArticleId);
-  const [confirmModalOpen, setConfirmModalOpen] = useState<boolean>(false);
+  const { openModal, closeModal } = useModals();
 
-  const applyForRecruitment = () => {
+  const handleClickApplyConfirm = () => {
     applyGroup(groupArticleId, {
       onSuccess: () => {
         showToast({
@@ -23,20 +22,24 @@ const ApplyButton = ({ groupArticleId }: Props) => {
         });
       },
     });
+    closeModal(modals.confirm);
   };
 
   return (
-    <>
-      <Button onClick={() => setConfirmModalOpen(true)} size="md" color="indigo" fullWidth>
-        참가하기
-      </Button>
-      <ConfirmModal
-        message="참가 신청하시겠습니까?"
-        open={confirmModalOpen}
-        onConfirmButtonClick={applyForRecruitment}
-        onCancelButtonClick={() => setConfirmModalOpen(false)}
-      />
-    </>
+    <Button
+      onClick={() =>
+        openModal(modals.confirm, {
+          message: '참가 신청하시겠습니까?',
+          onConfirmButtonClick: handleClickApplyConfirm,
+          onCancelButtonClick: () => closeModal(modals.confirm),
+        })
+      }
+      size="md"
+      color="indigo"
+      fullWidth
+    >
+      참가하기
+    </Button>
   );
 };
 
