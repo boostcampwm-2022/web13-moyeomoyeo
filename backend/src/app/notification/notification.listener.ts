@@ -24,7 +24,7 @@ export class NotificationListener {
     private readonly sseService: SseService,
   ) {}
 
-  @OnEvent('group.succeed')
+  @OnEvent(GroupSucceedEvent.event, { async: true })
   async handleGroupSucceedEvent(event: GroupSucceedEvent) {
     const { groupArticle } = event;
 
@@ -70,7 +70,7 @@ export class NotificationListener {
     }
   }
 
-  @OnEvent('group.failed')
+  @OnEvent(GroupFailedEvent.event, { async: true })
   async handleGroupFailedEvent(event: GroupFailedEvent) {
     const { groupArticle } = event;
 
@@ -116,7 +116,7 @@ export class NotificationListener {
     }
   }
 
-  @OnEvent('comment.added')
+  @OnEvent(CommentAddedEvent.event, { async: true })
   async handleCommentAddedEvent(event: CommentAddedEvent) {
     const { groupArticle, comment } = event;
     try {

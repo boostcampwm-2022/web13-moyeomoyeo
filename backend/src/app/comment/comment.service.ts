@@ -33,8 +33,8 @@ export class CommentService {
     );
 
     const result = await this.commentRepository.save(comment);
-    this.eventEmitter.emit(
-      'comment.added',
+    await this.eventEmitter.emitAsync(
+      CommentAddedEvent.event,
       new CommentAddedEvent(groupArticle, result),
     );
     return result;
