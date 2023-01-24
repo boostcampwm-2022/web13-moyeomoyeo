@@ -70,7 +70,7 @@ export class NotificationListener {
     }
   }
 
-  @OnEvent('group.failed')
+  @OnEvent(GroupFailedEvent.event, { async: true })
   async handleGroupFailedEvent(event: GroupFailedEvent) {
     const { groupArticle } = event;
 

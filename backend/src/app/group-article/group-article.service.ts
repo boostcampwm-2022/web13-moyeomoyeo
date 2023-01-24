@@ -112,7 +112,10 @@ export class GroupArticleService {
 
     await this.groupArticleRepository.save(groupArticle, { reload: false });
 
-    this.eventEmitter.emit('group.failed', new GroupFailedEvent(groupArticle));
+    await this.eventEmitter.emitAsync(
+      GroupFailedEvent.event,
+      new GroupFailedEvent(groupArticle),
+    );
   }
 
   async getDetailById(id: number) {
