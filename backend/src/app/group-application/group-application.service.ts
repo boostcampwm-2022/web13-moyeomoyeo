@@ -117,7 +117,7 @@ export class GroupApplicationService {
       groupArticle.group.complete();
       await this.groupArticleRepository.save(groupArticle);
       this.eventEmitter.emit(
-        'group.succeed',
+        GroupSucceedEvent.event,
         new GroupSucceedEvent(groupArticle),
       );
     }

@@ -24,7 +24,7 @@ export class NotificationListener {
     private readonly sseService: SseService,
   ) {}
 
-  @OnEvent('group.succeed')
+  @OnEvent(GroupSucceedEvent.event, { async: true })
   async handleGroupSucceedEvent(event: GroupSucceedEvent) {
     const { groupArticle } = event;
 

@@ -92,8 +92,8 @@ export class GroupArticleService {
 
     await this.groupArticleRepository.save(groupArticle, { reload: false });
 
-    this.eventEmitter.emit(
-      'group.succeed',
+    await this.eventEmitter.emitAsync(
+      GroupSucceedEvent.event,
       new GroupSucceedEvent(groupArticle),
     );
   }
