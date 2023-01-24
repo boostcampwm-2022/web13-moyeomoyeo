@@ -116,7 +116,7 @@ export class NotificationListener {
     }
   }
 
-  @OnEvent('comment.added')
+  @OnEvent(CommentAddedEvent.event, { async: true })
   async handleCommentAddedEvent(event: CommentAddedEvent) {
     const { groupArticle, comment } = event;
     try {
