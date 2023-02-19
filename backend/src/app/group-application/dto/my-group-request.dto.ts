@@ -1,3 +1,3 @@
-import { PageRequest } from '@src/common/util/page-request';
+import { PageRequest } from '@common/dto/page-request';
 
 export class MyGroupRequest extends PageRequest {}

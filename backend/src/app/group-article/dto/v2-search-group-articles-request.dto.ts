@@ -5,7 +5,7 @@ import {
   LOCATION,
 } from '@app/group-article/constants/group-article.constants';
 import { ApiProperty } from '@nestjs/swagger';
-import { NoOffsetPageRequest } from '@common/util/no-offset-page-request';
+import { NoOffsetPageRequest } from '@common/dto/no-offset-page-request';
 
 export class V2SearchGroupArticlesRequest extends NoOffsetPageRequest {
   @IsOptional()

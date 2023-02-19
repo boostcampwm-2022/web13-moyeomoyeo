@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { PageRequest } from '@src/common/util/page-request';
+import { PageRequest } from '@common/dto/page-request';
 import { Type } from 'class-transformer';
 import { IsNumber } from 'class-validator';
 

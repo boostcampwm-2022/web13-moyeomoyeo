@@ -23,12 +23,12 @@ import { PatchNotificationSettingRequest } from '@app/notification/dto/patch-not
 import { ApiErrorResponse } from '@decorator/api-error-response.decorator';
 import { NotificationSettingNotFoundException } from '@app/notification/exception/notification-setting-not-found.exception';
 import { NotAccessibleException } from '@app/notification/exception/not-accessible.exception';
-import { PageRequest } from '@common/util/page-request';
+import { PageRequest } from '@common/dto/page-request';
 import { UserNotificationRepository } from '@app/notification/repository/user-notification.repository';
 import { GetUserNotificationsResponse } from '@app/notification/dto/get-user-notifications-response.dto';
 import { GetUserNotificationResult } from '@app/notification/dto/get-user-notification-result.dto';
 import { UserNotificationNotFoundException } from '@app/notification/exception/user-notification-not-found.exception';
-import { NoOffsetPageRequest } from '@common/util/no-offset-page-request';
+import { NoOffsetPageRequest } from '@common/dto/no-offset-page-request';
 import { V2GetUserNotificationsResponse } from '@app/notification/dto/v2-get-user-notifications-response.dto';
 
 @Controller('notifications')

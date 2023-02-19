@@ -1,5 +1,5 @@
 import { GetUserNotificationResult } from '@app/notification/dto/get-user-notification-result.dto';
-import { NoOffsetPageResult } from '@common/util/no-offset-page-result';
+import { NoOffsetPageResult } from '@common/dto/no-offset-page-result';
 import { Expose } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 

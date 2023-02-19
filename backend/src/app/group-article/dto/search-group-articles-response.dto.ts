@@ -1,5 +1,5 @@
 import { Expose } from 'class-transformer';
-import { PageResult } from '@common/util/page-result';
+import { PageResult } from '@common/dto/page-result';
 import { ApiProperty } from '@nestjs/swagger';
 import { GroupArticleSearchResult } from '@app/group-article/dto/group-article-search-result.dto';
 

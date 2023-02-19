@@ -1,4 +1,4 @@
-import { NoOffsetPageResult } from '@common/util/no-offset-page-result';
+import { NoOffsetPageResult } from '@common/dto/no-offset-page-result';
 
 describe('No Offset Paging Result Test', () => {
   test.each([

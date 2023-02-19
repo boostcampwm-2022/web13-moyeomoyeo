@@ -13,7 +13,7 @@ import { ApiSuccessResponse } from '@decorator/api-success-resposne.decorator';
 import { SearchGroupArticleResponse } from '@app/group-article/dto/search-group-articles-response.dto';
 import { CurrentUser } from '@decorator/current-user.decorator';
 import { User } from '@app/user/entity/user.entity';
-import { PageRequest } from '@common/util/page-request';
+import { PageRequest } from '@common/dto/page-request';
 import { ResponseEntity } from '@common/response-entity';
 import { GroupArticleSearchResult } from '@app/group-article/dto/group-article-search-result.dto';
 import { ApiErrorResponse } from '@decorator/api-error-response.decorator';

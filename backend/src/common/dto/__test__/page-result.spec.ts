@@ -1,4 +1,4 @@
-import { PageResult } from '@common/util/page-result';
+import { PageResult } from '@common/dto/page-result';
 
 describe('Paging Result Test', () => {
   test.each([
