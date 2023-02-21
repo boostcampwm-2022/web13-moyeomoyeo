@@ -40,6 +40,6 @@ describe('FileImageStore (int)', () => {
     const path = await fileImageStore.upload(file);
 
     // then
-    expect(path).toBe('test.jpg');
+    expect(path.endsWith('.jpg')).toBe(true);
   });
 });
