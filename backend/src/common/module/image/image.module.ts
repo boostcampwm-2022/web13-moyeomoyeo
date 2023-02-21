@@ -1,4 +1,4 @@
-import { ClassProvider, DynamicModule, Type } from '@nestjs/common';
+import { DynamicModule, ValueProvider } from '@nestjs/common';
 import { ImageUploadConfiguration } from '@common/module/image/type/image-upload-configuration.interface';
 import { ImageStore } from '@common/module/image/image-store';
 import { S3ImageStore } from '@common/module/image/s3-image-store';
@@ -7,20 +7,20 @@ import { FileImageStore } from '@common/module/image/file-image-store';
 
 export class ImageModule {
   static register(config: ImageUploadConfiguration): DynamicModule {
-    let imageStore: Type<ImageStore>;
+    let imageStore: ImageStore;
 
     // TO DO: ImageFactory 로 분리
     switch (config.strategy) {
       case UploadStrategy.S3:
-        imageStore = S3ImageStore;
+        imageStore = new S3ImageStore(config);
         break;
       case UploadStrategy.FILE:
-        imageStore = FileImageStore;
+        imageStore = new FileImageStore(config);
     }
 
-    const imageStoreProvider: ClassProvider = {
+    const imageStoreProvider: ValueProvider = {
       provide: ImageStore,
-      useClass: imageStore,
+      useValue: imageStore,
     };
 
     return {
