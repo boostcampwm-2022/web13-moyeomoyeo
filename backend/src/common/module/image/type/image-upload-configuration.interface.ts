@@ -11,7 +11,7 @@ export interface S3ImageUploadConfiguration {
 }
 
 export interface FileImageUploadConfiguration {
-  strategy: UploadStrategy.FILE;
+  strategy: UploadStrategy.DISK;
 
   options: {
     path?: string;

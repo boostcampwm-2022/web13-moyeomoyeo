@@ -3,14 +3,14 @@ import { ImageModule } from '@common/module/image/image.module';
 import { UploadStrategy } from '@common/module/image/enums/upload-strategy.enum';
 import { ImageStore } from '@common/module/image/image-store';
 
-describe('FileImageStore (int)', () => {
+describe('DiskImageStore (int)', () => {
   let fileImageStore: ImageStore;
 
   beforeAll(async () => {
     const module = await Test.createTestingModule({
       imports: [
         ImageModule.register({
-          strategy: UploadStrategy.FILE,
+          strategy: UploadStrategy.DISK,
           options: {
             path: '.',
           },

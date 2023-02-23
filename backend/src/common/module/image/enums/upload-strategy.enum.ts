@@ -1,4 +1,4 @@
 export enum UploadStrategy {
-  FILE,
+  DISK,
   S3,
 }

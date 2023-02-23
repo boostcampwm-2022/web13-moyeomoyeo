@@ -6,7 +6,7 @@ import * as path from 'path';
 import { UuidGenerator } from '@common/util/uuid-generator';
 
 @Injectable()
-export class FileImageStore extends ImageStore {
+export class DiskImageStore extends ImageStore {
   constructor(private readonly config: FileImageUploadConfiguration) {
     super();
   }
