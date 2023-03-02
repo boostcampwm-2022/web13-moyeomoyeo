@@ -25,6 +25,7 @@
     "test:e2e": "env-cmd -f .env.test jest -i --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.282.0",
     "@js-joda/core": "^5.4.2",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.2.0",
