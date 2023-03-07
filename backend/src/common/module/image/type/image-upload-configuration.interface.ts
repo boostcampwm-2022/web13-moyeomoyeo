@@ -1,4 +1,5 @@
 import { UploadStrategy } from '@common/module/image/enums/upload-strategy.enum';
+import { ModuleMetadata, Type } from '@nestjs/common';
 
 export type ImageUploadConfiguration =
   | S3ImageUploadConfiguration
@@ -27,12 +28,18 @@ export interface FileImageUploadConfiguration {
   };
 }
 
-export type ImageUploadOptions = CommonUploadOptions;
+export interface ImageUploadConfigurationFactory {
+  createImageConfigurations():
+    | Promise<ImageUploadConfiguration>
+    | ImageUploadConfiguration;
+}
 
-export interface CommonUploadOptions {
-  filePath: string;
-
-  fileData: Buffer;
-
-  mimeType: string;
+export interface ImageModuleAsyncOptions
+  extends Pick<ModuleMetadata, 'imports'> {
+  useExisting?: Type<ImageUploadConfiguration>;
+  useClass?: Type<ImageUploadConfiguration>;
+  useFactory?: (
+    ...args: any[]
+  ) => Promise<ImageUploadConfiguration> | ImageUploadConfiguration;
+  inject?: any[];
 }
