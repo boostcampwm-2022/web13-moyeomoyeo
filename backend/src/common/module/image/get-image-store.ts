@@ -3,11 +3,12 @@ import { ImageStore } from '@common/module/image/image-store';
 import { UploadStrategy } from '@common/module/image/enums/upload-strategy.enum';
 import { S3ImageStore } from '@common/module/image/s3-image-store';
 import { DiskImageStore } from '@common/module/image/disk-image-store';
+import { S3Client } from '@aws-sdk/client-s3';
 
 export const getImageStore = (config: ImageUploadConfiguration): ImageStore => {
   switch (config.strategy) {
     case UploadStrategy.S3:
-      return new S3ImageStore(config);
+      return new S3ImageStore(config, new S3Client({}));
 
     case UploadStrategy.DISK:
       return new DiskImageStore(config);

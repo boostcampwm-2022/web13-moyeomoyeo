@@ -7,7 +7,16 @@ export type ImageUploadConfiguration =
 export interface S3ImageUploadConfiguration {
   strategy: UploadStrategy.S3;
 
-  // TO DO: S3 option 정하기
+  options: {
+    region: string;
+    credentials: {
+      secretAccessKey: string;
+      accessKeyId: string;
+    };
+    bucket: string;
+    acl: string;
+    path?: string;
+  };
 }
 
 export interface FileImageUploadConfiguration {
