@@ -64,7 +64,16 @@ services:
     networks:
       - backbone
 
+  localstack:
+    image: localstack/localstack:0.14
+    ports:
+      - '4567:4566'
+    environment:
+      - SERVICES=s3
+    container_name: localstack
+    volumes:
+      - './scripts/localstack-init:/docker-entrypoint-initaws.d'
+
 networks:
   backbone:
-    name: backbone
     driver: bridge
