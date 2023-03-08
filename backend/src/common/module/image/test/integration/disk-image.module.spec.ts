@@ -3,7 +3,7 @@ import { ImageModule } from '@common/module/image/image.module';
 import { UploadStrategy } from '@common/module/image/enums/upload-strategy.enum';
 import { ImageStore } from '@common/module/image/image-store';
 
-describe('DiskImageStore (int)', () => {
+describe('DiskImageModule (int)', () => {
   let fileImageStore: ImageStore;
 
   beforeAll(async () => {

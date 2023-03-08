@@ -4,7 +4,7 @@ import { UploadStrategy } from '@common/module/image/enums/upload-strategy.enum'
 import { ImageStore } from '@common/module/image/image-store';
 import { S3ImageStore } from '@common/module/image/s3-image-store';
 
-describe('S3ImageStore (int)', () => {
+describe('S3ImageModule (int)', () => {
   let s3ImageStore: S3ImageStore;
 
   beforeAll(async () => {
