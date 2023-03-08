@@ -8,7 +8,18 @@ import { S3Client } from '@aws-sdk/client-s3';
 export const getImageStore = (config: ImageUploadConfiguration): ImageStore => {
   switch (config.strategy) {
     case UploadStrategy.S3:
-      return new S3ImageStore(config, new S3Client({}));
+      return new S3ImageStore(
+        config,
+        new S3Client({
+          credentials: {
+            accessKeyId: config.options.credentials.accessKeyId,
+            secretAccessKey: config.options.credentials.secretAccessKey,
+          },
+          endpoint: config.options.endpoint,
+          region: config.options.region,
+          forcePathStyle: config.options.forcePathStyle,
+        }),
+      );
 
     case UploadStrategy.DISK:
       return new DiskImageStore(config);

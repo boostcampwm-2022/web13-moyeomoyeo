@@ -3,9 +3,6 @@ import { ImageModule } from '@common/module/image/image.module';
 import { UploadStrategy } from '@common/module/image/enums/upload-strategy.enum';
 import { ImageStore } from '@common/module/image/image-store';
 import { S3ImageStore } from '@common/module/image/s3-image-store';
-import { S3ConfigModule } from '@config/s3/config.module';
-import { S3ConfigService } from '@config/s3/config.service';
-import { ImageUploadConfiguration } from '@common/module/image/type/image-upload-configuration.interface';
 
 describe('S3ImageStore (int)', () => {
   let s3ImageStore: S3ImageStore;
@@ -13,26 +10,20 @@ describe('S3ImageStore (int)', () => {
   beforeAll(async () => {
     const module = await Test.createTestingModule({
       imports: [
-        ImageModule.registerAsync({
-          imports: [S3ConfigModule],
-          useFactory: (
-            s3ConfigService: S3ConfigService,
-          ): ImageUploadConfiguration => {
-            return {
-              strategy: UploadStrategy.S3,
-              options: {
-                region: s3ConfigService.region,
-                credentials: {
-                  accessKeyId: s3ConfigService.accessKey,
-                  secretAccessKey: s3ConfigService.secretKey,
-                },
-                bucket: s3ConfigService.bucket,
-                acl: 'public-read',
-                path: s3ConfigService.path,
-              },
-            };
+        ImageModule.register({
+          strategy: UploadStrategy.S3,
+          options: {
+            region: 'test',
+            credentials: {
+              accessKeyId: 'accessKey',
+              secretAccessKey: 'secretKey',
+            },
+            bucket: 'test-bucket',
+            acl: 'public-read',
+            path: '/path',
+            endpoint: 'http://localhost:4567',
+            forcePathStyle: true,
           },
-          inject: [S3ConfigService],
         }),
       ],
     }).compile();
@@ -42,8 +33,24 @@ describe('S3ImageStore (int)', () => {
 
   it('', async () => {
     // given
-    console.log(s3ImageStore);
+    const file: Express.Multer.File = {
+      fieldname: 'file',
+      originalname: 'test.jpg',
+      encoding: '',
+      mimetype: 'image/jpeg',
+      size: 100,
+      destination: '',
+      filename: '',
+      path: '',
+      buffer: Buffer.from('image-test'),
+      stream: '' as any,
+    };
+
     // when
+    const path = await s3ImageStore.upload(file);
+
     // then
+    expect(path.endsWith('.jpg')).toBe(true);
+    expect(path.startsWith('/path')).toBe(true);
   });
 });

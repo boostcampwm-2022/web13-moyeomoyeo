@@ -1,7 +1,7 @@
 import { ImageStore } from '@common/module/image/image-store';
 import { S3ImageUploadConfiguration } from '@common/module/image/type/image-upload-configuration.interface';
 import { HttpStatus, Injectable } from '@nestjs/common';
-import path from 'path';
+import * as path from 'path';
 import { UuidGenerator } from '@common/util/uuid-generator';
 import { getExtensionFromMimeType } from '@common/util/getExtensionFromMimeType';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
