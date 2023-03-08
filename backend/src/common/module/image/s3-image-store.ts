@@ -26,6 +26,7 @@ export class S3ImageStore extends ImageStore {
         new PutObjectCommand({
           Bucket: this.config.options.bucket,
           Key: key,
+          ACL: this.config.options.acl,
         }),
       );
 

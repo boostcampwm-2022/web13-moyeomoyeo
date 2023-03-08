@@ -17,7 +17,7 @@ export interface S3ImageUploadConfiguration {
     bucket: string;
     acl: string;
     path?: string;
-    endpoint?: string;
+    endPoint?: string;
     forcePathStyle?: boolean;
   };
 }

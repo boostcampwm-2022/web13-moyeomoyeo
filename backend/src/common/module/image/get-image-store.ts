@@ -15,7 +15,7 @@ export const getImageStore = (config: ImageUploadConfiguration): ImageStore => {
             accessKeyId: config.options.credentials.accessKeyId,
             secretAccessKey: config.options.credentials.secretAccessKey,
           },
-          endpoint: config.options.endpoint,
+          endpoint: config.options.endPoint,
           region: config.options.region,
           forcePathStyle: config.options.forcePathStyle,
         }),

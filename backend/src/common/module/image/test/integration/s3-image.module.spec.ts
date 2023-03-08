@@ -21,7 +21,7 @@ describe('S3ImageModule (int)', () => {
             bucket: 'test-bucket',
             acl: 'public-read',
             path: '/path',
-            endpoint: 'http://localhost:4567',
+            endPoint: 'http://localhost:4567',
             forcePathStyle: true,
           },
         }),
